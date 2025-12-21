@@ -1,0 +1,238 @@
+{
+  "countries": [
+    {
+      "code": "CO",
+      "name": "Colombia",
+      "states": [
+        {
+          "code": "ANT",
+          "name": "Antioquia",
+          "cities": ["Medellín", "Envigado", "Bello", "Itagüí", "Rionegro"]
+        },
+        {
+          "code": "BOG",
+          "name": "Bogotá D.C.",
+          "cities": ["Bogotá"]
+        },
+        {
+          "code": "VAL",
+          "name": "Valle del Cauca",
+          "cities": ["Cali", "Palmira", "Buenaventura", "Tuluá"]
+        },
+        {
+          "code": "ATL",
+          "name": "Atlántico",
+          "cities": ["Barranquilla", "Soledad", "Malambo"]
+        },
+        {
+          "code": "SAN",
+          "name": "Santander",
+          "cities": ["Bucaramanga", "Floridablanca", "Girón"]
+        }
+      ]
+    },
+    {
+      "code": "MX",
+      "name": "México",
+      "states": [
+        {
+          "code": "CDMX",
+          "name": "Ciudad de México",
+          "cities": ["Ciudad de México"]
+        },
+        {
+          "code": "JAL",
+          "name": "Jalisco",
+          "cities": ["Guadalajara", "Zapopan", "Tlaquepaque"]
+        },
+        {
+          "code": "NL",
+          "name": "Nuevo León",
+          "cities": ["Monterrey", "San Pedro Garza García", "Apodaca"]
+        }
+      ]
+    },
+    {
+      "code": "AR",
+      "name": "Argentina",
+      "states": [
+        {
+          "code": "BA",
+          "name": "Buenos Aires",
+          "cities": ["Buenos Aires", "La Plata", "Mar del Plata"]
+        },
+        {
+          "code": "COR",
+          "name": "Córdoba",
+          "cities": ["Córdoba", "Villa Carlos Paz"]
+        }
+      ]
+    },
+    {
+      "code": "CL",
+      "name": "Chile",
+      "states": [
+        {
+          "code": "RM",
+          "name": "Región Metropolitana",
+          "cities": ["Santiago", "Providencia", "Las Condes"]
+        },
+        {
+          "code": "VAL",
+          "name": "Valparaíso",
+          "cities": ["Valparaíso", "Viña del Mar"]
+        }
+      ]
+    },
+    {
+      "code": "PE",
+      "name": "Perú",
+      "states": [
+        {
+          "code": "LIM",
+          "name": "Lima",
+          "cities": ["Lima", "Miraflores", "San Isidro"]
+        },
+        {
+          "code": "AQP",
+          "name": "Arequipa",
+          "cities": ["Arequipa"]
+        }
+      ]
+    },
+    {
+      "code": "EC",
+      "name": "Ecuador",
+      "states": [
+        {
+          "code": "P",
+          "name": "Pichincha",
+          "cities": ["Quito"]
+        },
+        {
+          "code": "G",
+          "name": "Guayas",
+          "cities": ["Guayaquil"]
+        }
+      ]
+    },
+    {
+      "code": "SV",
+      "name": "El Salvador",
+      "states": [
+        {
+          "code": "SS",
+          "name": "San Salvador",
+          "cities": ["San Salvador", "Mejicanos", "Soyapango", "Apopa", "Ciudad Delgado", "Ilopango"]
+        },
+        {
+          "code": "LL",
+          "name": "La Libertad",
+          "cities": ["Santa Tecla", "Antiguo Cuscatlán", "La Libertad", "Colón", "Quezaltepeque"]
+        },
+        {
+          "code": "SA",
+          "name": "Santa Ana",
+          "cities": ["Santa Ana", "Metapán", "Chalchuapa"]
+        },
+        {
+          "code": "SM",
+          "name": "San Miguel",
+          "cities": ["San Miguel", "Ciudad Barrios", "Chinameca"]
+        },
+        {
+          "code": "US",
+          "name": "Usulután",
+          "cities": ["Usulután", "Jiquilisco", "Santiago de María"]
+        },
+        {
+          "code": "SO",
+          "name": "Sonsonate",
+          "cities": ["Sonsonate", "Izalco", "Acajutla", "Nahuizalco"]
+        },
+        {
+          "code": "AH",
+          "name": "Ahuachapán",
+          "cities": ["Ahuachapán", "Atiquizaya", "Tacuba"]
+        },
+        {
+          "code": "LP",
+          "name": "La Paz",
+          "cities": ["Zacatecoluca", "San Luis Talpa", "Olocuilta"]
+        },
+        {
+          "code": "CU",
+          "name": "Cuscatlán",
+          "cities": ["Cojutepeque", "San Pedro Perulapán", "Suchitoto"]
+        },
+        {
+          "code": "CH",
+          "name": "Chalatenango",
+          "cities": ["Chalatenango", "Nueva Concepción", "La Palma"]
+        },
+        {
+          "code": "CA",
+          "name": "Cabañas",
+          "cities": ["Sensuntepeque", "Ilobasco", "Victoria"]
+        },
+        {
+          "code": "MO",
+          "name": "Morazán",
+          "cities": ["San Francisco Gotera", "Perquín", "Corinto"]
+        },
+        {
+          "code": "UN",
+          "name": "La Unión",
+          "cities": ["La Unión", "Santa Rosa de Lima", "Conchagua"]
+        },
+        {
+          "code": "SV",
+          "name": "San Vicente",
+          "cities": ["San Vicente", "Tecoluca", "Apastepeque"]
+        }
+      ]
+    },
+    {
+      "code": "US",
+      "name": "Estados Unidos",
+      "states": [
+        {
+          "code": "FL",
+          "name": "Florida",
+          "cities": ["Miami", "Orlando", "Tampa"]
+        },
+        {
+          "code": "TX",
+          "name": "Texas",
+          "cities": ["Houston", "Dallas", "Austin"]
+        },
+        {
+          "code": "CA",
+          "name": "California",
+          "cities": ["Los Angeles", "San Francisco", "San Diego"]
+        },
+        {
+          "code": "NY",
+          "name": "New York",
+          "cities": ["New York City", "Buffalo", "Albany"]
+        }
+      ]
+    },
+    {
+      "code": "ES",
+      "name": "España",
+      "states": [
+        {
+          "code": "MAD",
+          "name": "Madrid",
+          "cities": ["Madrid", "Alcalá de Henares"]
+        },
+        {
+          "code": "CAT",
+          "name": "Cataluña",
+          "cities": ["Barcelona", "Tarragona"]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,82 @@
+import { Button } from "@/presentation/components/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
+import { MoreHorizontal, Building2 } from "lucide-react";
+import { SpaceViewModel, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
+
+interface SpacesTableProps {
+  spaces: SpaceViewModel[];
+  isLoading: boolean;
+  isDeleting: boolean;
+  onDeleteSpace: (id: string) => void;
+}
+
+export function SpacesTable({ spaces, isLoading, isDeleting, onDeleteSpace }: SpacesTableProps) {
+  if (isLoading) {
+    return (
+      <div className="flex justify-center py-8">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (spaces.length === 0) {
+    return (
+      <div className="text-center py-8 text-muted-foreground">
+        <Building2 className="mx-auto h-12 w-12 mb-4 opacity-50" />
+        <p>No tienes espacios registrados</p>
+        <p className="text-sm">Haz clic en "Agregar Espacio" para comenzar</p>
+      </div>
+    );
+  }
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Espacio</TableHead>
+          <TableHead>Tipo</TableHead>
+          <TableHead>Estado</TableHead>
+          <TableHead>m²</TableHead>
+          <TableHead>Precio/mes</TableHead>
+          <TableHead className="text-right">Acciones</TableHead>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {spaces.map((space) => (
+          <TableRow key={space.id}>
+            <TableCell className="font-medium">{space.title}</TableCell>
+            <TableCell>{spaceTypeLabels[space.type]}</TableCell>
+            <TableCell>
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(space.status)}`}>
+                {getStatusLabel(space.status)}
+              </span>
+            </TableCell>
+            <TableCell>{space.squareMeters}</TableCell>
+            <TableCell>${space.pricePerMonth}</TableCell>
+            <TableCell className="text-right">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon">
+                    <MoreHorizontal className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem>Editar</DropdownMenuItem>
+                  <DropdownMenuItem>Ver Detalles</DropdownMenuItem>
+                  <DropdownMenuItem 
+                    className="text-destructive"
+                    onClick={() => onDeleteSpace(space.id)}
+                    disabled={isDeleting}
+                  >
+                    Eliminar
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
