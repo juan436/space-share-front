@@ -4,8 +4,10 @@ import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
+import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { UserRoleType, roleOptions } from "@/presentation/types/auth";
 import { useRegisterForm } from "./hooks/useRegisterForm";
+import { TermsModal } from "./components/TermsModal";
 
 export function RegisterForm() {
   const {
@@ -19,6 +21,10 @@ export function RegisterForm() {
     setConfirmPassword,
     role,
     setRole,
+    acceptedTerms,
+    setAcceptedTerms,
+    isTermsModalOpen,
+    setIsTermsModalOpen,
     isLoading,
     error,
     handleRegister,
@@ -94,6 +100,23 @@ export function RegisterForm() {
               </SelectContent>
             </Select>
           </div>
+          <div className="flex items-start space-x-2">
+            <Checkbox
+              id="terms"
+              checked={acceptedTerms}
+              onCheckedChange={(checked) => setAcceptedTerms(checked === true)}
+            />
+            <Label htmlFor="terms" className="text-sm leading-tight cursor-pointer">
+              Acepto los{" "}
+              <button
+                type="button"
+                onClick={() => setIsTermsModalOpen(true)}
+                className="text-primary hover:underline font-medium"
+              >
+                términos y condiciones
+              </button>
+            </Label>
+          </div>
           {error && (
             <p className="text-sm text-destructive">{error}</p>
           )}
@@ -110,6 +133,12 @@ export function RegisterForm() {
           </Link>
         </p>
       </CardFooter>
+
+      <TermsModal
+        open={isTermsModalOpen}
+        onOpenChange={setIsTermsModalOpen}
+        onAccept={() => setAcceptedTerms(true)}
+      />
     </Card>
   );
 }

@@ -14,6 +14,10 @@ interface UseRegisterFormResult {
   setConfirmPassword: (confirmPassword: string) => void;
   role: UserRoleType;
   setRole: (role: UserRoleType) => void;
+  acceptedTerms: boolean;
+  setAcceptedTerms: (accepted: boolean) => void;
+  isTermsModalOpen: boolean;
+  setIsTermsModalOpen: (open: boolean) => void;
   isLoading: boolean;
   error: string;
   handleRegister: (e: React.FormEvent) => Promise<void>;
@@ -31,6 +35,8 @@ export function useRegisterForm(): UseRegisterFormResult {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [role, setRole] = useState<UserRoleType>("client");
+  const [acceptedTerms, setAcceptedTerms] = useState(false);
+  const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState("");
   const { register } = useAuth();
@@ -47,6 +53,11 @@ export function useRegisterForm(): UseRegisterFormResult {
 
     if (password.length < 6) {
       setError("La contraseña debe tener al menos 6 caracteres");
+      return;
+    }
+
+    if (!acceptedTerms) {
+      setError("Debes aceptar los términos y condiciones");
       return;
     }
 
@@ -73,6 +84,10 @@ export function useRegisterForm(): UseRegisterFormResult {
     setConfirmPassword,
     role,
     setRole,
+    acceptedTerms,
+    setAcceptedTerms,
+    isTermsModalOpen,
+    setIsTermsModalOpen,
     isLoading,
     error,
     handleRegister,
