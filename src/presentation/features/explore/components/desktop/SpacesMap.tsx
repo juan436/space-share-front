@@ -36,6 +36,8 @@ const mapOptions: google.maps.MapOptions = {
   streetViewControl: false,
   mapTypeControl: false,
   fullscreenControl: true,
+  scrollwheel: true,
+  gestureHandling: 'greedy',
   styles: [
     {
       featureType: "poi",
@@ -269,7 +271,7 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
                 space={space}
                 isSelected={isSelected}
                 isHovered={isHovered}
-                onClick={() => onSpaceSelect?.(space.id)}
+                onClick={() => window.open(`/space/${space.id}`, "_blank")}
                 onMouseEnter={() => setHoveredSpaceId(space.id)}
                 onMouseLeave={() => setHoveredSpaceId(null)}
               />

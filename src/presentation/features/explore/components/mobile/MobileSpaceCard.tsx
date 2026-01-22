@@ -12,9 +12,14 @@ interface MobileSpaceCardProps {
 }
 
 export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick }: MobileSpaceCardProps) {
+  const handleClick = () => {
+    // Open detail page in new tab
+    window.open(`/space/${space.id}`, "_blank");
+  };
+
   return (
     <div
-      onClick={onClick}
+      onClick={handleClick}
       className="bg-card rounded-2xl overflow-hidden shadow-sm border active:scale-[0.98] transition-transform"
     >
       {/* Image */}

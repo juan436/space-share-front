@@ -19,6 +19,8 @@ const mapOptions: google.maps.MapOptions = {
   streetViewControl: false,
   mapTypeControl: false,
   fullscreenControl: false,
+  scrollwheel: true,
+  gestureHandling: 'greedy',
 };
 
 export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDetail }: MobileMapViewProps) {
@@ -97,7 +99,7 @@ export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDet
         <div className="absolute bottom-4 left-4 right-4 animate-in slide-in-from-bottom duration-200">
           <div 
             className="bg-card rounded-2xl shadow-xl border overflow-hidden"
-            onClick={() => onSpaceDetail(selectedSpace)}
+            onClick={() => window.open(`/space/${selectedSpace.id}`, "_blank")}
           >
             <div className="flex gap-3 p-3">
               <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shrink-0">

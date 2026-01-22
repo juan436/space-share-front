@@ -32,9 +32,14 @@ export function SpaceCard({ space, isSelected, onClick }: SpaceCardProps) {
     amenitiesIcons.push({ icon: DoorOpen, label: "Entrada privada" });
   }
 
+  const handleClick = () => {
+    // Open detail page in new tab
+    window.open(`/space/${space.id}`, "_blank");
+  };
+
   return (
     <div
-      onClick={onClick}
+      onClick={handleClick}
       className={cn(
         "group flex gap-4 p-4 bg-card rounded-xl border-2 transition-all cursor-pointer hover:shadow-lg",
         isSelected 
