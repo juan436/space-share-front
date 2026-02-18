@@ -7,7 +7,7 @@ import { Label } from "@/presentation/components/ui/label";
 import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
 import { Textarea } from "@/presentation/components/ui/textarea";
-import { 
+import {
   Building2,
   Users,
   Ruler,
@@ -137,12 +137,12 @@ export function BusinessSpaceForm({ onClose }: BusinessSpaceFormProps) {
     onClose();
   };
 
-  const isFormValid = 
-    formData.spaceType && 
-    formData.title && 
-    formData.description && 
-    formData.maxCapacity > 0 && 
-    formData.squareMeters > 0 && 
+  const isFormValid =
+    formData.spaceType &&
+    formData.title &&
+    formData.description &&
+    formData.maxCapacity > 0 &&
+    formData.squareMeters > 0 &&
     formData.address &&
     formData.pricePerMonth > 0;
 

@@ -86,7 +86,7 @@ export function AddSpaceWizardMobile({
 
   const handleImageUpload = () => {
     const mockImages = [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=600&h=400&fit=crop",
+      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=600&h=400&fit=crop",
     ];
     setImages((prev) => [...prev, ...mockImages]);
   };

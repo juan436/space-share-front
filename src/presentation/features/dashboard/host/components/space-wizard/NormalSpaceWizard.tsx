@@ -60,7 +60,7 @@ export function NormalSpaceWizard({
 
   const handleImageUpload = () => {
     const mockImages = [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=300&h=200&fit=crop",
+      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=300&h=200&fit=crop",
     ];
     setImages([...images, ...mockImages]);
   };

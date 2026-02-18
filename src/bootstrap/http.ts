@@ -1,6 +1,6 @@
 import { configureHttpClient, createHttpClient } from "@/infrastructure/http/httpClientFactory";
 
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3001/api";
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006/api";
 const TOKEN_KEY = "spaceshare_tokens";
 
 let isRefreshing = false;

@@ -2,7 +2,7 @@
 
 import { useState, useCallback, useMemo } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
-import { Ruler, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 
 interface SpacesMapProps {
@@ -11,13 +11,7 @@ interface SpacesMapProps {
   onSpaceSelect?: (spaceId: string) => void;
 }
 
-const spaceTypeLabels: Record<string, string> = {
-  garage: "Garaje",
-  basement: "Sótano",
-  attic: "Ático",
-  storage: "Bodega",
-  other: "Otro",
-};
+
 
 const mapContainerStyle = {
   width: "100%",
@@ -53,14 +47,14 @@ const mapOptions: google.maps.MapOptions = {
 };
 
 // Custom marker component with image + price
-function SpaceMarker({ 
-  space, 
-  isSelected, 
+function SpaceMarker({
+  space,
+  isSelected,
   isHovered,
   onClick,
   onMouseEnter,
   onMouseLeave,
-}: { 
+}: {
   space: Space;
   isSelected: boolean;
   isHovered: boolean;
@@ -69,100 +63,22 @@ function SpaceMarker({
   onMouseLeave: () => void;
 }) {
   return (
-    <div 
-      className="relative cursor-pointer"
+    <div
+      className={`relative cursor-pointer transition-transform duration-200 flex items-center justify-center ${isSelected || isHovered ? 'z-50 scale-110' : 'z-10 hover:scale-105'
+        }`}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
       onClick={onClick}
-      style={{ transform: 'translate(-50%, -100%)' }}
+      style={{ transform: 'translate(-50%, -50%)' }}
     >
-      {/* Expanded Hover Card - shows full details */}
-      {isHovered && (
-        <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 w-64 animate-in fade-in zoom-in-95 duration-200 z-50">
-          <div className="bg-card rounded-xl shadow-2xl border-2 border-primary/20 overflow-hidden">
-            {/* Large Image */}
-            <div className="relative w-full h-32 bg-muted">
-              {space.images && space.images.length > 0 ? (
-                <img
-                  src={space.images[0]}
-                  alt={space.title}
-                  className="w-full h-full object-cover"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/20 to-accent/20">
-                  <Ruler className="w-12 h-12 text-muted-foreground/40" />
-                </div>
-              )}
-              {/* Type badge */}
-              <div className="absolute top-2 left-2 px-2 py-1 bg-primary text-primary-foreground text-xs font-semibold rounded-md shadow">
-                {spaceTypeLabels[space.type] || space.type}
-              </div>
-            </div>
-            {/* Full Info */}
-            <div className="p-4">
-              <h4 className="font-bold text-base text-foreground line-clamp-2">
-                {space.title}
-              </h4>
-              <p className="text-sm text-muted-foreground mt-1">
-                {space.location.city}, {space.location.state}
-              </p>
-              <div className="flex items-center justify-between mt-3 pt-3 border-t">
-                <span className="text-sm text-muted-foreground flex items-center gap-1.5">
-                  <Ruler className="w-4 h-4" />
-                  {space.squareMeters} m²
-                </span>
-                <span className="text-lg font-bold text-primary">
-                  ${space.pricePerMonth}<span className="text-sm font-normal text-muted-foreground">/mes</span>
-                </span>
-              </div>
-            </div>
-          </div>
-          {/* Arrow pointing down */}
-          <div className="absolute left-1/2 -translate-x-1/2 -bottom-2 w-0 h-0 border-l-[10px] border-r-[10px] border-t-[10px] border-l-transparent border-r-transparent border-t-card drop-shadow-sm" />
-        </div>
-      )}
-
-      {/* Compact Marker Card - Image + Price */}
       <div
-        className={`relative overflow-hidden rounded-lg shadow-lg transition-all duration-200 ${
-          isSelected || isHovered
-            ? 'ring-2 ring-primary ring-offset-2 scale-110'
-            : 'hover:scale-105'
-        }`}
-        style={{ width: '80px' }}
-      >
-        {/* Mini Image */}
-        <div className="relative w-full h-12 bg-muted">
-          {space.images && space.images.length > 0 ? (
-            <img
-              src={space.images[0]}
-              alt={space.title}
-              className="w-full h-full object-cover"
-            />
-          ) : (
-            <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/30 to-accent/30">
-              <Ruler className="w-5 h-5 text-muted-foreground/50" />
-            </div>
-          )}
-        </div>
-        {/* Price Tag */}
-        <div
-          className={`px-2 py-1.5 text-center font-bold text-sm ${
-            isSelected || isHovered
-              ? 'bg-primary text-primary-foreground'
-              : 'bg-card text-foreground'
+        className={`px-3 py-1.5 rounded-full font-bold text-sm shadow-md border whitespace-nowrap w-max ${isSelected || isHovered
+          ? 'bg-primary text-primary-foreground border-primary'
+          : 'bg-card text-foreground border-border'
           }`}
-        >
-          ${space.pricePerMonth}
-        </div>
+      >
+        ${space.pricePerMonth}
       </div>
-      
-      {/* Arrow pointer */}
-      <div
-        className={`absolute left-1/2 -translate-x-1/2 top-full w-0 h-0 border-l-[8px] border-r-[8px] border-t-[10px] border-l-transparent border-r-transparent transition-colors ${
-          isSelected || isHovered ? 'border-t-primary' : 'border-t-card'
-        }`}
-      />
     </div>
   );
 }
@@ -182,7 +98,7 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
   // Calculate bounds to fit all markers
   const bounds = useMemo(() => {
     if (!isLoaded || spaces.length === 0) return null;
-    
+
     const bounds = new google.maps.LatLngBounds();
     spaces.forEach((space) => {
       if (space.location.latitude && space.location.longitude) {

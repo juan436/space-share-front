@@ -6,6 +6,7 @@ export interface SpaceAmenities {
   climateControlled: boolean;
   securityCamera: boolean;
   privateEntrance: boolean;
+  access247?: boolean;
 }
 
 export interface SpaceLocation {
@@ -29,6 +30,7 @@ export interface Space {
   location: SpaceLocation;
   images: string[];
   status: SpaceStatus;
+  verified?: boolean;
   rating?: number;
   reviewCount?: number;
   bookingsCount?: number;

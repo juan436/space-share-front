@@ -12,6 +12,7 @@ export function ExplorePage() {
   const [spaceType, setSpaceType] = useState("all");
   const [priceRange, setPriceRange] = useState("all");
   const [sizeRange, setSizeRange] = useState("all");
+  const [conditions, setConditions] = useState<string[]>([]);
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
 
   // Filter spaces based on current filters
@@ -51,6 +52,15 @@ export function ExplorePage() {
       }
     }
 
+    // Conditions filter
+    if (conditions.length > 0) {
+      if (conditions.includes("24/7") && !space.amenities.access247) return false;
+      if (conditions.includes("climatizado") && !space.amenities.climateControlled) return false;
+      if (conditions.includes("seguridad") && !space.amenities.securityCamera) return false;
+      if (conditions.includes("privado") && !space.amenities.privateEntrance) return false;
+      if (conditions.includes("verificado") && !space.verified) return false;
+    }
+
     return true;
   });
 
@@ -69,6 +79,8 @@ export function ExplorePage() {
         onPriceRangeChange={setPriceRange}
         sizeRange={sizeRange}
         onSizeRangeChange={setSizeRange}
+        conditions={conditions}
+        onConditionsChange={setConditions}
       />
 
       {/* Main Content - Split View */}
