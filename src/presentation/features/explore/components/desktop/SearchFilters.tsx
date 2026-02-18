@@ -1,8 +1,7 @@
 "use client";
 
-import { Search, SlidersHorizontal } from "lucide-react";
+import { Search, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2 } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
-import { Button } from "@/presentation/components/ui/button";
 import {
   Select,
   SelectContent,
@@ -44,19 +43,28 @@ export function SearchFilters({
     }
   };
 
-  const quickChips = [
-    { id: "24/7", label: "Acceso 24/7" },
-    { id: "verificado", label: "Verificado" },
-    { id: "climatizado", label: "Climatizado" },
-    { id: "privado", label: "Entrada privada" },
+  const conditionOptions = [
+    { id: "24/7", label: "Acceso 24/7", icon: Clock },
+    { id: "verificado", label: "Verificado", icon: ShieldCheck },
+    { id: "climatizado", label: "Climatizado", icon: Snowflake },
+    { id: "privado", label: "Entrada privada", icon: DoorOpen },
   ];
 
-  // Calculate active filters
+  const spaceTypeLabels: Record<string, string> = {
+    garage: "Garaje", basement: "Sótano", attic: "Ático", storage: "Bodega", other: "Otro"
+  };
+  const priceLabels: Record<string, string> = {
+    "0-100": "$0 – $100/mes", "100-300": "$100 – $300/mes", "300-500": "$300 – $500/mes", "500+": "$500+/mes"
+  };
+  const sizeLabels: Record<string, string> = {
+    "0-10": "Pequeño (0–10 m²)", "10-30": "Mediano (10–30 m²)", "30-50": "Grande (30–50 m²)", "50+": "Extra grande (50+ m²)"
+  };
+
   const activeFilters = [
-    spaceType !== "all" && { label: spaceType === "garage" ? "Garaje" : spaceType === "storage" ? "Bodega" : spaceType, type: "type", value: spaceType },
-    priceRange !== "all" && { label: priceRange, type: "price", value: priceRange },
-    sizeRange !== "all" && { label: sizeRange, type: "size", value: sizeRange },
-    ...conditions.map(c => ({ label: quickChips.find(q => q.id === c)?.label || c, type: "condition", value: c }))
+    spaceType !== "all" && { label: spaceTypeLabels[spaceType] || spaceType, type: "type", value: spaceType },
+    priceRange !== "all" && { label: priceLabels[priceRange] || priceRange, type: "price", value: priceRange },
+    sizeRange !== "all" && { label: sizeLabels[sizeRange] || sizeRange, type: "size", value: sizeRange },
+    ...conditions.map(c => ({ label: conditionOptions.find(q => q.id === c)?.label || c, type: "condition", value: c }))
   ].filter(Boolean) as { label: string; type: string; value: string }[];
 
   const activeCount = activeFilters.length;
@@ -79,152 +87,138 @@ export function SearchFilters({
   };
 
   return (
-    <div className="bg-card border-b">
-      {/* Main Search Bar */}
-      <div className="bg-primary/5 border-b">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex items-center gap-4">
-            <div className="relative flex-1 max-w-md">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
-              <Input
-                type="text"
-                placeholder="Buscar por ciudad o ubicación..."
-                value={searchQuery}
-                onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 h-12 bg-card border-2 border-primary/20 focus:border-primary"
-              />
-            </div>
-            <Button className="h-12 px-6 bg-primary hover:bg-primary/90">
-              <Search className="w-5 h-5 mr-2" />
-              Buscar
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Filter Bar */}
-      <div className="max-w-7xl mx-auto px-6 py-3">
-        <div className="flex flex-col gap-3">
-          {/* Main Filters Row */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2 text-sm text-muted-foreground min-w-fit">
-              <SlidersHorizontal className="w-4 h-4" />
-              <span>Filtros:</span>
-            </div>
-
-            <Select value={spaceType} onValueChange={onSpaceTypeChange}>
-              <SelectTrigger className="w-[160px] bg-card">
-                <SelectValue placeholder="Tipo de espacio" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todos los tipos</SelectItem>
-                <SelectItem value="garage">Garaje</SelectItem>
-                <SelectItem value="basement">Sótano</SelectItem>
-                <SelectItem value="attic">Ático</SelectItem>
-                <SelectItem value="storage">Bodega</SelectItem>
-                <SelectItem value="other">Otro</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={priceRange} onValueChange={onPriceRangeChange}>
-              <SelectTrigger className="w-[160px] bg-card">
-                <SelectValue placeholder="Precio" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Cualquier precio</SelectItem>
-                <SelectItem value="0-100">$0 - $100/mes</SelectItem>
-                <SelectItem value="100-300">$100 - $300/mes</SelectItem>
-                <SelectItem value="300-500">$300 - $500/mes</SelectItem>
-                <SelectItem value="500+">$500+/mes</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select value={sizeRange} onValueChange={onSizeRangeChange}>
-              <SelectTrigger className="w-[160px] bg-card">
-                <SelectValue placeholder="Tamaño" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Cualquier tamaño</SelectItem>
-                <SelectItem value="0-10">Pequeño (0-10 m²)</SelectItem>
-                <SelectItem value="10-30">Mediano (10-30 m²)</SelectItem>
-                <SelectItem value="30-50">Grande (30-50 m²)</SelectItem>
-                <SelectItem value="50+">Extra grande (50+ m²)</SelectItem>
-              </SelectContent>
-            </Select>
-
-            <Select
-              value={conditions.length > 0 ? "selected" : "all"}
-              onValueChange={(v) => {
-                if (v === "all") onConditionsChange([]);
-              }}
-            >
-              <SelectTrigger className="w-[160px] bg-card">
-                <SelectValue placeholder="Condiciones" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas</SelectItem>
-                <div className="p-2 gap-2 flex flex-col">
-                  {quickChips.map((chip) => (
-                    <label key={chip.id} className="flex items-center gap-2 text-sm cursor-pointer hover:bg-muted/50 p-1 rounded">
-                      <input
-                        type="checkbox"
-                        checked={conditions.includes(chip.id)}
-                        onChange={() => toggleCondition(chip.id)}
-                        className="rounded border-gray-300"
-                      />
-                      {chip.label}
-                    </label>
-                  ))}
-                </div>
-              </SelectContent>
-            </Select>
-
-            <div className="flex-1" />
-
-            {activeCount > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={clearAll}
-                className="text-muted-foreground hover:text-foreground"
+    <div className="border-b border-border/40 bg-card/80 glass-strong">
+      <div className="max-w-screen-2xl mx-auto px-6 py-3">
+        {/* Row 1: Search + Dropdowns */}
+        <div className="flex items-center gap-3">
+          {/* Search */}
+          <div className="relative w-80 flex-shrink-0">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+            <Input
+              type="text"
+              placeholder="Buscar ciudad o zona..."
+              value={searchQuery}
+              onChange={(e) => onSearchChange(e.target.value)}
+              className="pl-9 h-9 bg-background/60 border-border/50 rounded-lg text-sm placeholder:text-muted-foreground/40 focus:border-primary/40 focus:ring-1 focus:ring-primary/10"
+            />
+            {searchQuery && (
+              <button
+                onClick={() => onSearchChange("")}
+                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-muted text-muted-foreground transition-colors"
               >
-                Limpiar todo ({activeCount})
-              </Button>
+                <X className="w-3 h-3" />
+              </button>
             )}
           </div>
 
-          {/* Active Chips & Quick Chips Row */}
-          <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-hide min-h-[32px]">
-            {activeFilters.length > 0 ? (
-              <>
-                {activeFilters.map((filter, idx) => (
-                  <div
-                    key={`${filter.type}-${filter.value}-${idx}`}
-                    className="flex items-center gap-1 px-3 py-1 bg-primary/10 text-primary rounded-full text-sm font-medium border border-primary/20"
-                  >
-                    <span>{filter.label}</span>
-                    <button
-                      onClick={() => removeFilter(filter)}
-                      className="hover:bg-primary/20 rounded-full p-0.5"
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M18 6 6 18" /><path d="m6 6 12 12" /></svg>
-                    </button>
-                  </div>
-                ))}
-              </>
-            ) : (
-              // Show suggestions when no filters active
-              quickChips.map((chip) => (
-                <button
-                  key={chip.id}
-                  onClick={() => toggleCondition(chip.id)}
-                  className="px-3 py-1 rounded-full text-sm font-medium bg-muted hover:bg-muted/80 text-muted-foreground transition-colors whitespace-nowrap"
+          {/* Separator */}
+          <div className="w-px h-5 bg-border/50 flex-shrink-0" />
+
+          {/* Tipo de espacio */}
+          <Select value={spaceType} onValueChange={onSpaceTypeChange}>
+            <SelectTrigger className="h-9 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/50 rounded-lg transition-colors gap-1.5 px-2.5 w-auto">
+              <LayoutGrid className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+              <SelectValue placeholder="Tipo de espacio" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Todos los tipos</SelectItem>
+              <SelectItem value="garage">Garaje</SelectItem>
+              <SelectItem value="basement">Sótano</SelectItem>
+              <SelectItem value="attic">Ático</SelectItem>
+              <SelectItem value="storage">Bodega</SelectItem>
+              <SelectItem value="other">Otro</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Precio */}
+          <Select value={priceRange} onValueChange={onPriceRangeChange}>
+            <SelectTrigger className="h-9 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/50 rounded-lg transition-colors gap-1.5 px-2.5 w-auto">
+              <DollarSign className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+              <SelectValue placeholder="Precio mensual" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Cualquier precio</SelectItem>
+              <SelectItem value="0-100">$0 – $100 / mes</SelectItem>
+              <SelectItem value="100-300">$100 – $300 / mes</SelectItem>
+              <SelectItem value="300-500">$300 – $500 / mes</SelectItem>
+              <SelectItem value="500+">$500+ / mes</SelectItem>
+            </SelectContent>
+          </Select>
+
+          {/* Tamaño */}
+          <Select value={sizeRange} onValueChange={onSizeRangeChange}>
+            <SelectTrigger className="h-9 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/50 rounded-lg transition-colors gap-1.5 px-2.5 w-auto">
+              <Maximize2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+              <SelectValue placeholder="Tamaño" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">Cualquier tamaño</SelectItem>
+              <SelectItem value="0-10">Pequeño (0–10 m²)</SelectItem>
+              <SelectItem value="10-30">Mediano (10–30 m²)</SelectItem>
+              <SelectItem value="30-50">Grande (30–50 m²)</SelectItem>
+              <SelectItem value="50+">Extra grande (50+ m²)</SelectItem>
+            </SelectContent>
+          </Select>
+
+          <div className="flex-1" />
+
+          {/* Clear */}
+          {activeCount > 0 && (
+            <button
+              onClick={clearAll}
+              className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
+            >
+              <X className="w-3 h-3" />
+              Limpiar filtros ({activeCount})
+            </button>
+          )}
+        </div>
+
+        {/* Row 2: Condition toggles + Active filter chips */}
+        <div className="flex items-center gap-2 mt-2.5 flex-wrap">
+          {/* Condition toggle buttons */}
+          {conditionOptions.map((opt) => {
+            const Icon = opt.icon;
+            const isActive = conditions.includes(opt.id);
+            return (
+              <button
+                key={opt.id}
+                onClick={() => toggleCondition(opt.id)}
+                className={`
+                  flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 whitespace-nowrap border
+                  ${isActive
+                    ? "bg-primary/10 text-primary border-primary/20 shadow-sm"
+                    : "text-muted-foreground hover:text-foreground bg-background/50 border-border/40 hover:border-border hover:bg-background/80"
+                  }
+                `}
+              >
+                <Icon className="w-3.5 h-3.5" />
+                {opt.label}
+              </button>
+            );
+          })}
+
+          {/* Active filter chips (category filters only, not conditions since those have toggles) */}
+          {activeFilters.filter(f => f.type !== "condition").length > 0 && (
+            <>
+              <div className="w-px h-4 bg-border/40 mx-1" />
+              {activeFilters.filter(f => f.type !== "condition").map((filter, idx) => (
+                <div
+                  key={`${filter.type}-${filter.value}-${idx}`}
+                  className="flex items-center gap-1 pl-2.5 pr-1.5 py-1 bg-primary/8 text-primary rounded-md text-[11px] font-semibold border border-primary/12 animate-fade-in-up"
+                  style={{ animationDelay: `${idx * 40}ms` }}
                 >
-                  {chip.label}
-                </button>
-              ))
-            )}
-          </div>
+                  <span>{filter.label}</span>
+                  <button
+                    onClick={() => removeFilter(filter)}
+                    className="p-0.5 rounded hover:bg-primary/15 transition-colors"
+                  >
+                    <X className="w-2.5 h-2.5" />
+                  </button>
+                </div>
+              ))}
+            </>
+          )}
         </div>
       </div>
     </div>

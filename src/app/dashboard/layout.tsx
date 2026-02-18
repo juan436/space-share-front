@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { usePathname } from "next/navigation";
 import { useEffect } from "react";
 import { Button } from "@/presentation/components/ui/button";
-import { LogOut, Home, Building2, Calendar, MessageSquare, Users, BarChart3 } from "lucide-react";
+import { LogOut, Home, Building2, Calendar, MessageSquare, Users, BarChart3, Compass } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/presentation/utils/cn";
 
@@ -44,6 +44,7 @@ export default function DashboardLayout({
   const getNavItems = () => {
     const baseItems = [
       { href: `/dashboard/${user.role === "client" ? "user" : user.role}`, icon: Home, label: "Inicio" },
+      { href: "/explore", icon: Compass, label: "Explorar" },
     ];
 
     if (user.role === "client") {

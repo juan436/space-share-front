@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { Map, List } from "lucide-react";
 import { ExploreHeader } from "./components/desktop/ExploreHeader";
 import { SearchFilters } from "./components/desktop/SearchFilters";
 import { SpacesList } from "./components/desktop/SpacesList";
@@ -14,10 +15,9 @@ export function ExplorePage() {
   const [sizeRange, setSizeRange] = useState("all");
   const [conditions, setConditions] = useState<string[]>([]);
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
+  const [showMap, setShowMap] = useState(false);
 
-  // Filter spaces based on current filters
   const filteredSpaces = mockSpaces.filter((space) => {
-    // Search query filter
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       const matchesSearch =
@@ -27,12 +27,8 @@ export function ExplorePage() {
       if (!matchesSearch) return false;
     }
 
-    // Space type filter
-    if (spaceType !== "all" && space.type !== spaceType) {
-      return false;
-    }
+    if (spaceType !== "all" && space.type !== spaceType) return false;
 
-    // Price range filter
     if (priceRange !== "all") {
       const [min, max] = priceRange.split("-").map((v) => (v === "500+" ? Infinity : parseInt(v)));
       if (priceRange === "500+") {
@@ -42,7 +38,6 @@ export function ExplorePage() {
       }
     }
 
-    // Size range filter
     if (sizeRange !== "all") {
       const [min, max] = sizeRange.split("-").map((v) => (v === "50+" ? Infinity : parseInt(v)));
       if (sizeRange === "50+") {
@@ -52,7 +47,6 @@ export function ExplorePage() {
       }
     }
 
-    // Conditions filter
     if (conditions.length > 0) {
       if (conditions.includes("24/7") && !space.amenities.access247) return false;
       if (conditions.includes("climatizado") && !space.amenities.climateControlled) return false;
@@ -65,11 +59,8 @@ export function ExplorePage() {
   });
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
-      {/* Header */}
+    <div className="h-screen bg-background flex flex-col overflow-hidden">
       <ExploreHeader />
-
-      {/* Search & Filters */}
       <SearchFilters
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
@@ -83,21 +74,46 @@ export function ExplorePage() {
         onConditionsChange={setConditions}
       />
 
-      {/* Main Content - Split View */}
-      <div className="flex-1 flex">
-        <div className="max-w-7xl mx-auto w-full flex">
-          {/* Left Column - Spaces List */}
-          <div className="w-1/2 p-6 overflow-y-auto" style={{ maxHeight: "calc(100vh - 180px)" }}>
-            <SpacesList
-              spaces={filteredSpaces}
-              selectedSpaceId={selectedSpaceId}
-              onSpaceSelect={setSelectedSpaceId}
-            />
-          </div>
+      {/* Constrained content area — always max-w-7xl centered */}
+      <div className="flex-1 min-h-0 max-w-screen-2xl mx-auto w-full flex overflow-hidden">
 
-          {/* Right Column - Map */}
-          <div className="w-1/2 p-6 pl-0">
-            <div className="sticky top-0" style={{ height: "calc(100vh - 180px)" }}>
+        {/* List panel */}
+        <div
+          className="overflow-y-auto thin-scrollbar relative transition-all duration-500 ease-in-out"
+          style={{ width: showMap ? "45%" : "100%" }}
+        >
+          <SpacesList
+            spaces={filteredSpaces}
+            selectedSpaceId={selectedSpaceId}
+            onSpaceSelect={setSelectedSpaceId}
+            showMap={showMap}
+          />
+
+          {/* Floating toggle button */}
+          <div className="sticky bottom-6 flex justify-center pointer-events-none">
+            <button
+              onClick={() => setShowMap((v) => !v)}
+              className="pointer-events-auto flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold shadow-xl hover:scale-105 active:scale-95 transition-all duration-200"
+            >
+              {showMap ? (
+                <><List className="w-4 h-4" />Solo listado</>
+              ) : (
+                <><Map className="w-4 h-4" />Mostrar mapa</>
+              )}
+            </button>
+          </div>
+        </div>
+
+        {/* Map panel — slides in from right, inside the same max-w-7xl box */}
+        <div
+          className="overflow-hidden flex-shrink-0 transition-all duration-500 ease-in-out"
+          style={{
+            width: showMap ? "55%" : "0%",
+            opacity: showMap ? 1 : 0,
+          }}
+        >
+          <div className="w-full h-full p-4 border-l border-border/30">
+            <div className="w-full h-full rounded-2xl overflow-hidden shadow-sm border border-border/30">
               <SpacesMap
                 spaces={filteredSpaces}
                 selectedSpaceId={selectedSpaceId}
@@ -106,6 +122,7 @@ export function ExplorePage() {
             </div>
           </div>
         </div>
+
       </div>
     </div>
   );
