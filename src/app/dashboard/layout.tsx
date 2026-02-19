@@ -2,7 +2,7 @@
 
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter, usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState, useMemo, useCallback } from "react";
 import { Button } from "@/presentation/components/ui/button";
 import {
   DropdownMenu,
@@ -27,6 +27,62 @@ import {
 import Link from "next/link";
 import { cn } from "@/presentation/utils/cn";
 
+// ── Tab content components ──
+import { UserHome, UserReservations } from "@/presentation/features/dashboard/user";
+import { HostHome, HostDashboard, HostReservations } from "@/presentation/features/dashboard/host";
+import { Messages } from "@/presentation/features/messages";
+import { AdminHome, AdminUsers, AdminSpaces, AdminAnalytics } from "@/presentation/features/admin";
+
+// ── Tab definitions per role ──
+type TabDef = { id: string; icon: typeof Home; label: string };
+
+const clientTabs: TabDef[] = [
+  { id: "home", icon: Home, label: "Inicio" },
+  { id: "reservations", icon: Calendar, label: "Mis Reservaciones" },
+  { id: "messages", icon: MessageSquare, label: "Mensajes" },
+];
+
+const hostTabs: TabDef[] = [
+  { id: "home", icon: Home, label: "Inicio" },
+  { id: "spaces", icon: Building2, label: "Mis Espacios" },
+  { id: "reservations", icon: Calendar, label: "Reservaciones" },
+  { id: "messages", icon: MessageSquare, label: "Mensajes" },
+];
+
+const adminTabs: TabDef[] = [
+  { id: "home", icon: Home, label: "Inicio" },
+  { id: "users", icon: Users, label: "Usuarios" },
+  { id: "spaces", icon: Building2, label: "Espacios" },
+  { id: "analytics", icon: BarChart3, label: "Analíticas" },
+];
+
+// ── Tab content registry per role ──
+function ClientContent({ tab }: { tab: string }) {
+  switch (tab) {
+    case "reservations": return <UserReservations />;
+    case "messages": return <Messages />;
+    default: return <UserHome />;
+  }
+}
+
+function HostContent({ tab }: { tab: string }) {
+  switch (tab) {
+    case "spaces": return <HostDashboard />;
+    case "reservations": return <HostReservations />;
+    case "messages": return <Messages />;
+    default: return <HostHome />;
+  }
+}
+
+function AdminContent({ tab }: { tab: string }) {
+  switch (tab) {
+    case "users": return <AdminUsers />;
+    case "spaces": return <AdminSpaces />;
+    case "analytics": return <AdminAnalytics />;
+    default: return <AdminHome />;
+  }
+}
+
 export default function DashboardLayout({
   children,
 }: {
@@ -35,6 +91,7 @@ export default function DashboardLayout({
   const { user, isAuthenticated, isLoading, logout } = useAuth();
   const router = useRouter();
   const pathname = usePathname();
+  const [activeTab, setActiveTab] = useState("home");
 
   useEffect(() => {
     if (!isLoading && !isAuthenticated) {
@@ -68,41 +125,15 @@ export default function DashboardLayout({
 
   const roleName = user.role === "client" ? "Cliente" : user.role === "host" ? "Anfitrión" : "Admin";
 
-  const getNavItems = () => {
-    const baseItems = [
-      { href: `/dashboard/${user.role === "client" ? "user" : user.role}`, icon: Home, label: "Inicio" },
-    ];
+  // Get tabs for current role
+  const tabs = user.role === "client" ? clientTabs : user.role === "host" ? hostTabs : adminTabs;
 
-    if (user.role === "client") {
-      return [
-        ...baseItems,
-        { href: "/dashboard/user/reservations", icon: Calendar, label: "Mis Reservaciones" },
-        { href: "/dashboard/messages", icon: MessageSquare, label: "Mensajes" },
-      ];
-    }
-
-    if (user.role === "host") {
-      return [
-        ...baseItems,
-        { href: "/dashboard/host/spaces", icon: Building2, label: "Mis Espacios" },
-        { href: "/dashboard/host/reservations", icon: Calendar, label: "Reservaciones" },
-        { href: "/dashboard/messages", icon: MessageSquare, label: "Mensajes" },
-      ];
-    }
-
-    if (user.role === "admin") {
-      return [
-        ...baseItems,
-        { href: "/dashboard/admin/users", icon: Users, label: "Usuarios" },
-        { href: "/dashboard/admin/spaces", icon: Building2, label: "Espacios" },
-        { href: "/dashboard/admin/analytics", icon: BarChart3, label: "Analíticas" },
-      ];
-    }
-
-    return baseItems;
+  // Render content for current role + tab
+  const renderContent = () => {
+    if (user.role === "client") return <ClientContent tab={activeTab} />;
+    if (user.role === "host") return <HostContent tab={activeTab} />;
+    return <AdminContent tab={activeTab} />;
   };
-
-  const navItems = getNavItems();
 
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">
@@ -167,22 +198,22 @@ export default function DashboardLayout({
         {/* ── Sidebar ── */}
         <aside className="hidden md:flex w-60 flex-col bg-card/50 border-r border-border/40">
           <nav className="flex-1 px-3 py-4 space-y-1">
-            {navItems.map((item) => {
-              const isActive = pathname === item.href;
+            {tabs.map((tab) => {
+              const isActive = activeTab === tab.id;
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
                   className={cn(
-                    "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200",
+                    "w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-left",
                     isActive
                       ? "bg-primary/10 text-primary border-l-2 border-primary ml-0"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50 border-l-2 border-transparent"
                   )}
                 >
-                  <item.icon className={cn("h-[18px] w-[18px]", isActive && "text-primary")} />
-                  {item.label}
-                </Link>
+                  <tab.icon className={cn("h-[18px] w-[18px]", isActive && "text-primary")} />
+                  {tab.label}
+                </button>
               );
             })}
           </nav>
@@ -202,29 +233,29 @@ export default function DashboardLayout({
         {/* ── Mobile Navigation ── */}
         <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border/40 bg-card/95 backdrop-blur-lg safe-area-bottom">
           <div className="flex justify-around py-1.5">
-            {navItems.slice(0, 4).map((item) => {
-              const isActive = pathname === item.href;
+            {tabs.slice(0, 4).map((tab) => {
+              const isActive = activeTab === tab.id;
               return (
-                <Link
-                  key={item.href}
-                  href={item.href}
+                <button
+                  key={tab.id}
+                  onClick={() => setActiveTab(tab.id)}
                   className={cn(
                     "flex flex-col items-center gap-0.5 p-2 rounded-lg transition-colors",
                     isActive ? "text-primary" : "text-muted-foreground"
                   )}
                 >
-                  <item.icon className="h-5 w-5" />
-                  <span className="text-[10px] font-medium">{item.label}</span>
-                </Link>
+                  <tab.icon className="h-5 w-5" />
+                  <span className="text-[10px] font-medium">{tab.label}</span>
+                </button>
               );
             })}
           </div>
         </nav>
 
-        {/* ── Main Content ── */}
+        {/* ── Main Content (tab-based, no route navigation) ── */}
         <main className="flex-1 overflow-y-auto thin-scrollbar pb-20 md:pb-0">
           <div className="mx-auto w-full max-w-6xl px-6 py-6">
-            {children}
+            {renderContent()}
           </div>
         </main>
       </div>

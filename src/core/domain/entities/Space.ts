@@ -1,4 +1,4 @@
-export type SpaceType = "garage" | "basement" | "attic" | "storage" | "other";
+export type SpaceType = "garage" | "basement" | "attic" | "storage" | "parking" | "other";
 
 export type SpaceStatus = "active" | "paused" | "pending";
 

@@ -51,7 +51,7 @@ export function SearchFilters({
   ];
 
   const spaceTypeLabels: Record<string, string> = {
-    garage: "Garaje", basement: "Sótano", attic: "Ático", storage: "Bodega", other: "Otro"
+    garage: "Garaje", basement: "Sótano", attic: "Ático", storage: "Bodega", parking: "Parqueo", other: "Otro"
   };
   const priceLabels: Record<string, string> = {
     "0-100": "$0 – $100/mes", "100-300": "$100 – $300/mes", "300-500": "$300 – $500/mes", "500+": "$500+/mes"
@@ -89,93 +89,89 @@ export function SearchFilters({
   return (
     <div className="border-b border-border/40 bg-card/80 glass-strong">
       <div className="max-w-screen-2xl mx-auto px-6 py-3">
-        {/* Row 1: Search + Dropdowns */}
-        <div className="flex items-center gap-3">
-          {/* Search */}
-          <div className="relative w-80 flex-shrink-0">
-            <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
-            <Input
-              type="text"
-              placeholder="Buscar ciudad o zona..."
-              value={searchQuery}
-              onChange={(e) => onSearchChange(e.target.value)}
-              className="pl-9 h-9 bg-background/60 border-border/50 rounded-lg text-sm placeholder:text-muted-foreground/40 focus:border-primary/40 focus:ring-1 focus:ring-primary/10"
-            />
-            {searchQuery && (
-              <button
-                onClick={() => onSearchChange("")}
-                className="absolute right-2 top-1/2 -translate-y-1/2 p-0.5 rounded-full hover:bg-muted text-muted-foreground transition-colors"
-              >
-                <X className="w-3 h-3" />
-              </button>
-            )}
+        {/* Centered search bar — unified pill */}
+        <div className="flex items-center justify-center">
+          <div className="flex items-center gap-0 bg-background/60 border border-border/50 rounded-xl shadow-sm overflow-hidden w-full max-w-4xl">
+            {/* Search input */}
+            <div className="relative flex-1 min-w-0">
+              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+              <Input
+                type="text"
+                placeholder="Buscar ciudad o zona..."
+                value={searchQuery}
+                onChange={(e) => onSearchChange(e.target.value)}
+                className="pl-10 h-10 bg-transparent border-none shadow-none rounded-none text-sm placeholder:text-muted-foreground/40 focus-visible:ring-0 focus-visible:ring-offset-0"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => onSearchChange("")}
+                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1 rounded-full hover:bg-muted text-muted-foreground transition-colors"
+                >
+                  <X className="w-3 h-3" />
+                </button>
+              )}
+            </div>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-border/50 flex-shrink-0" />
+
+            {/* Tipo */}
+            <Select value={spaceType} onValueChange={onSpaceTypeChange}>
+              <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
+                <LayoutGrid className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                <SelectValue placeholder="Tipo" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Todos los tipos</SelectItem>
+                <SelectItem value="garage">Garaje</SelectItem>
+                <SelectItem value="basement">Sótano</SelectItem>
+                <SelectItem value="attic">Ático</SelectItem>
+                <SelectItem value="storage">Bodega</SelectItem>
+                <SelectItem value="parking">Parqueo</SelectItem>
+                <SelectItem value="other">Otro</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-border/50 flex-shrink-0" />
+
+            {/* Precio */}
+            <Select value={priceRange} onValueChange={onPriceRangeChange}>
+              <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
+                <DollarSign className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                <SelectValue placeholder="Precio" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Cualquier precio</SelectItem>
+                <SelectItem value="0-100">$0 – $100 / mes</SelectItem>
+                <SelectItem value="100-300">$100 – $300 / mes</SelectItem>
+                <SelectItem value="300-500">$300 – $500 / mes</SelectItem>
+                <SelectItem value="500+">$500+ / mes</SelectItem>
+              </SelectContent>
+            </Select>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-border/50 flex-shrink-0" />
+
+            {/* Tamaño */}
+            <Select value={sizeRange} onValueChange={onSizeRangeChange}>
+              <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
+                <Maximize2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                <SelectValue placeholder="Tamaño" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Cualquier tamaño</SelectItem>
+                <SelectItem value="0-10">Pequeño (0–10 m²)</SelectItem>
+                <SelectItem value="10-30">Mediano (10–30 m²)</SelectItem>
+                <SelectItem value="30-50">Grande (30–50 m²)</SelectItem>
+                <SelectItem value="50+">Extra grande (50+ m²)</SelectItem>
+              </SelectContent>
+            </Select>
           </div>
-
-          {/* Separator */}
-          <div className="w-px h-5 bg-border/50 flex-shrink-0" />
-
-          {/* Tipo de espacio */}
-          <Select value={spaceType} onValueChange={onSpaceTypeChange}>
-            <SelectTrigger className="h-9 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/50 rounded-lg transition-colors gap-1.5 px-2.5 w-auto">
-              <LayoutGrid className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              <SelectValue placeholder="Tipo de espacio" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Todos los tipos</SelectItem>
-              <SelectItem value="garage">Garaje</SelectItem>
-              <SelectItem value="basement">Sótano</SelectItem>
-              <SelectItem value="attic">Ático</SelectItem>
-              <SelectItem value="storage">Bodega</SelectItem>
-              <SelectItem value="other">Otro</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Precio */}
-          <Select value={priceRange} onValueChange={onPriceRangeChange}>
-            <SelectTrigger className="h-9 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/50 rounded-lg transition-colors gap-1.5 px-2.5 w-auto">
-              <DollarSign className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              <SelectValue placeholder="Precio mensual" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Cualquier precio</SelectItem>
-              <SelectItem value="0-100">$0 – $100 / mes</SelectItem>
-              <SelectItem value="100-300">$100 – $300 / mes</SelectItem>
-              <SelectItem value="300-500">$300 – $500 / mes</SelectItem>
-              <SelectItem value="500+">$500+ / mes</SelectItem>
-            </SelectContent>
-          </Select>
-
-          {/* Tamaño */}
-          <Select value={sizeRange} onValueChange={onSizeRangeChange}>
-            <SelectTrigger className="h-9 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/50 rounded-lg transition-colors gap-1.5 px-2.5 w-auto">
-              <Maximize2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-              <SelectValue placeholder="Tamaño" />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="all">Cualquier tamaño</SelectItem>
-              <SelectItem value="0-10">Pequeño (0–10 m²)</SelectItem>
-              <SelectItem value="10-30">Mediano (10–30 m²)</SelectItem>
-              <SelectItem value="30-50">Grande (30–50 m²)</SelectItem>
-              <SelectItem value="50+">Extra grande (50+ m²)</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <div className="flex-1" />
-
-          {/* Clear */}
-          {activeCount > 0 && (
-            <button
-              onClick={clearAll}
-              className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive transition-colors flex-shrink-0"
-            >
-              <X className="w-3 h-3" />
-              Limpiar filtros ({activeCount})
-            </button>
-          )}
         </div>
 
-        {/* Row 2: Condition toggles + Active filter chips */}
-        <div className="flex items-center gap-2 mt-2.5 flex-wrap">
+        {/* Row 2: Conditions + Active chips — centered */}
+        <div className="flex items-center justify-center gap-2 mt-2.5 flex-wrap">
           {/* Condition toggle buttons */}
           {conditionOptions.map((opt) => {
             const Icon = opt.icon;
@@ -198,7 +194,7 @@ export function SearchFilters({
             );
           })}
 
-          {/* Active filter chips (category filters only, not conditions since those have toggles) */}
+          {/* Active filter chips */}
           {activeFilters.filter(f => f.type !== "condition").length > 0 && (
             <>
               <div className="w-px h-4 bg-border/40 mx-1" />
@@ -217,6 +213,20 @@ export function SearchFilters({
                   </button>
                 </div>
               ))}
+            </>
+          )}
+
+          {/* Clear all */}
+          {activeCount > 0 && (
+            <>
+              <div className="w-px h-4 bg-border/40 mx-1" />
+              <button
+                onClick={clearAll}
+                className="flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-destructive transition-colors"
+              >
+                <X className="w-3 h-3" />
+                Limpiar ({activeCount})
+              </button>
             </>
           )}
         </div>
