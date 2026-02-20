@@ -13,9 +13,7 @@ export const mockSpaces: Space[] = [
     amenities: { climateControlled: false, securityCamera: true, privateEntrance: true, access247: true },
     location: { address: "Colonia Escalón, Calle La Mascota", city: "San Salvador", state: "San Salvador", country: "El Salvador", latitude: 13.7034, longitude: -89.2368 },
     images: [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1621929747188-0b4dc28498d2?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1530906622477-29e4ff04afe7?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
     ],
@@ -125,9 +123,8 @@ export const mockSpaces: Space[] = [
     amenities: { climateControlled: false, securityCamera: true, privateEntrance: true, access247: true },
     location: { address: "Residencial Utila", city: "Santa Tecla", state: "La Libertad", country: "El Salvador", latitude: 13.6769, longitude: -89.2797 },
     images: [
-      "https://images.unsplash.com/photo-1530906622477-29e4ff04afe7?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1621929747188-0b4dc28498d2?w=800&h=600&fit=crop",
     ],
     status: "active",
@@ -191,8 +188,8 @@ export const mockSpaces: Space[] = [
     amenities: { climateControlled: false, securityCamera: true, privateEntrance: true },
     location: { address: "Colonia Lourdes", city: "Colón", state: "La Libertad", country: "El Salvador", latitude: 13.7167, longitude: -89.3667 },
     images: [
-      "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&h=600&fit=crop",
-      "https://images.unsplash.com/photo-1530906622477-29e4ff04afe7?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=800&h=600&fit=crop",
+      "https://images.unsplash.com/photo-1621929747188-0b4dc28498d2?w=800&h=600&fit=crop",
       "https://images.unsplash.com/photo-1486006920555-c77dcf18193c?w=800&h=600&fit=crop",
     ],
     status: "active",
