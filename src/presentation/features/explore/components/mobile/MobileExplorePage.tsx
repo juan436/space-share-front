@@ -11,7 +11,7 @@ import { MobileMapView } from "./MobileMapView";
 import { MobileBottomNav } from "./MobileBottomNav";
 
 type ViewMode = "list" | "map";
-type FilterType = "all" | "garage" | "basement" | "attic" | "storage";
+type FilterType = "all" | "garage" | "basement" | "attic" | "storage" | "parking";
 
 export function MobileExplorePage() {
   const [viewMode, setViewMode] = useState<ViewMode>("list");
@@ -37,8 +37,8 @@ export function MobileExplorePage() {
   const filteredSpaces = mockSpaces.filter(space => {
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
-      if (!space.title.toLowerCase().includes(q) && 
-          !space.location.city.toLowerCase().includes(q)) {
+      if (!space.title.toLowerCase().includes(q) &&
+        !space.location.city.toLowerCase().includes(q)) {
         return false;
       }
     }
@@ -65,7 +65,7 @@ export function MobileExplorePage() {
       {/* Sticky Header */}
       <header className="sticky top-0 z-40 bg-card border-b safe-area-top">
         <MobileHeader />
-        
+
         <MobileSearchFilters
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}

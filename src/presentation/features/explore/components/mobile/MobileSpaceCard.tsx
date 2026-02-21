@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { MapPin, Star, Ruler, Heart, Thermometer, Video, DoorOpen } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { spaceTypeLabels, spaceTypeColors } from "../../data";
@@ -24,10 +25,20 @@ export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick }
     >
       {/* Image */}
       <div className="relative aspect-[16/10] bg-gradient-to-br from-primary/10 to-accent/10">
-        <div className="absolute inset-0 flex items-center justify-center">
-          <Ruler className="w-16 h-16 text-muted-foreground/20" />
-        </div>
-        
+        {space.images && space.images.length > 0 ? (
+          <Image
+            src={space.images[0]}
+            alt={space.title}
+            fill
+            className="object-cover"
+            sizes="(max-width: 768px) 100vw, 50vw"
+          />
+        ) : (
+          <div className="absolute inset-0 flex items-center justify-center">
+            <Ruler className="w-16 h-16 text-muted-foreground/20" />
+          </div>
+        )}
+
         {/* Type Badge */}
         <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-white text-xs font-semibold ${spaceTypeColors[space.type]}`}>
           {spaceTypeLabels[space.type]}
