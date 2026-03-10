@@ -27,60 +27,66 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
   return (
     <>
       {/* Main Gallery */}
-      <div className="relative w-full">
+      <div className="relative w-full mb-8">
         {/* Desktop: Grid Layout */}
-        <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 gap-2 h-[400px] lg:h-[480px] rounded-2xl overflow-hidden">
-          {/* Main Image */}
-          <div className="col-span-2 row-span-2 relative group cursor-pointer" onClick={() => setIsFullscreen(true)}>
+        <div className="hidden md:grid md:grid-cols-12 md:grid-rows-2 gap-3 h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group/gallery">
+          {/* Main Hero Image */}
+          <div className="col-span-8 row-span-2 relative group cursor-pointer" onClick={() => setIsFullscreen(true)}>
             {hasImages ? (
               <Image
                 src={displayImages[0]}
                 alt={title}
                 fill
-                className="object-cover transition-transform duration-300 group-hover:scale-105"
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
                 priority
               />
             ) : (
-              <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-                <span className="text-6xl">🏠</span>
+              <div className="w-full h-full bg-muted/30 flex items-center justify-center">
+                <span className="text-6xl opacity-20">🏠</span>
               </div>
             )}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
+            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
           </div>
 
-          {/* Secondary Images */}
-          {[1, 2, 3, 4].map((index) => (
-            <div
-              key={index}
-              className="relative group cursor-pointer"
-              onClick={() => {
-                setCurrentIndex(index);
-                setIsFullscreen(true);
-              }}
-            >
-              {displayImages[index] ? (
-                <Image
-                  src={displayImages[index]}
-                  alt={`${title} - ${index + 1}`}
-                  fill
-                  className="object-cover transition-transform duration-300 group-hover:scale-105"
-                />
-              ) : (
-                <div className="w-full h-full bg-gradient-to-br from-muted to-muted/50 flex items-center justify-center">
-                  <span className="text-3xl opacity-30">📷</span>
+          {/* Secondary Stacked Images */}
+          <div className="col-span-4 row-span-1 relative group cursor-pointer" onClick={() => { setCurrentIndex(1); setIsFullscreen(true); }}>
+            {displayImages[1] ? (
+              <Image
+                src={displayImages[1]}
+                alt={`${title} - 2`}
+                fill
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+            ) : (
+               <div className="w-full h-full bg-muted/40 flex items-center justify-center">
+                  <span className="text-3xl opacity-20">📷</span>
                 </div>
-              )}
-              <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors" />
-            </div>
-          ))}
+            )}
+             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+          </div>
+          <div className="col-span-4 row-span-1 relative group cursor-pointer" onClick={() => { setCurrentIndex(2); setIsFullscreen(true); }}>
+            {displayImages[2] ? (
+              <Image
+                src={displayImages[2]}
+                alt={`${title} - 3`}
+                fill
+                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+              />
+            ) : (
+               <div className="w-full h-full bg-muted/50 flex items-center justify-center">
+                  <span className="text-3xl opacity-20">📷</span>
+                </div>
+            )}
+             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
+          </div>
 
-          {/* Show All Button */}
+          {/* Show All Button (Glassmorphism) */}
           <button
             onClick={() => setIsFullscreen(true)}
-            className="absolute bottom-4 right-4 flex items-center gap-2 px-4 py-2 bg-white/90 backdrop-blur-sm rounded-lg shadow-lg hover:bg-white transition-colors text-sm font-medium"
+            className="absolute bottom-6 right-6 flex items-center gap-2 px-5 py-2.5 bg-white/80 dark:bg-black/80 backdrop-blur-md rounded-xl border border-white/40 dark:border-white/10 shadow-[0_8px_30px_rgb(0,0,0,0.12)] hover:bg-white dark:hover:bg-black hover:scale-105 active:scale-95 transition-all duration-300 text-[13px] font-bold tracking-wide"
           >
             <Expand className="w-4 h-4" />
-            Ver todas las fotos
+            <span>Ver todas</span>
           </button>
         </div>
 

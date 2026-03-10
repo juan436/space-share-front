@@ -29,46 +29,59 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor }: Spa
   };
 
   return (
-    <div className="space-y-4">
-      {/* Title Row */}
-      <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <span className={`px-3 py-1 rounded-full text-white text-sm font-medium ${spaceTypeColor}`}>
-              {spaceTypeLabel}
-            </span>
-            {space.rating && (
-              <div className="flex items-center gap-1">
-                <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-                <span className="font-semibold">{space.rating}</span>
-                <span className="text-muted-foreground">({space.reviewCount} reseñas)</span>
-              </div>
-            )}
-          </div>
-          
-          <h1 className="text-2xl md:text-3xl lg:text-4xl font-bold text-foreground">
-            {space.title}
-          </h1>
-          
-          <div className="flex items-center gap-2 text-muted-foreground">
-            <MapPin className="w-4 h-4" />
-            <span>
-              {space.location.address}, {space.location.city}, {space.location.state}
+    <div className="flex flex-col gap-6">
+      {/* Top Meta info */}
+      <div className="flex items-center gap-3 text-sm">
+        <span className={`px-3 py-1 rounded-full text-foreground/90 font-semibold ring-1 ring-inset ${spaceTypeColor}`}>
+          {spaceTypeLabel}
+        </span>
+        
+        {space.rating && (
+          <div className="flex items-center gap-1.5 pl-1">
+            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
+            <span className="font-bold text-foreground">{space.rating}</span>
+            <span className="text-muted-foreground">·</span>
+            <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
+              {space.reviewCount} reseñas
             </span>
           </div>
-        </div>
+        )}
+      </div>
 
-        {/* Action Buttons */}
-        <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm" onClick={handleShare} className="gap-2">
+      {/* Main Title & Actions inline row */}
+      <div className="flex items-start justify-between gap-6">
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-[1.15]">
+          {space.title}
+        </h1>
+
+        {/* Action Buttons (Icons only for minimalist look) */}
+        <div className="flex items-center gap-2 pt-1">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            onClick={handleShare} 
+            className="rounded-full shadow-sm hover:shadow-md transition-all border-border/50 hover:bg-muted/50"
+            title="Compartir"
+          >
             <Share2 className="w-4 h-4" />
-            <span className="hidden sm:inline">Compartir</span>
           </Button>
-          <Button variant="outline" size="sm" className="gap-2">
+          <Button 
+            variant="outline" 
+            size="icon" 
+            className="rounded-full shadow-sm hover:shadow-md transition-all border-border/50 hover:bg-muted/50"
+            title="Guardar"
+          >
             <Heart className="w-4 h-4" />
-            <span className="hidden sm:inline">Guardar</span>
           </Button>
         </div>
+      </div>
+
+      {/* Location line under title */}
+      <div className="flex items-center gap-2 text-muted-foreground font-medium">
+        <MapPin className="w-4 h-4 shrink-0" />
+        <span className="underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
+          {space.location.address}, {space.location.city}, {space.location.state}
+        </span>
       </div>
     </div>
   );
