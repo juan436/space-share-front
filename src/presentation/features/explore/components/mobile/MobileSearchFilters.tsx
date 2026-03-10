@@ -1,11 +1,18 @@
 "use client";
 
-import { Search, X, SlidersHorizontal, Thermometer, Video, DoorOpen, Warehouse, Home, ArrowDown, Box, Car, Clock } from "lucide-react";
+import { Search, X, Thermometer, Video, DoorOpen, Warehouse, Home, ArrowDown, Box, Car, Clock } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Button } from "@/presentation/components/ui/button";
-import { spaceTypeLabels } from "../../data";
+import { useEffect, useState } from "react";
 
-type FilterType = "all" | "garage" | "basement" | "attic" | "storage" | "parking";
+export type FilterType = "all" | "garage" | "basement" | "attic" | "storage" | "parking";
+
+export interface FilterState {
+  type: FilterType;
+  priceRange: string | null;
+  size: string | null;
+  amenities: string[];
+}
 
 const filterOptions: { type: FilterType; label: string; icon: typeof Home }[] = [
   { type: "all", label: "Todos", icon: Home },
@@ -16,11 +23,25 @@ const filterOptions: { type: FilterType; label: string; icon: typeof Home }[] = 
   { type: "attic", label: "Ático", icon: Home },
 ];
 
+const priceRanges = ["$0-$50", "$50-$100", "$100-$200", "$200+"];
+const sizes = [
+  { id: "small", label: "Pequeño", sub: "0-15m²" },
+  { id: "medium", label: "Mediano", sub: "15-30m²" },
+  { id: "large", label: "Grande", sub: "30-50m²" },
+  { id: "xlarge", label: "Extra grande", sub: "50m²+" },
+];
+const amenitiesList = [
+  { id: "climateControlled", icon: Thermometer, label: "Clima controlado" },
+  { id: "securityCamera", icon: Video, label: "Cámara de seguridad" },
+  { id: "privateEntrance", icon: DoorOpen, label: "Entrada privada" },
+  { id: "access247", icon: Clock, label: "Acceso 24/7" },
+];
+
 interface MobileSearchFiltersProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  activeFilter: FilterType;
-  onFilterChange: (filter: FilterType) => void;
+  filters: FilterState;
+  onFilterChange: (filters: FilterState) => void;
   showFilters: boolean;
   onShowFiltersChange: (show: boolean) => void;
 }
@@ -28,11 +49,44 @@ interface MobileSearchFiltersProps {
 export function MobileSearchFilters({
   searchQuery,
   onSearchChange,
-  activeFilter,
+  filters,
   onFilterChange,
   showFilters,
   onShowFiltersChange,
 }: MobileSearchFiltersProps) {
+  // Local state for the filter sheet to allow cancel/apply
+  const [localFilters, setLocalFilters] = useState<FilterState>(filters);
+
+  // Sync local state when sheet opens or parent filters change
+  useEffect(() => {
+    if (showFilters) {
+      setLocalFilters(filters);
+    }
+  }, [showFilters, filters]);
+
+  const handleApply = () => {
+    onFilterChange(localFilters);
+    onShowFiltersChange(false);
+  };
+
+  const handleClear = () => {
+    const cleared: FilterState = { type: "all", priceRange: null, size: null, amenities: [] };
+    setLocalFilters(cleared);
+    onFilterChange(cleared);
+    onShowFiltersChange(false);
+  };
+
+  const toggleAmenity = (id: string) => {
+    setLocalFilters(prev => ({
+      ...prev,
+      amenities: prev.amenities.includes(id) 
+        ? prev.amenities.filter(a => a !== id)
+        : [...prev.amenities, id]
+    }));
+  };
+
+  const activeFilterCount = (filters.priceRange ? 1 : 0) + (filters.size ? 1 : 0) + filters.amenities.length;
+
   return (
     <>
       {/* Search Bar */}
@@ -58,13 +112,13 @@ export function MobileSearchFilters({
       </div>
 
       {/* Filter Pills with Icons */}
-      <div className="px-4 pb-3 overflow-x-auto no-scrollbar">
-        <div className="flex gap-2">
+      <div className="px-4 pb-3 overflow-x-auto no-scrollbar flex items-center justify-between">
+        <div className="flex gap-2 mr-2">
           {filterOptions.map(({ type, label, icon: Icon }) => (
             <button
               key={type}
-              onClick={() => onFilterChange(type)}
-              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${activeFilter === type
+              onClick={() => onFilterChange({ ...filters, type })}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filters.type === type
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
                   : "bg-card text-muted-foreground border border-border/60 hover:border-primary/30 hover:text-foreground"
                 }`}
@@ -74,6 +128,13 @@ export function MobileSearchFilters({
             </button>
           ))}
         </div>
+        
+        {/* Visual indicator for active sheet filters */}
+        {activeFilterCount > 0 && (
+          <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm animate-in fade-in zoom-in duration-200">
+            {activeFilterCount}
+          </div>
+        )}
       </div>
 
       {/* Filter Sheet */}
@@ -83,15 +144,15 @@ export function MobileSearchFilters({
             className="absolute inset-0 bg-black/50 backdrop-blur-sm"
             onClick={() => onShowFiltersChange(false)}
           />
-          <div className="absolute bottom-0 left-0 right-0 bg-card rounded-t-3xl safe-area-bottom animate-in slide-in-from-bottom duration-300">
+          <div className="absolute bottom-0 left-0 right-0 bg-card rounded-t-3xl safe-area-bottom animate-in slide-in-from-bottom duration-300 flex flex-col max-h-[90vh]">
             {/* Handle bar */}
-            <div className="flex justify-center pt-3 pb-1">
+            <div className="flex-none flex justify-center pt-3 pb-1">
               <div className="w-10 h-1 rounded-full bg-muted-foreground/20" />
             </div>
 
-            <div className="p-6 pt-3">
-              <div className="flex items-center justify-between mb-6">
-                <h2 className="text-lg font-bold">Filtros</h2>
+            <div className="flex-none p-6 pt-3 pb-2">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold">Filtros Avanzados</h2>
                 <button
                   onClick={() => onShowFiltersChange(false)}
                   className="p-2 -mr-2 rounded-full hover:bg-muted transition-colors"
@@ -99,72 +160,88 @@ export function MobileSearchFilters({
                   <X className="w-5 h-5" />
                 </button>
               </div>
+            </div>
 
-              <div className="space-y-6 max-h-[60vh] overflow-y-auto">
-                {/* Price Range */}
-                <div>
-                  <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-3">Rango de precio</h3>
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {["$0-$50", "$50-$100", "$100-$200", "$200+"].map((range) => (
+            <div className="flex-1 overflow-y-auto px-6 space-y-6 pb-2">
+              {/* Price Range */}
+              <div>
+                <h3 className="font-semibold text-sm text-foreground mb-3">Rango de precio</h3>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {priceRanges.map((range) => {
+                    const isActive = localFilters.priceRange === range;
+                    return (
                       <button
                         key={range}
-                        className="py-3 px-4 rounded-xl border border-border/60 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 active:bg-primary/10 transition-all"
+                        onClick={() => setLocalFilters({ ...localFilters, priceRange: isActive ? null : range })}
+                        className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
+                          isActive 
+                            ? "border-primary bg-primary/10 text-primary" 
+                            : "border-border/60 hover:border-primary/50 text-muted-foreground"
+                        }`}
                       >
                         {range}/mes
                       </button>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
+              </div>
 
-                {/* Size */}
-                <div>
-                  <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-3">Tamaño</h3>
-                  <div className="grid grid-cols-2 gap-2.5">
-                    {[
-                      { label: "Pequeño", sub: "0-15m²" },
-                      { label: "Mediano", sub: "15-30m²" },
-                      { label: "Grande", sub: "30-50m²" },
-                      { label: "Extra grande", sub: "50m²+" },
-                    ].map(({ label, sub }) => (
+              {/* Size */}
+              <div>
+                <h3 className="font-semibold text-sm text-foreground mb-3">Tamaño</h3>
+                <div className="grid grid-cols-2 gap-2.5">
+                  {sizes.map(({ id, label, sub }) => {
+                     const isActive = localFilters.size === id;
+                     return (
                       <button
-                        key={label}
-                        className="py-3 px-4 rounded-xl border border-border/60 text-left hover:border-primary hover:bg-primary/5 active:bg-primary/10 transition-all"
+                        key={id}
+                        onClick={() => setLocalFilters({ ...localFilters, size: isActive ? null : id })}
+                        className={`py-3 px-4 rounded-xl border text-left transition-all ${
+                          isActive 
+                            ? "border-primary bg-primary/10" 
+                            : "border-border/60 hover:border-primary/50"
+                        }`}
                       >
-                        <span className="block text-sm font-medium">{label}</span>
-                        <span className="block text-xs text-muted-foreground mt-0.5">{sub}</span>
+                        <span className={`block text-sm font-medium ${isActive ? 'text-primary' : 'text-foreground'}`}>{label}</span>
+                        <span className={`block text-xs mt-0.5 ${isActive ? 'text-primary/70' : 'text-muted-foreground'}`}>{sub}</span>
                       </button>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
+              </div>
 
-                {/* Amenities */}
-                <div>
-                  <h3 className="font-semibold text-sm text-muted-foreground uppercase tracking-wider mb-3">Características</h3>
-                  <div className="flex flex-wrap gap-2">
-                    {[
-                      { icon: Thermometer, label: "Clima controlado" },
-                      { icon: Video, label: "Cámara de seguridad" },
-                      { icon: DoorOpen, label: "Entrada privada" },
-                      { icon: Clock, label: "Acceso 24/7" },
-                    ].map(({ icon: Icon, label }) => (
+              {/* Amenities */}
+              <div>
+                <h3 className="font-semibold text-sm text-foreground mb-3">Características</h3>
+                <div className="flex flex-wrap gap-2">
+                  {amenitiesList.map(({ id, icon: Icon, label }) => {
+                     const isActive = localFilters.amenities.includes(id);
+                     return (
                       <button
-                        key={label}
-                        className="flex items-center gap-2 py-2.5 px-4 rounded-full border border-border/60 text-sm font-medium hover:border-primary hover:text-primary hover:bg-primary/5 active:bg-primary/10 transition-all"
+                        key={id}
+                        onClick={() => toggleAmenity(id)}
+                        className={`flex items-center gap-2 py-2.5 px-4 rounded-full border text-sm font-medium transition-all ${
+                          isActive 
+                            ? "border-primary bg-primary text-primary-foreground shadow-md shadow-primary/25" 
+                            : "border-border/60 hover:border-primary/50 text-muted-foreground bg-card"
+                        }`}
                       >
                         <Icon className="w-4 h-4" />
                         {label}
                       </button>
-                    ))}
-                  </div>
+                    );
+                  })}
                 </div>
               </div>
+            </div>
 
-              <div className="flex gap-3 mt-6 pt-4 border-t">
-                <Button variant="outline" className="flex-1 h-12 rounded-xl" onClick={() => onShowFiltersChange(false)}>
-                  Limpiar
+            <div className="flex-none p-6 pt-4 border-t border-border/40 bg-card">
+              <div className="flex gap-3">
+                <Button variant="outline" className="flex-1 h-12 rounded-xl" onClick={handleClear}>
+                  Limpiar todo
                 </Button>
-                <Button className="flex-1 h-12 rounded-xl shadow-md shadow-primary/25" onClick={() => onShowFiltersChange(false)}>
-                  Aplicar filtros
+                <Button className="flex-1 h-12 rounded-xl shadow-md shadow-primary/25" onClick={handleApply}>
+                  Ver resultados
                 </Button>
               </div>
             </div>

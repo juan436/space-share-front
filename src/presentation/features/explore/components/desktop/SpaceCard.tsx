@@ -19,7 +19,10 @@ const spaceTypeLabels: Record<string, string> = {
   other: "Otro",
 };
 
+import { useRouter } from "next/navigation";
+
 export function SpaceCard({ space, isSelected, onClick }: SpaceCardProps) {
+  const router = useRouter();
   const amenities = [];
 
   if (space.amenities.climateControlled) {
@@ -36,7 +39,7 @@ export function SpaceCard({ space, isSelected, onClick }: SpaceCardProps) {
   }
 
   const handleClick = () => {
-    window.open(`/space/${space.id}`, "_blank");
+    router.push(`/space/${space.id}`);
   };
 
   return (

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { MapPin, Star, Ruler, Heart, Thermometer, Video, DoorOpen } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { spaceTypeLabels, spaceTypeColors } from "../../data";
+import { useRouter } from "next/navigation";
 
 interface MobileSpaceCardProps {
   space: Space;
@@ -13,9 +14,11 @@ interface MobileSpaceCardProps {
 }
 
 export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick }: MobileSpaceCardProps) {
+  const router = useRouter();
+
   const handleClick = () => {
-    // Open detail page in new tab
-    window.open(`/space/${space.id}`, "_blank");
+    // Open detail page in the same tab
+    router.push(`/space/${space.id}`);
   };
 
   return (
