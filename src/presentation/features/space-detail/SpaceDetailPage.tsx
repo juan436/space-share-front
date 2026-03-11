@@ -2,6 +2,7 @@
 
 import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
+import { useEffect, useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 import {
@@ -22,18 +23,31 @@ interface SpaceDetailPageProps {
 }
 
 export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: SpaceDetailPageProps) {
+  const [returnPath, setReturnPath] = useState("/explore");
+
+  useEffect(() => {
+    // Read the query params safely on client-side to determine the return path
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      const fromParam = params.get("from");
+      if (fromParam) {
+        setReturnPath(fromParam);
+      }
+    }
+  }, []);
+
   return (
     <div className="min-h-screen bg-background pb-32 md:pb-12 font-sans selection:bg-primary/20">
       {/* Floating Navigation Bar */}
       <div className="fixed top-4 left-0 right-0 z-50 pointer-events-none px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-start">
-        <Link href="/explore" className="pointer-events-auto">
+        <Link href={returnPath} className="pointer-events-auto">
           <Button 
             variant="secondary" 
             size="sm" 
             className="gap-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-black/5 dark:border-white/10 hover:scale-105 transition-transform duration-300 h-10 px-4"
           >
             <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline font-medium text-[13px] tracking-wide">Volver a explorar</span>
+            <span className="hidden sm:inline font-medium text-[13px] tracking-wide">Volver</span>
             <span className="sm:hidden font-medium text-[13px] tracking-wide">Volver</span>
           </Button>
         </Link>

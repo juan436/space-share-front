@@ -36,6 +36,8 @@ export interface Space {
   bookingsCount?: number;
   occupancyRate?: number;
   totalEarnings?: number;
+  capacity: number; // Maximum Number of slots/capacity available for rent
+  occupancyMap?: Record<string, number>; // Maps 'YYYY-MM-DD' -> number of booked slots
   createdAt: Date;
   updatedAt: Date;
 }
@@ -45,6 +47,7 @@ export interface CreateSpaceInput {
   title: string;
   description: string;
   type: SpaceType;
+  capacity: number;
   squareMeters: number;
   pricePerMonth: number;
   amenities: SpaceAmenities;
@@ -56,6 +59,7 @@ export interface UpdateSpaceInput {
   title?: string;
   description?: string;
   type?: SpaceType;
+  capacity?: number;
   squareMeters?: number;
   pricePerMonth?: number;
   amenities?: Partial<SpaceAmenities>;

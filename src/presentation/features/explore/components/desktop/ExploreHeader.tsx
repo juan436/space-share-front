@@ -20,6 +20,7 @@ import {
   LogOut,
   Settings,
   ChevronDown,
+  Heart,
 } from "lucide-react";
 
 export function ExploreHeader() {
@@ -127,6 +128,13 @@ export function ExploreHeader() {
                     <Link href={dashboardPath}>
                       <LayoutDashboard className="w-4 h-4 text-muted-foreground" />
                       Panel administrativo
+                    </Link>
+                  </DropdownMenuItem>
+
+                  <DropdownMenuItem asChild className="rounded-lg cursor-pointer gap-2.5 px-3 py-2 text-sm">
+                    <Link href="/favorites">
+                      <Heart className="w-4 h-4 text-muted-foreground" />
+                      Guardados
                     </Link>
                   </DropdownMenuItem>
 

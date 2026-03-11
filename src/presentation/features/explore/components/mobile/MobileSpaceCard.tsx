@@ -11,14 +11,16 @@ interface MobileSpaceCardProps {
   isFavorite: boolean;
   onToggleFavorite: (id: string) => void;
   onClick: () => void;
+  returnPath?: string;
 }
 
-export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick }: MobileSpaceCardProps) {
+export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick, returnPath }: MobileSpaceCardProps) {
   const router = useRouter();
 
   const handleClick = () => {
-    // Open detail page in the same tab
-    router.push(`/space/${space.id}`);
+    if (onClick) onClick();
+    const query = returnPath ? `?from=${encodeURIComponent(returnPath)}` : '';
+    router.push(`/space/${space.id}${query}`);
   };
 
   return (

@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { Star, Ruler, Thermometer, Video, DoorOpen, ShieldCheck, Clock } from "lucide-react";
+import { Star, Ruler, Thermometer, Video, DoorOpen, ShieldCheck, Clock, Heart } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { cn } from "@/presentation/utils/cn";
 
@@ -9,6 +9,9 @@ interface SpaceCardProps {
   space: Space;
   isSelected?: boolean;
   onClick?: () => void;
+  returnPath?: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: (id: string) => void;
 }
 
 const spaceTypeLabels: Record<string, string> = {
@@ -21,7 +24,7 @@ const spaceTypeLabels: Record<string, string> = {
 
 import { useRouter } from "next/navigation";
 
-export function SpaceCard({ space, isSelected, onClick }: SpaceCardProps) {
+export function SpaceCard({ space, isSelected, onClick, returnPath, isFavorite, onToggleFavorite }: SpaceCardProps) {
   const router = useRouter();
   const amenities = [];
 
@@ -39,7 +42,9 @@ export function SpaceCard({ space, isSelected, onClick }: SpaceCardProps) {
   }
 
   const handleClick = () => {
-    router.push(`/space/${space.id}`);
+    if (onClick) onClick();
+    const query = returnPath ? `?from=${encodeURIComponent(returnPath)}` : '';
+    router.push(`/space/${space.id}${query}`);
   };
 
   return (
@@ -92,20 +97,45 @@ export function SpaceCard({ space, isSelected, onClick }: SpaceCardProps) {
       {/* Content */}
       <div className="flex-1 flex flex-col justify-between min-w-0 py-0.5">
         <div>
-          {/* Title & Rating */}
+          {/* Title, Rating & Favorite */}
           <div className="flex items-start justify-between gap-2">
             <h3 className="font-semibold text-foreground text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
               {space.title}
             </h3>
-            {space.rating && space.rating > 0 && (
-              <div className="flex items-center gap-1 flex-shrink-0 bg-accent/10 px-2 py-0.5 rounded-md">
-                <Star className="w-3.5 h-3.5 fill-accent text-accent" />
-                <span className="text-xs font-bold text-accent">{space.rating.toFixed(1)}</span>
-                {space.reviewCount && space.reviewCount > 0 && (
-                  <span className="text-[10px] text-muted-foreground">({space.reviewCount})</span>
-                )}
-              </div>
-            )}
+            
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {/* Rating */}
+              {space.rating && space.rating > 0 && (
+                <div className="flex items-center gap-1 bg-accent/10 px-2 py-0.5 rounded-md">
+                  <Star className="w-3.5 h-3.5 fill-accent text-accent" />
+                  <span className="text-xs font-bold text-accent">{space.rating.toFixed(1)}</span>
+                  {space.reviewCount && space.reviewCount > 0 && (
+                    <span className="text-[10px] text-muted-foreground">({space.reviewCount})</span>
+                  )}
+                </div>
+              )}
+              
+              {/* Favorite Button */}
+              {onToggleFavorite && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    onToggleFavorite(space.id);
+                  }}
+                  className="p-1.5 rounded-full hover:bg-rose-50 transition-colors group/heart"
+                  title={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
+                >
+                  <Heart 
+                    className={cn(
+                      "w-4 h-4 transition-colors",
+                      isFavorite 
+                        ? "fill-rose-500 text-rose-500" 
+                        : "text-muted-foreground group-hover/heart:text-rose-500"
+                    )} 
+                  />
+                </button>
+              )}
+            </div>
           </div>
 
           {/* Location */}
