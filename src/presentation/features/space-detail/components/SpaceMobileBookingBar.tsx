@@ -27,6 +27,10 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
   const [quantity, setQuantity] = useState(1);
   const [startDate, setStartDate] = useState<Date>(new Date(new Date().setHours(0, 0, 0, 0)));
 
+  const isVehicleSpace = space.type === "garage" || space.type === "parking";
+  const effectiveQuantity = isVehicleSpace ? quantity : 1;
+  const displayCapacity = space.capacity || 1;
+
   // Calculate pricing based on mode
   let currentMonths = months;
   if (mode === "dates" && dateRange?.from && dateRange?.to) {
@@ -34,7 +38,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
     currentMonths = Math.max(1, diffDays / 30);
   }
 
-  const totalPrice = Math.round(space.pricePerMonth * currentMonths * quantity);
+  const totalPrice = Math.round(space.pricePerMonth * currentMonths * effectiveQuantity);
   const serviceFee = Math.round(totalPrice * 0.1);
   const grandTotal = Math.round(totalPrice + serviceFee);
 
@@ -49,7 +53,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
       d.setDate(start.getDate() + i);
       const dateStr = format(d, "yyyy-MM-dd");
       const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
-      if (currentOccupancy + quantity > space.capacity) return false;
+      if (currentOccupancy + effectiveQuantity > displayCapacity) return false;
     }
     return true;
   };
@@ -108,12 +112,12 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
             </DialogHeader>
 
             <div className="mt-4">
-              {/* Quantity Selector (Shared Capacity) */}
-              {space.capacity > 1 && (
+              {/* Quantity Selector (Shared Capacity - Only for Garages/Parking) */}
+              {isVehicleSpace && (
                 <div className="flex items-center justify-between mb-6 p-4 rounded-xl border border-border/60 bg-muted/20">
                   <div className="flex flex-col">
                     <span className="text-sm font-bold">Cantidad de espacios</span>
-                    <span className="text-xs text-muted-foreground font-medium">Capacidad disponible: {space.capacity}</span>
+                    <span className="text-xs text-muted-foreground font-medium">Capacidad disponible: {displayCapacity}</span>
                   </div>
                   <div className="flex items-center gap-3">
                     <button
@@ -125,8 +129,8 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                     </button>
                     <span className="text-sm font-bold w-4 text-center">{quantity}</span>
                     <button
-                      onClick={() => setQuantity(Math.min(space.capacity, quantity + 1))}
-                      disabled={quantity >= space.capacity}
+                      onClick={() => setQuantity(Math.min(displayCapacity, quantity + 1))}
+                      disabled={quantity >= displayCapacity}
                       className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 dark:ring-white/10 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-all"
                     >
                       <Plus className="w-4 h-4" />
@@ -195,7 +199,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                         </p>
                         <p className="text-[11px] text-amber-600/80 dark:text-amber-400/60 leading-relaxed font-medium text-left">
                           Una reserva por meses requiere disponibilidad continua los {months * 30} días seguidos. 
-                          Como hay fechas sueltas ya reservadas en este período, se interrumpe la disponibilidad y no podemos ofrecerte los <b>{quantity} {quantity === 1 ? 'espacio' : 'espacios'}</b> sin pausas.
+                          Como hay fechas sueltas ya reservadas en este período, se interrumpe la disponibilidad y no podemos ofrecerte el <b>{isVehicleSpace ? effectiveQuantity + (effectiveQuantity === 1 ? ' espacio' : ' espacios') : 'lugar'}</b> sin pausas.
                         </p>
                         {nextDate && (
                           <button 
@@ -232,7 +236,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                           
                           const dateStr = format(date, "yyyy-MM-dd");
                           const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
-                          return currentOccupancy + quantity > space.capacity;
+                          return currentOccupancy + effectiveQuantity > displayCapacity;
                         }}
                       />
                     </div>
@@ -249,7 +253,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
               <div className="space-y-4 mb-8 pt-2">
                 <div className="flex justify-between items-center text-[15px]">
                   <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30">
-                    ${space.pricePerMonth} x {months} {months === 1 ? "mes" : "meses"} {space.capacity > 1 && `x ${quantity} unid.`}
+                    ${space.pricePerMonth} x {months} {months === 1 ? "mes" : "meses"} {isVehicleSpace && `x ${effectiveQuantity} unid.`}
                   </span>
                   <span className="text-foreground font-semibold">${totalPrice}</span>
                 </div>
