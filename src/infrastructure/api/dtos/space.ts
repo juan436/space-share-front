@@ -15,7 +15,7 @@ export interface SpaceLocationDto {
 
 export interface SpaceDto {
   _id: string;
-  hostId: string;
+  hostId: string | { _id: string; name: string; email: string; avatar?: string };
   title: string;
   description: string;
   type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";

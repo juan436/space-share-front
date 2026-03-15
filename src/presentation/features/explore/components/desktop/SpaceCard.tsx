@@ -4,6 +4,7 @@ import Image from "next/image";
 import { Star, Ruler, Thermometer, Video, DoorOpen, ShieldCheck, Clock, Heart } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { cn } from "@/presentation/utils/cn";
+import { useAuth } from "@/presentation/providers/auth-context";
 
 interface SpaceCardProps {
   space: Space;
@@ -26,6 +27,8 @@ import { useRouter } from "next/navigation";
 
 export function SpaceCard({ space, isSelected, onClick, returnPath, isFavorite, onToggleFavorite }: SpaceCardProps) {
   const router = useRouter();
+  const { user } = useAuth();
+  const isOwner = user?.id === space.hostId;
   const amenities = [];
 
   if (space.amenities.climateControlled) {
@@ -84,6 +87,13 @@ export function SpaceCard({ space, isSelected, onClick, returnPath, isFavorite, 
         {space.verified && (
           <div className="absolute top-2.5 right-2.5 p-1.5 bg-emerald-500 text-white rounded-lg shadow-sm">
             <ShieldCheck className="w-3 h-3" />
+          </div>
+        )}
+
+        {/* Owner badge */}
+        {isOwner && (
+          <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-[11px] font-bold rounded-lg shadow-sm">
+            Tu publicación
           </div>
         )}
 

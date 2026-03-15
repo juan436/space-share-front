@@ -8,6 +8,7 @@ export interface SpaceViewModel {
   type: SpaceTypeValue;
   squareMeters: number;
   pricePerMonth: number;
+  capacity: number;
   status: SpaceStatusValue;
   climateControlled: boolean;
   securityCamera: boolean;
@@ -16,6 +17,7 @@ export interface SpaceViewModel {
   city: string;
   state: string;
   country: string;
+  images: string[];
 }
 
 export interface NewSpaceFormData {

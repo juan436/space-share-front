@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/pre
 import { Button } from "@/presentation/components/ui/button";
 import {
   Calendar, CheckCircle2, XCircle, Clock, Loader2,
-  MapPin, User, MessageSquare, DollarSign,
+  MapPin, User, MessageSquare, DollarSign, ChevronLeft, ChevronRight,
 } from "lucide-react";
 import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
 import { reservationRepository } from "@/bootstrap/application";
@@ -27,6 +27,8 @@ export function HostReservations() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [updatingId, setUpdatingId] = useState<string | null>(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 3;
 
   const fetchReservations = useCallback(async () => {
     try {
@@ -59,6 +61,12 @@ export function HostReservations() {
     ? reservations
     : reservations.filter((r) => r.status === activeTab);
 
+  const totalPages = Math.ceil(filteredReservations.length / pageSize);
+  const paginatedReservations = filteredReservations.slice(
+    (currentPage - 1) * pageSize,
+    currentPage * pageSize
+  );
+
   const tabs: { key: FilterTab; label: string; count: number }[] = [
     { key: "all", label: "Todas", count: reservations.length },
     { key: "pending", label: "Pendientes", count: reservations.filter((r) => r.status === "pending").length },
@@ -78,7 +86,7 @@ export function HostReservations() {
         {tabs.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => setActiveTab(tab.key)}
+            onClick={() => { setActiveTab(tab.key); setCurrentPage(1); }}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
               activeTab === tab.key
                 ? "bg-primary text-primary-foreground shadow-sm"
@@ -115,7 +123,7 @@ export function HostReservations() {
         </Card>
       ) : (
         <div className="space-y-4">
-          {filteredReservations.map((reservation) => {
+          {paginatedReservations.map((reservation) => {
             const statusCfg = STATUS_CONFIG[reservation.status] || STATUS_CONFIG.pending;
             const StatusIcon = statusCfg.icon;
 
@@ -123,15 +131,19 @@ export function HostReservations() {
               <Card key={reservation.id} className="overflow-hidden">
                 <div className="flex flex-col sm:flex-row">
                   {/* Image */}
-                  {reservation.space?.images?.[0] && (
-                    <div className="sm:w-48 h-32 sm:h-auto shrink-0">
+                  <div className="h-40 sm:h-auto sm:w-48 shrink-0 bg-muted overflow-hidden">
+                    {reservation.space?.images?.[0] ? (
                       <img
                         src={reservation.space.images[0]}
                         alt={reservation.space.title}
                         className="w-full h-full object-cover"
                       />
-                    </div>
-                  )}
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Calendar className="w-8 h-8 text-muted-foreground/30" />
+                      </div>
+                    )}
+                  </div>
 
                   {/* Content */}
                   <div className="flex-1 p-5">
@@ -220,6 +232,46 @@ export function HostReservations() {
               </Card>
             );
           })}
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="flex items-center justify-between pt-4">
+              <p className="text-sm text-muted-foreground">
+                {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, filteredReservations.length)} de {filteredReservations.length}
+              </p>
+              <div className="flex items-center gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage <= 1}
+                  onClick={() => setCurrentPage((p) => p - 1)}
+                  className="rounded-xl"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </Button>
+                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+                  <Button
+                    key={p}
+                    variant={p === currentPage ? "default" : "outline"}
+                    size="sm"
+                    onClick={() => setCurrentPage(p)}
+                    className="rounded-xl w-9 h-9 p-0"
+                  >
+                    {p}
+                  </Button>
+                ))}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => p + 1)}
+                  className="rounded-xl"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </Button>
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

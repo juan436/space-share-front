@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
+import { useAuth } from "@/presentation/providers/auth-context";
 import {
   SpaceImageGallery,
   SpaceDetailHeader,
@@ -27,6 +28,8 @@ interface SpaceDetailPageProps {
 export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: SpaceDetailPageProps) {
   const [returnPath, setReturnPath] = useState("/explore");
   const { isFavorite, toggleFavorite } = useFavorites();
+  const { user } = useAuth();
+  const isOwner = user?.id === space.hostId;
 
   useEffect(() => {
     // Read the query params safely on client-side to determine the return path
@@ -90,14 +93,54 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
           {/* Right Column - Booking Sidebar (Desktop) */}
           <div className="hidden lg:block lg:col-span-4">
             <div className="sticky top-28">
-              <SpaceBookingSidebar space={space} />
+              {isOwner ? (
+                <div className="p-8 rounded-[24px] bg-white dark:bg-zinc-900 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-black/5 dark:ring-white/10">
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                      <span className="text-lg">🏠</span>
+                    </div>
+                    <div>
+                      <p className="font-bold text-foreground">Tu publicación</p>
+                      <p className="text-xs text-muted-foreground">Eres el anfitrión de este espacio</p>
+                    </div>
+                  </div>
+                  <Link href="/dashboard/host">
+                    <Button className="w-full h-12 rounded-xl font-bold">
+                      Ir al panel de gestión
+                    </Button>
+                  </Link>
+                </div>
+              ) : (
+                <SpaceBookingSidebar space={space} />
+              )}
             </div>
           </div>
         </div>
       </main>
 
-      {/* Mobile Booking Bar */}
-      <SpaceMobileBookingBar space={space} />
+      {/* Mobile Booking Bar / Owner Bar */}
+      {isOwner ? (
+        <div className="fixed bottom-4 left-4 right-4 md:hidden z-40 safe-area-bottom">
+          <Link href="/dashboard/host">
+            <div className="flex items-center justify-between gap-4 p-4 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-1 ring-black/5">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                  <span className="text-base">🏠</span>
+                </div>
+                <div>
+                  <p className="font-bold text-sm text-foreground">Tu publicación</p>
+                  <p className="text-[11px] text-muted-foreground">Eres el anfitrión</p>
+                </div>
+              </div>
+              <Button size="sm" className="rounded-xl font-bold shrink-0">
+                Panel de gestión
+              </Button>
+            </div>
+          </Link>
+        </div>
+      ) : (
+        <SpaceMobileBookingBar space={space} />
+      )}
     </div>
   );
 }

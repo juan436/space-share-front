@@ -77,7 +77,7 @@ function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
     type: space.type,
     squareMeters: space.squareMeters,
     pricePerMonth: space.pricePerMonth,
-    capacity: 1,
+    capacity: space.capacity || 1,
     climateControlled: space.climateControlled,
     securityCamera: space.securityCamera,
     privateEntrance: space.privateEntrance,
@@ -85,5 +85,6 @@ function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
     city: space.city,
     state: space.state,
     country: space.country,
+    images: space.images || [],
   };
 }

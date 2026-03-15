@@ -43,6 +43,7 @@ export function useHostDashboard() {
     type: space.type as SpaceTypeValue,
     squareMeters: space.squareMeters,
     pricePerMonth: space.pricePerMonth,
+    capacity: space.capacity,
     status: space.status,
     climateControlled: space.amenities.climateControlled,
     securityCamera: space.amenities.securityCamera,
@@ -51,6 +52,7 @@ export function useHostDashboard() {
     city: space.location.city,
     state: space.location.state,
     country: space.location.country,
+    images: space.images || [],
   }));
 
   const activeSpacesCount = spaces.filter(s => s.status === "active").length;

@@ -12,7 +12,7 @@ export class SpaceMapper {
   static toDomain(dto: SpaceDto): Space {
     return {
       id: dto._id,
-      hostId: dto.hostId,
+      hostId: typeof dto.hostId === "object" ? dto.hostId._id : dto.hostId,
       title: dto.title,
       description: dto.description,
       type: dto.type,

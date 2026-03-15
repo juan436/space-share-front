@@ -5,6 +5,7 @@ import { MapPin, Star, Ruler, Heart, Thermometer, Video, DoorOpen } from "lucide
 import { Space } from "@/core/domain/entities/Space";
 import { spaceTypeLabels, spaceTypeColors } from "../../data";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/presentation/providers/auth-context";
 
 interface MobileSpaceCardProps {
   space: Space;
@@ -16,6 +17,8 @@ interface MobileSpaceCardProps {
 
 export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick, returnPath }: MobileSpaceCardProps) {
   const router = useRouter();
+  const { user } = useAuth();
+  const isOwner = user?.id === space.hostId;
 
   const handleClick = () => {
     if (onClick) onClick();
@@ -65,6 +68,13 @@ export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick, 
           <span className="text-lg font-bold text-primary">${space.pricePerMonth}</span>
           <span className="text-xs text-muted-foreground">/mes</span>
         </div>
+
+        {/* Owner Badge */}
+        {isOwner && (
+          <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-bold shadow-sm">
+            Tu publicación
+          </div>
+        )}
       </div>
 
       {/* Content */}

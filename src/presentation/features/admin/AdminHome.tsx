@@ -1,7 +1,10 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { Users, Building2, DollarSign, Calendar, ArrowRight } from "lucide-react";
+import { adminRepository } from "@/bootstrap/application";
+import { AdminStats } from "@/core/domain/entities/AdminStats";
+import { Users, Building2, Calendar, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 function getGreeting(): string {
     const hour = new Date().getHours();
@@ -18,55 +21,50 @@ function getTodayDate(): string {
     });
 }
 
-const stats = [
+const statCards = [
     {
+        key: "totalUsers" as const,
         label: "Total Usuarios",
-        value: "1,234",
-        delta: "+12% desde el mes pasado",
         icon: Users,
         color: "from-primary/15 to-primary/5",
         iconColor: "text-primary",
     },
     {
-        label: "Total Anuncios",
-        value: "456",
-        delta: "+8% desde el mes pasado",
+        key: "totalSpaces" as const,
+        label: "Total Espacios",
         icon: Building2,
         color: "from-violet-500/15 to-violet-500/5",
         iconColor: "text-violet-600",
     },
     {
-        label: "Ingresos Totales",
-        value: "$45,231",
-        delta: "+20% desde el mes pasado",
-        icon: DollarSign,
-        color: "from-emerald-500/15 to-emerald-500/5",
-        iconColor: "text-emerald-600",
-    },
-    {
-        label: "Reservas Activas",
-        value: "89",
-        delta: "+5% desde el mes pasado",
+        key: "totalReservations" as const,
+        label: "Reservas Solicitadas",
         icon: Calendar,
         color: "from-accent/15 to-accent/5",
         iconColor: "text-accent",
     },
-];
-
-const recentUsers = [
-    { name: "María García", email: "maria@email.com", role: "Cliente", initials: "MG", gradient: "from-primary to-primary/70" },
-    { name: "Carlos López", email: "carlos@email.com", role: "Anfitrión", initials: "CL", gradient: "from-accent to-accent/70" },
-    { name: "Ana Martínez", email: "ana@email.com", role: "Cliente", initials: "AM", gradient: "from-violet-500 to-violet-400" },
-];
-
-const recentSpaces = [
-    { title: "Garaje Centro", host: "Carlos López", price: "$120/mes" },
-    { title: "Sótano Climatizado", host: "María García", price: "$200/mes" },
-    { title: "Ático con Vista", host: "Juan Pérez", price: "$150/mes" },
+    {
+        key: "acceptedReservations" as const,
+        label: "Reservas Aceptadas",
+        icon: CheckCircle2,
+        color: "from-emerald-500/15 to-emerald-500/5",
+        iconColor: "text-emerald-600",
+    },
 ];
 
 export function AdminHome() {
     const { user } = useAuth();
+    const [stats, setStats] = useState<AdminStats | null>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+
+    useEffect(() => {
+        adminRepository
+            .getStats()
+            .then(setStats)
+            .catch(() => setError("No se pudieron cargar las estadísticas"))
+            .finally(() => setIsLoading(false));
+    }, []);
 
     return (
         <div className="space-y-8">
@@ -80,88 +78,44 @@ export function AdminHome() {
             </div>
 
             {/* Stat Cards */}
-            <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {stats.map((stat, idx) => {
-                    const Icon = stat.icon;
-                    return (
-                        <div
-                            key={stat.label}
-                            className="group relative p-5 rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 animate-fade-in-up"
-                            style={{ animationDelay: `${idx * 80}ms` }}
-                        >
-                            <div className="flex items-start justify-between mb-4">
-                                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
-                                    <Icon className={`w-5 h-5 ${stat.iconColor}`} />
-                                </div>
-                            </div>
-                            <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
-                            <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
-                            <p className="text-[11px] mt-2 text-muted-foreground/70">{stat.delta}</p>
-                        </div>
-                    );
-                })}
-            </div>
-
-            {/* Recent Activity */}
-            <div className="grid gap-5 md:grid-cols-2">
-                {/* Recent Users */}
-                <div className="rounded-2xl bg-card border border-border/50 overflow-hidden animate-fade-in-up" style={{ animationDelay: "400ms" }}>
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-border/40">
-                        <div>
-                            <h3 className="text-sm font-semibold text-foreground">Usuarios Recientes</h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">Últimos usuarios registrados</p>
-                        </div>
-                        <span className="text-xs font-medium text-primary flex items-center gap-1">
-                            Ver todos <ArrowRight className="w-3 h-3" />
-                        </span>
-                    </div>
-                    <div className="divide-y divide-border/30">
-                        {recentUsers.map((u, i) => (
-                            <div key={i} className="flex items-center gap-3 px-5 py-3 hover:bg-muted/30 transition-colors">
-                                <div className={`w-8 h-8 rounded-full bg-gradient-to-br ${u.gradient} flex items-center justify-center text-white text-[10px] font-bold flex-shrink-0`}>
-                                    {u.initials}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-foreground truncate">{u.name}</p>
-                                    <p className="text-xs text-muted-foreground truncate">{u.email}</p>
-                                </div>
-                                <span className="text-[11px] font-medium text-muted-foreground px-2 py-0.5 rounded-md bg-muted/50 flex-shrink-0">
-                                    {u.role}
-                                </span>
-                            </div>
-                        ))}
-                    </div>
+            {error ? (
+                <div className="flex items-center gap-3 p-5 rounded-2xl bg-red-50 dark:bg-red-950/20 border border-red-200 dark:border-red-800">
+                    <AlertCircle className="w-5 h-5 text-red-600 shrink-0" />
+                    <p className="text-sm text-red-700 dark:text-red-300">{error}</p>
                 </div>
-
-                {/* Recent Spaces */}
-                <div className="rounded-2xl bg-card border border-border/50 overflow-hidden animate-fade-in-up" style={{ animationDelay: "480ms" }}>
-                    <div className="flex items-center justify-between px-5 py-4 border-b border-border/40">
-                        <div>
-                            <h3 className="text-sm font-semibold text-foreground">Espacios Recientes</h3>
-                            <p className="text-xs text-muted-foreground mt-0.5">Últimos espacios publicados</p>
-                        </div>
-                        <span className="text-xs font-medium text-primary flex items-center gap-1">
-                            Ver todos <ArrowRight className="w-3 h-3" />
-                        </span>
-                    </div>
-                    <div className="divide-y divide-border/30">
-                        {recentSpaces.map((space, i) => (
-                            <div key={i} className="flex items-center gap-3 px-5 py-3 hover:bg-muted/30 transition-colors">
-                                <div className="w-8 h-8 rounded-lg bg-primary/8 flex items-center justify-center flex-shrink-0">
-                                    <Building2 className="w-4 h-4 text-primary" />
+            ) : (
+                <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                    {statCards.map((card, idx) => {
+                        const Icon = card.icon;
+                        return (
+                            <div
+                                key={card.key}
+                                className="group relative p-5 rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 animate-fade-in-up"
+                                style={{ animationDelay: `${idx * 80}ms` }}
+                            >
+                                <div className="flex items-start justify-between mb-4">
+                                    <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${card.color} flex items-center justify-center`}>
+                                        <Icon className={`w-5 h-5 ${card.iconColor}`} />
+                                    </div>
                                 </div>
-                                <div className="flex-1 min-w-0">
-                                    <p className="text-sm font-medium text-foreground truncate">{space.title}</p>
-                                    <p className="text-xs text-muted-foreground truncate">{space.host}</p>
-                                </div>
-                                <span className="text-sm font-semibold text-foreground flex-shrink-0">
-                                    {space.price}
-                                </span>
+                                {isLoading ? (
+                                    <div className="space-y-2">
+                                        <div className="h-7 w-16 bg-muted rounded-lg animate-pulse" />
+                                        <div className="h-4 w-24 bg-muted rounded animate-pulse" />
+                                    </div>
+                                ) : (
+                                    <>
+                                        <p className="text-2xl font-bold text-foreground tracking-tight">
+                                            {stats?.[card.key]?.toLocaleString() ?? "—"}
+                                        </p>
+                                        <p className="text-xs text-muted-foreground mt-1">{card.label}</p>
+                                    </>
+                                )}
                             </div>
-                        ))}
-                    </div>
+                        );
+                    })}
                 </div>
-            </div>
+            )}
         </div>
     );
 }
