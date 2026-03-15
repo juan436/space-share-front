@@ -23,7 +23,7 @@ import {
   Upload,
   X,
 } from "lucide-react";
-import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions } from "@/presentation/types/spaces";
+import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
 import { useLocationData } from "@/presentation/hooks/useLocationData";
 import { cn } from "@/presentation/utils/cn";
 
@@ -201,7 +201,11 @@ export function AddSpaceWizardMobile({
               <div className="bg-background rounded-xl p-4 border space-y-4">
                 <div className="space-y-2">
                   <Label className="text-sm font-medium">Tipo de espacio *</Label>
-                  <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => onUpdateNewSpace({ type: v })}>
+                  <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => {
+                    const updates: Partial<NewSpaceFormData> = { type: v };
+                    if (!isVehicleSpaceType(v)) updates.capacity = 1;
+                    onUpdateNewSpace(updates);
+                  }}>
                     <SelectTrigger className="h-11">
                       <SelectValue placeholder="Seleccionar" />
                     </SelectTrigger>
@@ -244,6 +248,23 @@ export function AddSpaceWizardMobile({
                   <p className="text-xs text-muted-foreground">
                     💡 Sugerido: ${recommendedPrice}/mes
                   </p>
+                )}
+
+                {isVehicleSpaceType(newSpace.type) && (
+                  <div className="space-y-2">
+                    <Label className="text-sm font-medium">Capacidad (vehículos) *</Label>
+                    <Input
+                      type="number"
+                      min="1"
+                      placeholder="1"
+                      value={newSpace.capacity || ""}
+                      onChange={(e) => onUpdateNewSpace({ capacity: Math.max(1, Number(e.target.value)) })}
+                      className="h-11"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Número de vehículos que caben simultáneamente
+                    </p>
+                  </div>
                 )}
               </div>
             </div>
@@ -487,6 +508,11 @@ export function AddSpaceWizardMobile({
                     <span className="text-[10px] bg-muted px-2 py-1 rounded-full">
                       {newSpace.squareMeters} m²
                     </span>
+                    {isVehicleSpaceType(newSpace.type) && newSpace.capacity > 1 && (
+                      <span className="text-[10px] bg-orange-100 text-orange-700 px-2 py-1 rounded-full">
+                        {newSpace.capacity} vehículos
+                      </span>
+                    )}
                     {newSpace.climateControlled && (
                       <span className="text-[10px] bg-blue-100 text-blue-700 px-2 py-1 rounded-full">Clima</span>
                     )}

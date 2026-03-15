@@ -1,6 +1,6 @@
 import { LoginUseCase, RegisterUseCase, LogoutUseCase } from "@/core/application/use-cases/auth";
 import { CreateSpaceUseCase, ListSpacesUseCase, UpdateSpaceUseCase, DeleteSpaceUseCase } from "@/core/application/use-cases/spaces";
-import { authRepository, spaceRepository } from "./repositories";
+import { authRepository, spaceRepository, reservationRepository, reviewRepository } from "./repositories";
 
 export const loginUseCase = new LoginUseCase(authRepository);
 export const registerUseCase = new RegisterUseCase(authRepository);
@@ -11,4 +11,4 @@ export const listSpacesUseCase = new ListSpacesUseCase(spaceRepository);
 export const updateSpaceUseCase = new UpdateSpaceUseCase(spaceRepository);
 export const deleteSpaceUseCase = new DeleteSpaceUseCase(spaceRepository);
 
-export { authRepository, spaceRepository };
+export { authRepository, spaceRepository, reservationRepository, reviewRepository };

@@ -116,6 +116,34 @@ export class HttpClient {
   async delete<T>(endpoint: string, headers?: Record<string, string>): Promise<HttpResponse<T>> {
     return this.request<T>("DELETE", endpoint, undefined, headers);
   }
+
+  async postFormData<T>(endpoint: string, formData: FormData): Promise<HttpResponse<T>> {
+    const url = `${this.baseUrl}${endpoint}`;
+
+    const token = this.resolveAccessToken();
+    const headers: Record<string, string> = {
+      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+    };
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeoutMs);
+
+    const response = await fetch(url, {
+      method: "POST",
+      headers,
+      body: formData,
+      credentials: "include",
+      signal: controller.signal,
+    }).finally(() => clearTimeout(timeoutId));
+
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({}));
+      throw new HttpError(response.status, response.statusText, errorData);
+    }
+
+    const data = await response.json().catch(() => null);
+    return { data: data as T, status: response.status, statusText: response.statusText };
+  }
 }
 
 export class HttpError extends Error {

@@ -1,6 +1,6 @@
 export type SpaceType = "garage" | "basement" | "attic" | "storage" | "parking" | "other";
 
-export type SpaceStatus = "active" | "paused" | "pending";
+export type SpaceStatus = "active" | "paused" | "pending" | "deactivated";
 
 export interface SpaceAmenities {
   climateControlled: boolean;

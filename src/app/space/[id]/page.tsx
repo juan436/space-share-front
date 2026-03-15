@@ -2,14 +2,30 @@
 
 import { useParams } from "next/navigation";
 import { SpaceDetailPage } from "@/presentation/features/space-detail";
-import { mockSpaces, spaceTypeLabels, spaceTypeColors } from "@/presentation/features/explore/data";
+import { useSpaceById } from "@/presentation/hooks/useSpaces";
+import { spaceTypeLabels } from "@/presentation/types/spaces";
+
+const spaceTypeColors: Record<string, string> = {
+  garage: "bg-blue-500",
+  basement: "bg-purple-500",
+  attic: "bg-amber-500",
+  storage: "bg-emerald-500",
+  parking: "bg-sky-500",
+  other: "bg-gray-500",
+};
 
 export default function SpaceDetailRoute() {
   const params = useParams();
   const spaceId = params.id as string;
+  const { space, isLoading } = useSpaceById(spaceId);
 
-  // Find the space by ID
-  const space = mockSpaces.find((s) => s.id === spaceId);
+  if (isLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   if (!space) {
     return (
@@ -31,7 +47,7 @@ export default function SpaceDetailRoute() {
   return (
     <SpaceDetailPage
       space={space}
-      spaceTypeLabel={spaceTypeLabels[space.type] || space.type}
+      spaceTypeLabel={spaceTypeLabels[space.type as keyof typeof spaceTypeLabels] || space.type}
       spaceTypeColor={spaceTypeColors[space.type] || "bg-gray-500"}
     />
   );

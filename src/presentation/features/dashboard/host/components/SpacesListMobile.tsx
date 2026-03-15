@@ -1,16 +1,24 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
 import { MoreHorizontal, Building2, Ruler, DollarSign, MapPin } from "lucide-react";
-import { SpaceViewModel, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
+import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
 
 interface SpacesListMobileProps {
   spaces: SpaceViewModel[];
   isLoading: boolean;
   isDeleting: boolean;
+  isUpdating: boolean;
   onDeleteSpace: (id: string) => void;
+  onUpdateStatus: (id: string, status: SpaceStatusValue) => void;
+  onEditSpace: (space: SpaceViewModel) => void;
 }
 
-export function SpacesListMobile({ spaces, isLoading, isDeleting, onDeleteSpace }: SpacesListMobileProps) {
+export function SpacesListMobile({ spaces, isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace }: SpacesListMobileProps) {
+  const router = useRouter();
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -24,7 +32,7 @@ export function SpacesListMobile({ spaces, isLoading, isDeleting, onDeleteSpace 
       <div className="text-center py-10 text-muted-foreground">
         <Building2 className="mx-auto h-12 w-12 mb-4 opacity-50" />
         <p className="font-medium">No tienes espacios registrados</p>
-        <p className="text-sm">Toca “Agregar Espacio” para comenzar</p>
+        <p className="text-sm">Toca "Agregar Espacio" para comenzar</p>
       </div>
     );
   }
@@ -55,12 +63,42 @@ export function SpacesListMobile({ spaces, isLoading, isDeleting, onDeleteSpace 
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Editar</DropdownMenuItem>
-                  <DropdownMenuItem>Ver Detalles</DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => onEditSpace(space)}>
+                    Editar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => router.push(`/space/${space.id}?from=/dashboard/host/spaces`)}>
+                    Ver Detalles
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {space.status !== "active" && (
+                    <DropdownMenuItem
+                      disabled={isUpdating}
+                      onSelect={() => onUpdateStatus(space.id, "active")}
+                    >
+                      Activar
+                    </DropdownMenuItem>
+                  )}
+                  {space.status === "active" && (
+                    <DropdownMenuItem
+                      disabled={isUpdating}
+                      onSelect={() => onUpdateStatus(space.id, "paused")}
+                    >
+                      Pausar
+                    </DropdownMenuItem>
+                  )}
+                  {(space.status === "active" || space.status === "paused") && (
+                    <DropdownMenuItem
+                      disabled={isUpdating}
+                      onSelect={() => onUpdateStatus(space.id, "deactivated")}
+                    >
+                      Desactivar
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
                   <DropdownMenuItem
                     className="text-destructive"
-                    onClick={() => onDeleteSpace(space.id)}
                     disabled={isDeleting}
+                    onSelect={() => onDeleteSpace(space.id)}
                   >
                     Eliminar
                   </DropdownMenuItem>

@@ -2,21 +2,21 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Heart, Search, ArrowRight } from "lucide-react";
+import { Heart, Search, ArrowRight, Loader2 } from "lucide-react";
 import { ExploreHeader } from "@/presentation/features/explore/components/desktop/ExploreHeader";
 import { MobileHeader } from "@/presentation/features/explore/components/mobile/MobileHeader";
 import { SpaceCard } from "@/presentation/features/explore/components/desktop/SpaceCard";
 import { MobileSpaceCard } from "@/presentation/features/explore/components/mobile/MobileSpaceCard";
-import { mockSpaces } from "@/presentation/features/explore/data/mockSpaces";
+import { Space } from "@/core/domain/entities/Space";
+import { useFavorites } from "@/presentation/hooks/useFavorites";
+import { spaceRepository } from "@/bootstrap/application";
 
 export function FavoritesPage() {
   const [isMobile, setIsMobile] = useState(false);
   const [mounted, setMounted] = useState(false);
-  
-  // For demonstration, let's pretend the user has 3 favorite spaces. 
-  // In a real app, this would be fetched from the backend.
-  // To test the empty state, you can set this to empty array: []
-  const [favorites, setFavorites] = useState(mockSpaces.slice(0, 3));
+  const [spaces, setSpaces] = useState<Space[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     setMounted(true);
@@ -25,6 +25,37 @@ export function FavoritesPage() {
     window.addEventListener("resize", checkMobile);
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
+
+  // Fetch the actual space data for each favorite ID
+  useEffect(() => {
+    const fetchFavoriteSpaces = async () => {
+      if (favorites.size === 0) {
+        setSpaces([]);
+        setIsLoading(false);
+        return;
+      }
+
+      setIsLoading(true);
+      try {
+        const ids = Array.from(favorites);
+        const results = await Promise.all(
+          ids.map((id) => spaceRepository.findById(id).catch(() => null))
+        );
+        setSpaces(results.filter((s): s is Space => s !== null));
+      } catch {
+        setSpaces([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchFavoriteSpaces();
+  }, [favorites]);
+
+  const handleToggleFavorite = async (id: string) => {
+    await toggleFavorite(id);
+    setSpaces((prev) => prev.filter((s) => s.id !== id));
+  };
 
   if (!mounted) return null;
 
@@ -35,7 +66,7 @@ export function FavoritesPage() {
 
       {/* Main Content */}
       <main className="flex-1 max-w-screen-xl mx-auto w-full px-4 sm:px-6 py-8 md:py-12">
-        
+
         {/* Page Header */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
           <div>
@@ -51,10 +82,10 @@ export function FavoritesPage() {
               Tus espacios de interés guardados para alquilar más tarde. Revisa disponibilidad y completa tu reserva cuando estés listo.
             </p>
           </div>
-          
-          <Link 
+
+          <Link
             href="/explore"
-            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white border border-border/60 text-foreground font-semibold rounded-xl hover:bg-gray-50 transition-all shadow-sm active:scale-95 shrink-0"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white dark:bg-zinc-900 border border-border/60 text-foreground font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all shadow-sm active:scale-95 shrink-0"
           >
             Explorar espacios
             <ArrowRight className="w-4 h-4 ml-1" />
@@ -62,23 +93,28 @@ export function FavoritesPage() {
         </div>
 
         {/* Content Section */}
-        {favorites.length > 0 ? (
+        {isLoading ? (
+          <div className="flex flex-col items-center justify-center py-20">
+            <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
+            <p className="text-sm text-muted-foreground">Cargando favoritos...</p>
+          </div>
+        ) : spaces.length > 0 ? (
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            {favorites.map((space) => (
+            {spaces.map((space) => (
               <div key={space.id} className="relative group/fav">
                 {isMobile ? (
-                  <MobileSpaceCard 
-                    space={space} 
+                  <MobileSpaceCard
+                    space={space}
                     isFavorite={true}
-                    onToggleFavorite={(id) => setFavorites(favorites.filter(s => s.id !== id))}
+                    onToggleFavorite={handleToggleFavorite}
                     onClick={() => {}}
                     returnPath="/favorites"
                   />
                 ) : (
-                  <SpaceCard 
-                    space={space} 
+                  <SpaceCard
+                    space={space}
                     isFavorite={true}
-                    onToggleFavorite={(id) => setFavorites(favorites.filter(s => s.id !== id))}
+                    onToggleFavorite={handleToggleFavorite}
                     returnPath="/favorites"
                   />
                 )}
@@ -97,7 +133,7 @@ export function FavoritesPage() {
             <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
               Explora nuestra colección y guarda los espacios que más te gusten haciendo clic en el ícono del corazón. Aquí podrás compararlos fácilmente.
             </p>
-            <Link 
+            <Link
               href="/explore"
               className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-all shadow-md hover:shadow-lg active:scale-95"
             >

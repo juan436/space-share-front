@@ -11,6 +11,7 @@ interface WizardFooterProps {
   onBack: () => void;
   onNext: () => void;
   onSubmit: () => void;
+  editMode?: boolean;
 }
 
 export function WizardFooter({
@@ -22,6 +23,7 @@ export function WizardFooter({
   onBack,
   onNext,
   onSubmit,
+  editMode = false,
 }: WizardFooterProps) {
   const isFirstStep = currentStep === 1;
   const isLastStep = currentStep === totalSteps;
@@ -52,7 +54,7 @@ export function WizardFooter({
             disabled={isCreating || !isFormValid}
             className="gap-2 bg-green-600 hover:bg-green-700"
           >
-            {isCreating ? "Publicando..." : "Publicar espacio"}
+            {isCreating ? (editMode ? "Guardando..." : "Publicando...") : (editMode ? "Guardar cambios" : "Publicar espacio")}
             <Check className="h-4 w-4" />
           </Button>
         )}

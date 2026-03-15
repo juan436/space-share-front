@@ -1,1 +1,1 @@
-export { mockSpaces, spaceTypeLabels, spaceTypeColors, mapConfig } from "./mockSpaces";
+export { spaceTypeLabels, spaceTypeColors, mapConfig } from "./spaceConstants";

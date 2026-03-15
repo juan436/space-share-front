@@ -21,15 +21,17 @@ export interface SpaceDto {
   type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
   squareMeters: number;
   pricePerMonth: number;
+  capacity: number;
   amenities: SpaceAmenitiesDto;
   location: SpaceLocationDto;
   images: string[];
-  status: "active" | "paused" | "pending";
+  status: "active" | "paused" | "pending" | "deactivated";
   rating?: number;
   reviewCount?: number;
   bookingsCount?: number;
   occupancyRate?: number;
   totalEarnings?: number;
+  occupancyMap?: Record<string, number>;
   createdAt: string;
   updatedAt: string;
 }
@@ -40,6 +42,7 @@ export interface CreateSpaceRequestDto {
   type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
   squareMeters: number;
   pricePerMonth: number;
+  capacity?: number;
   amenities: SpaceAmenitiesDto;
   location: SpaceLocationDto;
   images?: string[];
@@ -51,10 +54,11 @@ export interface UpdateSpaceRequestDto {
   type?: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
   squareMeters?: number;
   pricePerMonth?: number;
+  capacity?: number;
   amenities?: Partial<SpaceAmenitiesDto>;
   location?: Partial<SpaceLocationDto>;
   images?: string[];
-  status?: "active" | "paused" | "pending";
+  status?: "active" | "paused" | "pending" | "deactivated";
 }
 
 export interface PaginatedSpacesResponseDto {

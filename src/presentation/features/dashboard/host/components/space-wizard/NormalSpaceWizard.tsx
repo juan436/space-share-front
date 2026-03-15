@@ -1,10 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { Home } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 import { useLocationData } from "@/presentation/hooks/useLocationData";
+import { spaceRepository } from "@/bootstrap/application";
 import { WizardStepper, WIZARD_STEPS } from "./WizardStepper";
 import { WizardFooter } from "./WizardFooter";
 import { DescriptionStep } from "./steps/DescriptionStep";
@@ -21,6 +22,7 @@ interface NormalSpaceWizardProps {
   isCreating: boolean;
   isFormValid: boolean;
   recommendedPrice: number;
+  editMode?: boolean;
 }
 
 export function NormalSpaceWizard({
@@ -31,9 +33,10 @@ export function NormalSpaceWizard({
   isCreating,
   isFormValid,
   recommendedPrice,
+  editMode = false,
 }: NormalSpaceWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [images, setImages] = useState<string[]>([]);
+  const [images, setImages] = useState<string[]>(newSpace.images || []);
   const { countries, states, cities } = useLocationData(newSpace.country, newSpace.state);
 
   const handleCountryChange = (value: string) => {
@@ -58,15 +61,24 @@ export function NormalSpaceWizard({
     }
   };
 
-  const handleImageUpload = () => {
-    const mockImages = [
-      "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=300&h=200&fit=crop",
-    ];
-    setImages([...images, ...mockImages]);
-  };
+  const handleFilesSelected = useCallback(
+    async (files: File[]): Promise<string[]> => {
+      const formData = new FormData();
+      files.forEach((f) => formData.append("images", f));
+
+      const response = await spaceRepository.uploadImages(formData);
+      const newImages = [...images, ...response];
+      setImages(newImages);
+      onUpdateNewSpace({ images: newImages });
+      return response;
+    },
+    [images, onUpdateNewSpace]
+  );
 
   const removeImage = (index: number) => {
-    setImages(images.filter((_, i) => i !== index));
+    const newImages = images.filter((_, i) => i !== index);
+    setImages(newImages);
+    onUpdateNewSpace({ images: newImages });
   };
 
   const canProceed = (): boolean => {
@@ -97,7 +109,7 @@ export function NormalSpaceWizard({
         <DialogHeader className="p-4 pb-0">
           <DialogTitle className="text-xl font-semibold flex items-center gap-2">
             <Home className="h-5 w-5 text-blue-600" />
-            Publicar Espacio Normal
+            {editMode ? "Editar Espacio" : "Publicar Espacio Normal"}
           </DialogTitle>
         </DialogHeader>
         <WizardStepper currentStep={currentStep} />
@@ -113,7 +125,7 @@ export function NormalSpaceWizard({
           />
         )}
         {currentStep === 2 && (
-          <ImagesStep images={images} onUpload={handleImageUpload} onRemove={removeImage} />
+          <ImagesStep images={images} onFilesSelected={handleFilesSelected} onRemove={removeImage} />
         )}
         {currentStep === 3 && (
           <AmenitiesStep newSpace={newSpace} onUpdateNewSpace={onUpdateNewSpace} />
@@ -142,6 +154,7 @@ export function NormalSpaceWizard({
         onBack={handleBack}
         onNext={handleNext}
         onSubmit={onAddSpace}
+        editMode={editMode}
       />
     </>
   );

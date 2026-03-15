@@ -6,7 +6,7 @@ import { ExploreHeader } from "./components/desktop/ExploreHeader";
 import { SearchFilters } from "./components/desktop/SearchFilters";
 import { SpacesList } from "./components/desktop/SpacesList";
 import { SpacesMap } from "./components/desktop/SpacesMap";
-import { mockSpaces } from "./data";
+import { useExploreSpaces } from "./hooks/useExploreSpaces";
 
 export function ExplorePage() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -17,7 +17,9 @@ export function ExplorePage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
   const [showMap, setShowMap] = useState(false);
 
-  const filteredSpaces = mockSpaces.filter((space) => {
+  const { spaces } = useExploreSpaces();
+
+  const filteredSpaces = spaces.filter((space) => {
     if (searchQuery) {
       const query = searchQuery.toLowerCase();
       const matchesSearch =

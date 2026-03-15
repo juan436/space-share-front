@@ -8,9 +8,11 @@ interface SpaceDetailHeaderProps {
   space: Space;
   spaceTypeLabel: string;
   spaceTypeColor: string;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor }: SpaceDetailHeaderProps) {
+export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFavorite, onToggleFavorite }: SpaceDetailHeaderProps) {
   const handleShare = async () => {
     if (navigator.share) {
       try {
@@ -35,7 +37,7 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor }: Spa
         <span className={`px-3 py-1 rounded-full text-foreground/90 font-semibold ring-1 ring-inset ${spaceTypeColor}`}>
           {spaceTypeLabel}
         </span>
-        
+
         {space.rating && (
           <div className="flex items-center gap-1.5 pl-1">
             <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
@@ -56,22 +58,27 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor }: Spa
 
         {/* Action Buttons (Icons only for minimalist look) */}
         <div className="flex items-center gap-2 pt-1">
-          <Button 
-            variant="outline" 
-            size="icon" 
-            onClick={handleShare} 
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={handleShare}
             className="rounded-full shadow-sm hover:shadow-md transition-all border-border/50 hover:bg-muted/50"
             title="Compartir"
           >
             <Share2 className="w-4 h-4" />
           </Button>
-          <Button 
-            variant="outline" 
-            size="icon" 
-            className="rounded-full shadow-sm hover:shadow-md transition-all border-border/50 hover:bg-muted/50"
-            title="Guardar"
+          <Button
+            variant="outline"
+            size="icon"
+            onClick={onToggleFavorite}
+            className={`rounded-full shadow-sm hover:shadow-md transition-all border-border/50 ${
+              isFavorite
+                ? "bg-rose-50 border-rose-200 hover:bg-rose-100 dark:bg-rose-950/30 dark:border-rose-800"
+                : "hover:bg-muted/50"
+            }`}
+            title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
           >
-            <Heart className="w-4 h-4" />
+            <Heart className={`w-4 h-4 transition-colors ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`} />
           </Button>
         </div>
       </div>

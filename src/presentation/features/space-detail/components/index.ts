@@ -6,3 +6,4 @@ export { SpaceLocationMap } from "./SpaceLocationMap";
 export { SpaceHostCard } from "./SpaceHostCard";
 export { SpaceBookingSidebar } from "./SpaceBookingSidebar";
 export { SpaceMobileBookingBar } from "./SpaceMobileBookingBar";
+export { SpaceReviews } from "./SpaceReviews";

@@ -2,7 +2,7 @@ import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { Textarea } from "@/presentation/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
-import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions } from "@/presentation/types/spaces";
+import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
 
 interface DescriptionStepProps {
   newSpace: NewSpaceFormData;
@@ -11,6 +11,16 @@ interface DescriptionStepProps {
 }
 
 export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }: DescriptionStepProps) {
+  const showCapacity = isVehicleSpaceType(newSpace.type);
+
+  const handleTypeChange = (value: SpaceTypeValue) => {
+    const updates: Partial<NewSpaceFormData> = { type: value };
+    if (!isVehicleSpaceType(value)) {
+      updates.capacity = 1;
+    }
+    onUpdateNewSpace(updates);
+  };
+
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
       <div className="text-center mb-6">
@@ -45,12 +55,12 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
           />
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div className={`grid grid-cols-1 ${showCapacity ? "sm:grid-cols-2" : "sm:grid-cols-3"} gap-4`}>
           <div className="space-y-2">
             <Label className="text-sm font-medium">Tipo de espacio *</Label>
             <Select
               value={newSpace.type}
-              onValueChange={(value: SpaceTypeValue) => onUpdateNewSpace({ type: value })}
+              onValueChange={(value: SpaceTypeValue) => handleTypeChange(value)}
             >
               <SelectTrigger className="h-11">
                 <SelectValue placeholder="Seleccionar" />
@@ -99,6 +109,26 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
               </p>
             )}
           </div>
+
+          {showCapacity && (
+            <div className="space-y-2">
+              <Label htmlFor="capacity" className="text-sm font-medium">
+                Capacidad (vehículos) *
+              </Label>
+              <Input
+                id="capacity"
+                type="number"
+                min="1"
+                placeholder="1"
+                value={newSpace.capacity || ""}
+                onChange={(e) => onUpdateNewSpace({ capacity: Math.max(1, Number(e.target.value)) })}
+                className="h-11"
+              />
+              <p className="text-xs text-muted-foreground">
+                Número de vehículos que caben simultáneamente
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

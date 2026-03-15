@@ -6,7 +6,7 @@ import { MobileSpaceCard } from "./MobileSpaceCard";
 
 interface MobileSpacesListProps {
   spaces: Space[];
-  favorites: Set<string>;
+  isFavorite: (id: string) => boolean;
   onToggleFavorite: (id: string) => void;
   onSpaceSelect: (space: Space) => void;
   onShowFilters: () => void;
@@ -14,7 +14,7 @@ interface MobileSpacesListProps {
 
 export function MobileSpacesList({
   spaces,
-  favorites,
+  isFavorite,
   onToggleFavorite,
   onSpaceSelect,
   onShowFilters,
@@ -41,7 +41,7 @@ export function MobileSpacesList({
           <MobileSpaceCard
             key={space.id}
             space={space}
-            isFavorite={favorites.has(space.id)}
+            isFavorite={isFavorite(space.id)}
             onToggleFavorite={onToggleFavorite}
             onClick={() => onSpaceSelect(space)}
           />

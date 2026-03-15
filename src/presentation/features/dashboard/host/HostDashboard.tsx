@@ -5,6 +5,7 @@ import { useEffect } from "react";
 import { useHostDashboard } from "./hooks";
 import { AddSpaceWizard } from "./components/AddSpaceWizard";
 import { AddSpaceWizardMobile } from "./components/AddSpaceWizardMobile";
+import { EditSpaceDialog } from "./components/EditSpaceDialog";
 import { SpacesTable } from "./components/SpacesTable";
 import { SpacesListMobile } from "./components/SpacesListMobile";
 import { useMediaQuery } from "@/presentation/hooks/useMediaQuery";
@@ -18,12 +19,19 @@ export function HostDashboard() {
     isLoading,
     isCreating,
     isDeleting,
+    isUpdating,
     isDialogOpen,
     setIsDialogOpen,
     newSpace,
     updateNewSpace,
     handleAddSpace,
     handleDeleteSpace,
+    handleUpdateStatus,
+    handleEditSpace,
+    handleSaveEdit,
+    editingSpace,
+    isEditDialogOpen,
+    setIsEditDialogOpen,
     isFormValid,
     recommendedPrice,
   } = useHostDashboard();
@@ -102,18 +110,32 @@ export function HostDashboard() {
               spaces={spaces}
               isLoading={isLoading}
               isDeleting={isDeleting}
+              isUpdating={isUpdating}
               onDeleteSpace={handleDeleteSpace}
+              onUpdateStatus={handleUpdateStatus}
+              onEditSpace={handleEditSpace}
             />
           ) : (
             <SpacesTable
               spaces={spaces}
               isLoading={isLoading}
               isDeleting={isDeleting}
+              isUpdating={isUpdating}
               onDeleteSpace={handleDeleteSpace}
+              onUpdateStatus={handleUpdateStatus}
+              onEditSpace={handleEditSpace}
             />
           )}
         </CardContent>
       </Card>
-    </div> 
+
+      <EditSpaceDialog
+        space={editingSpace}
+        isOpen={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        onSave={handleSaveEdit}
+        isSaving={isUpdating}
+      />
+    </div>
   );
 }

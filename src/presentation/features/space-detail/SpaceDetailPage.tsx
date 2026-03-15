@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
+import { useFavorites } from "@/presentation/hooks/useFavorites";
 import {
   SpaceImageGallery,
   SpaceDetailHeader,
@@ -14,6 +15,7 @@ import {
   SpaceHostCard,
   SpaceBookingSidebar,
   SpaceMobileBookingBar,
+  SpaceReviews,
 } from "./components";
 
 interface SpaceDetailPageProps {
@@ -24,6 +26,7 @@ interface SpaceDetailPageProps {
 
 export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: SpaceDetailPageProps) {
   const [returnPath, setReturnPath] = useState("/explore");
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
     // Read the query params safely on client-side to determine the return path
@@ -66,6 +69,8 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
               space={space}
               spaceTypeLabel={spaceTypeLabel}
               spaceTypeColor={spaceTypeColor}
+              isFavorite={isFavorite(space.id)}
+              onToggleFavorite={() => toggleFavorite(space.id)}
             />
             
             <SpaceDescription
@@ -77,6 +82,8 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
             
             <SpaceLocationMap location={space.location} />
             
+            <SpaceReviews spaceId={space.id} rating={space.rating} reviewCount={space.reviewCount} />
+
             <SpaceHostCard hostId={space.hostId} />
           </div>
 

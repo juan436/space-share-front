@@ -26,4 +26,5 @@ export interface SpaceRepository {
   create(input: CreateSpaceInput): Promise<Space>;
   update(id: string, input: UpdateSpaceInput): Promise<Space>;
   delete(id: string): Promise<void>;
+  uploadImages(formData: FormData): Promise<string[]>;
 }

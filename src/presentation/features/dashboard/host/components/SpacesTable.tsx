@@ -1,17 +1,25 @@
+"use client";
+
+import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
 import { MoreHorizontal, Building2 } from "lucide-react";
-import { SpaceViewModel, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
+import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
 
 interface SpacesTableProps {
   spaces: SpaceViewModel[];
   isLoading: boolean;
   isDeleting: boolean;
+  isUpdating: boolean;
   onDeleteSpace: (id: string) => void;
+  onUpdateStatus: (id: string, status: SpaceStatusValue) => void;
+  onEditSpace: (space: SpaceViewModel) => void;
 }
 
-export function SpacesTable({ spaces, isLoading, isDeleting, onDeleteSpace }: SpacesTableProps) {
+export function SpacesTable({ spaces, isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace }: SpacesTableProps) {
+  const router = useRouter();
+
   if (isLoading) {
     return (
       <div className="flex justify-center py-8">
@@ -62,12 +70,42 @@ export function SpacesTable({ spaces, isLoading, isDeleting, onDeleteSpace }: Sp
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end">
-                  <DropdownMenuItem>Editar</DropdownMenuItem>
-                  <DropdownMenuItem>Ver Detalles</DropdownMenuItem>
-                  <DropdownMenuItem 
+                  <DropdownMenuItem onSelect={() => onEditSpace(space)}>
+                    Editar
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onSelect={() => router.push(`/space/${space.id}?from=/dashboard/host/spaces`)}>
+                    Ver Detalles
+                  </DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  {space.status !== "active" && (
+                    <DropdownMenuItem
+                      disabled={isUpdating}
+                      onSelect={() => onUpdateStatus(space.id, "active")}
+                    >
+                      Activar
+                    </DropdownMenuItem>
+                  )}
+                  {space.status === "active" && (
+                    <DropdownMenuItem
+                      disabled={isUpdating}
+                      onSelect={() => onUpdateStatus(space.id, "paused")}
+                    >
+                      Pausar
+                    </DropdownMenuItem>
+                  )}
+                  {(space.status === "active" || space.status === "paused") && (
+                    <DropdownMenuItem
+                      disabled={isUpdating}
+                      onSelect={() => onUpdateStatus(space.id, "deactivated")}
+                    >
+                      Desactivar
+                    </DropdownMenuItem>
+                  )}
+                  <DropdownMenuSeparator />
+                  <DropdownMenuItem
                     className="text-destructive"
-                    onClick={() => onDeleteSpace(space.id)}
                     disabled={isDeleting}
+                    onSelect={() => onDeleteSpace(space.id)}
                   >
                     Eliminar
                   </DropdownMenuItem>

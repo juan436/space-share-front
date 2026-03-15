@@ -2,7 +2,7 @@
 
 import { Space } from "@/core/domain/entities/Space";
 import { SpaceCard } from "./SpaceCard";
-import { useState } from "react";
+import { useFavorites } from "@/presentation/hooks/useFavorites";
 
 interface SpacesListProps {
   spaces: Space[];
@@ -13,14 +13,7 @@ interface SpacesListProps {
 }
 
 export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, showMap }: SpacesListProps) {
-  // Simulated favorites state for the explore view
-  const [favorites, setFavorites] = useState<string[]>(['1', '2', '3']);
-
-  const handleToggleFavorite = (id: string) => {
-    setFavorites(prev => 
-      prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
-    );
-  };
+  const { isFavorite, toggleFavorite } = useFavorites();
 
   if (isLoading) {
     return (
@@ -96,8 +89,8 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
               space={space}
               isSelected={space.id === selectedSpaceId}
               onClick={() => onSpaceSelect?.(space.id)}
-              isFavorite={favorites.includes(space.id)}
-              onToggleFavorite={handleToggleFavorite}
+              isFavorite={isFavorite(space.id)}
+              onToggleFavorite={toggleFavorite}
             />
           </div>
         ))}

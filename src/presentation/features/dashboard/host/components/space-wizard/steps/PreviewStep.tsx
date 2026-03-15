@@ -1,5 +1,12 @@
 import { ImageIcon, MapPin } from "lucide-react";
-import { NewSpaceFormData, spaceTypeOptions } from "@/presentation/types/spaces";
+import { NewSpaceFormData, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
+
+const UPLOADS_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3006";
+
+function resolveImageUrl(filename: string): string {
+  if (filename.startsWith("http") || filename.startsWith("blob:")) return filename;
+  return `${UPLOADS_BASE_URL}/uploads/${filename}`;
+}
 
 interface PreviewStepProps {
   newSpace: NewSpaceFormData;
@@ -18,7 +25,7 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
       <div className="border rounded-xl overflow-hidden bg-card">
         <div className="aspect-[16/9] sm:aspect-video bg-muted flex items-center justify-center max-h-[150px] sm:max-h-[200px]">
           {images.length > 0 ? (
-            <img src={images[0]} alt="Preview" className="w-full h-full object-cover" />
+            <img src={resolveImageUrl(images[0])} alt="Preview" className="w-full h-full object-cover" />
           ) : (
             <ImageIcon className="h-10 w-10 sm:h-12 sm:w-12 text-muted-foreground" />
           )}
@@ -55,6 +62,11 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
             <span className="text-[10px] sm:text-xs bg-muted px-2 py-0.5 sm:py-1 rounded-full">
               {newSpace.squareMeters} m²
             </span>
+            {isVehicleSpaceType(newSpace.type) && newSpace.capacity > 1 && (
+              <span className="text-[10px] sm:text-xs bg-orange-100 text-orange-700 px-2 py-0.5 sm:py-1 rounded-full">
+                {newSpace.capacity} vehículos
+              </span>
+            )}
             {newSpace.climateControlled && (
               <span className="text-[10px] sm:text-xs bg-blue-100 text-blue-700 px-2 py-0.5 sm:py-1 rounded-full">
                 Clima

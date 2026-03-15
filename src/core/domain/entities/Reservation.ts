@@ -1,4 +1,4 @@
-export type ReservationStatus = "pending" | "confirmed" | "completed" | "canceled";
+export type ReservationStatus = "pending" | "accepted" | "rejected" | "cancelled" | "completed";
 
 export interface Reservation {
   id: string;
@@ -7,19 +7,32 @@ export interface Reservation {
   hostId: string;
   startDate: Date;
   endDate: Date;
-  totalDays: number;
-  pricePerDay: number;
+  basePrice: number;
   serviceFee: number;
   totalPrice: number;
   status: ReservationStatus;
+  notes: string;
+  space?: {
+    title: string;
+    images: string[];
+    type: string;
+    location: { city: string; state: string; country: string };
+    pricePerMonth: number;
+  };
+  client?: { name: string; email: string; avatar?: string };
+  host?: { name: string; email: string; avatar?: string };
   createdAt: Date;
   updatedAt: Date;
 }
 
 export interface CreateReservationInput {
   spaceId: string;
-  startDate: Date;
-  endDate: Date;
+  startDate: string;
+  endDate: string;
+  basePrice: number;
+  serviceFee: number;
+  totalPrice: number;
+  notes?: string;
 }
 
 export const SERVICE_FEE_PERCENTAGE = 0.05;

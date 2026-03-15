@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
-import { mockSpaces } from "../../data";
+import { useExploreSpaces } from "../../hooks/useExploreSpaces";
+import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { MobileHeader } from "./MobileHeader";
 import { MobileSearchFilters, FilterState } from "./MobileSearchFilters";
 import { MobileSpacesList } from "./MobileSpacesList";
@@ -13,6 +14,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 type ViewMode = "list" | "map";
 
 export function MobileExplorePage() {
+  const { spaces } = useExploreSpaces();
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>({
@@ -23,22 +25,10 @@ export function MobileExplorePage() {
   });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
-  const [favorites, setFavorites] = useState<Set<string>>(new Set());
+  const { isFavorite, toggleFavorite } = useFavorites();
   const [mapSelectedSpace, setMapSelectedSpace] = useState<Space | null>(null);
 
-  const toggleFavorite = (id: string) => {
-    setFavorites(prev => {
-      const newFavs = new Set(prev);
-      if (newFavs.has(id)) {
-        newFavs.delete(id);
-      } else {
-        newFavs.add(id);
-      }
-      return newFavs;
-    });
-  };
-
-  const filteredSpaces = mockSpaces.filter(space => {
+  const filteredSpaces = spaces.filter(space => {
     // 1. Search Query
     if (searchQuery) {
       const q = searchQuery.toLowerCase();
@@ -88,7 +78,7 @@ export function MobileExplorePage() {
     return (
       <MobileSpaceDetail
         space={selectedSpace}
-        isFavorite={favorites.has(selectedSpace.id)}
+        isFavorite={isFavorite(selectedSpace.id)}
         onToggleFavorite={toggleFavorite}
         onClose={() => setSelectedSpace(null)}
       />
@@ -115,7 +105,7 @@ export function MobileExplorePage() {
       {viewMode === "list" ? (
         <MobileSpacesList
           spaces={filteredSpaces}
-          favorites={favorites}
+          isFavorite={isFavorite}
           onToggleFavorite={toggleFavorite}
           onSpaceSelect={setSelectedSpace}
           onShowFilters={() => setShowFilters(true)}
