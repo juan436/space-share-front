@@ -38,15 +38,19 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
           {spaceTypeLabel}
         </span>
 
-        {space.rating && (
+        {space.rating && space.rating > 0 ? (
           <div className="flex items-center gap-1.5 pl-1">
             <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
             <span className="font-bold text-foreground">{space.rating}</span>
             <span className="text-muted-foreground">·</span>
             <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
-              {space.reviewCount} reseñas
+              {space.reviewCount} {space.reviewCount === 1 ? "reseña" : "reseñas"}
             </span>
           </div>
+        ) : (
+          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 px-3 py-1 rounded-full ring-1 ring-emerald-200 dark:ring-emerald-800">
+            Nuevo en SpaceShare
+          </span>
         )}
       </div>
 

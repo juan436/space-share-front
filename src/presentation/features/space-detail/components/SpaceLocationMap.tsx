@@ -33,7 +33,10 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
   };
 
   const handleGetDirections = () => {
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${location.latitude},${location.longitude}`;
+    const destination = location.latitude && location.longitude
+      ? `${location.latitude},${location.longitude}`
+      : encodeURIComponent(`${location.address}, ${location.city}, ${location.country}`);
+    const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
     window.open(url, "_blank");
   };
 

@@ -115,7 +115,7 @@ export function SpaceCard({ space, isSelected, onClick, returnPath, isFavorite, 
             
             <div className="flex items-center gap-2 flex-shrink-0">
               {/* Rating */}
-              {space.rating && space.rating > 0 && (
+              {space.rating && space.rating > 0 ? (
                 <div className="flex items-center gap-1 bg-accent/10 px-2 py-0.5 rounded-md">
                   <Star className="w-3.5 h-3.5 fill-accent text-accent" />
                   <span className="text-xs font-bold text-accent">{space.rating.toFixed(1)}</span>
@@ -123,6 +123,10 @@ export function SpaceCard({ space, isSelected, onClick, returnPath, isFavorite, 
                     <span className="text-[10px] text-muted-foreground">({space.reviewCount})</span>
                   )}
                 </div>
+              ) : (
+                <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md ring-1 ring-emerald-200 dark:ring-emerald-800">
+                  Nuevo
+                </span>
               )}
               
               {/* Favorite Button */}

@@ -65,12 +65,12 @@ function ClientContent({ tab }: { tab: string }) {
   }
 }
 
-function HostContent({ tab }: { tab: string }) {
+function HostContent({ tab, onNavigate }: { tab: string; onNavigate: (tab: string) => void }) {
   switch (tab) {
     case "spaces": return <HostDashboard />;
     case "reservations": return <HostReservations />;
     case "messages": return <Messages />;
-    default: return <HostHome />;
+    default: return <HostHome onNavigate={onNavigate} />;
   }
 }
 
@@ -131,7 +131,7 @@ export default function DashboardLayout({
   // Render content for current role + tab
   const renderContent = () => {
     if (user.role === "client") return <ClientContent tab={activeTab} />;
-    if (user.role === "host") return <HostContent tab={activeTab} />;
+    if (user.role === "host") return <HostContent tab={activeTab} onNavigate={setActiveTab} />;
     return <AdminContent tab={activeTab} />;
   };
 

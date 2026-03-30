@@ -82,11 +82,15 @@ export function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick, 
         {/* Title & Rating */}
         <div className="flex items-start justify-between gap-2">
           <h3 className="font-semibold text-base leading-tight">{space.title}</h3>
-          {space.rating && (
+          {space.rating && space.rating > 0 ? (
             <div className="flex items-center gap-1 shrink-0">
               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
               <span className="text-sm font-medium">{space.rating}</span>
             </div>
+          ) : (
+            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ring-1 ring-emerald-200 shrink-0">
+              Nuevo
+            </span>
           )}
         </div>
 
