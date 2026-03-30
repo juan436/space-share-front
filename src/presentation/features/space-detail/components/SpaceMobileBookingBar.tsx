@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Star, CalendarIcon, Info, Minus, Plus } from "lucide-react";
+import { Star, Info, Minus, Plus, ShieldCheck } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 import { Calendar } from "@/presentation/components/ui/calendar";
@@ -117,6 +117,12 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
 
   const isBookingDisabled = mode === "months" ? !isMonthAvailable(months) : (!dateRange?.from || !dateRange?.to);
 
+  const showFreeCancellation = mode === "months"
+    ? true
+    : (dateRange?.from && dateRange?.to)
+      ? differenceInDays(dateRange.to, dateRange.from) >= 30
+      : false;
+
   return (
     <>
       <div className="fixed bottom-4 left-4 right-4 md:hidden z-40 animate-in slide-in-from-bottom-6 fade-in duration-500 ease-out safe-area-bottom">
@@ -132,23 +138,23 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
               </span>
             </div>
 
-            {space.rating ? (
+            {space.rating && space.rating > 0 ? (
               <div className="flex items-center gap-1.5 mt-1.5">
                 <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
                 <span className="text-xs font-bold">{space.rating}</span>
-                <span className="text-[10px] text-muted-foreground">({space.reviewCount} reseñas)</span>
+                <span className="text-[10px] text-muted-foreground">({space.reviewCount} {space.reviewCount === 1 ? "reseña" : "reseñas"})</span>
               </div>
             ) : (
-              <div className="text-[11px] font-bold text-emerald-600 mt-1.5 bg-emerald-500/10 w-fit px-2 py-0.5 rounded-full">
-                Disponible ahora
-              </div>
+              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 px-2 py-0.5 rounded-full ring-1 ring-emerald-200 dark:ring-emerald-800 mt-1.5 w-fit">
+                Nuevo en SpaceShare
+              </span>
             )}
           </div>
 
           {/* Right: Trigger Button */}
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button className="h-[3.25rem] px-7 rounded-xl font-bold tracking-wide shadow-lg shadow-primary/20 bg-gradient-to-tr from-primary to-accent hover:opacity-90 hover:scale-[1.02] transition-all active:scale-95 text-[15px]">
+              <Button className="h-[3.25rem] px-7 rounded-xl font-bold tracking-wide shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90 hover:scale-[1.02] transition-all active:scale-95 text-[15px]">
                 Reservar
               </Button>
             </DialogTrigger>
@@ -188,7 +194,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                 {/* Segmented Control */}
                 <div className="flex p-1 bg-muted/40 rounded-xl mb-6 ring-1 ring-inset ring-black/5 dark:ring-white/5">
                   <button
-                    onClick={() => setMode("dates")}
+                    onClick={() => { setMode("dates"); setMonths(1); }}
                     className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-300 ${
                       mode === "dates"
                         ? "bg-white dark:bg-zinc-800 text-foreground shadow-sm ring-1 ring-black/5"
@@ -198,7 +204,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                     Fechas exactas
                   </button>
                   <button
-                    onClick={() => setMode("months")}
+                    onClick={() => { setMode("months"); setDateRange(undefined); }}
                     className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-300 ${
                       mode === "months"
                         ? "bg-white dark:bg-zinc-800 text-foreground shadow-sm ring-1 ring-black/5"
@@ -274,7 +280,18 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                           mode="range"
                           defaultMonth={dateRange?.from}
                           selected={dateRange}
-                          onSelect={setDateRange}
+                          onSelect={(range) => {
+                            if (range?.from && range?.to) {
+                              const today = new Date(new Date().setHours(0, 0, 0, 0));
+                              if (range.from.getTime() === today.getTime()) {
+                                const tomorrow = new Date(today);
+                                tomorrow.setDate(today.getDate() + 1);
+                                setDateRange({ from: tomorrow, to: range.to });
+                                return;
+                              }
+                            }
+                            setDateRange(range);
+                          }}
                           numberOfMonths={1}
                           className="w-full flex justify-center"
                           disabled={(date) => {
@@ -295,32 +312,51 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                 </div>
 
                 {/* Price Breakdown */}
-                <div className="space-y-4 mb-8 pt-2">
-                  <div className="flex justify-between items-center text-[15px]">
-                    <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30">
-                      ${space.pricePerMonth} x {months} {months === 1 ? "mes" : "meses"} {isVehicleSpace && `x ${effectiveQuantity} unid.`}
-                    </span>
-                    <span className="text-foreground font-semibold">${totalPrice}</span>
+                {mode === "dates" && (!dateRange?.from || !dateRange?.to) ? (
+                  <div className="mb-4 py-3 rounded-xl bg-muted/30 text-center">
+                    <p className="text-sm text-muted-foreground font-medium">Selecciona las fechas para ver el total</p>
                   </div>
-                  <div className="flex justify-between items-center text-[15px]">
-                    <span className="text-muted-foreground font-medium flex items-center gap-1.5 underline decoration-muted-foreground/30">
-                      Tarifa de servicio (5%)
-                      <Info className="w-3.5 h-3.5" />
-                    </span>
-                    <span className="text-foreground font-semibold">${serviceFee}</span>
-                  </div>
-                  <div className="h-px w-full bg-border/40" />
-                  <div className="flex justify-between items-end">
-                    <span className="font-bold text-foreground">Total</span>
-                    <span className="text-2xl font-extrabold text-foreground tracking-tight">${grandTotal}</span>
-                  </div>
-                </div>
+                ) : (
+                  <>
+                    <div className="space-y-2 mb-4 pt-1">
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30">
+                          ${space.pricePerMonth} x {Number.isInteger(currentMonths) ? currentMonths : currentMonths.toFixed(1)} {currentMonths === 1 ? "mes" : "meses"} {isVehicleSpace && `x ${effectiveQuantity} unid.`}
+                        </span>
+                        <span className="text-foreground font-semibold">${totalPrice}</span>
+                      </div>
+                      <div className="flex justify-between items-center text-sm">
+                        <span className="text-muted-foreground font-medium flex items-center gap-1 underline decoration-muted-foreground/30">
+                          Tarifa de servicio (5%)
+                          <Info className="w-3 h-3" />
+                        </span>
+                        <span className="text-foreground font-semibold">${serviceFee}</span>
+                      </div>
+                      <div className="h-px w-full bg-border/40" />
+                      <div className="flex justify-between items-center">
+                        <span className="font-bold text-foreground">Total</span>
+                        <span className="text-xl font-extrabold text-foreground tracking-tight">${grandTotal}</span>
+                      </div>
+                    </div>
+                  </>
+                )}
 
-                <div className="space-y-3">
+                {/* Cancelación Gratuita */}
+                {showFreeCancellation && (
+                  <div className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 ring-1 ring-emerald-200 dark:ring-emerald-800 mb-4">
+                    <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
+                    <div>
+                      <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400">Cancelación gratuita</p>
+                      <p className="text-[11px] text-emerald-600/80 dark:text-emerald-400/70">Cancela sin costo hasta 15 días antes.</p>
+                    </div>
+                  </div>
+                )}
+
+                <div className="space-y-2">
                   <Button
                     disabled={isBookingDisabled}
                     onClick={handleReserveClick}
-                    className="w-full h-14 rounded-xl text-[15px] font-bold tracking-wide shadow-lg shadow-primary/20 bg-gradient-to-tr from-primary to-accent disabled:opacity-50 disabled:scale-100 disabled:from-muted disabled:to-muted disabled:text-muted-foreground disabled:shadow-none"
+                    className="w-full h-12 rounded-xl text-sm font-bold tracking-wide shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90 disabled:opacity-50 disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
                   >
                     {mode === "months" && !isMonthAvailable(months) ? "Capacidad Excedida" : "Continuar"}
                   </Button>
