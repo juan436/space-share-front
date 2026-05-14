@@ -6,6 +6,7 @@ import { Button } from "@/presentation/components/ui/button";
 import {
   Calendar, CheckCircle2, XCircle, Clock, Loader2,
   MapPin, User, MessageSquare, DollarSign, ChevronLeft, ChevronRight,
+  CreditCard
 } from "lucide-react";
 import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
 import { reservationRepository } from "@/bootstrap/application";
@@ -13,11 +14,14 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  pending: { label: "Pendiente", color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400", icon: Clock },
-  accepted: { label: "Aceptada", color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400", icon: CheckCircle2 },
-  rejected: { label: "Rechazada", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400", icon: XCircle },
-  cancelled: { label: "Cancelada", color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400", icon: XCircle },
-  completed: { label: "Completada", color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400", icon: CheckCircle2 },
+  pending:          { label: "Pendiente",        color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",     icon: Clock },
+  accepted:         { label: "Aceptada (Viejas)",color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400", icon: CheckCircle2 },
+  awaiting_payment: { label: "Espera de Pago",   color: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-400",  icon: CreditCard },
+  confirmed:        { label: "Confirmada",       color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400", icon: CheckCircle2 },
+  expired:          { label: "Expirada",         color: "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400",             icon: XCircle },
+  rejected:         { label: "Rechazada",        color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",               icon: XCircle },
+  cancelled:        { label: "Cancelada",        color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400",             icon: XCircle },
+  completed:        { label: "Completada",       color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",          icon: CheckCircle2 },
 };
 
 type FilterTab = "all" | ReservationStatus;
@@ -59,7 +63,9 @@ export function HostReservations() {
 
   const filteredReservations = activeTab === "all"
     ? reservations
-    : reservations.filter((r) => r.status === activeTab);
+    : activeTab === "awaiting_payment"
+      ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
+      : reservations.filter((r) => r.status === activeTab);
 
   const totalPages = Math.ceil(filteredReservations.length / pageSize);
   const paginatedReservations = filteredReservations.slice(
@@ -68,10 +74,12 @@ export function HostReservations() {
   );
 
   const tabs: { key: FilterTab; label: string; count: number }[] = [
-    { key: "all", label: "Todas", count: reservations.length },
-    { key: "pending", label: "Pendientes", count: reservations.filter((r) => r.status === "pending").length },
-    { key: "accepted", label: "Aceptadas", count: reservations.filter((r) => r.status === "accepted").length },
-    { key: "rejected", label: "Rechazadas", count: reservations.filter((r) => r.status === "rejected").length },
+    { key: "all",              label: "Todas",           count: reservations.length },
+    { key: "pending",         label: "Pendientes",      count: reservations.filter((r) => r.status === "pending").length },
+    { key: "awaiting_payment",label: "Esperando Pago",  count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
+    { key: "confirmed",       label: "Confirmadas",     count: reservations.filter((r) => r.status === "confirmed").length },
+    { key: "completed",       label: "Completadas",     count: reservations.filter((r) => r.status === "completed").length },
+    { key: "rejected",        label: "Rechazadas",      count: reservations.filter((r) => r.status === "rejected").length },
   ];
 
   return (

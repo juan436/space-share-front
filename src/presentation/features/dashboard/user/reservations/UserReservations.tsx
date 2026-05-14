@@ -5,21 +5,25 @@ import { Card, CardContent } from "@/presentation/components/ui/card";
 import {
   Calendar, CheckCircle2, XCircle, Clock, Loader2,
   MapPin, DollarSign, ArrowRight, Star, ChevronLeft, ChevronRight,
+  CreditCard, Info,
 } from "lucide-react";
 import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
 import { reservationRepository, reviewRepository } from "@/bootstrap/application";
 import { Button } from "@/presentation/components/ui/button";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { ReviewDialog } from "../components";
+import { ReviewDialog, ReservationDetailsDialog } from "../components";
 
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  pending: { label: "Pendiente", color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400", icon: Clock },
-  accepted: { label: "Aceptada", color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400", icon: CheckCircle2 },
-  rejected: { label: "Rechazada", color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400", icon: XCircle },
-  cancelled: { label: "Cancelada", color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400", icon: XCircle },
-  completed: { label: "Completada", color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400", icon: CheckCircle2 },
+  pending:          { label: "Pendiente",        color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400",     icon: Clock },
+  accepted:         { label: "Aceptada",         color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400", icon: CheckCircle2 },
+  awaiting_payment: { label: "Pend. de Pago",   color: "bg-violet-100 text-violet-800 dark:bg-violet-900/30 dark:text-violet-400",  icon: CreditCard },
+  confirmed:        { label: "Confirmada",       color: "bg-emerald-100 text-emerald-800 dark:bg-emerald-900/30 dark:text-emerald-400", icon: CheckCircle2 },
+  expired:          { label: "Expirada",         color: "bg-gray-100 text-gray-500 dark:bg-gray-800 dark:text-gray-400",             icon: XCircle },
+  rejected:         { label: "Rechazada",        color: "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400",               icon: XCircle },
+  cancelled:        { label: "Cancelada",        color: "bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-400",             icon: XCircle },
+  completed:        { label: "Completada",       color: "bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400",          icon: CheckCircle2 },
 };
 
 type FilterTab = "all" | ReservationStatus;
@@ -32,6 +36,8 @@ export function UserReservations() {
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
   const [reviewError, setReviewError] = useState<string | null>(null);
+  const [detailsId, setDetailsId] = useState<string | null>(null);
+  const [simulatingPaymentId, setSimulatingPaymentId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 4;
 
@@ -52,31 +58,50 @@ export function UserReservations() {
 
   const handleSubmitReview = async (rating: number, comment: string) => {
     if (!reviewingId) return;
-    const reservation = reservations.find((r) => r.id === reviewingId);
-    if (!reservation) return;
-
     setReviewSubmitting(true);
     setReviewError(null);
+
     try {
       await reviewRepository.create({
-        spaceId: reservation.spaceId,
-        reservationId: reservation.id,
+        reservationId: reviewingId,
         rating,
         comment,
+        spaceId: ""
       });
-      setReviewedIds((prev) => new Set(prev).add(reservation.id));
+
+      setReviewedIds((prev) => {
+        const next = new Set(prev);
+        next.add(reviewingId);
+        return next;
+      });
       setReviewingId(null);
-    } catch (err: any) {
-      const msg = err?.response?.data?.message || err?.message || "Error al enviar reseña";
-      setReviewError(typeof msg === "string" ? msg : msg[0]);
+    } catch (error: any) {
+      setReviewError(error.message || "Error al enviar la reseña");
     } finally {
       setReviewSubmitting(false);
     }
   };
 
+  const handleSimulatePayment = async (reservationId: string) => {
+    setSimulatingPaymentId(reservationId);
+    try {
+      // Simular que Wompi procesó el pago y nos devolvió éxito
+      await reservationRepository.updateStatus(reservationId, "confirmed");
+      // Refrescar las reservas para ver el cambio de estado
+      const data = await reservationRepository.findByClientId();
+      setReservations(data);
+    } catch (error) {
+      console.error("Error simulando el pago:", error);
+    } finally {
+      setSimulatingPaymentId(null);
+    }
+  };
+
   const filteredReservations = activeTab === "all"
     ? reservations
-    : reservations.filter((r) => r.status === activeTab);
+    : activeTab === "awaiting_payment"
+      ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
+      : reservations.filter((r) => r.status === activeTab);
 
   const totalPages = Math.ceil(filteredReservations.length / pageSize);
   const paginatedReservations = filteredReservations.slice(
@@ -85,10 +110,12 @@ export function UserReservations() {
   );
 
   const tabs: { key: FilterTab; label: string; count: number }[] = [
-    { key: "all", label: "Todas", count: reservations.length },
-    { key: "pending", label: "Pendientes", count: reservations.filter((r) => r.status === "pending").length },
-    { key: "accepted", label: "Aceptadas", count: reservations.filter((r) => r.status === "accepted").length },
-    { key: "rejected", label: "Rechazadas", count: reservations.filter((r) => r.status === "rejected").length },
+    { key: "all",              label: "Todas",           count: reservations.length },
+    { key: "pending",         label: "Pendientes",      count: reservations.filter((r) => r.status === "pending").length },
+    { key: "awaiting_payment",label: "Pend. Pago",      count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
+    { key: "confirmed",       label: "Confirmadas",     count: reservations.filter((r) => r.status === "confirmed").length },
+    { key: "completed",       label: "Completadas",     count: reservations.filter((r) => r.status === "completed").length },
+    { key: "rejected",        label: "Rechazadas",      count: reservations.filter((r) => r.status === "rejected").length },
   ];
 
   return (
@@ -208,7 +235,7 @@ export function UserReservations() {
                     </span>
                   </div>
 
-                  {/* Status message */}
+                  {/* Status messages */}
                   {reservation.status === "pending" && (
                     <p className="text-xs text-amber-600 dark:text-amber-400 font-medium bg-amber-50 dark:bg-amber-950/20 p-2 rounded-lg">
                       Esperando respuesta del anfitrión...
@@ -216,17 +243,48 @@ export function UserReservations() {
                   )}
                   {reservation.status === "accepted" && (
                     <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium bg-emerald-50 dark:bg-emerald-950/20 p-2 rounded-lg">
-                      Tu reserva ha sido aprobada
+                      Tu reserva ha sido aprobada por el anfitrión.
                     </p>
                   )}
                   {reservation.status === "rejected" && (
                     <p className="text-xs text-red-600 dark:text-red-400 font-medium bg-red-50 dark:bg-red-950/20 p-2 rounded-lg">
-                      El anfitrión ha rechazado esta solicitud
+                      El anfitrión ha rechazado esta solicitud.
+                    </p>
+                  )}
+                  {reservation.status === "expired" && (
+                    <p className="text-xs text-gray-500 font-medium bg-gray-100 dark:bg-gray-800/40 p-2 rounded-lg">
+                      El tiempo para pagar expiró. El espacio fue liberado.
                     </p>
                   )}
 
-                  {/* Review Section */}
-                  {(reservation.status === "accepted" || reservation.status === "completed") && !reviewedIds.has(reservation.id) && (
+                  {/* Dynamic action buttons */}
+                  {(reservation.status === "awaiting_payment" || reservation.status === "accepted") && (
+                    <Button
+                      size="sm"
+                      onClick={() => handleSimulatePayment(reservation.id)}
+                      disabled={simulatingPaymentId === reservation.id}
+                      className="w-full rounded-xl gap-2 mt-1 bg-violet-600 hover:bg-violet-700 text-white"
+                    >
+                      {simulatingPaymentId === reservation.id ? (
+                        <Loader2 className="w-4 h-4 animate-spin" />
+                      ) : (
+                        <CreditCard className="w-3.5 h-3.5" />
+                      )}
+                      {simulatingPaymentId === reservation.id ? "Procesando..." : "Pagar ahora"}
+                    </Button>
+                  )}
+                  {reservation.status === "confirmed" && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setDetailsId(reservation.id)}
+                      className="w-full rounded-xl gap-2 mt-1"
+                    >
+                      <Info className="w-3.5 h-3.5" />
+                      Ver detalles
+                    </Button>
+                  )}
+                  {reservation.status === "completed" && !reviewedIds.has(reservation.id) && (
                     <Button
                       variant="outline"
                       size="sm"
@@ -298,6 +356,13 @@ export function UserReservations() {
         onSubmit={handleSubmitReview}
         isSubmitting={reviewSubmitting}
         error={reviewError}
+      />
+
+      {/* Reservation Details Dialog */}
+      <ReservationDetailsDialog
+        isOpen={!!detailsId}
+        onClose={() => setDetailsId(null)}
+        reservation={reservations.find((r) => r.id === detailsId) ?? null}
       />
     </div>
   );
