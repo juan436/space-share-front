@@ -139,7 +139,8 @@ export function UserReservations() {
           </CardContent>
         </Card>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2">
+        <>
+          <div className="grid gap-4 sm:grid-cols-2">
           {paginatedReservations.map((reservation) => {
             const statusCfg = STATUS_CONFIG[reservation.status] || STATUS_CONFIG.pending;
             const StatusIcon = statusCfg.icon;
@@ -246,6 +247,7 @@ export function UserReservations() {
               </Card>
             );
           })}
+          </div>
 
           {/* Pagination */}
           {totalPages > 1 && (
@@ -286,7 +288,7 @@ export function UserReservations() {
               </div>
             </div>
           )}
-        </div>
+        </>
       )}
 
       {/* Review Dialog Modal */}
