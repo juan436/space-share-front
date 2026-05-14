@@ -11,6 +11,8 @@ import { reservationRepository, reviewRepository } from "@/bootstrap/application
 import { Button } from "@/presentation/components/ui/button";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
+import { ReviewDialog } from "../components";
+
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ElementType }> = {
   pending: { label: "Pendiente", color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-400", icon: Clock },
@@ -27,8 +29,6 @@ export function UserReservations() {
   const [isLoading, setIsLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [reviewingId, setReviewingId] = useState<string | null>(null);
-  const [reviewRating, setReviewRating] = useState(5);
-  const [reviewComment, setReviewComment] = useState("");
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
   const [reviewError, setReviewError] = useState<string | null>(null);
@@ -50,20 +50,22 @@ export function UserReservations() {
     fetchReservations();
   }, []);
 
-  const handleSubmitReview = async (reservationId: string, spaceId: string) => {
+  const handleSubmitReview = async (rating: number, comment: string) => {
+    if (!reviewingId) return;
+    const reservation = reservations.find((r) => r.id === reviewingId);
+    if (!reservation) return;
+
     setReviewSubmitting(true);
     setReviewError(null);
     try {
       await reviewRepository.create({
-        spaceId,
-        reservationId,
-        rating: reviewRating,
-        comment: reviewComment,
+        spaceId: reservation.spaceId,
+        reservationId: reservation.id,
+        rating,
+        comment,
       });
-      setReviewedIds((prev) => new Set(prev).add(reservationId));
+      setReviewedIds((prev) => new Set(prev).add(reservation.id));
       setReviewingId(null);
-      setReviewRating(5);
-      setReviewComment("");
     } catch (err: any) {
       const msg = err?.response?.data?.message || err?.message || "Error al enviar reseña";
       setReviewError(typeof msg === "string" ? msg : msg[0]);
@@ -224,59 +226,15 @@ export function UserReservations() {
 
                   {/* Review Section */}
                   {(reservation.status === "accepted" || reservation.status === "completed") && !reviewedIds.has(reservation.id) && (
-                    reviewingId === reservation.id ? (
-                      <div className="space-y-3 pt-2 border-t border-border/40">
-                        <p className="text-sm font-semibold">Dejar reseña</p>
-                        <div className="flex gap-1">
-                          {[1, 2, 3, 4, 5].map((s) => (
-                            <button key={s} onClick={() => setReviewRating(s)} type="button">
-                              <Star className={`w-5 h-5 transition-colors ${s <= reviewRating ? "fill-amber-400 text-amber-400" : "text-muted-foreground/30"}`} />
-                            </button>
-                          ))}
-                        </div>
-                        <textarea
-                          value={reviewComment}
-                          onChange={(e) => setReviewComment(e.target.value)}
-                          placeholder="Escribe tu experiencia (opcional)"
-                          className="w-full rounded-xl border border-border/50 bg-background p-2.5 text-sm resize-none h-20 focus:outline-none focus:ring-2 focus:ring-primary/30"
-                        />
-                        {reviewError && (
-                          <p className="text-xs text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-950/20 p-2 rounded-lg">
-                            {reviewError}
-                          </p>
-                        )}
-                        <div className="flex gap-2">
-                          <Button
-                            type="button"
-                            size="sm"
-                            disabled={reviewSubmitting}
-                            onClick={(e) => { e.preventDefault(); e.stopPropagation(); handleSubmitReview(reservation.id, reservation.spaceId); }}
-                            className="rounded-xl"
-                          >
-                            {reviewSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Enviar"}
-                          </Button>
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => { setReviewingId(null); setReviewComment(""); setReviewRating(5); }}
-                            className="rounded-xl"
-                          >
-                            Cancelar
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setReviewingId(reservation.id)}
-                        className="w-full rounded-xl gap-2 mt-1"
-                      >
-                        <Star className="w-3.5 h-3.5" />
-                        Dejar reseña
-                      </Button>
-                    )
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setReviewingId(reservation.id)}
+                      className="w-full rounded-xl gap-2 mt-1"
+                    >
+                      <Star className="w-3.5 h-3.5" />
+                      Dejar reseña
+                    </Button>
                   )}
                   {reviewedIds.has(reservation.id) && (
                     <p className="text-xs text-emerald-600 dark:text-emerald-400 font-medium flex items-center gap-1.5 pt-2">
@@ -330,6 +288,15 @@ export function UserReservations() {
           )}
         </div>
       )}
+
+      {/* Review Dialog Modal */}
+      <ReviewDialog
+        isOpen={!!reviewingId}
+        onClose={() => setReviewingId(null)}
+        onSubmit={handleSubmitReview}
+        isSubmitting={reviewSubmitting}
+        error={reviewError}
+      />
     </div>
   );
 }
