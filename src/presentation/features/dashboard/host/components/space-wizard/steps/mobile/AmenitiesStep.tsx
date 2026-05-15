@@ -1,0 +1,97 @@
+import { Checkbox } from "@/presentation/components/ui/checkbox";
+import { Thermometer, Shield, DoorOpen } from "lucide-react";
+import { NewSpaceFormData } from "@/presentation/types/spaces";
+import { cn } from "@/presentation/utils/cn";
+
+interface AmenitiesStepProps {
+  newSpace: NewSpaceFormData;
+  onUpdateNewSpace: (updates: Partial<NewSpaceFormData>) => void;
+}
+
+export function AmenitiesStep({
+  newSpace,
+  onUpdateNewSpace,
+}: AmenitiesStepProps) {
+  return (
+    <div className="space-y-4">
+      <div className="bg-background rounded-xl p-4 border">
+        <p className="font-medium">Comodidades</p>
+        <p className="text-sm text-muted-foreground">Selecciona las que apliquen</p>
+      </div>
+
+      <div className="space-y-3">
+        <label
+          className={cn(
+            "bg-background rounded-xl p-4 border flex items-center justify-between",
+            newSpace.climateControlled && "border-primary bg-primary/5"
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "h-10 w-10 rounded-lg flex items-center justify-center",
+              newSpace.climateControlled ? "bg-primary text-primary-foreground" : "bg-muted"
+            )}>
+              <Thermometer className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-medium">Control de clima</p>
+              <p className="text-xs text-muted-foreground">Temperatura regulada</p>
+            </div>
+          </div>
+          <Checkbox
+            checked={newSpace.climateControlled}
+            onCheckedChange={(checked) => onUpdateNewSpace({ climateControlled: checked as boolean })}
+          />
+        </label>
+
+        <label
+          className={cn(
+            "bg-background rounded-xl p-4 border flex items-center justify-between",
+            newSpace.securityCamera && "border-primary bg-primary/5"
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "h-10 w-10 rounded-lg flex items-center justify-center",
+              newSpace.securityCamera ? "bg-primary text-primary-foreground" : "bg-muted"
+            )}>
+              <Shield className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-medium">Seguridad</p>
+              <p className="text-xs text-muted-foreground">Cámaras / vigilancia</p>
+            </div>
+          </div>
+          <Checkbox
+            checked={newSpace.securityCamera}
+            onCheckedChange={(checked) => onUpdateNewSpace({ securityCamera: checked as boolean })}
+          />
+        </label>
+
+        <label
+          className={cn(
+            "bg-background rounded-xl p-4 border flex items-center justify-between",
+            newSpace.privateEntrance && "border-primary bg-primary/5"
+          )}
+        >
+          <div className="flex items-center gap-3">
+            <div className={cn(
+              "h-10 w-10 rounded-lg flex items-center justify-center",
+              newSpace.privateEntrance ? "bg-primary text-primary-foreground" : "bg-muted"
+            )}>
+              <DoorOpen className="h-5 w-5" />
+            </div>
+            <div>
+              <p className="font-medium">Entrada privada</p>
+              <p className="text-xs text-muted-foreground">Acceso independiente</p>
+            </div>
+          </div>
+          <Checkbox
+            checked={newSpace.privateEntrance}
+            onCheckedChange={(checked) => onUpdateNewSpace({ privateEntrance: checked as boolean })}
+          />
+        </label>
+      </div>
+    </div>
+  );
+}
