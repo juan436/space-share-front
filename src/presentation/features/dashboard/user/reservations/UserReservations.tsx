@@ -1,90 +1,26 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/presentation/components/ui/card";
-import {
-  Calendar, CheckCircle2, XCircle, Clock, Loader2,
-  MapPin, DollarSign, ArrowRight, Star, ChevronLeft, ChevronRight,
-  CreditCard, Info,
-} from "lucide-react";
-import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
-import { reservationRepository, reviewRepository } from "@/bootstrap/application";
+import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ReservationStatus } from "@/core/domain/entities/Reservation";
 import { Button } from "@/presentation/components/ui/button";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import { ReviewDialog, ReservationDetailsDialog, UserReservationCard } from "../components";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
+import { useUserReservations } from "../hooks/useUserReservations";
 
 type FilterTab = "all" | ReservationStatus;
 
+const PAGE_SIZE = 4;
+
 export function UserReservations() {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { reservations, isLoading, reviewedIds, simulatingPaymentId, submitReview, simulatePayment } = useUserReservations();
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [reviewingId, setReviewingId] = useState<string | null>(null);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
-  const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
   const [reviewError, setReviewError] = useState<string | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
-  const [simulatingPaymentId, setSimulatingPaymentId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 4;
-
-  useEffect(() => {
-    const fetchReservations = async () => {
-      try {
-        const data = await reservationRepository.findByClientId();
-        setReservations(data);
-      } catch (error) {
-        console.error("Error fetching reservations:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchReservations();
-  }, []);
-
-  const handleSubmitReview = async (rating: number, comment: string) => {
-    if (!reviewingId) return;
-    setReviewSubmitting(true);
-    setReviewError(null);
-
-    try {
-      await reviewRepository.create({
-        reservationId: reviewingId,
-        rating,
-        comment,
-        spaceId: ""
-      });
-
-      setReviewedIds((prev) => {
-        const next = new Set(prev);
-        next.add(reviewingId);
-        return next;
-      });
-      setReviewingId(null);
-    } catch (error: any) {
-      setReviewError(error.message || "Error al enviar la reseña");
-    } finally {
-      setReviewSubmitting(false);
-    }
-  };
-
-  const handleSimulatePayment = async (reservationId: string) => {
-    setSimulatingPaymentId(reservationId);
-    try {
-      // Simular que Wompi procesó el pago y nos devolvió éxito
-      await reservationRepository.updateStatus(reservationId, "confirmed");
-      // Refrescar las reservas para ver el cambio de estado
-      const data = await reservationRepository.findByClientId();
-      setReservations(data);
-    } catch (error) {
-      console.error("Error simulando el pago:", error);
-    } finally {
-      setSimulatingPaymentId(null);
-    }
-  };
 
   const filteredReservations = activeTab === "all"
     ? reservations
@@ -92,20 +28,34 @@ export function UserReservations() {
       ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
       : reservations.filter((r) => r.status === activeTab);
 
-  const totalPages = Math.ceil(filteredReservations.length / pageSize);
+  const totalPages = Math.ceil(filteredReservations.length / PAGE_SIZE);
   const paginatedReservations = filteredReservations.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
+    (currentPage - 1) * PAGE_SIZE,
+    currentPage * PAGE_SIZE
   );
 
   const tabs: { key: FilterTab; label: string; count: number }[] = [
-    { key: "all",              label: "Todas",           count: reservations.length },
-    { key: "pending",         label: "Pendientes",      count: reservations.filter((r) => r.status === "pending").length },
-    { key: "awaiting_payment",label: "Pend. Pago",      count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
-    { key: "confirmed",       label: "Confirmadas",     count: reservations.filter((r) => r.status === "confirmed").length },
-    { key: "completed",       label: "Completadas",     count: reservations.filter((r) => r.status === "completed").length },
-    { key: "rejected",        label: "Rechazadas",      count: reservations.filter((r) => r.status === "rejected").length },
+    { key: "all",               label: "Todas",       count: reservations.length },
+    { key: "pending",           label: "Pendientes",  count: reservations.filter((r) => r.status === "pending").length },
+    { key: "awaiting_payment",  label: "Pend. Pago",  count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
+    { key: "confirmed",         label: "Confirmadas", count: reservations.filter((r) => r.status === "confirmed").length },
+    { key: "completed",         label: "Completadas", count: reservations.filter((r) => r.status === "completed").length },
+    { key: "rejected",          label: "Rechazadas",  count: reservations.filter((r) => r.status === "rejected").length },
   ];
+
+  const handleSubmitReview = async (rating: number, comment: string) => {
+    if (!reviewingId) return;
+    setReviewSubmitting(true);
+    setReviewError(null);
+    try {
+      await submitReview(reviewingId, rating, comment);
+      setReviewingId(null);
+    } catch (error: unknown) {
+      setReviewError(error instanceof Error ? error.message : "Error al enviar la reseña");
+    } finally {
+      setReviewSubmitting(false);
+    }
+  };
 
   return (
     <div className="space-y-6">
@@ -114,23 +64,18 @@ export function UserReservations() {
         <p className="text-muted-foreground">Historial y estado de tus solicitudes de reserva</p>
       </div>
 
-      {/* Filter Tabs */}
       <div className="flex gap-2 flex-wrap">
         {tabs.map((tab) => (
           <button
             key={tab.key}
             onClick={() => { setActiveTab(tab.key); setCurrentPage(1); }}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === tab.key
-                ? "bg-primary text-primary-foreground shadow-sm"
-                : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
+              activeTab === tab.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
             }`}
           >
             {tab.label}
             {tab.count > 0 && (
-              <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${
-                activeTab === tab.key ? "bg-primary-foreground/20" : "bg-background"
-              }`}>
+              <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${activeTab === tab.key ? "bg-primary-foreground/20" : "bg-background"}`}>
                 {tab.count}
               </span>
             )}
@@ -138,7 +83,6 @@ export function UserReservations() {
         ))}
       </div>
 
-      {/* Content */}
       {isLoading ? (
         <div className="text-center py-12">
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
@@ -157,53 +101,32 @@ export function UserReservations() {
       ) : (
         <>
           <div className="grid gap-4 sm:grid-cols-2">
-          {paginatedReservations.map((reservation) => (
-            <UserReservationCard
-              key={reservation.id}
-              reservation={reservation}
-              reviewedIds={reviewedIds}
-              simulatingPaymentId={simulatingPaymentId}
-              onPay={handleSimulatePayment}
-              onDetails={setDetailsId}
-              onReview={setReviewingId}
-            />
-          ))}
+            {paginatedReservations.map((reservation) => (
+              <UserReservationCard
+                key={reservation.id}
+                reservation={reservation}
+                reviewedIds={reviewedIds}
+                simulatingPaymentId={simulatingPaymentId}
+                onPay={simulatePayment}
+                onDetails={setDetailsId}
+                onReview={setReviewingId}
+              />
+            ))}
           </div>
 
-          {/* Pagination */}
           {totalPages > 1 && (
             <div className="flex items-center justify-between pt-4">
               <p className="text-sm text-muted-foreground">
-                {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, filteredReservations.length)} de {filteredReservations.length}
+                {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filteredReservations.length)} de {filteredReservations.length}
               </p>
               <div className="flex items-center gap-2">
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={currentPage <= 1}
-                  onClick={() => setCurrentPage((p) => p - 1)}
-                  className="rounded-xl"
-                >
+                <Button variant="outline" size="sm" disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="rounded-xl">
                   <ChevronLeft className="w-4 h-4" />
                 </Button>
                 {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                  <Button
-                    key={p}
-                    variant={p === currentPage ? "default" : "outline"}
-                    size="sm"
-                    onClick={() => setCurrentPage(p)}
-                    className="rounded-xl w-9 h-9 p-0"
-                  >
-                    {p}
-                  </Button>
+                  <Button key={p} variant={p === currentPage ? "default" : "outline"} size="sm" onClick={() => setCurrentPage(p)} className="rounded-xl w-9 h-9 p-0">{p}</Button>
                 ))}
-                <Button
-                  variant="outline"
-                  size="sm"
-                  disabled={currentPage >= totalPages}
-                  onClick={() => setCurrentPage((p) => p + 1)}
-                  className="rounded-xl"
-                >
+                <Button variant="outline" size="sm" disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="rounded-xl">
                   <ChevronRight className="w-4 h-4" />
                 </Button>
               </div>
@@ -212,21 +135,8 @@ export function UserReservations() {
         </>
       )}
 
-      {/* Review Dialog Modal */}
-      <ReviewDialog
-        isOpen={!!reviewingId}
-        onClose={() => setReviewingId(null)}
-        onSubmit={handleSubmitReview}
-        isSubmitting={reviewSubmitting}
-        error={reviewError}
-      />
-
-      {/* Reservation Details Dialog */}
-      <ReservationDetailsDialog
-        isOpen={!!detailsId}
-        onClose={() => setDetailsId(null)}
-        reservation={reservations.find((r) => r.id === detailsId) ?? null}
-      />
+      <ReviewDialog isOpen={!!reviewingId} onClose={() => setReviewingId(null)} onSubmit={handleSubmitReview} isSubmitting={reviewSubmitting} error={reviewError} />
+      <ReservationDetailsDialog isOpen={!!detailsId} onClose={() => setDetailsId(null)} reservation={reservations.find((r) => r.id === detailsId) ?? null} />
     </div>
   );
 }

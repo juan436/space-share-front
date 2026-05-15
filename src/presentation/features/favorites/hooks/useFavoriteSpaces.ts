@@ -1,0 +1,40 @@
+import { useState, useEffect } from "react";
+import { Space } from "@/core/domain/entities/Space";
+import { spaceRepository } from "@/bootstrap/application";
+import { useFavorites } from "@/presentation/hooks/useFavorites";
+
+export function useFavoriteSpaces() {
+  const [spaces, setSpaces] = useState<Space[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const { favorites, isFavorite, toggleFavorite } = useFavorites();
+
+  useEffect(() => {
+    const fetch = async () => {
+      if (favorites.size === 0) {
+        setSpaces([]);
+        setIsLoading(false);
+        return;
+      }
+      setIsLoading(true);
+      try {
+        const ids = Array.from(favorites);
+        const results = await Promise.all(
+          ids.map((id) => spaceRepository.findById(id).catch(() => null))
+        );
+        setSpaces(results.filter((s): s is Space => s !== null));
+      } catch {
+        setSpaces([]);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+    fetch();
+  }, [favorites]);
+
+  const handleToggleFavorite = async (id: string) => {
+    await toggleFavorite(id);
+    setSpaces((prev) => prev.filter((s) => s.id !== id));
+  };
+
+  return { spaces, isLoading, isFavorite, handleToggleFavorite };
+}

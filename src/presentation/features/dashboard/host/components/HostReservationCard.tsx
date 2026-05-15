@@ -1,9 +1,7 @@
+import { memo } from "react";
 import { Card } from "@/presentation/components/ui/card";
 import { Button } from "@/presentation/components/ui/button";
-import {
-  Calendar, CheckCircle2, XCircle, Loader2,
-  MapPin, User, MessageSquare, DollarSign
-} from "lucide-react";
+import { Calendar, CheckCircle2, XCircle, Loader2, MapPin, User, MessageSquare, DollarSign } from "lucide-react";
 import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -15,7 +13,7 @@ interface HostReservationCardProps {
   onStatusUpdate: (id: string, status: ReservationStatus) => void;
 }
 
-export function HostReservationCard({
+export const HostReservationCard = memo(function HostReservationCard({
   reservation,
   updatingId,
   onStatusUpdate,
@@ -26,14 +24,9 @@ export function HostReservationCard({
   return (
     <Card key={reservation.id} className="overflow-hidden">
       <div className="flex flex-col sm:flex-row">
-        {/* Image */}
         <div className="h-40 sm:h-auto sm:w-48 shrink-0 bg-muted overflow-hidden">
           {reservation.space?.images?.[0] ? (
-            <img
-              src={reservation.space.images[0]}
-              alt={reservation.space.title}
-              className="w-full h-full object-cover"
-            />
+            <img src={reservation.space.images[0]} alt={reservation.space.title} className="w-full h-full object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Calendar className="w-8 h-8 text-muted-foreground/30" />
@@ -41,7 +34,6 @@ export function HostReservationCard({
           )}
         </div>
 
-        {/* Content */}
         <div className="flex-1 p-5">
           <div className="flex items-start justify-between gap-4 mb-3">
             <div>
@@ -76,8 +68,7 @@ export function HostReservationCard({
             <div>
               <p className="text-muted-foreground text-xs font-medium">Ganancia</p>
               <p className="font-semibold flex items-center gap-1">
-                <DollarSign className="w-3.5 h-3.5 text-emerald-600" />
-                ${reservation.basePrice}
+                <DollarSign className="w-3.5 h-3.5 text-emerald-600" />${reservation.basePrice}
               </p>
             </div>
             <div>
@@ -95,31 +86,14 @@ export function HostReservationCard({
             </div>
           )}
 
-          {/* Action Buttons */}
           {reservation.status === "pending" && (
             <div className="flex gap-3">
-              <Button
-                size="sm"
-                onClick={() => onStatusUpdate(reservation.id, "accepted")}
-                disabled={updatingId === reservation.id}
-                className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white"
-              >
-                {updatingId === reservation.id ? (
-                  <Loader2 className="w-4 h-4 animate-spin mr-1" />
-                ) : (
-                  <CheckCircle2 className="w-4 h-4 mr-1" />
-                )}
+              <Button size="sm" onClick={() => onStatusUpdate(reservation.id, "accepted")} disabled={updatingId === reservation.id} className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white">
+                {updatingId === reservation.id ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <CheckCircle2 className="w-4 h-4 mr-1" />}
                 Aceptar Reserva
               </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => onStatusUpdate(reservation.id, "rejected")}
-                disabled={updatingId === reservation.id}
-                className="rounded-xl font-bold text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/20"
-              >
-                <XCircle className="w-4 h-4 mr-1" />
-                Rechazar
+              <Button size="sm" variant="outline" onClick={() => onStatusUpdate(reservation.id, "rejected")} disabled={updatingId === reservation.id} className="rounded-xl font-bold text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/20">
+                <XCircle className="w-4 h-4 mr-1" />Rechazar
               </Button>
             </div>
           )}
@@ -127,4 +101,4 @@ export function HostReservationCard({
       </div>
     </Card>
   );
-}
+});
