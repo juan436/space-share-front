@@ -1,3 +1,10 @@
+/**
+ * WizardFooter (mobile)
+ *
+ * Qué hace: Footer del wizard mobile. Botón único de acción: "Continuar" o "Finalizar" según el paso.
+ * Recibe:   currentStep, totalSteps, canProceed, isCreating, isFormValid, onNext, onSubmit
+ * Genera:   botón full-width deshabilitado según validación del paso actual
+ */
 import { Button } from "@/presentation/components/ui/button";
 import { Check, ChevronRight } from "lucide-react";
 

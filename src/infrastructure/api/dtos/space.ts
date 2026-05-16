@@ -1,3 +1,15 @@
+export type SpaceCategoryDto = "normal" | "business";
+
+export interface BusinessServicesDto {
+  wifi?: boolean;
+  parking?: boolean;
+  cafeteria?: boolean;
+  printer?: boolean;
+  reception?: boolean;
+  security?: boolean;
+  airConditioning?: boolean;
+}
+
 export interface SpaceAmenitiesDto {
   climateControlled: boolean;
   securityCamera: boolean;
@@ -32,6 +44,13 @@ export interface SpaceDto {
   occupancyRate?: number;
   totalEarnings?: number;
   occupancyMap?: Record<string, number>;
+  category?: SpaceCategoryDto;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServicesDto;
   createdAt: string;
   updatedAt: string;
 }
@@ -46,6 +65,13 @@ export interface CreateSpaceRequestDto {
   amenities: SpaceAmenitiesDto;
   location: SpaceLocationDto;
   images?: string[];
+  category?: SpaceCategoryDto;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServicesDto;
 }
 
 export interface UpdateSpaceRequestDto {
@@ -59,6 +85,13 @@ export interface UpdateSpaceRequestDto {
   location?: Partial<SpaceLocationDto>;
   images?: string[];
   status?: "active" | "paused" | "pending" | "deactivated";
+  category?: SpaceCategoryDto;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServicesDto;
 }
 
 export interface PaginatedSpacesResponseDto {

@@ -3,4 +3,3 @@ export { BasicInfoSection } from "./BasicInfoSection";
 export { LocationSection } from "./LocationSection";
 export { ServicesSection } from "./ServicesSection";
 export { PricingSection } from "./PricingSection";
-export { PhotosSection } from "./PhotosSection";

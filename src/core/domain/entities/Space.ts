@@ -1,5 +1,17 @@
 export type SpaceType = "garage" | "basement" | "attic" | "storage" | "parking" | "other";
 
+export type SpaceCategory = "normal" | "business";
+
+export interface BusinessServices {
+  wifi?: boolean;
+  parking?: boolean;
+  cafeteria?: boolean;
+  printer?: boolean;
+  reception?: boolean;
+  security?: boolean;
+  airConditioning?: boolean;
+}
+
 export type SpaceStatus = "active" | "paused" | "pending" | "deactivated";
 
 export interface SpaceAmenities {
@@ -36,8 +48,15 @@ export interface Space {
   bookingsCount?: number;
   occupancyRate?: number;
   totalEarnings?: number;
-  capacity: number; // Maximum Number of slots/capacity available for rent
-  occupancyMap?: Record<string, number>; // Maps 'YYYY-MM-DD' -> number of booked slots
+  capacity: number;
+  occupancyMap?: Record<string, number>;
+  category?: SpaceCategory;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServices;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -53,6 +72,13 @@ export interface CreateSpaceInput {
   amenities: SpaceAmenities;
   location: SpaceLocation;
   images?: string[];
+  category?: SpaceCategory;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServices;
 }
 
 export interface UpdateSpaceInput {
@@ -66,6 +92,13 @@ export interface UpdateSpaceInput {
   location?: Partial<SpaceLocation>;
   images?: string[];
   status?: SpaceStatus;
+  category?: SpaceCategory;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServices;
 }
 
 export function calculateRecommendedPrice(squareMeters: number): number {

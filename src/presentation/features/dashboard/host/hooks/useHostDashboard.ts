@@ -1,3 +1,11 @@
+/**
+ * useHostDashboard
+ *
+ * Qué hace: Hook central del módulo host. Centraliza estado del formulario, edición y operaciones CRUD de espacios.
+ * Recibe:   nada
+ * Genera:   spaces (SpaceViewModel[]), handlers CRUD, estado de dialogs, validación del formulario, recommendedPrice
+ * Procesa:  transforma entidades de dominio a SpaceViewModel; usa ref para evitar stale closure en handleAddSpace
+ */
 import { useState, useRef, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
 import {
@@ -5,6 +13,7 @@ import {
   NewSpaceFormData,
   SpaceTypeValue,
   SpaceStatusValue,
+  SpaceCategoryValue,
   calculateRecommendedPriceForUI
 } from "@/presentation/types/spaces";
 
@@ -53,6 +62,13 @@ export function useHostDashboard() {
     state: space.location.state,
     country: space.location.country,
     images: space.images || [],
+    category: (space.category ?? "normal") as SpaceCategoryValue,
+    businessSpaceType: space.businessSpaceType,
+    pricePerHour: space.pricePerHour,
+    availableFrom: space.availableFrom,
+    availableTo: space.availableTo,
+    usageConditions: space.usageConditions,
+    services: space.services,
   }));
 
   const activeSpacesCount = spaces.filter(s => s.status === "active").length;
@@ -94,6 +110,7 @@ export function useHostDashboard() {
           country: current.country,
         },
         images: current.images || [],
+        category: "normal",
       });
       resetForm();
       setIsDialogOpen(false);

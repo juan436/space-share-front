@@ -1,3 +1,11 @@
+/**
+ * ImagesStep (mobile)
+ *
+ * Qué hace: Paso 2 del wizard mobile — carga de imágenes simplificada para mobile.
+ * Recibe:   images (URLs), onImageUpload, onRemoveImage
+ * Genera:   botón de subida + grid de imágenes con opción de eliminar
+ * Procesa:  upload simulado (mock); versión simplificada respecto al desktop que soporta drag-and-drop
+ */
 import { Button } from "@/presentation/components/ui/button";
 import { ImageIcon, Upload, X } from "lucide-react";
 

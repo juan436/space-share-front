@@ -1,5 +1,16 @@
 export type SpaceTypeValue = "garage" | "parking" | "basement" | "attic" | "storage" | "other";
 export type SpaceStatusValue = "active" | "paused" | "pending" | "deactivated";
+export type SpaceCategoryValue = "normal" | "business";
+
+export interface BusinessServicesViewModel {
+  wifi?: boolean;
+  parking?: boolean;
+  cafeteria?: boolean;
+  printer?: boolean;
+  reception?: boolean;
+  security?: boolean;
+  airConditioning?: boolean;
+}
 
 export interface SpaceViewModel {
   id: string;
@@ -18,6 +29,13 @@ export interface SpaceViewModel {
   state: string;
   country: string;
   images: string[];
+  category?: SpaceCategoryValue;
+  businessSpaceType?: string;
+  pricePerHour?: number;
+  availableFrom?: string;
+  availableTo?: string;
+  usageConditions?: string;
+  services?: BusinessServicesViewModel;
 }
 
 export interface NewSpaceFormData {

@@ -1,3 +1,10 @@
+/**
+ * BasicInfoSection
+ *
+ * Qué hace: Sección 2 del formulario empresarial — nombre, descripción, capacidad y m² del espacio.
+ * Recibe:   formData (BusinessSpaceData), onUpdate callback
+ * Genera:   campos de texto para nombre, descripción, capacidad y superficie
+ */
 import { FileText, Users, Ruler } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";

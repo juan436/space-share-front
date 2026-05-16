@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * MobileSpacesList
+ *
+ * Qué hace: Lista mobile del inventario de espacios del host. Alternativa responsive a SpacesTable.
+ * Recibe:   spaces (SpaceViewModel[]), isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace
+ * Genera:   tarjetas apiladas con título, ubicación, estado y chips de tipo/m²/precio
+ * Procesa:  misma lógica de menú contextual que SpacesTable; estado vacío y cargando incluidos
+ */
 import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";

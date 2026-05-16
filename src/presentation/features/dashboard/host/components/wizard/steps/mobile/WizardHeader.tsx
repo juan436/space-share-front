@@ -1,3 +1,10 @@
+/**
+ * WizardHeader (mobile)
+ *
+ * Qué hace: Header compacto del wizard mobile. Navegación, título del paso y barra de progreso.
+ * Recibe:   currentStep, totalSteps, stepTitle, progress (0-100), onBack, onClose
+ * Genera:   franja con botón back (naranja en paso 1 = cerrar), título centrado y barra de progreso lineal
+ */
 import { Button } from "@/presentation/components/ui/button";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";

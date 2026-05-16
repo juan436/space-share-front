@@ -1,4 +1,10 @@
-import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
+/**
+ * SpaceTypeSelector
+ *
+ * Qué hace: Pantalla de selección de tipo de espacio (Normal o Empresarial) dentro del dialog de alta.
+ * Recibe:   onSelectMode — callback con el modo elegido ("normal" | "business")
+ * Genera:   dos tarjetas clickeables con descripción de cada tipo de espacio
+ */
 import { Home, Building2 } from "lucide-react";
 
 export type SpaceMode = "normal" | "business" | null;
@@ -10,13 +16,6 @@ interface SpaceTypeSelectorProps {
 export function SpaceTypeSelector({ onSelectMode }: SpaceTypeSelectorProps) {
   return (
     <>
-      <div className="border-b bg-muted/30">
-        <DialogHeader className="p-4">
-          <DialogTitle className="text-xl font-semibold">
-            ¿Qué tipo de espacio deseas publicar?
-          </DialogTitle>
-        </DialogHeader>
-      </div>
       <div className="flex-1 p-6 flex flex-col items-center justify-center">
         <p className="text-muted-foreground text-center mb-8 max-w-md">
           Selecciona el tipo de espacio que mejor se adapte a lo que deseas ofrecer

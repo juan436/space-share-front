@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * SpacesTable
+ *
+ * Qué hace: Tabla desktop del inventario de espacios del host con acciones por fila.
+ * Recibe:   spaces (SpaceViewModel[]), isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace
+ * Genera:   Table con columnas título/tipo/estado/m²/precio/acciones; estados vacío y cargando incluidos
+ * Procesa:  menú contextual con opciones de activar/pausar/desactivar según estado actual del espacio
+ */
 import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";

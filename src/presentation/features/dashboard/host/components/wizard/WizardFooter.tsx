@@ -1,3 +1,10 @@
+/**
+ * WizardFooter (desktop)
+ *
+ * Qué hace: Barra inferior de navegación del wizard desktop. Muestra Volver/Anterior + Siguiente/Publicar.
+ * Recibe:   currentStep, totalSteps, canProceed, isCreating, isFormValid, editMode?, onBack, onNext, onSubmit
+ * Genera:   botones de navegación con texto y estilo según posición en el wizard y editMode
+ */
 import { Button } from "@/presentation/components/ui/button";
 import { ChevronLeft, ChevronRight, Check } from "lucide-react";
 import { cn } from "@/presentation/utils/cn";

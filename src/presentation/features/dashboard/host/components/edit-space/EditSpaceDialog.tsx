@@ -1,9 +1,18 @@
 "use client";
 
+/**
+ * EditSpaceDialog
+ *
+ * Qué hace: Dialog de edición. Bifurca según space.category: empresarial → BusinessSpaceForm, normal → SpaceWizard.
+ * Recibe:   space (SpaceViewModel | null), isOpen, onOpenChange, onSave, isSaving
+ * Genera:   Dialog con el formulario adecuado precargado con los datos del espacio
+ * Procesa:  convierte SpaceViewModel a NewSpaceFormData para el wizard normal
+ */
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/presentation/components/ui/dialog";
 import { NewSpaceFormData, SpaceViewModel, calculateRecommendedPriceForUI } from "@/presentation/types/spaces";
 import { SpaceWizard } from "../wizard";
+import { BusinessSpaceForm } from "../add-space/BusinessSpaceForm";
 
 interface EditSpaceDialogProps {
   space: SpaceViewModel | null;
@@ -43,19 +52,29 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
 
   const recommendedPrice = calculateRecommendedPriceForUI(formData.squareMeters);
 
+  const isBusiness = space?.category === "business";
+
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0">
-        <SpaceWizard
-          newSpace={formData}
-          onUpdateNewSpace={updateFormData}
-          onAddSpace={handleSubmit}
-          onBack={() => onOpenChange(false)}
-          isCreating={isSaving}
-          isFormValid={isFormValid}
-          recommendedPrice={recommendedPrice}
-          editMode
-        />
+        {isBusiness ? (
+          <BusinessSpaceForm
+            onClose={() => onOpenChange(false)}
+            initialData={space ?? undefined}
+            spaceId={space?.id}
+          />
+        ) : (
+          <SpaceWizard
+            newSpace={formData}
+            onUpdateNewSpace={updateFormData}
+            onAddSpace={handleSubmit}
+            onBack={() => onOpenChange(false)}
+            isCreating={isSaving}
+            isFormValid={isFormValid}
+            recommendedPrice={recommendedPrice}
+            editMode
+          />
+        )}
       </DialogContent>
     </Dialog>
   );

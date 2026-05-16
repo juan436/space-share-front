@@ -1,3 +1,11 @@
+/**
+ * LocationStep (desktop)
+ *
+ * Qué hace: Paso 4 del wizard — captura la ubicación del espacio en selects encadenados.
+ * Recibe:   newSpace, onUpdateNewSpace, countries, states, cities (listas precargadas), onCountryChange, onStateChange
+ * Genera:   selects en cascada (país → estado → ciudad) + input de dirección + placeholder de mapa
+ * Procesa:  selects dependientes: estado deshabilitado sin país, ciudad deshabilitada sin estado
+ */
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";

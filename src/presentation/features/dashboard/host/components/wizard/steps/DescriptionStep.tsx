@@ -1,3 +1,11 @@
+/**
+ * DescriptionStep (desktop)
+ *
+ * Qué hace: Paso 1 del wizard — captura los datos básicos del espacio.
+ * Recibe:   newSpace (formData), onUpdateNewSpace, recommendedPrice
+ * Genera:   formulario con título, descripción, tipo, m², precio/mes y capacidad (solo tipos vehiculares)
+ * Procesa:  resetea capacity a 1 al cambiar a tipo no vehicular; muestra precio sugerido si m² > 0
+ */
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { Textarea } from "@/presentation/components/ui/textarea";

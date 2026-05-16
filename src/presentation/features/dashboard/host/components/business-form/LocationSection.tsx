@@ -1,3 +1,10 @@
+/**
+ * LocationSection
+ *
+ * Qué hace: Sección 3 del formulario empresarial — dirección y horario de disponibilidad.
+ * Recibe:   formData (BusinessSpaceData), onUpdate callback
+ * Genera:   campos de dirección vía LocationPicker + inputs de horario de apertura/cierre
+ */
 import { MapPin, Clock } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";

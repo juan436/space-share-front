@@ -1,3 +1,11 @@
+/**
+ * WizardStepper
+ *
+ * Qué hace: Barra de progreso visual del wizard desktop. Muestra los 5 pasos con iconos y estado.
+ * Recibe:   currentStep (1-5)
+ * Genera:   fila de pasos con indicador activo/completado/pendiente y líneas conectoras entre pasos
+ * Procesa:  exporta WIZARD_STEPS para que SpaceWizard controle el total de pasos de forma centralizada
+ */
 import { Check, FileText, ImageIcon, Settings2, MapPin, Eye, LucideIcon } from "lucide-react";
 import { cn } from "@/presentation/utils/cn";
 

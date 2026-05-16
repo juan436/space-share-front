@@ -1,3 +1,10 @@
+/**
+ * LocationStep (mobile)
+ *
+ * Qué hace: Paso 4 del wizard mobile — captura ubicación del espacio en selects encadenados.
+ * Recibe:   newSpace, onUpdateNewSpace, countries, states, cities, onCountryChange, onStateChange
+ * Genera:   selects en cascada (país → estado → ciudad) + input de dirección; layout mobile
+ */
 import { Label } from "@/presentation/components/ui/label";
 import { Input } from "@/presentation/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";

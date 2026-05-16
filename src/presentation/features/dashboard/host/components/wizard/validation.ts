@@ -1,0 +1,30 @@
+/**
+ * validation
+ *
+ * Qué hace: Centraliza la lógica de validación por paso del wizard de espacio normal.
+ * Recibe:   step (número de paso actual), formData (NewSpaceFormData)
+ * Genera:   boolean — true si el usuario puede avanzar al siguiente paso
+ */
+import { NewSpaceFormData } from "@/presentation/types/spaces";
+
+export function canProceed(step: number, formData: NewSpaceFormData): boolean {
+  switch (step) {
+    case 1:
+      return Boolean(
+        formData.title &&
+        formData.description &&
+        formData.type &&
+        formData.squareMeters > 0 &&
+        formData.pricePerMonth > 0
+      );
+    case 4:
+      return Boolean(
+        formData.country &&
+        formData.state &&
+        formData.city &&
+        formData.address
+      );
+    default:
+      return true;
+  }
+}

@@ -29,6 +29,13 @@ export class SpaceMapper {
       totalEarnings: dto.totalEarnings,
       capacity: dto.capacity ?? 1,
       occupancyMap: dto.occupancyMap,
+      category: dto.category,
+      businessSpaceType: dto.businessSpaceType,
+      pricePerHour: dto.pricePerHour,
+      availableFrom: dto.availableFrom,
+      availableTo: dto.availableTo,
+      usageConditions: dto.usageConditions,
+      services: dto.services,
       createdAt: new Date(dto.createdAt),
       updatedAt: new Date(dto.updatedAt),
     };
@@ -45,6 +52,13 @@ export class SpaceMapper {
       amenities: input.amenities,
       location: input.location,
       images: input.images,
+      category: input.category,
+      businessSpaceType: input.businessSpaceType,
+      pricePerHour: input.pricePerHour,
+      availableFrom: input.availableFrom,
+      availableTo: input.availableTo,
+      usageConditions: input.usageConditions,
+      services: input.services,
     };
   }
 
@@ -60,6 +74,13 @@ export class SpaceMapper {
       location: input.location,
       images: input.images,
       status: input.status,
+      category: input.category,
+      businessSpaceType: input.businessSpaceType,
+      pricePerHour: input.pricePerHour,
+      availableFrom: input.availableFrom,
+      availableTo: input.availableTo,
+      usageConditions: input.usageConditions,
+      services: input.services,
     };
   }
 }

@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * AddSpaceWizardMobile
+ *
+ * Qué hace: Dialog mobile para dar de alta un espacio normal en 5 pasos. No incluye flujo empresarial.
+ * Recibe:   isOpen, onOpenChange, newSpace (formData), onUpdateNewSpace, onAddSpace, isCreating, isFormValid, recommendedPrice
+ * Genera:   Dialog mobile con WizardHeader (progreso), steps de contenido y WizardFooter de navegación
+ * Procesa:  canProceed() valida campos requeridos por paso; manejo de imágenes con estado local
+ */
 import { useMemo, useState } from "react";
 import { Button } from "@/presentation/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/presentation/components/ui/dialog";
@@ -22,6 +30,7 @@ import {
   WizardHeader,
   WizardFooter,
 } from "../wizard/steps/mobile";
+import { canProceed } from "../wizard/validation";
 
 interface AddSpaceWizardMobileProps {
   isOpen: boolean;
@@ -89,22 +98,6 @@ export function AddSpaceWizardMobile({
 
   const removeImage = (index: number) => {
     setImages((prev) => prev.filter((_, i) => i !== index));
-  };
-
-  const canProceed = () => {
-    switch (currentStep) {
-      case 1:
-        return Boolean(newSpace.title) && Boolean(newSpace.description) && Boolean(newSpace.type) && (newSpace.squareMeters ?? 0) > 0 && (newSpace.pricePerMonth ?? 0) > 0;
-      case 2:
-        return true;
-      case 3:
-        return true;
-      case 4:
-        return Boolean(newSpace.country) && Boolean(newSpace.state) && Boolean(newSpace.city) && Boolean(newSpace.address);
-      case 5:
-      default:
-        return true;
-    }
   };
 
   const stepTitle = STEPS[stepIndex]?.title ?? "";
@@ -184,7 +177,7 @@ export function AddSpaceWizardMobile({
         <WizardFooter
           currentStep={currentStep}
           totalSteps={STEPS.length}
-          canProceed={canProceed()}
+          canProceed={canProceed(currentStep, newSpace)}
           isCreating={isCreating}
           isFormValid={isFormValid}
           onNext={handleNext}

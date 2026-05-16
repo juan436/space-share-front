@@ -1,3 +1,11 @@
+/**
+ * HostReservationCard
+ *
+ * Qué hace: Tarjeta de reservación para la vista del host. Muestra detalles y permite gestionar el estado.
+ * Recibe:   reservation (Reservation), updatingId (ID en proceso), onStatusUpdate callback
+ * Genera:   Card con imagen, datos del cliente, fechas, ganancia/total y botones aceptar/rechazar si está pendiente
+ * Procesa:  lee STATUS_CONFIG para colores y labels; formato de fechas con date-fns/es; memoizado con React.memo
+ */
 import { memo } from "react";
 import { Card } from "@/presentation/components/ui/card";
 import { Button } from "@/presentation/components/ui/button";

@@ -1,5 +1,13 @@
 "use client";
 
+/**
+ * SpaceWizard
+ *
+ * Qué hace: Orquestador del wizard de 5 pasos para alta/edición de espacio normal. Versión desktop.
+ * Recibe:   newSpace (formData), onUpdateNewSpace, onAddSpace, onBack, isCreating, isFormValid, recommendedPrice, editMode?
+ * Genera:   header con stepper + contenido del paso activo + footer de navegación
+ * Procesa:  canProceed() valida campos requeridos por paso; handleFilesSelected sube imágenes al backend via spaceRepository
+ */
 import { useState, useCallback } from "react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { Home } from "lucide-react";
@@ -8,6 +16,7 @@ import { useLocationData } from "@/presentation/hooks/useLocationData";
 import { spaceRepository } from "@/bootstrap/application";
 import { WizardStepper, WIZARD_STEPS } from "./WizardStepper";
 import { WizardFooter } from "./WizardFooter";
+import { canProceed } from "./validation";
 import { DescriptionStep } from "./steps/DescriptionStep";
 import { ImagesStep } from "./steps/ImagesStep";
 import { AmenitiesStep } from "./steps/AmenitiesStep";
@@ -81,26 +90,6 @@ export function SpaceWizard({
     onUpdateNewSpace({ images: newImages });
   };
 
-  const canProceed = (): boolean => {
-    switch (currentStep) {
-      case 1:
-        return Boolean(
-          newSpace.title &&
-          newSpace.description &&
-          newSpace.type &&
-          newSpace.squareMeters > 0 &&
-          newSpace.pricePerMonth > 0
-        );
-      case 2:
-        return true;
-      case 3:
-        return true;
-      case 4:
-        return Boolean(newSpace.country && newSpace.state && newSpace.city && newSpace.address);
-      default:
-        return true;
-    }
-  };
 
   return (
     <>
@@ -148,7 +137,7 @@ export function SpaceWizard({
       <WizardFooter
         currentStep={currentStep}
         totalSteps={WIZARD_STEPS.length}
-        canProceed={canProceed()}
+        canProceed={canProceed(currentStep, newSpace)}
         isCreating={isCreating}
         isFormValid={isFormValid}
         onBack={handleBack}
