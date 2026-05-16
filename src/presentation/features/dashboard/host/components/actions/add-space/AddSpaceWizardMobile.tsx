@@ -29,8 +29,8 @@ import {
   PreviewStep,
   WizardHeader,
   WizardFooter,
-} from "../wizard/steps/mobile";
-import { canProceed } from "../wizard/validation";
+} from "../../forms/wizard/steps/mobile";
+import { canProceed } from "../../forms/wizard/validation";
 
 interface AddSpaceWizardMobileProps {
   isOpen: boolean;

@@ -11,8 +11,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/pre
 import { Building2 } from "lucide-react";
 import { useEffect } from "react";
 import { useHostDashboard } from "./hooks";
-import { AddSpaceWizard, AddSpaceWizardMobile } from "./components/add-space";
-import { EditSpaceDialog } from "./components/edit-space";
+import { AddSpaceWizard, AddSpaceWizardMobile } from "./components/actions/add-space";
+import { EditSpaceDialog } from "./components/actions/edit-space";
 import { SpacesTable, MobileSpacesList } from "./components/spaces";
 import { useMediaQuery } from "@/presentation/hooks/useMediaQuery";
 

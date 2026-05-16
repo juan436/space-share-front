@@ -1,3 +1,4 @@
+export { BusinessSpaceForm } from "./BusinessSpaceForm";
 export { SpaceTypeSection } from "./SpaceTypeSection";
 export { BasicInfoSection } from "./BasicInfoSection";
 export { LocationSection } from "./LocationSection";

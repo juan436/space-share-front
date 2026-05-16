@@ -9,7 +9,7 @@ import { MapPin, Clock } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { LocationPicker } from "@/presentation/components/shared/forms/LocationPicker";
-import { BusinessSpaceData } from "../../hooks/useBusinessSpaceForm";
+import { BusinessSpaceData } from "../../../hooks/useBusinessSpaceForm";
 
 interface LocationSectionProps {
   formData: Pick<BusinessSpaceData, "country" | "state" | "city" | "address" | "availableFrom" | "availableTo">;

@@ -13,8 +13,8 @@ import { Button } from "@/presentation/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/presentation/components/ui/dialog";
 import { Plus } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
-import { BusinessSpaceForm } from "./BusinessSpaceForm";
-import { SpaceTypeSelector, SpaceMode, SpaceWizard } from "../wizard";
+import { BusinessSpaceForm } from "../../forms/business/BusinessSpaceForm";
+import { SpaceTypeSelector, SpaceMode, SpaceWizard } from "../../forms/wizard";
 
 interface AddSpaceWizardProps {
   isOpen: boolean;

@@ -8,7 +8,7 @@
 import { Wifi, Car, Coffee, Printer, Phone, Shield, Snowflake, Check } from "lucide-react";
 import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { cn } from "@/presentation/utils/cn";
-import { BusinessSpaceData } from "../../hooks/useBusinessSpaceForm";
+import { BusinessSpaceData } from "../../../hooks/useBusinessSpaceForm";
 
 const serviceOptions = [
   { key: "wifi", label: "WiFi", icon: Wifi },

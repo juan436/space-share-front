@@ -11,8 +11,8 @@
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/presentation/components/ui/dialog";
 import { NewSpaceFormData, SpaceViewModel, calculateRecommendedPriceForUI } from "@/presentation/types/spaces";
-import { SpaceWizard } from "../wizard";
-import { BusinessSpaceForm } from "../add-space/BusinessSpaceForm";
+import { SpaceWizard } from "../../forms/wizard";
+import { BusinessSpaceForm } from "../../forms/business/BusinessSpaceForm";
 
 interface EditSpaceDialogProps {
   space: SpaceViewModel | null;

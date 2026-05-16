@@ -9,7 +9,7 @@ import { DollarSign, FileText } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { Textarea } from "@/presentation/components/ui/textarea";
-import { BusinessSpaceData } from "../../hooks/useBusinessSpaceForm";
+import { BusinessSpaceData } from "../../../hooks/useBusinessSpaceForm";
 
 interface PricingSectionProps {
   formData: Pick<BusinessSpaceData, "pricePerMonth" | "pricePerHour" | "usageConditions">;
