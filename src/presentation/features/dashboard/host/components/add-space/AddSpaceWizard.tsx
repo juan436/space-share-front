@@ -6,7 +6,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from 
 import { Plus, Building2 } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 import { BusinessSpaceForm } from "./BusinessSpaceForm";
-import { SpaceTypeSelector, SpaceMode, NormalSpaceWizard } from "./space-wizard";
+import { SpaceTypeSelector, SpaceMode, SpaceWizard } from "../wizard";
 
 interface AddSpaceWizardProps {
   isOpen: boolean;
@@ -54,12 +54,10 @@ export function AddSpaceWizard({
         </Button>
       </DialogTrigger>
       <DialogContent className="w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0">
-        {/* Pantalla de selección de tipo */}
         {spaceMode === null && (
           <SpaceTypeSelector onSelectMode={setSpaceMode} />
         )}
 
-        {/* Formulario Empresarial */}
         {spaceMode === "business" && (
           <>
             <div className="border-b bg-muted/30">
@@ -77,9 +75,8 @@ export function AddSpaceWizard({
           </>
         )}
 
-        {/* Formulario Normal */}
         {spaceMode === "normal" && (
-          <NormalSpaceWizard
+          <SpaceWizard
             newSpace={newSpace}
             onUpdateNewSpace={onUpdateNewSpace}
             onAddSpace={onAddSpace}

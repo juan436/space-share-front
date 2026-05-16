@@ -14,7 +14,7 @@ import { AmenitiesStep } from "./steps/AmenitiesStep";
 import { LocationStep } from "./steps/LocationStep";
 import { PreviewStep } from "./steps/PreviewStep";
 
-interface NormalSpaceWizardProps {
+interface SpaceWizardProps {
   newSpace: NewSpaceFormData;
   onUpdateNewSpace: (updates: Partial<NewSpaceFormData>) => void;
   onAddSpace: () => void;
@@ -25,7 +25,7 @@ interface NormalSpaceWizardProps {
   editMode?: boolean;
 }
 
-export function NormalSpaceWizard({
+export function SpaceWizard({
   newSpace,
   onUpdateNewSpace,
   onAddSpace,
@@ -34,7 +34,7 @@ export function NormalSpaceWizard({
   isFormValid,
   recommendedPrice,
   editMode = false,
-}: NormalSpaceWizardProps) {
+}: SpaceWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
   const [images, setImages] = useState<string[]>(newSpace.images || []);
   const { countries, states, cities } = useLocationData(newSpace.country, newSpace.state);

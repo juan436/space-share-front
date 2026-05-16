@@ -3,11 +3,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/pre
 import { Building2 } from "lucide-react";
 import { useEffect } from "react";
 import { useHostDashboard } from "./hooks";
-import { AddSpaceWizard } from "./components/AddSpaceWizard";
-import { AddSpaceWizardMobile } from "./components/AddSpaceWizardMobile";
-import { EditSpaceDialog } from "./components/EditSpaceDialog";
-import { SpacesTable } from "./components/SpacesTable";
-import { SpacesListMobile } from "./components/SpacesListMobile";
+import { AddSpaceWizard, AddSpaceWizardMobile } from "./components/add-space";
+import { EditSpaceDialog } from "./components/edit-space";
+import { SpacesTable, MobileSpacesList } from "./components/spaces";
 import { useMediaQuery } from "@/presentation/hooks/useMediaQuery";
 
 export function HostDashboard() {
@@ -106,7 +104,7 @@ export function HostDashboard() {
         </CardHeader>
         <CardContent>
           {isMobile ? (
-            <SpacesListMobile
+            <MobileSpacesList
               spaces={spaces}
               isLoading={isLoading}
               isDeleting={isDeleting}

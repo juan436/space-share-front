@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
-import { Pencil } from "lucide-react";
+import { Dialog, DialogContent } from "@/presentation/components/ui/dialog";
 import { NewSpaceFormData, SpaceViewModel, calculateRecommendedPriceForUI } from "@/presentation/types/spaces";
-import { NormalSpaceWizard } from "./space-wizard";
+import { SpaceWizard } from "../wizard";
 
 interface EditSpaceDialogProps {
   space: SpaceViewModel | null;
@@ -47,7 +46,7 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
   return (
     <Dialog open={isOpen} onOpenChange={onOpenChange}>
       <DialogContent className="w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0">
-        <NormalSpaceWizard
+        <SpaceWizard
           newSpace={formData}
           onUpdateNewSpace={updateFormData}
           onAddSpace={handleSubmit}

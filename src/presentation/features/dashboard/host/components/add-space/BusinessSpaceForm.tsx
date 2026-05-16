@@ -2,13 +2,13 @@
 
 import { Button } from "@/presentation/components/ui/button";
 import { Check } from "lucide-react";
-import { useBusinessSpaceForm } from "../hooks/useBusinessSpaceForm";
-import { SpaceTypeSection } from "./business-form/SpaceTypeSection";
-import { BasicInfoSection } from "./business-form/BasicInfoSection";
-import { LocationSection } from "./business-form/LocationSection";
-import { ServicesSection } from "./business-form/ServicesSection";
-import { PricingSection } from "./business-form/PricingSection";
-import { PhotosSection } from "./business-form/PhotosSection";
+import { useBusinessSpaceForm } from "../../hooks/useBusinessSpaceForm";
+import { SpaceTypeSection } from "../business-form/SpaceTypeSection";
+import { BasicInfoSection } from "../business-form/BasicInfoSection";
+import { LocationSection } from "../business-form/LocationSection";
+import { ServicesSection } from "../business-form/ServicesSection";
+import { PricingSection } from "../business-form/PricingSection";
+import { PhotosSection } from "../business-form/PhotosSection";
 
 interface BusinessSpaceFormProps {
   onClose: () => void;

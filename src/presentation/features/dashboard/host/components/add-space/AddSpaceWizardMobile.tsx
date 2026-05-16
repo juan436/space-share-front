@@ -21,7 +21,7 @@ import {
   PreviewStep,
   WizardHeader,
   WizardFooter,
-} from "./space-wizard/steps/mobile";
+} from "../wizard/steps/mobile";
 
 interface AddSpaceWizardMobileProps {
   isOpen: boolean;

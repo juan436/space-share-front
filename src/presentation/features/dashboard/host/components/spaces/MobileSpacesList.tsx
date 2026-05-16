@@ -6,7 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { MoreHorizontal, Building2, Ruler, DollarSign, MapPin } from "lucide-react";
 import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
 
-interface SpacesListMobileProps {
+interface MobileSpacesListProps {
   spaces: SpaceViewModel[];
   isLoading: boolean;
   isDeleting: boolean;
@@ -16,7 +16,7 @@ interface SpacesListMobileProps {
   onEditSpace: (space: SpaceViewModel) => void;
 }
 
-export function SpacesListMobile({ spaces, isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace }: SpacesListMobileProps) {
+export function MobileSpacesList({ spaces, isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace }: MobileSpacesListProps) {
   const router = useRouter();
 
   if (isLoading) {
