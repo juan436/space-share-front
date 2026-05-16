@@ -1,3 +1,10 @@
+/**
+ * UserDashboard
+ *
+ * Qué hace: Panel principal del usuario con stats de resumen y acceso rápido a reservaciones.
+ * Recibe:   nada — obtiene usuario del contexto de auth
+ * Genera:   grid de stat cards (hardcodeadas pendiente P1), empty state de reservaciones y CTA de exploración
+ */
 import { useAuth } from "@/presentation/providers/auth-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Button } from "@/presentation/components/ui/button";

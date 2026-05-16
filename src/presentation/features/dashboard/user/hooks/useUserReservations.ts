@@ -1,44 +1,54 @@
-import { useState, useEffect } from "react";
-import { Reservation } from "@/core/domain/entities/Reservation";
+/**
+ * useUserReservations
+ *
+ * Qué hace: Fetch y mutaciones de reservaciones del usuario via React Query.
+ * Recibe:   nada — usa el userId del contexto de auth
+ * Genera:   reservations[], isLoading, isError, errorMessage, submitReview, simulatePayment, reviewedIds, simulatingPaymentId
+ * Procesa:  cache con staleTime 30s; invalidación automática tras simulatePayment; spaceId extraído de la reservación al crear review
+ */
+import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { reservationRepository, reviewRepository } from "@/bootstrap/application";
+import { toErrorMessage } from "@/presentation/utils/error";
+
+const QUERY_KEY = ["reservations", "user"] as const;
 
 export function useUserReservations() {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const queryClient = useQueryClient();
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
-  const [simulatingPaymentId, setSimulatingPaymentId] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetch = async () => {
-      try {
-        const data = await reservationRepository.findByClientId();
-        setReservations(data);
-      } catch (error) {
-        console.error("Error fetching reservations:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetch();
-  }, []);
+  const query = useQuery({
+    queryKey: QUERY_KEY,
+    queryFn: () => reservationRepository.findByClientId(),
+    staleTime: 30_000,
+  });
+
+  const reservations = query.data ?? [];
+
+  const payMutation = useMutation({
+    mutationFn: (reservationId: string) =>
+      reservationRepository.updateStatus(reservationId, "confirmed"),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+  });
 
   const submitReview = async (reservationId: string, rating: number, comment: string): Promise<void> => {
-    await reviewRepository.create({ reservationId, rating, comment, spaceId: "" });
+    const spaceId = reservations.find((r) => r.id === reservationId)?.spaceId ?? "";
+    await reviewRepository.create({ reservationId, rating, comment, spaceId });
     setReviewedIds((prev) => new Set(prev).add(reservationId));
   };
 
   const simulatePayment = async (reservationId: string): Promise<void> => {
-    setSimulatingPaymentId(reservationId);
-    try {
-      await reservationRepository.updateStatus(reservationId, "confirmed");
-      const data = await reservationRepository.findByClientId();
-      setReservations(data);
-    } catch (error) {
-      console.error("Error simulando el pago:", error);
-    } finally {
-      setSimulatingPaymentId(null);
-    }
+    await payMutation.mutateAsync(reservationId);
   };
 
-  return { reservations, isLoading, reviewedIds, simulatingPaymentId, submitReview, simulatePayment };
+  return {
+    reservations,
+    isLoading: query.isLoading,
+    isError: query.isError,
+    errorMessage: query.error ? toErrorMessage(query.error) : null,
+    reviewedIds,
+    simulatingPaymentId: payMutation.isPending ? payMutation.variables ?? null : null,
+    submitReview,
+    simulatePayment,
+  };
 }

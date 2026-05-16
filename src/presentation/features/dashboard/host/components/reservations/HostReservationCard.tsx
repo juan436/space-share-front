@@ -18,7 +18,7 @@ import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-statu
 interface HostReservationCardProps {
   reservation: Reservation;
   updatingId: string | null;
-  onStatusUpdate: (id: string, status: ReservationStatus) => void;
+  onStatusUpdate: (id: string, status: ReservationStatus) => Promise<void>;
 }
 
 export const HostReservationCard = memo(function HostReservationCard({
@@ -30,7 +30,7 @@ export const HostReservationCard = memo(function HostReservationCard({
   const StatusIcon = statusCfg.icon;
 
   return (
-    <Card key={reservation.id} className="overflow-hidden">
+    <Card className="overflow-hidden">
       <div className="flex flex-col sm:flex-row">
         <div className="h-40 sm:h-auto sm:w-48 shrink-0 bg-muted overflow-hidden">
           {reservation.space?.images?.[0] ? (
@@ -96,11 +96,11 @@ export const HostReservationCard = memo(function HostReservationCard({
 
           {reservation.status === "pending" && (
             <div className="flex gap-3">
-              <Button size="sm" onClick={() => onStatusUpdate(reservation.id, "accepted")} disabled={updatingId === reservation.id} className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white">
+              <Button size="sm" onClick={() => onStatusUpdate(reservation.id, "accepted")} disabled={!!updatingId} className="rounded-xl font-bold bg-emerald-600 hover:bg-emerald-700 text-white">
                 {updatingId === reservation.id ? <Loader2 className="w-4 h-4 animate-spin mr-1" /> : <CheckCircle2 className="w-4 h-4 mr-1" />}
                 Aceptar Reserva
               </Button>
-              <Button size="sm" variant="outline" onClick={() => onStatusUpdate(reservation.id, "rejected")} disabled={updatingId === reservation.id} className="rounded-xl font-bold text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/20">
+              <Button size="sm" variant="outline" onClick={() => onStatusUpdate(reservation.id, "rejected")} disabled={!!updatingId} className="rounded-xl font-bold text-red-600 border-red-200 hover:bg-red-50 dark:hover:bg-red-950/20">
                 <XCircle className="w-4 h-4 mr-1" />Rechazar
               </Button>
             </div>

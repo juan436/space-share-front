@@ -1,3 +1,11 @@
+/**
+ * UserReservationCard
+ *
+ * Qué hace: Tarjeta de reservación para la vista del usuario. Muestra estado, fechas, anfitrión y acciones disponibles.
+ * Recibe:   reservation, reviewedIds, simulatingPaymentId, onPay, onDetails, onReview callbacks
+ * Genera:   Card con imagen, badge de status, fechas, total y botones contextuales según status
+ * Procesa:  lee STATUS_CONFIG para colores y labels; memoizado con React.memo para evitar re-renders innecesarios
+ */
 import { memo } from "react";
 import { Card } from "@/presentation/components/ui/card";
 import { Calendar, MapPin, DollarSign, ArrowRight, Star, CreditCard, Info, Loader2, CheckCircle2 } from "lucide-react";
@@ -28,7 +36,7 @@ export const UserReservationCard = memo(function UserReservationCard({
   const StatusIcon = statusCfg.icon;
 
   return (
-    <Card key={reservation.id} className="overflow-hidden hover:shadow-md transition-shadow flex flex-col">
+    <Card className="overflow-hidden hover:shadow-md transition-shadow flex flex-col">
       <div className="h-40 w-full bg-muted shrink-0 overflow-hidden">
         {reservation.space?.images?.[0] ? (
           <img src={reservation.space.images[0]} alt={reservation.space.title} className="w-full h-full object-cover" />

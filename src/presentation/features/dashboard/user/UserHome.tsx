@@ -1,3 +1,11 @@
+/**
+ * UserHome
+ *
+ * Qué hace: Pantalla de inicio del dashboard de usuario con saludo, stats y acciones rápidas.
+ * Recibe:   nada — obtiene usuario del contexto de auth
+ * Genera:   saludo dinámico, grid de stat cards (hardcodeadas pendiente P1-A5) y tarjetas de acción rápida
+ * Procesa:  getGreeting() y getTodayDate() calculados en runtime; animaciones escalonadas por índice
+ */
 import { useAuth } from "@/presentation/providers/auth-context";
 import { Calendar, DollarSign, Package, TrendingUp, ArrowRight, Compass, MessageSquare } from "lucide-react";
 import Link from "next/link";

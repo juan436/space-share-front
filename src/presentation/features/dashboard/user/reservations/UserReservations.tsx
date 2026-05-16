@@ -1,6 +1,14 @@
 "use client";
 
-import { useState } from "react";
+/**
+ * UserReservations
+ *
+ * Qué hace: Vista de todas las reservaciones del usuario con filtros por status y paginación.
+ * Recibe:   nada — obtiene datos via useUserReservations (React Query)
+ * Genera:   tabs de filtro, grid de UserReservationCard, paginación, ReviewDialog y ReservationDetailsDialog
+ * Procesa:  filteredReservations y tabs memoizados; labels derivados de STATUS_CONFIG
+ */
+import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/presentation/components/ui/card";
 import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { ReservationStatus } from "@/core/domain/entities/Reservation";
@@ -14,7 +22,7 @@ type FilterTab = "all" | ReservationStatus;
 const PAGE_SIZE = 4;
 
 export function UserReservations() {
-  const { reservations, isLoading, reviewedIds, simulatingPaymentId, submitReview, simulatePayment } = useUserReservations();
+  const { reservations, isLoading, isError, errorMessage, reviewedIds, simulatingPaymentId, submitReview, simulatePayment } = useUserReservations();
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [reviewingId, setReviewingId] = useState<string | null>(null);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
@@ -22,26 +30,30 @@ export function UserReservations() {
   const [detailsId, setDetailsId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
 
-  const filteredReservations = activeTab === "all"
-    ? reservations
-    : activeTab === "awaiting_payment"
-      ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
-      : reservations.filter((r) => r.status === activeTab);
-
-  const totalPages = Math.ceil(filteredReservations.length / PAGE_SIZE);
-  const paginatedReservations = filteredReservations.slice(
-    (currentPage - 1) * PAGE_SIZE,
-    currentPage * PAGE_SIZE
+  const filteredReservations = useMemo(() =>
+    activeTab === "all"
+      ? reservations
+      : activeTab === "awaiting_payment"
+        ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
+        : reservations.filter((r) => r.status === activeTab),
+    [reservations, activeTab]
   );
 
-  const tabs: { key: FilterTab; label: string; count: number }[] = [
-    { key: "all",               label: "Todas",       count: reservations.length },
-    { key: "pending",           label: "Pendientes",  count: reservations.filter((r) => r.status === "pending").length },
-    { key: "awaiting_payment",  label: "Pend. Pago",  count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
-    { key: "confirmed",         label: "Confirmadas", count: reservations.filter((r) => r.status === "confirmed").length },
-    { key: "completed",         label: "Completadas", count: reservations.filter((r) => r.status === "completed").length },
-    { key: "rejected",          label: "Rechazadas",  count: reservations.filter((r) => r.status === "rejected").length },
-  ];
+  const totalPages = Math.ceil(filteredReservations.length / PAGE_SIZE);
+
+  const paginatedReservations = useMemo(() =>
+    filteredReservations.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
+    [filteredReservations, currentPage]
+  );
+
+  const tabs: { key: FilterTab; label: string; count: number }[] = useMemo(() => [
+    { key: "all",              label: "Todas",                                 count: reservations.length },
+    { key: "pending",          label: STATUS_CONFIG.pending.tabLabel,          count: reservations.filter((r) => r.status === "pending").length },
+    { key: "awaiting_payment", label: STATUS_CONFIG.awaiting_payment.tabLabel, count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
+    { key: "confirmed",        label: STATUS_CONFIG.confirmed.tabLabel,        count: reservations.filter((r) => r.status === "confirmed").length },
+    { key: "completed",        label: STATUS_CONFIG.completed.tabLabel,        count: reservations.filter((r) => r.status === "completed").length },
+    { key: "rejected",         label: STATUS_CONFIG.rejected.tabLabel,         count: reservations.filter((r) => r.status === "rejected").length },
+  ], [reservations]);
 
   const handleSubmitReview = async (rating: number, comment: string) => {
     if (!reviewingId) return;
@@ -88,6 +100,16 @@ export function UserReservations() {
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
           <p className="text-sm text-muted-foreground mt-2">Cargando reservaciones...</p>
         </div>
+      ) : isError ? (
+        <Card>
+          <CardContent>
+            <div className="text-center py-12 text-muted-foreground">
+              <Calendar className="mx-auto h-12 w-12 mb-4 opacity-50" />
+              <p className="text-lg font-medium">Error al cargar las reservaciones</p>
+              <p className="text-sm">{errorMessage ?? "Intenta recargar la página"}</p>
+            </div>
+          </CardContent>
+        </Card>
       ) : filteredReservations.length === 0 ? (
         <Card>
           <CardContent>
@@ -135,7 +157,7 @@ export function UserReservations() {
         </>
       )}
 
-      <ReviewDialog isOpen={!!reviewingId} onClose={() => setReviewingId(null)} onSubmit={handleSubmitReview} isSubmitting={reviewSubmitting} error={reviewError} />
+      <ReviewDialog isOpen={!!reviewingId} onClose={() => { setReviewingId(null); setReviewError(null); }} onSubmit={handleSubmitReview} isSubmitting={reviewSubmitting} error={reviewError} />
       <ReservationDetailsDialog isOpen={!!detailsId} onClose={() => setDetailsId(null)} reservation={reservations.find((r) => r.id === detailsId) ?? null} />
     </div>
   );

@@ -10,7 +10,7 @@ function resolveImageUrl(filename: string): string {
 
 export class ReservationMapper {
   static toDomain(dto: ReservationDto): Reservation {
-    const space = typeof dto.spaceId === "object" ? {
+    const space = dto.spaceId !== null && typeof dto.spaceId === "object" ? {
       title: dto.spaceId.title,
       images: (dto.spaceId.images || []).map(resolveImageUrl),
       type: dto.spaceId.type,
@@ -18,13 +18,13 @@ export class ReservationMapper {
       pricePerMonth: dto.spaceId.pricePerMonth,
     } : undefined;
 
-    const client = typeof dto.clientId === "object" ? {
+    const client = dto.clientId !== null && typeof dto.clientId === "object" ? {
       name: dto.clientId.name,
       email: dto.clientId.email,
       avatar: dto.clientId.avatar,
     } : undefined;
 
-    const host = typeof dto.hostId === "object" ? {
+    const host = dto.hostId !== null && typeof dto.hostId === "object" ? {
       name: dto.hostId.name,
       email: dto.hostId.email,
       avatar: dto.hostId.avatar,
@@ -32,9 +32,9 @@ export class ReservationMapper {
 
     return {
       id: dto._id,
-      spaceId: typeof dto.spaceId === "object" ? dto.spaceId._id : dto.spaceId,
-      clientId: typeof dto.clientId === "object" ? dto.clientId._id : dto.clientId,
-      hostId: typeof dto.hostId === "object" ? dto.hostId._id : dto.hostId,
+      spaceId: dto.spaceId !== null && typeof dto.spaceId === "object" ? dto.spaceId._id : dto.spaceId as string,
+      clientId: dto.clientId !== null && typeof dto.clientId === "object" ? dto.clientId._id : dto.clientId as string,
+      hostId: dto.hostId !== null && typeof dto.hostId === "object" ? dto.hostId._id : dto.hostId as string,
       startDate: new Date(dto.startDate),
       endDate: new Date(dto.endDate),
       basePrice: dto.basePrice,

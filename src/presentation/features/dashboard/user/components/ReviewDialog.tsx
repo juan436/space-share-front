@@ -1,3 +1,11 @@
+/**
+ * ReviewDialog
+ *
+ * Qué hace: Dialog para que el usuario deje una reseña con rating (1-5 estrellas) y comentario opcional.
+ * Recibe:   isOpen, onClose, onSubmit (async), isSubmitting, error
+ * Genera:   Dialog con selector de estrellas, textarea y botones Cancelar / Enviar
+ * Procesa:  resetea rating y comment al cerrar; muestra error del padre si el submit falla
+ */
 import { useState } from "react";
 import { Star, Loader2 } from "lucide-react";
 import { Button } from "@/presentation/components/ui/button";

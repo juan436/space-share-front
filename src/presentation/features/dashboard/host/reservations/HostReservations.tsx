@@ -1,74 +1,58 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+/**
+ * HostReservations
+ *
+ * Qué hace: Vista de todas las reservaciones del host con filtros por status y paginación.
+ * Recibe:   nada — obtiene datos via useHostReservations (React Query)
+ * Genera:   tabs de filtro, grid de HostReservationCard, paginación y dialogs de detalle
+ * Procesa:  filteredReservations y tabs memoizados; updateStatus con invalidación de cache automática
+ */
+import { useState, useMemo } from "react";
 import { Card, CardContent } from "@/presentation/components/ui/card";
 import { Button } from "@/presentation/components/ui/button";
-import {
-  Calendar, Loader2,
-  ChevronLeft, ChevronRight,
-} from "lucide-react";
-import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
-import { reservationRepository } from "@/bootstrap/application";
+import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { ReservationStatus } from "@/core/domain/entities/Reservation";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { HostReservationCard } from "../components";
+import { useHostReservations } from "../hooks";
 
 type FilterTab = "all" | ReservationStatus;
 
 export function HostReservations() {
-  const [reservations, setReservations] = useState<Reservation[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+  const { reservations, isLoading, isError, errorMessage, updateStatus, updatingId } = useHostReservations();
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
-  const [updatingId, setUpdatingId] = useState<string | null>(null);
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 3;
 
-  const fetchReservations = useCallback(async () => {
-    try {
-      const data = await reservationRepository.findByHostId();
-      setReservations(data);
-    } catch (error) {
-      console.error("Error fetching reservations:", error);
-    } finally {
-      setIsLoading(false);
-    }
-  }, []);
-
-  useEffect(() => {
-    fetchReservations();
-  }, [fetchReservations]);
-
-  const handleStatusUpdate = async (id: string, status: ReservationStatus) => {
-    setUpdatingId(id);
-    try {
-      await reservationRepository.updateStatus(id, status);
-      await fetchReservations();
-    } catch (error) {
-      console.error("Error updating status:", error);
-    } finally {
-      setUpdatingId(null);
-    }
+  const handleStatusUpdate = async (id: string, status: ReservationStatus): Promise<void> => {
+    await updateStatus({ id, status });
   };
 
-  const filteredReservations = activeTab === "all"
-    ? reservations
-    : activeTab === "awaiting_payment"
-      ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
-      : reservations.filter((r) => r.status === activeTab);
-
-  const totalPages = Math.ceil(filteredReservations.length / pageSize);
-  const paginatedReservations = filteredReservations.slice(
-    (currentPage - 1) * pageSize,
-    currentPage * pageSize
+  const filteredReservations = useMemo(() =>
+    activeTab === "all"
+      ? reservations
+      : activeTab === "awaiting_payment"
+        ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
+        : reservations.filter((r) => r.status === activeTab),
+    [reservations, activeTab]
   );
 
-  const tabs: { key: FilterTab; label: string; count: number }[] = [
-    { key: "all",              label: "Todas",           count: reservations.length },
-    { key: "pending",         label: "Pendientes",      count: reservations.filter((r) => r.status === "pending").length },
-    { key: "awaiting_payment",label: "Esperando Pago",  count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
-    { key: "confirmed",       label: "Confirmadas",     count: reservations.filter((r) => r.status === "confirmed").length },
-    { key: "completed",       label: "Completadas",     count: reservations.filter((r) => r.status === "completed").length },
-    { key: "rejected",        label: "Rechazadas",      count: reservations.filter((r) => r.status === "rejected").length },
-  ];
+  const totalPages = Math.ceil(filteredReservations.length / pageSize);
+
+  const paginatedReservations = useMemo(() =>
+    filteredReservations.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    [filteredReservations, currentPage]
+  );
+
+  const tabs: { key: FilterTab; label: string; count: number }[] = useMemo(() => [
+    { key: "all",              label: "Todas",                                 count: reservations.length },
+    { key: "pending",          label: STATUS_CONFIG.pending.tabLabel,          count: reservations.filter((r) => r.status === "pending").length },
+    { key: "awaiting_payment", label: STATUS_CONFIG.awaiting_payment.tabLabel, count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
+    { key: "confirmed",        label: STATUS_CONFIG.confirmed.tabLabel,        count: reservations.filter((r) => r.status === "confirmed").length },
+    { key: "completed",        label: STATUS_CONFIG.completed.tabLabel,        count: reservations.filter((r) => r.status === "completed").length },
+    { key: "rejected",         label: STATUS_CONFIG.rejected.tabLabel,         count: reservations.filter((r) => r.status === "rejected").length },
+  ], [reservations]);
 
   return (
     <div className="space-y-6">
@@ -107,6 +91,16 @@ export function HostReservations() {
           <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
           <p className="text-sm text-muted-foreground mt-2">Cargando reservaciones...</p>
         </div>
+      ) : isError ? (
+        <Card>
+          <CardContent>
+            <div className="text-center py-12 text-muted-foreground">
+              <Calendar className="mx-auto h-12 w-12 mb-4 opacity-50" />
+              <p className="text-lg font-medium">Error al cargar las reservaciones</p>
+              <p className="text-sm">{errorMessage ?? "Intenta recargar la página"}</p>
+            </div>
+          </CardContent>
+        </Card>
       ) : filteredReservations.length === 0 ? (
         <Card>
           <CardContent>
