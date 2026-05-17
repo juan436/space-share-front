@@ -6,7 +6,6 @@
  * Genera:   tabla/lista de espacios + dialogs de alta y edición
  * Procesa:  adapta vista entre SpacesTable (desktop) y MobileSpacesList según media query
  */
-import { useAuth } from "@/presentation/providers/auth-context";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { AlertCircle, Building2 } from "lucide-react";
 import { useHostDashboard } from "./hooks";
@@ -16,7 +15,6 @@ import { SpacesTable, MobileSpacesList } from "./components/spaces";
 import { useMediaQuery } from "@/presentation/hooks/useMediaQuery";
 
 export function HostDashboard() {
-  const { user } = useAuth();
   const isMobile = useMediaQuery("(max-width: 639px)");
   const {
     spaces,

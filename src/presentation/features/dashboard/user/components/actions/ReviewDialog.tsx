@@ -68,7 +68,9 @@ export function ReviewDialog({
           ))}
         </div>
 
+        <label htmlFor="review-comment" className="sr-only">Comentario (opcional)</label>
         <textarea
+          id="review-comment"
           value={comment}
           onChange={(e) => setComment(e.target.value)}
           placeholder="Escribe tu experiencia (opcional)"

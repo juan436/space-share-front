@@ -11,16 +11,7 @@ import { Label } from "@/presentation/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
 import { MapPin } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
-
-interface Country {
-  code: string;
-  name: string;
-}
-
-interface State {
-  code: string;
-  name: string;
-}
+import type { Country, State } from "@/presentation/types/location";
 
 interface LocationStepProps {
   newSpace: NewSpaceFormData;

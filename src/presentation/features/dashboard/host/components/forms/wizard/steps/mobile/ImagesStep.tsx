@@ -8,6 +8,7 @@
  */
 import { Button } from "@/presentation/components/ui/button";
 import { ImageIcon, Upload, X } from "lucide-react";
+import { resolveImageUrl } from "@/presentation/utils/image";
 
 interface ImagesStepProps {
   images: string[];
@@ -45,7 +46,7 @@ export function ImagesStep({
           <div className="space-y-3">
             {images.map((img, idx) => (
               <div key={idx} className="relative rounded-xl overflow-hidden border bg-muted">
-                <img src={img} alt={`Imagen ${idx + 1}`} className="w-full h-44 object-cover" />
+                <img src={resolveImageUrl(img)} alt={`Imagen ${idx + 1}`} className="w-full h-44 object-cover" />
                 <button
                   onClick={() => onRemoveImage(idx)}
                   className="absolute top-2 right-2 bg-black/60 text-white rounded-full p-2"

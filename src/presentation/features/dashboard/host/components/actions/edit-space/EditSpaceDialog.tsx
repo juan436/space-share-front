@@ -28,6 +28,8 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
   useEffect(() => {
     if (space && isOpen) {
       setFormData(toFormData(space));
+    } else if (!space) {
+      setFormData(toFormData(null));
     }
   }, [space, isOpen]);
 

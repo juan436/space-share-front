@@ -8,52 +8,24 @@
  * Genera:   tabs de filtro, grid de UserReservationCard, paginación, ReviewDialog y ReservationDetailsDialog
  * Procesa:  filteredReservations y tabs memoizados; labels derivados de STATUS_CONFIG
  */
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { Card, CardContent } from "@/presentation/components/ui/card";
 import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
-import { ReservationStatus } from "@/core/domain/entities/Reservation";
 import { Button } from "@/presentation/components/ui/button";
 import { ReviewDialog, ReservationDetailsDialog, UserReservationCard } from "../components";
-import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { useUserReservations } from "../hooks/useUserReservations";
+import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
+import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 
-type FilterTab = "all" | ReservationStatus;
-
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 4; // user ve tarjetas más compactas (grid 2 cols) → caben más por página
 
 export function UserReservations() {
   const { reservations, isLoading, isError, errorMessage, reviewedIds, simulatingPaymentId, submitReview, simulatePayment } = useUserReservations();
-  const [activeTab, setActiveTab] = useState<FilterTab>("all");
+  const { activeTab, currentPage, setCurrentPage, handleTabChange, filteredReservations, paginatedReservations, totalPages, tabs } = usePaginatedReservations(reservations, PAGE_SIZE);
   const [reviewingId, setReviewingId] = useState<string | null>(null);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewError, setReviewError] = useState<string | null>(null);
   const [detailsId, setDetailsId] = useState<string | null>(null);
-  const [currentPage, setCurrentPage] = useState(1);
-
-  const filteredReservations = useMemo(() =>
-    activeTab === "all"
-      ? reservations
-      : activeTab === "awaiting_payment"
-        ? reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted")
-        : reservations.filter((r) => r.status === activeTab),
-    [reservations, activeTab]
-  );
-
-  const totalPages = Math.ceil(filteredReservations.length / PAGE_SIZE);
-
-  const paginatedReservations = useMemo(() =>
-    filteredReservations.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
-    [filteredReservations, currentPage]
-  );
-
-  const tabs: { key: FilterTab; label: string; count: number }[] = useMemo(() => [
-    { key: "all",              label: "Todas",                                 count: reservations.length },
-    { key: "pending",          label: STATUS_CONFIG.pending.tabLabel,          count: reservations.filter((r) => r.status === "pending").length },
-    { key: "awaiting_payment", label: STATUS_CONFIG.awaiting_payment.tabLabel, count: reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted").length },
-    { key: "confirmed",        label: STATUS_CONFIG.confirmed.tabLabel,        count: reservations.filter((r) => r.status === "confirmed").length },
-    { key: "completed",        label: STATUS_CONFIG.completed.tabLabel,        count: reservations.filter((r) => r.status === "completed").length },
-    { key: "rejected",         label: STATUS_CONFIG.rejected.tabLabel,         count: reservations.filter((r) => r.status === "rejected").length },
-  ], [reservations]);
 
   const handleSubmitReview = async (rating: number, comment: string) => {
     if (!reviewingId) return;
@@ -80,7 +52,7 @@ export function UserReservations() {
         {tabs.map((tab) => (
           <button
             key={tab.key}
-            onClick={() => { setActiveTab(tab.key); setCurrentPage(1); }}
+            onClick={() => handleTabChange(tab.key)}
             className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
               activeTab === tab.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
             }`}

@@ -82,7 +82,10 @@ export function ImagesStep({ images, onFilesSelected, onRemove }: ImagesStepProp
         );
         setTimeout(() => {
           setUploadingFiles((prev) => prev.filter((u) => !newUploading.includes(u)));
-          newUploading.forEach((u) => URL.revokeObjectURL(u.preview));
+          // Revoke after next paint so img is removed from DOM before URL is freed
+          requestAnimationFrame(() => {
+            newUploading.forEach((u) => URL.revokeObjectURL(u.preview));
+          });
         }, 500);
       } catch {
         setUploadingFiles((prev) =>
