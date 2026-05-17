@@ -10,13 +10,7 @@
  */
 import { useRef, useState, useCallback } from "react";
 import { Upload, X, Loader2, AlertCircle, ImageIcon } from "lucide-react";
-
-const UPLOADS_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3006";
-
-function resolveImageUrl(filename: string): string {
-  if (filename.startsWith("http") || filename.startsWith("blob:")) return filename;
-  return `${UPLOADS_BASE_URL}/uploads/${filename}`;
-}
+import { resolveImageUrl } from "@/presentation/utils/image";
 
 interface UploadingFile {
   file: File;

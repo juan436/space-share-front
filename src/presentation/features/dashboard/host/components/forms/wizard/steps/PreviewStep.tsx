@@ -8,13 +8,7 @@
  */
 import { ImageIcon, MapPin } from "lucide-react";
 import { NewSpaceFormData, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
-
-const UPLOADS_BASE_URL = process.env.NEXT_PUBLIC_API_URL?.replace("/api", "") || "http://localhost:3006";
-
-function resolveImageUrl(filename: string): string {
-  if (filename.startsWith("http") || filename.startsWith("blob:")) return filename;
-  return `${UPLOADS_BASE_URL}/uploads/${filename}`;
-}
+import { resolveImageUrl } from "@/presentation/utils/image";
 
 interface PreviewStepProps {
   newSpace: NewSpaceFormData;

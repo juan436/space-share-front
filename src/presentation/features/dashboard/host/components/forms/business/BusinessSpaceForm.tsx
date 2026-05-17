@@ -9,9 +9,8 @@
  * Procesa:  delega estado y submit a useBusinessSpaceForm; valida cada paso antes de avanzar
  */
 import { useState } from "react";
-import { Building2, MapPin, Wifi, ImageIcon, Check } from "lucide-react";
+import { AlertCircle, Building2, MapPin, Wifi, ImageIcon } from "lucide-react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
-import { cn } from "@/presentation/utils/cn";
 import { useBusinessSpaceForm } from "../../../hooks/useBusinessSpaceForm";
 import { SpaceTypeSection } from "./SpaceTypeSection";
 import { BasicInfoSection } from "./BasicInfoSection";
@@ -20,14 +19,15 @@ import { ServicesSection } from "./ServicesSection";
 import { PricingSection } from "./PricingSection";
 import { ImagesStep } from "../wizard/steps/ImagesStep";
 import { WizardFooter } from "../wizard/WizardFooter";
+import { WizardStepper } from "../wizard/WizardStepper";
 import type { SpaceViewModel } from "@/presentation/types/spaces";
 
 const STEPS = [
-  { id: 1, label: "Descripción", icon: Building2 },
-  { id: 2, label: "Ubicación",   icon: MapPin     },
-  { id: 3, label: "Servicios",   icon: Wifi       },
-  { id: 4, label: "Fotos",       icon: ImageIcon  },
-] as const;
+  { id: 1, title: "Descripción", icon: Building2 },
+  { id: 2, title: "Ubicación",   icon: MapPin     },
+  { id: 3, title: "Servicios",   icon: Wifi       },
+  { id: 4, title: "Fotos",       icon: ImageIcon  },
+];
 
 interface BusinessSpaceFormProps {
   onClose: () => void;
@@ -42,7 +42,7 @@ export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpa
     formData, updateFormData, toggleService,
     images, handleFilesSelected, removeImage,
     handleSubmit, isFormValid, canProceedStep,
-    isSubmitting,
+    isSubmitting, submitError,
   } = useBusinessSpaceForm({ onClose, initialData, spaceId });
 
   const handleBack = () => {
@@ -62,52 +62,17 @@ export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpa
             {spaceId ? "Editar Espacio Empresarial" : "Publicar Espacio Empresarial"}
           </DialogTitle>
         </DialogHeader>
-        <div className="px-2 sm:px-4 py-3 sm:py-4">
-        <div className="flex items-center justify-between">
-          {STEPS.map((step, index) => {
-            const Icon = step.icon;
-            const isActive    = currentStep === step.id;
-            const isCompleted = currentStep > step.id;
-
-            return (
-              <div key={step.id} className="flex items-center flex-1">
-                <div className="flex flex-col items-center">
-                  <div
-                    className={cn(
-                      "w-8 h-8 sm:w-10 sm:h-10 rounded-full flex items-center justify-center transition-all duration-200",
-                      isActive    && "bg-primary text-primary-foreground shadow-lg scale-110",
-                      isCompleted && "bg-green-500 text-white",
-                      !isActive && !isCompleted && "bg-muted text-muted-foreground"
-                    )}
-                  >
-                    {isCompleted
-                      ? <Check className="h-4 w-4 sm:h-5 sm:w-5" />
-                      : <Icon  className="h-4 w-4 sm:h-5 sm:w-5" />
-                    }
-                  </div>
-                  <span
-                    className={cn(
-                      "text-[10px] sm:text-xs mt-1 font-medium",
-                      isActive    && "text-primary",
-                      isCompleted && "text-green-600",
-                      !isActive && !isCompleted && "text-muted-foreground"
-                    )}
-                  >
-                    {step.label}
-                  </span>
-                </div>
-                {index < STEPS.length - 1 && (
-                  <div className={cn("flex-1 h-0.5 mx-1 sm:mx-2", isCompleted ? "bg-green-500" : "bg-muted")} />
-                )}
-              </div>
-            );
-          })}
-        </div>
-        </div>
+        <WizardStepper currentStep={currentStep} steps={STEPS} />
       </div>
 
       {/* Step content */}
       <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-6 min-h-0">
+        {submitError && (
+          <div className="flex items-center gap-2 rounded-lg border border-destructive/30 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+            <AlertCircle className="h-4 w-4 shrink-0" />
+            <span>{submitError}</span>
+          </div>
+        )}
         {currentStep === 1 && (
           <>
             <SpaceTypeSection

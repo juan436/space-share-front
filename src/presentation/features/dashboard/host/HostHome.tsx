@@ -161,7 +161,7 @@ export function HostHome({ onNavigate }: HostHomeProps) {
             ) : (
               <button
                 key={action.label}
-                onClick={() => onNavigate(action.tab!)}
+                onClick={() => action.tab && onNavigate(action.tab)}
                 className={sharedClass}
                 style={{ animationDelay: `${(idx + 4) * 80}ms` }}
               >

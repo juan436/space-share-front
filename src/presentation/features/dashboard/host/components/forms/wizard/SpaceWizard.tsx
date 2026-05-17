@@ -45,7 +45,6 @@ export function SpaceWizard({
   editMode = false,
 }: SpaceWizardProps) {
   const [currentStep, setCurrentStep] = useState(1);
-  const [images, setImages] = useState<string[]>(newSpace.images || []);
   const { countries, states, cities } = useLocationData(newSpace.country, newSpace.state);
 
   const handleCountryChange = (value: string) => {
@@ -76,18 +75,15 @@ export function SpaceWizard({
       files.forEach((f) => formData.append("images", f));
 
       const response = await spaceRepository.uploadImages(formData);
-      const newImages = [...images, ...response];
-      setImages(newImages);
+      const newImages = [...(newSpace.images || []), ...response];
       onUpdateNewSpace({ images: newImages });
       return response;
     },
-    [images, onUpdateNewSpace]
+    [newSpace.images, onUpdateNewSpace]
   );
 
   const removeImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
-    onUpdateNewSpace({ images: newImages });
+    onUpdateNewSpace({ images: (newSpace.images || []).filter((_, i) => i !== index) });
   };
 
 
@@ -114,7 +110,7 @@ export function SpaceWizard({
           />
         )}
         {currentStep === 2 && (
-          <ImagesStep images={images} onFilesSelected={handleFilesSelected} onRemove={removeImage} />
+          <ImagesStep images={newSpace.images || []} onFilesSelected={handleFilesSelected} onRemove={removeImage} />
         )}
         {currentStep === 3 && (
           <AmenitiesStep newSpace={newSpace} onUpdateNewSpace={onUpdateNewSpace} />
@@ -130,7 +126,7 @@ export function SpaceWizard({
             onStateChange={handleStateChange}
           />
         )}
-        {currentStep === 5 && <PreviewStep newSpace={newSpace} images={images} />}
+        {currentStep === 5 && <PreviewStep newSpace={newSpace} images={newSpace.images || []} />}
       </div>
 
       {/* Footer */}

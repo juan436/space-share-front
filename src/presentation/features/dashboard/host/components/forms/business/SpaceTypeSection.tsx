@@ -7,8 +7,7 @@
  */
 import { Building2, Users } from "lucide-react";
 import { cn } from "@/presentation/utils/cn";
-
-type BusinessSpaceType = "office" | "commercial" | "warehouse" | "meeting_room" | "";
+import type { BusinessSpaceType } from "../../../hooks/useBusinessSpaceForm";
 
 const spaceTypeOptions = [
   { value: "office", label: "Oficina", icon: Building2 },

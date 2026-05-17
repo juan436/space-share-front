@@ -25,13 +25,14 @@ export const WIZARD_STEPS: Step[] = [
 
 interface WizardStepperProps {
   currentStep: number;
+  steps?: Step[];
 }
 
-export function WizardStepper({ currentStep }: WizardStepperProps) {
+export function WizardStepper({ currentStep, steps = WIZARD_STEPS }: WizardStepperProps) {
   return (
     <div className="px-2 sm:px-4 py-3 sm:py-4">
       <div className="flex items-center justify-between">
-        {WIZARD_STEPS.map((step, index) => {
+        {steps.map((step, index) => {
           const Icon = step.icon;
           const isActive = currentStep === step.id;
           const isCompleted = currentStep > step.id;
@@ -64,7 +65,7 @@ export function WizardStepper({ currentStep }: WizardStepperProps) {
                   {step.title}
                 </span>
               </div>
-              {index < WIZARD_STEPS.length - 1 && (
+              {index < steps.length - 1 && (
                 <div
                   className={cn(
                     "flex-1 h-0.5 mx-1 sm:mx-2",

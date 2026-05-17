@@ -7,6 +7,7 @@
  */
 import { MapPin, ImageIcon } from "lucide-react";
 import { NewSpaceFormData, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
+import { resolveImageUrl } from "@/presentation/utils/image";
 
 interface PreviewStepProps {
   newSpace: NewSpaceFormData;
@@ -27,7 +28,7 @@ export function PreviewStep({
       <div className="border rounded-xl overflow-hidden bg-card">
         <div className="bg-muted flex items-center justify-center h-44">
           {images.length > 0 ? (
-            <img src={images[0]} alt="Preview" className="w-full h-full object-cover" />
+            <img src={resolveImageUrl(images[0])} alt="Preview" className="w-full h-full object-cover" />
           ) : (
             <ImageIcon className="h-10 w-10 text-muted-foreground" />
           )}

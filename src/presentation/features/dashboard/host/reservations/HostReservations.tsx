@@ -23,7 +23,7 @@ export function HostReservations() {
   const { reservations, isLoading, isError, errorMessage, updateStatus, updatingId } = useHostReservations();
   const [activeTab, setActiveTab] = useState<FilterTab>("all");
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 3;
+  const PAGE_SIZE = 3;
 
   const handleStatusUpdate = async (id: string, status: ReservationStatus): Promise<void> => {
     await updateStatus({ id, status });
@@ -38,10 +38,10 @@ export function HostReservations() {
     [reservations, activeTab]
   );
 
-  const totalPages = Math.ceil(filteredReservations.length / pageSize);
+  const totalPages = Math.ceil(filteredReservations.length / PAGE_SIZE);
 
   const paginatedReservations = useMemo(() =>
-    filteredReservations.slice((currentPage - 1) * pageSize, currentPage * pageSize),
+    filteredReservations.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE),
     [filteredReservations, currentPage]
   );
 
@@ -126,7 +126,7 @@ export function HostReservations() {
           {totalPages > 1 && (
             <div className="flex items-center justify-between pt-4">
               <p className="text-sm text-muted-foreground">
-                {(currentPage - 1) * pageSize + 1}–{Math.min(currentPage * pageSize, filteredReservations.length)} de {filteredReservations.length}
+                {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filteredReservations.length)} de {filteredReservations.length}
               </p>
               <div className="flex items-center gap-2">
                 <Button

@@ -25,6 +25,7 @@ export function canProceed(step: number, formData: NewSpaceFormData): boolean {
         formData.address
       );
     default:
+      // Steps 2 (images) and 3 (amenities) are optional by design — no validation required
       return true;
   }
 }

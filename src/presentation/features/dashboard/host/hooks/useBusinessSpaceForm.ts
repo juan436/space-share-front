@@ -11,7 +11,7 @@ import { useSpaces } from "@/presentation/hooks/useSpaces";
 import { spaceRepository } from "@/bootstrap/application";
 import type { SpaceViewModel } from "@/presentation/types/spaces";
 
-type BusinessSpaceType = "office" | "commercial" | "warehouse" | "meeting_room" | "";
+export type BusinessSpaceType = "office" | "commercial" | "warehouse" | "meeting_room" | "";
 
 export interface BusinessSpaceData {
   spaceType: BusinessSpaceType;
@@ -98,6 +98,7 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
   const { create, isCreating, update, isUpdating } = useSpaces();
 
   const [images, setImages] = useState<string[]>(initialData?.images ?? []);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [formData, setFormData] = useState<BusinessSpaceData>(
     initialData ? viewModelToFormData(initialData) : INITIAL_STATE
   );
@@ -150,6 +151,7 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
       services: formData.services,
     };
 
+    setSubmitError(null);
     try {
       if (spaceId) {
         await update({ id: spaceId, input: payload });
@@ -158,7 +160,7 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
       }
       onClose();
     } catch (error) {
-      console.error("Error guardando espacio empresarial:", error);
+      setSubmitError("No se pudo guardar el espacio empresarial. Intenta de nuevo.");
     }
   };
 
@@ -178,5 +180,6 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
     images, handleFilesSelected, removeImage,
     handleSubmit, isFormValid, canProceedStep,
     isSubmitting: isCreating || isUpdating,
+    submitError,
   };
 }

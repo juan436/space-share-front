@@ -10,12 +10,15 @@ import { Input } from "@/presentation/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 
+interface Country { code: string; name: string; }
+interface State { code: string; name: string; }
+
 interface LocationStepProps {
   newSpace: NewSpaceFormData;
   onUpdateNewSpace: (updates: Partial<NewSpaceFormData>) => void;
-  countries: any[];
-  states: any[];
-  cities: any[];
+  countries: Country[];
+  states: State[];
+  cities: string[];
   onCountryChange: (value: string) => void;
   onStateChange: (value: string) => void;
 }

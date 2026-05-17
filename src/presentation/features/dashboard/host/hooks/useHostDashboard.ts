@@ -38,6 +38,7 @@ export function useHostDashboard() {
   const { spaces: rawSpaces, isLoading, create, isCreating, update, isUpdating, delete: deleteSpace, isDeleting } = useSpaces();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newSpace, setNewSpace] = useState<NewSpaceFormData>(initialFormState);
+  const [actionError, setActionError] = useState<string | null>(null);
   const newSpaceRef = useRef(newSpace);
 
   // Edit state
@@ -115,7 +116,7 @@ export function useHostDashboard() {
       resetForm();
       setIsDialogOpen(false);
     } catch (error) {
-      console.error("Error creating space:", error);
+      setActionError("No se pudo crear el espacio. Intenta de nuevo.");
     }
   }, [create]);
 
@@ -152,7 +153,7 @@ export function useHostDashboard() {
       setIsEditDialogOpen(false);
       setEditingSpace(null);
     } catch (error) {
-      console.error("Error updating space:", error);
+      setActionError("No se pudo guardar los cambios. Intenta de nuevo.");
     }
   };
 
@@ -160,7 +161,7 @@ export function useHostDashboard() {
     try {
       await update({ id, input: { status } });
     } catch (error) {
-      console.error("Error updating space status:", error);
+      setActionError("No se pudo actualizar el estado. Intenta de nuevo.");
     }
   };
 
@@ -168,7 +169,7 @@ export function useHostDashboard() {
     try {
       await deleteSpace(id);
     } catch (error) {
-      console.error("Error deleting space:", error);
+      setActionError("No se pudo eliminar el espacio. Intenta de nuevo.");
     }
   };
 
@@ -202,5 +203,7 @@ export function useHostDashboard() {
     setIsEditDialogOpen,
     isFormValid,
     recommendedPrice,
+    actionError,
+    clearActionError: () => setActionError(null),
   };
 }
