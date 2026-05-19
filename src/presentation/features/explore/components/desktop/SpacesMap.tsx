@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useMemo } from "react";
+import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import { MapPin } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
@@ -89,10 +89,17 @@ function SpaceMarker({
 export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapProps) {
   const [hoveredSpaceId, setHoveredSpaceId] = useState<string | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
+  const zoomTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
+
+  useEffect(() => {
+    return () => {
+      if (zoomTimeoutRef.current) clearTimeout(zoomTimeoutRef.current);
+    };
+  }, []);
 
   const onUnmount = useCallback(() => {
     setMap(null);
@@ -113,7 +120,7 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
     setMap(map);
     if (bounds && !bounds.isEmpty()) {
       map.fitBounds(bounds);
-      setTimeout(() => map.setZoom((map.getZoom() || 12) - 1), 100);
+      zoomTimeoutRef.current = setTimeout(() => map.setZoom((map.getZoom() || 12) - 1), 100);
     }
   }, [bounds]);
 

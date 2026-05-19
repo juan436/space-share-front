@@ -23,6 +23,23 @@ interface SearchFiltersProps {
   onConditionsChange: (value: string[]) => void;
 }
 
+const conditionOptions = [
+  { id: "24/7", label: "Acceso 24/7", icon: Clock },
+  { id: "verificado", label: "Verificado", icon: ShieldCheck },
+  { id: "climatizado", label: "Climatizado", icon: Snowflake },
+  { id: "privado", label: "Entrada privada", icon: DoorOpen },
+];
+
+const spaceTypeLabels: Record<string, string> = {
+  garage: "Garaje", basement: "Sótano", attic: "Ático", storage: "Bodega", parking: "Parqueo", other: "Otro"
+};
+const priceLabels: Record<string, string> = {
+  "0-100": "$0 – $100/mes", "100-300": "$100 – $300/mes", "300-500": "$300 – $500/mes", "500+": "$500+/mes"
+};
+const sizeLabels: Record<string, string> = {
+  "0-10": "Pequeño (0–10 m²)", "10-30": "Mediano (10–30 m²)", "30-50": "Grande (30–50 m²)", "50+": "Extra grande (50+ m²)"
+};
+
 export function SearchFilters({
   searchQuery,
   onSearchChange,
@@ -41,23 +58,6 @@ export function SearchFilters({
     } else {
       onConditionsChange([...conditions, condition]);
     }
-  };
-
-  const conditionOptions = [
-    { id: "24/7", label: "Acceso 24/7", icon: Clock },
-    { id: "verificado", label: "Verificado", icon: ShieldCheck },
-    { id: "climatizado", label: "Climatizado", icon: Snowflake },
-    { id: "privado", label: "Entrada privada", icon: DoorOpen },
-  ];
-
-  const spaceTypeLabels: Record<string, string> = {
-    garage: "Garaje", basement: "Sótano", attic: "Ático", storage: "Bodega", parking: "Parqueo", other: "Otro"
-  };
-  const priceLabels: Record<string, string> = {
-    "0-100": "$0 – $100/mes", "100-300": "$100 – $300/mes", "300-500": "$300 – $500/mes", "500+": "$500+/mes"
-  };
-  const sizeLabels: Record<string, string> = {
-    "0-10": "Pequeño (0–10 m²)", "10-30": "Mediano (10–30 m²)", "30-50": "Grande (30–50 m²)", "50+": "Extra grande (50+ m²)"
   };
 
   const activeFilters = [

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { useCallback, useEffect, useMemo, useRef } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import { MapPin, Ruler, X } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
@@ -27,6 +27,13 @@ export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDet
   const { isLoaded } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
+  const zoomTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (zoomTimeoutRef.current) clearTimeout(zoomTimeoutRef.current);
+    };
+  }, []);
 
   const bounds = useMemo(() => {
     if (!isLoaded || spaces.length === 0) return null;
@@ -42,7 +49,7 @@ export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDet
   const handleMapLoad = useCallback((map: google.maps.Map) => {
     if (bounds && !bounds.isEmpty()) {
       map.fitBounds(bounds);
-      setTimeout(() => map.setZoom((map.getZoom() || 11) - 1), 100);
+      zoomTimeoutRef.current = setTimeout(() => map.setZoom((map.getZoom() || 11) - 1), 100);
     }
   }, [bounds]);
 

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
+import Image from "next/image";
 import { adminRepository } from "@/bootstrap/application";
 import { AdminSpace } from "@/core/domain/entities/AdminStats";
 import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL, SPACE_TYPE_LABEL } from "@/presentation/shared/constants/space-labels";
@@ -11,7 +12,7 @@ import { Building2, Loader2, AlertCircle, Search, Star, MapPin } from "lucide-re
 
 interface HostIdObject { name: string }
 function isHostIdObject(value: unknown): value is HostIdObject {
-  return typeof value === "object" && value !== null && "name" in value;
+  return typeof value === "object" && value !== null && !Array.isArray(value) && "name" in value;
 }
 
 export function AdminSpaces() {
@@ -103,10 +104,12 @@ export function AdminSpaces() {
                       <TableCell>
                         <div className="flex items-center gap-3">
                           {space.images?.[0] ? (
-                            <img
-                              src={space.images?.[0]}
+                            <Image
+                              src={space.images?.[0] as string}
                               alt={space.title}
-                              className="w-10 h-10 rounded-lg object-cover"
+                              width={40}
+                              height={40}
+                              className="rounded-lg object-cover"
                             />
                           ) : (
                             <div className="w-10 h-10 rounded-lg bg-muted flex items-center justify-center">

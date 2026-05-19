@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Heart, Share2, MapPin, Star } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
@@ -15,6 +15,13 @@ interface SpaceDetailHeaderProps {
 
 export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFavorite, onToggleFavorite }: SpaceDetailHeaderProps) {
   const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "error">("idle");
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+    };
+  }, []);
 
   const handleShare = async () => {
     if (navigator.share) {
@@ -28,10 +35,12 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
     try {
       await navigator.clipboard.writeText(window.location.href);
       setShareStatus("copied");
-      setTimeout(() => setShareStatus("idle"), 2000);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setShareStatus("idle"), 2000);
     } catch {
       setShareStatus("error");
-      setTimeout(() => setShareStatus("idle"), 3000);
+      if (timeoutRef.current) clearTimeout(timeoutRef.current);
+      timeoutRef.current = setTimeout(() => setShareStatus("idle"), 3000);
     }
   };
 

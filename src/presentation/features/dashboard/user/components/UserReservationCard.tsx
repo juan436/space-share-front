@@ -7,6 +7,7 @@
  * Procesa:  lee STATUS_CONFIG para colores y labels; memoizado con React.memo para evitar re-renders innecesarios
  */
 import { memo } from "react";
+import Image from "next/image";
 import { Card } from "@/presentation/components/ui/card";
 import { Calendar, MapPin, DollarSign, ArrowRight, Star, CreditCard, Info, Loader2, CheckCircle2 } from "lucide-react";
 import { Reservation } from "@/core/domain/entities/Reservation";
@@ -37,9 +38,9 @@ export const UserReservationCard = memo(function UserReservationCard({
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow flex flex-col">
-      <div className="h-40 w-full bg-muted shrink-0 overflow-hidden">
+      <div className="relative h-40 w-full bg-muted shrink-0 overflow-hidden">
         {reservation.space?.images?.[0] ? (
-          <img src={reservation.space.images[0]} alt={reservation.space.title} className="w-full h-full object-cover" />
+          <Image src={reservation.space.images[0]} alt={reservation.space.title ?? "Espacio"} fill className="object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <Calendar className="w-8 h-8 text-muted-foreground/30" />

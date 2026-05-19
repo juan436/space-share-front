@@ -3,6 +3,7 @@ import { format, differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Space } from "@/core/domain/entities/Space";
 import { reservationRepository } from "@/bootstrap/application";
+import { toErrorMessage } from "@/presentation/utils/error";
 
 export const SERVICE_FEE_RATE = 0.05;
 export const DAYS_PER_MONTH = 30;
@@ -88,8 +89,7 @@ export function useBookingLogic(space: Space) {
         notes,
       });
     } catch (err) {
-      const msg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
-      setBookingError(msg ?? "No se pudo completar la reserva. Intenta de nuevo.");
+      setBookingError(toErrorMessage(err));
       throw err;
     }
   };

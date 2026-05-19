@@ -18,12 +18,14 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
   const { user, isAuthenticated } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isError, setIsError] = useState(false);
 
   useEffect(() => {
+    setIsError(false);
     reviewRepository
       .findBySpaceId(spaceId)
       .then(setReviews)
-      .catch(() => {})
+      .catch(() => setIsError(true))
       .finally(() => setIsLoading(false));
   }, [spaceId]);
 
@@ -53,7 +55,9 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
       </div>
 
       {/* Reviews List */}
-      {isLoading ? (
+      {isError ? (
+        <p className="text-sm text-muted-foreground">No se pudieron cargar las reseñas.</p>
+      ) : isLoading ? (
         <div className="space-y-4">
           {[1, 2].map((i) => (
             <div key={i} className="animate-pulse space-y-2">

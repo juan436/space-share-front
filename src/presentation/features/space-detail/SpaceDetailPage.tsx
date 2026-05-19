@@ -7,6 +7,7 @@ import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { useAuth } from "@/presentation/providers/auth-context";
+import { resolveHostId } from "@/presentation/utils/resolveHostId";
 import {
   SpaceImageGallery,
   SpaceDetailHeader,
@@ -29,7 +30,7 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
   const [returnPath, setReturnPath] = useState("/explore");
   const { isFavorite, toggleFavorite } = useFavorites();
   const { user } = useAuth();
-  const isOwner = user?.id === space.hostId;
+  const isOwner = user?.id === resolveHostId(space.hostId);
 
   useEffect(() => {
     if (typeof window !== "undefined") {
