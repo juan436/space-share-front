@@ -18,10 +18,13 @@ export function useFavoriteSpaces() {
       setIsLoading(true);
       try {
         const ids = Array.from(favorites);
-        const results = await Promise.all(
-          ids.map((id) => spaceRepository.findById(id).catch(() => null))
+        const results = await Promise.allSettled(ids.map((id) => spaceRepository.findById(id)));
+        setSpaces(
+          results
+            .filter((r): r is PromiseFulfilledResult<Space> => r.status === "fulfilled")
+            .map((r) => r.value)
+            .filter((s): s is Space => s !== null)
         );
-        setSpaces(results.filter((s): s is Space => s !== null));
       } catch {
         setSpaces([]);
       } finally {

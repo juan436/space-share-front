@@ -26,8 +26,9 @@ export function MobileSpacesList({
         <p className="text-sm text-muted-foreground">
           <span className="font-semibold text-foreground">{spaces.length}</span> espacios encontrados
         </p>
-        <button 
+        <button
           onClick={onShowFilters}
+          aria-label="Abrir filtros"
           className="flex items-center gap-1.5 text-sm text-primary font-medium"
         >
           <SlidersHorizontal className="w-4 h-4" />

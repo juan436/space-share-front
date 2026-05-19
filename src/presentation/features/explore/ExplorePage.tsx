@@ -48,6 +48,7 @@ export function ExplorePage() {
           <div className="sticky bottom-6 flex justify-center pointer-events-none">
             <button
               onClick={() => setShowMap((v) => !v)}
+              aria-label={showMap ? "Ver solo listado" : "Mostrar mapa"}
               className="pointer-events-auto flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold shadow-xl hover:scale-105 active:scale-95 transition-all duration-200"
             >
               {showMap ? (<><List className="w-4 h-4" />Solo listado</>) : (<><Map className="w-4 h-4" />Mostrar mapa</>)}

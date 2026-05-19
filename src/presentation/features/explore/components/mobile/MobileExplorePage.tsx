@@ -3,9 +3,10 @@
 import { useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
 import { useExploreSpaces } from "../../hooks/useExploreSpaces";
+import { useMobileExploreFilters } from "../../hooks/useMobileExploreFilters";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { MobileHeader } from "./MobileHeader";
-import { MobileSearchFilters, FilterState } from "./MobileSearchFilters";
+import { MobileSearchFilters } from "./MobileSearchFilters";
 import { MobileSpacesList } from "./MobileSpacesList";
 import { MobileSpaceDetail } from "./MobileSpaceDetail";
 import { MobileMapView } from "./MobileMapView";
@@ -16,62 +17,13 @@ type ViewMode = "list" | "map";
 export function MobileExplorePage() {
   const { spaces } = useExploreSpaces();
   const [viewMode, setViewMode] = useState<ViewMode>("list");
-  const [searchQuery, setSearchQuery] = useState("");
-  const [filters, setFilters] = useState<FilterState>({
-    type: "all",
-    priceRange: null,
-    size: null,
-    amenities: [],
-  });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
   const [mapSelectedSpace, setMapSelectedSpace] = useState<Space | null>(null);
 
-  const filteredSpaces = spaces.filter(space => {
-    // 1. Search Query
-    if (searchQuery) {
-      const q = searchQuery.toLowerCase();
-      if (!space.title.toLowerCase().includes(q) &&
-        !space.location.city.toLowerCase().includes(q)) {
-        return false;
-      }
-    }
-    
-    // 2. Type Filter
-    if (filters.type !== "all" && space.type !== filters.type) {
-      return false;
-    }
-
-    // 3. Price Filter (Simple mock logic)
-    if (filters.priceRange) {
-      const price = space.pricePerMonth;
-      if (filters.priceRange === "$0-$50" && price > 50) return false;
-      if (filters.priceRange === "$50-$100" && (price < 50 || price > 100)) return false;
-      if (filters.priceRange === "$100-$200" && (price < 100 || price > 200)) return false;
-      if (filters.priceRange === "$200+" && price < 200) return false;
-    }
-
-    // 4. Size Filter (Simple mock logic)
-    if (filters.size) {
-      const sqMeters = space.squareMeters;
-      if (filters.size === "small" && sqMeters > 15) return false;
-      if (filters.size === "medium" && (sqMeters < 15 || sqMeters > 30)) return false;
-      if (filters.size === "large" && (sqMeters < 30 || sqMeters > 50)) return false;
-      if (filters.size === "xlarge" && sqMeters < 50) return false;
-    }
-
-    // 5. Amenities Filter
-    if (filters.amenities.length > 0) {
-      for (const amenity of filters.amenities) {
-        if (!space.amenities[amenity as keyof typeof space.amenities]) {
-          return false;
-        }
-      }
-    }
-
-    return true;
-  });
+  const { searchQuery, setSearchQuery, filters, setFilters, filteredSpaces } =
+    useMobileExploreFilters(spaces);
 
   // Space Detail View
   if (selectedSpace) {

@@ -1,34 +1,18 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { adminRepository } from "@/bootstrap/application";
 import { AdminSpace } from "@/core/domain/entities/AdminStats";
+import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL, SPACE_TYPE_LABEL } from "@/presentation/shared/constants/space-labels";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { Building2, Loader2, AlertCircle, Search, Star, MapPin } from "lucide-react";
 
-const statusBadge: Record<string, string> = {
-  active: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-300",
-  paused: "bg-yellow-100 text-yellow-700 dark:bg-yellow-950 dark:text-yellow-300",
-  pending: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
-  deactivated: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400",
-};
 
-const statusLabel: Record<string, string> = {
-  active: "Activo",
-  paused: "Pausado",
-  pending: "Pendiente",
-  deactivated: "Desactivado",
-};
-
-const typeLabel: Record<string, string> = {
-  garage: "Garaje",
-  parking: "Parking",
-  basement: "Sótano",
-  attic: "Ático",
-  storage: "Almacén",
-  other: "Otro",
-};
+interface HostIdObject { name: string }
+function isHostIdObject(value: unknown): value is HostIdObject {
+  return typeof value === "object" && value !== null && "name" in value;
+}
 
 export function AdminSpaces() {
   const [spaces, setSpaces] = useState<AdminSpace[]>([]);
@@ -44,16 +28,18 @@ export function AdminSpaces() {
       .finally(() => setIsLoading(false));
   }, []);
 
-  const filtered = spaces.filter((s) => {
+  const filtered = useMemo(() => {
     const q = search.toLowerCase();
-    const hostName = typeof s.hostId === "object" ? s.hostId.name : "";
-    return (
-      s.title.toLowerCase().includes(q) ||
-      s.location.city.toLowerCase().includes(q) ||
-      hostName.toLowerCase().includes(q) ||
-      s.type.toLowerCase().includes(q)
-    );
-  });
+    return spaces.filter((s) => {
+      const hostName = isHostIdObject(s.hostId) ? s.hostId.name : "";
+      return (
+        s.title.toLowerCase().includes(q) ||
+        s.location.city.toLowerCase().includes(q) ||
+        hostName.toLowerCase().includes(q) ||
+        s.type.toLowerCase().includes(q)
+      );
+    });
+  }, [spaces, search]);
 
   return (
     <div className="space-y-6">
@@ -111,7 +97,7 @@ export function AdminSpaces() {
               </TableHeader>
               <TableBody>
                 {filtered.map((space) => {
-                  const hostName = typeof space.hostId === "object" ? space.hostId.name : "—";
+                  const hostName = isHostIdObject(space.hostId) ? space.hostId.name : "—";
                   return (
                     <TableRow key={space._id}>
                       <TableCell>
@@ -133,7 +119,7 @@ export function AdminSpaces() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm">{typeLabel[space.type] || space.type}</TableCell>
+                      <TableCell className="text-sm">{SPACE_TYPE_LABEL[space.type] || space.type}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                           <MapPin className="w-3.5 h-3.5" />
@@ -149,8 +135,8 @@ export function AdminSpaces() {
                         </div>
                       </TableCell>
                       <TableCell>
-                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusBadge[space.status] || statusBadge.pending}`}>
-                          {statusLabel[space.status] || space.status}
+                        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${SPACE_STATUS_BADGE[space.status] || SPACE_STATUS_BADGE.pending}`}>
+                          {SPACE_STATUS_LABEL[space.status] || space.status}
                         </span>
                       </TableCell>
                     </TableRow>

@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import { Calendar as CalendarIconSVG, Info, Shield, ShieldCheck, Star, CalendarIcon, Minus, Plus } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
@@ -10,86 +9,42 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/presentation/components/ui/popover";
-import { format, differenceInDays, addMonths } from "date-fns";
+import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { DateRange } from "react-day-picker";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
-import { reservationRepository } from "@/bootstrap/application";
 import { BookingConfirmModal } from "./BookingConfirmModal";
+import { useBookingLogic, AVAILABLE_MONTHS, DAYS_PER_MONTH, MIN_RENTAL_DAYS } from "../hooks/useBookingLogic";
 
 interface SpaceBookingSidebarProps {
   space: Space;
 }
 
 export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
-  const [months, setMonths] = useState(1);
-  const [mode, setMode] = useState<"months" | "dates">("dates");
-  const [dateRange, setDateRange] = useState<DateRange | undefined>();
-  const [quantity, setQuantity] = useState(1);
-  const [startDate, setStartDate] = useState<Date>(new Date(new Date().setHours(0, 0, 0, 0)));
-  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const {
+    months, setMonths,
+    mode, setMode,
+    dateRange, setDateRange,
+    quantity, setQuantity,
+    startDate, setStartDate,
+    showConfirmModal, setShowConfirmModal,
+    bookingError,
+    isVehicleSpace,
+    effectiveQuantity,
+    displayCapacity,
+    currentMonths,
+    totalPrice,
+    serviceFee,
+    grandTotal,
+    isMonthAvailable,
+    nextDate,
+    handleConfirmBooking,
+    isBookingDisabled,
+    showFreeCancellation,
+  } = useBookingLogic(space);
 
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const router = useRouter();
-
-  const isVehicleSpace = space.type === "garage" || space.type === "parking";
-  const effectiveQuantity = isVehicleSpace ? quantity : 1;
-  const displayCapacity = space.capacity || 1;
-
-  // Calculate pricing based on mode
-  let currentMonths = months;
-  if (mode === "dates" && dateRange?.from && dateRange?.to) {
-    const diffDays = differenceInDays(dateRange.to, dateRange.from);
-    currentMonths = Math.max(1, diffDays / 30);
-  }
-
-  const totalPrice = Math.round(space.pricePerMonth * currentMonths * effectiveQuantity);
-  const serviceFee = Math.round(totalPrice * 0.05);
-  const grandTotal = Math.round(totalPrice + serviceFee);
-
-  // Math logic for Month Button validation
-  const checkAvailability = (m: number, start: Date) => {
-    const end = new Date(start);
-    end.setMonth(start.getMonth() + m);
-    const days = differenceInDays(end, start);
-
-    for (let i = 0; i < days; i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
-      const dateStr = format(d, "yyyy-MM-dd");
-      const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
-      if (currentOccupancy + effectiveQuantity > displayCapacity) return false;
-    }
-    return true;
-  };
-
-  const isMonthAvailable = (m: number) => checkAvailability(m, startDate);
-
-  const getNextAvailableDate = (m: number) => {
-    const today = new Date(new Date().setHours(0, 0, 0, 0));
-    for (let i = 0; i < 365; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-      if (checkAvailability(m, d)) return d;
-    }
-    return null;
-  };
-
-  const nextDate = getNextAvailableDate(months);
-
-  const getBookingDates = (): { start: string; end: string } => {
-    if (mode === "dates" && dateRange?.from && dateRange?.to) {
-      return {
-        start: dateRange.from.toISOString(),
-        end: dateRange.to.toISOString(),
-      };
-    }
-    return {
-      start: startDate.toISOString(),
-      end: addMonths(startDate, months).toISOString(),
-    };
-  };
 
   const handleReserveClick = () => {
     if (!isAuthenticated) {
@@ -98,27 +53,6 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
     }
     setShowConfirmModal(true);
   };
-
-  const handleConfirmBooking = async (notes: string) => {
-    const dates = getBookingDates();
-    await reservationRepository.create({
-      spaceId: space.id,
-      startDate: dates.start,
-      endDate: dates.end,
-      basePrice: totalPrice,
-      serviceFee,
-      totalPrice: grandTotal,
-      notes,
-    });
-  };
-
-  const isBookingDisabled = mode === "months" ? !isMonthAvailable(months) : (!dateRange?.from || !dateRange?.to);
-
-  const showFreeCancellation = mode === "months"
-    ? true
-    : (dateRange?.from && dateRange?.to)
-      ? differenceInDays(dateRange.to, dateRange.from) >= 30
-      : false;
 
   return (
     <>
@@ -188,7 +122,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
                 Duración del alquiler
               </label>
               <div className="grid grid-cols-3 gap-2">
-                {[1, 3, 6].map((m) => {
+                {AVAILABLE_MONTHS.map((m) => {
                   const available = isMonthAvailable(m);
                   return (
                     <button
@@ -215,7 +149,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
                     Cupo limitado para hoy
                   </p>
                   <p className="text-[11px] text-amber-600/80 dark:text-amber-400/60 leading-relaxed font-medium">
-                    Una reserva por meses requiere disponibilidad continua los {months * 30} días seguidos.
+                    Una reserva por meses requiere disponibilidad continua los {months * DAYS_PER_MONTH} días seguidos.
                     Como hay fechas sueltas ya reservadas en este período, se interrumpe la disponibilidad y no podemos ofrecerte el <b>{isVehicleSpace ? effectiveQuantity + (effectiveQuantity === 1 ? ' espacio' : ' espacios') : 'lugar'}</b> sin pausas.
                   </p>
                   {nextDate && (
@@ -293,7 +227,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
                   </PopoverContent>
                 </Popover>
               </div>
-              {dateRange?.from && <p className="text-[11px] text-muted-foreground font-medium">Estadía mínima: 15 días</p>}
+              {dateRange?.from && <p className="text-[11px] text-muted-foreground font-medium">Estadía mínima: {MIN_RENTAL_DAYS} días</p>}
             </div>
           )}
         </div>
@@ -344,6 +278,9 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
 
         {/* CTA Button */}
         <div className="space-y-2">
+          {bookingError && (
+            <p className="text-red-500 text-sm text-center">{bookingError}</p>
+          )}
           <Button
             disabled={isBookingDisabled}
             onClick={handleReserveClick}

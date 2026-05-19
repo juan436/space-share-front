@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import { Star, User } from "lucide-react";
 import { Review, CreateReviewInput } from "@/core/domain/entities/Review";
 import { reviewRepository } from "@/bootstrap/application";
@@ -72,7 +73,7 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
                     {review.client?.avatar ? (
-                      <img src={review.client.avatar} alt="" className="w-10 h-10 rounded-full object-cover" />
+                      <Image src={review.client.avatar} alt={review.client.name ?? "Avatar"} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
                     ) : (
                       <User className="w-5 h-5 text-muted-foreground" />
                     )}

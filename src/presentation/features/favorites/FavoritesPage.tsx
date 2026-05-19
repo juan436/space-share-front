@@ -1,6 +1,5 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import Link from "next/link";
 import { Heart, Search, ArrowRight, Loader2 } from "lucide-react";
 import { ExploreHeader } from "@/presentation/features/explore/components/desktop/ExploreHeader";
@@ -8,21 +7,11 @@ import { MobileHeader } from "@/presentation/features/explore/components/mobile/
 import { SpaceCard } from "@/presentation/features/explore/components/desktop/SpaceCard";
 import { MobileSpaceCard } from "@/presentation/features/explore/components/mobile/MobileSpaceCard";
 import { useFavoriteSpaces } from "./hooks/useFavoriteSpaces";
+import { useMediaQuery } from "@/presentation/hooks/useMediaQuery";
 
 export function FavoritesPage() {
-  const [isMobile, setIsMobile] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 767px)");
   const { spaces, isLoading, isFavorite, handleToggleFavorite } = useFavoriteSpaces();
-
-  useEffect(() => {
-    setMounted(true);
-    const checkMobile = () => setIsMobile(window.innerWidth < 768);
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  if (!mounted) return null;
 
   return (
     <div className="min-h-screen bg-background flex flex-col">

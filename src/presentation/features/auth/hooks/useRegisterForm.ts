@@ -67,7 +67,8 @@ export function useRegisterForm(): UseRegisterFormResult {
       await register({ name, email, password, role });
       router.push(dashboardRoutes[role] || "/dashboard/user");
     } catch (err) {
-      setError("Error al crear la cuenta. Intenta de nuevo.");
+      const serverMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setError(serverMsg ?? "Error al crear la cuenta. Intenta de nuevo.");
     } finally {
       setIsLoading(false);
     }

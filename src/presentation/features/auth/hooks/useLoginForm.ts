@@ -35,7 +35,8 @@ export function useLoginForm(): UseLoginFormResult {
       const user = await login(email, password);
       router.push(dashboardRoutes[user.role] || "/dashboard/user");
     } catch (err) {
-      setError("Credenciales inválidas. Intenta de nuevo.");
+      const serverMsg = (err as { response?: { data?: { message?: string } } })?.response?.data?.message;
+      setError(serverMsg ?? "Credenciales inválidas. Intenta de nuevo.");
     } finally {
       setIsLoading(false);
     }

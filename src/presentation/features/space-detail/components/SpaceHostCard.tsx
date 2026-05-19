@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { User, Star, Calendar, MessageCircle, Shield } from "lucide-react";
 import { Button } from "@/presentation/components/ui/button";
 
@@ -29,9 +30,11 @@ export function SpaceHostCard({ hostId }: SpaceHostCardProps) {
         <div className="flex items-start gap-4">
           <div className="relative">
             {host.avatar ? (
-              <img
+              <Image
                 src={host.avatar}
                 alt={host.name}
+                width={64}
+                height={64}
                 className="w-16 h-16 rounded-full object-cover"
               />
             ) : (
@@ -79,7 +82,7 @@ export function SpaceHostCard({ hostId }: SpaceHostCardProps) {
         </div>
 
         {/* Contact Button */}
-        <Button className="w-full mt-6 gap-2">
+        <Button aria-label="Contactar al anfitrión" className="w-full mt-6 gap-2">
           <MessageCircle className="w-4 h-4" />
           Contactar al anfitrión
         </Button>

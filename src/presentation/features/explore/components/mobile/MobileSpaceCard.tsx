@@ -42,6 +42,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onToggleFavorite(space.id); }}
+          aria-label={isFavorite ? "Quitar de favoritos" : "Añadir a favoritos"}
           className="absolute top-3 right-3 p-2 rounded-full bg-white/90 backdrop-blur-sm shadow-sm"
         >
           <Heart className={`w-5 h-5 ${isFavorite ? "fill-red-500 text-red-500" : "text-gray-600"}`} />

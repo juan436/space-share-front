@@ -9,22 +9,7 @@ import {
   BarChart3, Users, Building2, Calendar,
   Loader2, AlertCircle, TrendingUp, Star, DollarSign,
 } from "lucide-react";
-
-const statusLabel: Record<string, string> = {
-  pending: "Pendientes",
-  accepted: "Aceptadas",
-  rejected: "Rechazadas",
-  cancelled: "Canceladas",
-  completed: "Completadas",
-};
-
-const statusColor: Record<string, string> = {
-  pending: "bg-yellow-500",
-  accepted: "bg-emerald-500",
-  rejected: "bg-red-500",
-  cancelled: "bg-gray-400",
-  completed: "bg-blue-500",
-};
+import { RESERVATION_STATUS_LABEL, RESERVATION_STATUS_COLOR } from "@/presentation/shared/constants/space-labels";
 
 export function AdminAnalytics() {
   const [data, setData] = useState<AdminAnalyticsType | null>(null);
@@ -35,7 +20,7 @@ export function AdminAnalytics() {
     adminRepository
       .getAnalytics()
       .then(setData)
-      .catch(() => setError("No se pudieron cargar las analíticas"))
+      .catch((err) => setError(err instanceof Error ? err.message : "No se pudieron cargar las analíticas"))
       .finally(() => setIsLoading(false));
   }, []);
 
@@ -112,12 +97,12 @@ export function AdminAnalytics() {
             {Object.entries(data.reservationsByStatus).map(([status, count]) => (
               <div key={status} className="space-y-1">
                 <div className="flex items-center justify-between text-sm">
-                  <span>{statusLabel[status] || status}</span>
+                  <span>{RESERVATION_STATUS_LABEL[status] || status}</span>
                   <span className="font-medium">{count}</span>
                 </div>
                 <div className="h-2 rounded-full bg-muted overflow-hidden">
                   <div
-                    className={`h-full rounded-full ${statusColor[status] || "bg-gray-400"}`}
+                    className={`h-full rounded-full ${RESERVATION_STATUS_COLOR[status] || "bg-gray-400"}`}
                     style={{ width: `${(count / totalStatusCount) * 100}%` }}
                   />
                 </div>
