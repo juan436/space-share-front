@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { httpClient } from "@/bootstrap/http";
+import { favoritesRepository } from "@/bootstrap/application";
 
 export function useFavorites() {
-  const { user, isAuthenticated } = useAuth();
+  const { isAuthenticated } = useAuth();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
 
@@ -15,10 +15,10 @@ export function useFavorites() {
 
     const fetchFavorites = async () => {
       try {
-        const response = await httpClient.get<string[]>("/users/favorites");
-        setFavorites(new Set(response.data));
+        const ids = await favoritesRepository.getFavorites();
+        setFavorites(new Set(ids));
       } catch {
-        // silently fail
+        // silently fail — user stays with empty favorites
       }
     };
 
@@ -32,29 +32,21 @@ export function useFavorites() {
       // Optimistic update
       setFavorites((prev) => {
         const next = new Set(prev);
-        if (next.has(spaceId)) {
-          next.delete(spaceId);
-        } else {
-          next.add(spaceId);
-        }
+        if (next.has(spaceId)) next.delete(spaceId);
+        else next.add(spaceId);
         return next;
       });
 
       try {
-        const response = await httpClient.post<{ favorites: string[]; added: boolean }>(
-          `/users/favorites/${spaceId}`
-        );
-        setFavorites(new Set(response.data.favorites));
-        return response.data.added;
+        const result = await favoritesRepository.toggleFavorite(spaceId);
+        setFavorites(new Set(result.favorites));
+        return result.added;
       } catch {
         // Revert on error
         setFavorites((prev) => {
           const next = new Set(prev);
-          if (next.has(spaceId)) {
-            next.delete(spaceId);
-          } else {
-            next.add(spaceId);
-          }
+          if (next.has(spaceId)) next.delete(spaceId);
+          else next.add(spaceId);
           return next;
         });
         return false;

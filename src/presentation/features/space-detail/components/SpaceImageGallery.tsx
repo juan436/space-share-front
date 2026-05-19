@@ -65,7 +65,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
               />
             ) : (
               <div className="w-full h-full bg-muted/30 flex items-center justify-center">
-                <Images className="w-16 h-16 text-muted-foreground/20" />
+                <Images aria-hidden="true" className="w-16 h-16 text-muted-foreground/20" />
               </div>
             )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -85,7 +85,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
               />
             ) : (
               <div className="w-full h-full bg-muted/40 flex items-center justify-center">
-                <Images className="w-8 h-8 text-muted-foreground/20" />
+                <Images aria-hidden="true" className="w-8 h-8 text-muted-foreground/20" />
               </div>
             )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -104,7 +104,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
               />
             ) : (
               <div className="w-full h-full bg-muted/50 flex items-center justify-center">
-                <Images className="w-8 h-8 text-muted-foreground/20" />
+                <Images aria-hidden="true" className="w-8 h-8 text-muted-foreground/20" />
               </div>
             )}
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
@@ -132,7 +132,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
             />
           ) : (
             <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
-              <Images className="w-16 h-16 text-muted-foreground/30" />
+              <Images aria-hidden="true" className="w-16 h-16 text-muted-foreground/30" />
             </div>
           )}
 
@@ -225,7 +225,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center">
-                <Images className="w-24 h-24 text-white/20" />
+                <Images aria-hidden="true" className="w-24 h-24 text-white/20" />
               </div>
             )}
           </div>

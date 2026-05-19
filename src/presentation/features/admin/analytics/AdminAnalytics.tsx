@@ -141,7 +141,7 @@ export function AdminAnalytics() {
             ) : (
               <div className="space-y-3">
                 {data.monthlyRevenue.map((m) => {
-                  const maxRevenue = Math.max(...data.monthlyRevenue.map((r) => r.total)) || 1;
+                  const maxRevenue = Math.max(...data.monthlyRevenue.map((r) => r.total), 0) || 1;
                   return (
                     <div key={m.month} className="space-y-1">
                       <div className="flex items-center justify-between text-sm">

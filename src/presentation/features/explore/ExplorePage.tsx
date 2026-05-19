@@ -13,7 +13,7 @@ export function ExplorePage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
   const [showMap, setShowMap] = useState(false);
 
-  const { spaces } = useExploreSpaces();
+  const { spaces, isLoading } = useExploreSpaces();
   const {
     searchQuery, setSearchQuery,
     spaceType, setSpaceType,
@@ -44,7 +44,7 @@ export function ExplorePage() {
           className="overflow-y-auto thin-scrollbar relative transition-all duration-500 ease-in-out"
           style={{ width: showMap ? "45%" : "100%" }}
         >
-          <SpacesList spaces={filteredSpaces} selectedSpaceId={selectedSpaceId} onSpaceSelect={setSelectedSpaceId} showMap={showMap} />
+          <SpacesList spaces={filteredSpaces} selectedSpaceId={selectedSpaceId} onSpaceSelect={setSelectedSpaceId} showMap={showMap} isLoading={isLoading} />
           <div className="sticky bottom-6 flex justify-center pointer-events-none">
             <button
               onClick={() => setShowMap((v) => !v)}

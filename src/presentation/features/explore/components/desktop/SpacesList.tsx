@@ -62,7 +62,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
             <span className="font-bold text-foreground">{spaces.length}</span> espacios disponibles
           </p>
         </div>
-        <select className="text-xs font-medium bg-background/50 border border-border/50 rounded-full px-3 py-1.5 text-muted-foreground cursor-pointer focus:outline-none focus:border-primary/40 transition-colors">
+        <select aria-label="Ordenar espacios" className="text-xs font-medium bg-background/50 border border-border/50 rounded-full px-3 py-1.5 text-muted-foreground cursor-pointer focus:outline-none focus:border-primary/40 transition-colors">
           <option value="recommended">Recomendados</option>
           <option value="price-asc">Precio ↑</option>
           <option value="price-desc">Precio ↓</option>

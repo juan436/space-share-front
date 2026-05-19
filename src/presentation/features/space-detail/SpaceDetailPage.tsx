@@ -32,11 +32,11 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
   const isOwner = user?.id === space.hostId;
 
   useEffect(() => {
-    // Read the query params safely on client-side to determine the return path
     if (typeof window !== "undefined") {
       const params = new URLSearchParams(window.location.search);
       const fromParam = params.get("from");
-      if (fromParam) {
+      const ALLOWED_PREFIXES = ["/explore", "/favorites", "/dashboard"];
+      if (fromParam && ALLOWED_PREFIXES.some((p) => fromParam.startsWith(p))) {
         setReturnPath(fromParam);
       }
     }

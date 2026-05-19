@@ -86,10 +86,11 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
                     </p>
                   </div>
                 </div>
-                <div className="flex items-center gap-1">
+                <div className="flex items-center gap-1" aria-label={`Calificación: ${review.rating} de 5 estrellas`}>
                   {Array.from({ length: 5 }).map((_, i) => (
                     <Star
                       key={i}
+                      aria-hidden="true"
                       className={`w-3.5 h-3.5 ${
                         i < review.rating
                           ? "fill-amber-400 text-amber-400"

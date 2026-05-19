@@ -11,6 +11,7 @@ import {
   PopoverTrigger,
 } from "@/presentation/components/ui/popover";
 import { format, differenceInDays, addMonths } from "date-fns";
+import { es } from "date-fns/locale";
 import { DateRange } from "react-day-picker";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
@@ -222,14 +223,14 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
                       onClick={() => setStartDate(nextDate)}
                       className="text-[11px] text-primary font-extrabold hover:underline mt-1 block"
                     >
-                      Disponible desde el {format(nextDate, "d 'de' MMMM", { locale: require('date-fns/locale').es })}. ¿Cambiar fecha?
+                      Disponible desde el {format(nextDate, "d 'de' MMMM", { locale: es })}. ¿Cambiar fecha?
                     </button>
                   )}
                 </div>
               )}
               {isMonthAvailable(months) && startDate.getTime() !== new Date(new Date().setHours(0, 0, 0, 0)).getTime() && (
                 <p className="text-[11px] text-emerald-600 font-bold mt-2">
-                  Iniciando el {format(startDate, "d 'de' MMMM", { locale: require('date-fns/locale').es })}
+                  Iniciando el {format(startDate, "d 'de' MMMM", { locale: es })}
                 </p>
               )}
             </div>

@@ -9,7 +9,7 @@ export function useFavoriteSpaces() {
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
 
   useEffect(() => {
-    const fetch = async () => {
+    const fetchFavorites = async () => {
       if (favorites.size === 0) {
         setSpaces([]);
         setIsLoading(false);
@@ -28,7 +28,7 @@ export function useFavoriteSpaces() {
         setIsLoading(false);
       }
     };
-    fetch();
+    fetchFavorites();
   }, [favorites]);
 
   const handleToggleFavorite = async (id: string) => {

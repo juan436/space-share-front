@@ -24,8 +24,9 @@ export function ContactForm() {
       ) : (
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Nombre</label>
+            <label htmlFor="contact-name" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Nombre</label>
             <Input
+              id="contact-name"
               placeholder="Tu nombre completo"
               value={formState.name}
               onChange={(e) => setFormState({ ...formState, name: e.target.value })}
@@ -34,8 +35,9 @@ export function ContactForm() {
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Correo electrónico</label>
+            <label htmlFor="contact-email" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Correo electrónico</label>
             <Input
+              id="contact-email"
               type="email"
               placeholder="tu@correo.com"
               value={formState.email}
@@ -45,8 +47,9 @@ export function ContactForm() {
             />
           </div>
           <div>
-            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Mensaje</label>
+            <label htmlFor="contact-message" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Mensaje</label>
             <textarea
+              id="contact-message"
               placeholder="¿En qué podemos ayudarte?"
               value={formState.message}
               onChange={(e) => setFormState({ ...formState, message: e.target.value })}

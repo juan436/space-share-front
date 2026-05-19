@@ -55,8 +55,10 @@ export function AdminUsers() {
               <CardDescription>{users.length} usuarios registrados</CardDescription>
             </div>
             <div className="relative">
+              <label htmlFor="admin-user-search" className="sr-only">Buscar usuarios</label>
               <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <input
+                id="admin-user-search"
                 type="text"
                 placeholder="Buscar..."
                 value={search}
