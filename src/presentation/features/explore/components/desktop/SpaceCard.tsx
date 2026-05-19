@@ -95,6 +95,7 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
                 <button
                   onClick={(e) => { e.stopPropagation(); onToggleFavorite(space.id); }}
                   className="p-1.5 rounded-full hover:bg-rose-50 transition-colors group/heart"
+                  aria-label={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
                   title={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
                 >
                   <Heart className={cn("w-4 h-4 transition-colors", isFavorite ? "fill-rose-500 text-rose-500" : "text-muted-foreground group-hover/heart:text-rose-500")} />

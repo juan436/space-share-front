@@ -7,6 +7,7 @@ import { Space } from "@/core/domain/entities/Space";
 import { spaceTypeLabels, spaceTypeColors } from "../../data";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/presentation/providers/auth-context";
+import { resolveHostId } from "@/presentation/utils/resolveHostId";
 
 interface MobileSpaceCardProps {
   space: Space;
@@ -19,7 +20,7 @@ interface MobileSpaceCardProps {
 export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite, onToggleFavorite, onClick, returnPath }: MobileSpaceCardProps) {
   const router = useRouter();
   const { user } = useAuth();
-  const isOwner = user?.id === space.hostId;
+  const isOwner = user?.id === resolveHostId(space.hostId);
 
   const handleClick = () => {
     if (onClick) onClick();
