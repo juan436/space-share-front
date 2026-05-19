@@ -55,7 +55,7 @@ export function MobileSpacesList({ spaces, isLoading, isDeleting, isUpdating, on
               <p className="text-xs text-muted-foreground flex items-center gap-1 mt-1">
                 <MapPin className="h-3 w-3" />
                 <span className="truncate">
-                  {space.city || space.state || space.country ? `${space.city}${space.state ? `, ${space.state}` : ""}${space.country ? `, ${space.country}` : ""}` : "Sin ubicación"}
+                  {[space.city, space.state, space.country].filter(Boolean).join(", ") || "Sin ubicación"}
                 </span>
               </p>
             </div>

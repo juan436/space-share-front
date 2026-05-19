@@ -28,7 +28,12 @@ const spaceTypeLabels: Record<string, string> = {
 export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, returnPath, isFavorite, onToggleFavorite }: SpaceCardProps) {
   const router = useRouter();
   const { user } = useAuth();
-  const isOwner = user?.id === space.hostId;
+  const rawHostId = space.hostId as unknown;
+  const resolvedHostId =
+    typeof rawHostId === "object" && rawHostId !== null
+      ? ((rawHostId as { _id?: string })._id ?? (rawHostId as { id?: string }).id ?? "")
+      : (rawHostId as string);
+  const isOwner = user?.id === resolvedHostId;
 
   const amenities = [];
   if (space.amenities.climateControlled) amenities.push({ icon: Thermometer, label: "Climatizado" });

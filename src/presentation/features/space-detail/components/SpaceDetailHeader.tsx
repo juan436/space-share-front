@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Heart, Share2, MapPin, Star } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
@@ -13,20 +14,24 @@ interface SpaceDetailHeaderProps {
 }
 
 export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFavorite, onToggleFavorite }: SpaceDetailHeaderProps) {
+  const [shareStatus, setShareStatus] = useState<"idle" | "copied" | "error">("idle");
+
   const handleShare = async () => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: space.title,
-          text: space.description,
-          url: window.location.href,
-        });
-      } catch (err) {
-        // User cancelled or error
+        await navigator.share({ title: space.title, text: space.description, url: window.location.href });
+        return;
+      } catch {
+        // User cancelled — fall through to clipboard
       }
-    } else {
-      // Fallback: copy to clipboard
-      navigator.clipboard.writeText(window.location.href);
+    }
+    try {
+      await navigator.clipboard.writeText(window.location.href);
+      setShareStatus("copied");
+      setTimeout(() => setShareStatus("idle"), 2000);
+    } catch {
+      setShareStatus("error");
+      setTimeout(() => setShareStatus("idle"), 3000);
     }
   };
 
@@ -61,7 +66,8 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
         </h1>
 
         {/* Action Buttons (Icons only for minimalist look) */}
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex flex-col items-end gap-1 pt-1">
+          <div className="flex items-center gap-2">
           <Button
             variant="outline"
             size="icon"
@@ -84,6 +90,13 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
           >
             <Heart className={`w-4 h-4 transition-colors ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`} />
           </Button>
+          </div>
+          {shareStatus === "copied" && (
+            <span className="text-[11px] font-medium text-emerald-600 animate-in fade-in duration-200">Enlace copiado</span>
+          )}
+          {shareStatus === "error" && (
+            <span className="text-[11px] font-medium text-destructive animate-in fade-in duration-200">No se pudo compartir</span>
+          )}
         </div>
       </div>
 

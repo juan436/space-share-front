@@ -8,6 +8,7 @@
  */
 import { useState, useRef, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
+import { toErrorMessage } from "@/presentation/utils/error";
 import {
   SpaceViewModel,
   NewSpaceFormData,
@@ -116,7 +117,7 @@ export function useHostDashboard() {
       resetForm();
       setIsDialogOpen(false);
     } catch (error) {
-      setActionError("No se pudo crear el espacio. Intenta de nuevo.");
+      setActionError(toErrorMessage(error));
     }
   }, [create]);
 
@@ -153,7 +154,7 @@ export function useHostDashboard() {
       setIsEditDialogOpen(false);
       setEditingSpace(null);
     } catch (error) {
-      setActionError("No se pudo guardar los cambios. Intenta de nuevo.");
+      setActionError(toErrorMessage(error));
     }
   };
 
@@ -161,7 +162,7 @@ export function useHostDashboard() {
     try {
       await update({ id, input: { status } });
     } catch (error) {
-      setActionError("No se pudo actualizar el estado. Intenta de nuevo.");
+      setActionError(toErrorMessage(error));
     }
   };
 
@@ -169,7 +170,7 @@ export function useHostDashboard() {
     try {
       await deleteSpace(id);
     } catch (error) {
-      setActionError("No se pudo eliminar el espacio. Intenta de nuevo.");
+      setActionError(toErrorMessage(error));
     }
   };
 

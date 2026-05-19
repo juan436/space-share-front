@@ -102,9 +102,9 @@ export function AdminSpaces() {
                     <TableRow key={space._id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
-                          {space.images[0] ? (
+                          {space.images?.[0] ? (
                             <img
-                              src={space.images[0]}
+                              src={space.images?.[0]}
                               alt={space.title}
                               className="w-10 h-10 rounded-lg object-cover"
                             />

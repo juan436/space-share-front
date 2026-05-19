@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
 import { SpaceCard } from "./SpaceCard";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
@@ -14,6 +15,19 @@ interface SpacesListProps {
 
 export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, showMap }: SpacesListProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
+  const [sortBy, setSortBy] = useState("recommended");
+
+  const sortedSpaces = useMemo(() => {
+    const sorted = [...spaces];
+    switch (sortBy) {
+      case "price-asc": return sorted.sort((a, b) => a.pricePerMonth - b.pricePerMonth);
+      case "price-desc": return sorted.sort((a, b) => b.pricePerMonth - a.pricePerMonth);
+      case "size-asc": return sorted.sort((a, b) => a.squareMeters - b.squareMeters);
+      case "size-desc": return sorted.sort((a, b) => b.squareMeters - a.squareMeters);
+      case "rating": return sorted.sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      default: return sorted;
+    }
+  }, [spaces, sortBy]);
 
   if (isLoading) {
     return (
@@ -62,7 +76,12 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
             <span className="font-bold text-foreground">{spaces.length}</span> espacios disponibles
           </p>
         </div>
-        <select aria-label="Ordenar espacios" className="text-xs font-medium bg-background/50 border border-border/50 rounded-full px-3 py-1.5 text-muted-foreground cursor-pointer focus:outline-none focus:border-primary/40 transition-colors">
+        <select
+          aria-label="Ordenar espacios"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          className="text-xs font-medium bg-background/50 border border-border/50 rounded-full px-3 py-1.5 text-muted-foreground cursor-pointer focus:outline-none focus:border-primary/40 transition-colors"
+        >
           <option value="recommended">Recomendados</option>
           <option value="price-asc">Precio ↑</option>
           <option value="price-desc">Precio ↓</option>
@@ -79,7 +98,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
             : "grid grid-cols-1 lg:grid-cols-2 gap-4"
           }`}
       >
-        {spaces.map((space, idx) => (
+        {sortedSpaces.map((space, idx) => (
           <div
             key={space.id}
             className="animate-fade-in-up"

@@ -32,8 +32,9 @@ export function useUserReservations() {
   });
 
   const submitReview = async (reservationId: string, rating: number, comment: string): Promise<void> => {
-    const spaceId = reservations.find((r) => r.id === reservationId)?.spaceId ?? "";
-    await reviewRepository.create({ reservationId, rating, comment, spaceId });
+    const reservation = reservations.find((r) => r.id === reservationId);
+    if (!reservation?.spaceId) return;
+    await reviewRepository.create({ reservationId, rating, comment, spaceId: reservation.spaceId });
     setReviewedIds((prev) => new Set(prev).add(reservationId));
   };
 

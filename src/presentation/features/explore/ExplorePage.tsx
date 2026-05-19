@@ -13,7 +13,7 @@ export function ExplorePage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
   const [showMap, setShowMap] = useState(false);
 
-  const { spaces, isLoading } = useExploreSpaces();
+  const { spaces, isLoading, isError } = useExploreSpaces();
   const {
     searchQuery, setSearchQuery,
     spaceType, setSpaceType,
@@ -38,6 +38,12 @@ export function ExplorePage() {
         conditions={conditions}
         onConditionsChange={setConditions}
       />
+
+      {isError && (
+        <div className="px-6 py-3 bg-destructive/10 border-b border-destructive/20">
+          <p className="text-sm text-destructive text-center">No se pudieron cargar los espacios. Intenta de nuevo.</p>
+        </div>
+      )}
 
       <div className="flex-1 min-h-0 max-w-screen-2xl mx-auto w-full flex overflow-hidden">
         <div

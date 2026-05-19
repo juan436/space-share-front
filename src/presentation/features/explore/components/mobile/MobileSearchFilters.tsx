@@ -3,7 +3,7 @@
 import { Search, X, Thermometer, Video, DoorOpen, Warehouse, Home, ArrowDown, Box, Car, Clock } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Button } from "@/presentation/components/ui/button";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type FilterType = "all" | "garage" | "basement" | "attic" | "storage" | "parking";
 
@@ -54,14 +54,15 @@ export function MobileSearchFilters({
   showFilters,
   onShowFiltersChange,
 }: MobileSearchFiltersProps) {
-  // Local state for the filter sheet to allow cancel/apply
   const [localFilters, setLocalFilters] = useState<FilterState>(filters);
 
-  // Sync local state when sheet opens or parent filters change
+  // Only sync when the sheet opens (false→true), not on every filters change while sheet is already open
+  const prevShowFilters = useRef(false);
   useEffect(() => {
-    if (showFilters) {
+    if (showFilters && !prevShowFilters.current) {
       setLocalFilters(filters);
     }
+    prevShowFilters.current = showFilters;
   }, [showFilters, filters]);
 
   const handleApply = () => {

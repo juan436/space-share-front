@@ -90,7 +90,7 @@ export function UserHome() {
       {/* Welcome */}
       <div>
         <h1 className="text-3xl font-bold text-foreground tracking-tight">
-          {getGreeting()}, {user?.name?.split(" ")[0]}
+          {getGreeting()}, {user?.name?.split(" ")[0] ?? "Usuario"}
         </h1>
         <p className="text-muted-foreground mt-1 capitalize">{getTodayDate()}</p>
         <div className="h-0.5 w-12 bg-gradient-to-r from-primary to-accent rounded-full mt-3" />
