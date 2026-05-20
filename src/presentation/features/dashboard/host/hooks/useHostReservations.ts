@@ -8,12 +8,13 @@
  */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReservationStatus } from "@/core/domain/entities/Reservation";
-import { reservationRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 const QUERY_KEY = ["reservations", "host"] as const;
 
 export function useHostReservations() {
+  const { reservationRepository } = useRepositories();
   const queryClient = useQueryClient();
 
   const query = useQuery({

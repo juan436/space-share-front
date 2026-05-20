@@ -1,13 +1,8 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../providers/auth-context";
 import { toErrorMessage } from "../utils/error";
-import {
-  createSpaceUseCase,
-  listSpacesUseCase,
-  updateSpaceUseCase,
-  deleteSpaceUseCase,
-  spaceRepository,
-} from "../../bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import type { Space, CreateSpaceInput, UpdateSpaceInput } from "@/core/domain/entities/Space";
 
 interface UseSpacesOptions {
@@ -17,6 +12,8 @@ interface UseSpacesOptions {
 }
 
 export function useSpaces(options?: UseSpacesOptions) {
+  const { spaceRepository } = useRepositories();
+  const { createSpaceUseCase, updateSpaceUseCase, deleteSpaceUseCase } = useUseCases();
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
@@ -84,6 +81,7 @@ export function useSpaces(options?: UseSpacesOptions) {
 }
 
 export function useSpaceById(id: string | null) {
+  const { spaceRepository } = useRepositories();
   const query = useQuery({
     enabled: Boolean(id),
     queryKey: ["space", { id }],

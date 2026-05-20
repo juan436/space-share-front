@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Star, User } from "lucide-react";
 import { Review, CreateReviewInput } from "@/core/domain/entities/Review";
-import { reviewRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { Button } from "@/presentation/components/ui/button";
 
@@ -15,6 +15,7 @@ interface SpaceReviewsProps {
 }
 
 export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps) {
+  const { reviewRepository } = useRepositories();
   const { user, isAuthenticated } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);

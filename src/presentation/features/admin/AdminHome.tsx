@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { adminRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { AdminStats } from "@/core/domain/entities/AdminStats";
 import { Users, Building2, Calendar, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
@@ -53,6 +53,7 @@ const statCards = [
 ];
 
 export function AdminHome() {
+    const { adminRepository } = useRepositories();
     const { user } = useAuth();
     const [stats, setStats] = useState<AdminStats | null>(null);
     const [isLoading, setIsLoading] = useState(true);

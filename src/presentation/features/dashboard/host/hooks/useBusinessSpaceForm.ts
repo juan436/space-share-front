@@ -8,7 +8,7 @@
  */
 import { useState, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
-import { spaceRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import type { SpaceViewModel } from "@/presentation/types/spaces";
 
 export type BusinessSpaceType = "office" | "commercial" | "warehouse" | "meeting_room" | "";
@@ -95,6 +95,7 @@ interface UseBusinessSpaceFormOptions {
 }
 
 export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusinessSpaceFormOptions) {
+  const { spaceRepository } = useRepositories();
   const { create, isCreating, update, isUpdating } = useSpaces();
 
   const [images, setImages] = useState<string[]>(initialData?.images ?? []);
@@ -114,9 +115,7 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
 
   const handleFilesSelected = useCallback(
     async (files: File[]): Promise<string[]> => {
-      const formData = new FormData();
-      files.forEach((f) => formData.append("images", f));
-      const uploaded = await spaceRepository.uploadImages(formData);
+      const uploaded = await spaceRepository.uploadImages(files);
       setImages((prev) => [...prev, ...uploaded]);
       return uploaded;
     },

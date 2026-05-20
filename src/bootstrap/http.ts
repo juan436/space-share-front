@@ -1,37 +1,16 @@
 import { configureHttpClient, createHttpClient } from "@/infrastructure/http/httpClientFactory";
+import { TokenStorage } from "@/infrastructure/services/TokenStorage";
 
 const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3006/api";
-const TOKEN_KEY = "spaceshare_tokens";
 
 let isRefreshing = false;
 
-function getStoredTokens(): { accessToken?: string; refreshToken?: string } | null {
-  if (typeof window === "undefined") return null;
-  const stored = localStorage.getItem(TOKEN_KEY);
-  if (!stored) return null;
-  try {
-    return JSON.parse(stored);
-  } catch {
-    return null;
-  }
-}
-
-function saveTokens(tokens: { accessToken: string; refreshToken: string }) {
-  if (typeof window === "undefined") return;
-  localStorage.setItem(TOKEN_KEY, JSON.stringify(tokens));
-}
-
-function clearTokens() {
-  if (typeof window === "undefined") return;
-  localStorage.removeItem(TOKEN_KEY);
-}
-
 configureHttpClient({
   baseUrl: API_BASE_URL,
-  getAccessToken: () => getStoredTokens()?.accessToken,
+  getAccessToken: () => TokenStorage.get()?.accessToken,
   onUnauthorized: async () => {
     if (isRefreshing) return false;
-    const tokens = getStoredTokens();
+    const tokens = TokenStorage.get();
     if (!tokens?.refreshToken) return false;
 
     isRefreshing = true;
@@ -44,7 +23,7 @@ configureHttpClient({
       });
 
       if (!response.ok) {
-        clearTokens();
+        TokenStorage.clear();
         return false;
       }
 
@@ -53,11 +32,11 @@ configureHttpClient({
         | null;
 
       if (!data?.accessToken || !data?.refreshToken) {
-        clearTokens();
+        TokenStorage.clear();
         return false;
       }
 
-      saveTokens({ accessToken: data.accessToken, refreshToken: data.refreshToken });
+      TokenStorage.save({ accessToken: data.accessToken, refreshToken: data.refreshToken });
       return true;
     } finally {
       isRefreshing = false;

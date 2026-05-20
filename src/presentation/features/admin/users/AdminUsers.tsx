@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { adminRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { AdminUser } from "@/core/domain/entities/AdminStats";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
@@ -20,6 +20,7 @@ const roleLabel: Record<string, string> = {
 };
 
 export function AdminUsers() {
+  const { adminRepository } = useRepositories();
   const [users, setUsers] = useState<AdminUser[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

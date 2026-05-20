@@ -3,8 +3,8 @@ import { User, CreateUserInput } from "@/core/domain/entities/User";
 import { HttpClient } from "@/infrastructure/http/HttpClient";
 import { AuthResponseDto, LoginRequestDto, RegisterRequestDto } from "@/infrastructure/api/dtos/auth";
 import { UserMapper } from "@/infrastructure/api/mappers/UserMapper";
+import { TokenStorage } from "@/infrastructure/services/TokenStorage";
 
-const TOKEN_KEY = "spaceshare_tokens";
 const USER_KEY = "spaceshare_user";
 
 export class ApiAuthRepository implements AuthRepository {
@@ -23,7 +23,7 @@ export class ApiAuthRepository implements AuthRepository {
       refreshToken: response.data.refreshToken,
     };
 
-    this.saveTokens(tokens);
+    TokenStorage.save(tokens);
     this.saveUser(user);
     this.httpClient.setAuthToken(tokens.accessToken);
 
@@ -46,7 +46,7 @@ export class ApiAuthRepository implements AuthRepository {
       refreshToken: response.data.refreshToken,
     };
 
-    this.saveTokens(tokens);
+    TokenStorage.save(tokens);
     this.saveUser(user);
     this.httpClient.setAuthToken(tokens.accessToken);
 
@@ -76,7 +76,7 @@ export class ApiAuthRepository implements AuthRepository {
       refreshToken: response.data.refreshToken,
     };
 
-    this.saveTokens(tokens);
+    TokenStorage.save(tokens);
     this.httpClient.setAuthToken(tokens.accessToken);
 
     return tokens;
@@ -88,7 +88,7 @@ export class ApiAuthRepository implements AuthRepository {
       return savedUser;
     }
 
-    const tokens = this.getTokens();
+    const tokens = TokenStorage.get();
     if (!tokens) {
       return null;
     }
@@ -103,18 +103,6 @@ export class ApiAuthRepository implements AuthRepository {
       this.clearStorage();
       return null;
     }
-  }
-
-  private saveTokens(tokens: AuthTokens): void {
-    if (typeof window !== "undefined") {
-      localStorage.setItem(TOKEN_KEY, JSON.stringify(tokens));
-    }
-  }
-
-  private getTokens(): AuthTokens | null {
-    if (typeof window === "undefined") return null;
-    const stored = localStorage.getItem(TOKEN_KEY);
-    return stored ? JSON.parse(stored) : null;
   }
 
   private saveUser(user: User): void {
@@ -136,8 +124,8 @@ export class ApiAuthRepository implements AuthRepository {
   }
 
   private clearStorage(): void {
+    TokenStorage.clear();
     if (typeof window !== "undefined") {
-      localStorage.removeItem(TOKEN_KEY);
       localStorage.removeItem(USER_KEY);
     }
   }

@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { favoritesRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 
 export function useFavorites() {
+  const { favoritesRepository } = useRepositories();
   const { isAuthenticated } = useAuth();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Manrope } from "next/font/google";
 import { Toaster } from "@/presentation/components/ui/toaster";
-import { AuthProvider } from "@/presentation/providers/auth-context";
 import { QueryProvider } from "@/presentation/providers/query-provider";
+import { ClientProviders } from "./ClientProviders";
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -26,10 +26,10 @@ export default function RootLayout({
     <html lang="es" className={manrope.variable}>
       <body className="antialiased">
         <QueryProvider>
-          <AuthProvider>
+          <ClientProviders>
             {children}
             <Toaster />
-          </AuthProvider>
+          </ClientProviders>
         </QueryProvider>
       </body>
     </html>

@@ -64,7 +64,9 @@ export class ApiSpaceRepository implements SpaceRepository {
     await this.httpClient.delete(`/spaces/${id}`);
   }
 
-  async uploadImages(formData: FormData): Promise<string[]> {
+  async uploadImages(files: File[]): Promise<string[]> {
+    const formData = new FormData();
+    files.forEach((f) => formData.append("images", f));
     const response = await this.httpClient.postFormData<{ urls: string[] }>("/spaces/upload-images", formData);
     return response.data.urls;
   }

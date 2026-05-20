@@ -1,20 +1,23 @@
 "use client";
 
-import { Calendar as CalendarIconSVG, Info, Shield, ShieldCheck, Star, CalendarIcon, Minus, Plus } from "lucide-react";
+import { Calendar as CalendarIconSVG, Shield, CalendarIcon } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 import { Calendar } from "@/presentation/components/ui/calendar";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/presentation/components/ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "@/presentation/components/ui/popover";
 import { format } from "date-fns";
-import { es } from "date-fns/locale";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
 import { BookingConfirmModal } from "./BookingConfirmModal";
-import { useBookingLogic, AVAILABLE_MONTHS, DAYS_PER_MONTH, MIN_RENTAL_DAYS } from "../hooks/useBookingLogic";
+import { useBookingLogic, MIN_RENTAL_DAYS } from "../hooks/useBookingLogic";
+import {
+  BookingQuantitySelector,
+  BookingModeSelector,
+  BookingMonthGrid,
+  BookingPriceSummary,
+  BookingFreeCancellation,
+  BookingCTAButton,
+} from "./booking";
 
 interface SpaceBookingSidebarProps {
   space: Space;
@@ -22,25 +25,12 @@ interface SpaceBookingSidebarProps {
 
 export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
   const {
-    months, setMonths,
-    mode, setMode,
-    dateRange, setDateRange,
-    quantity, setQuantity,
-    startDate, setStartDate,
-    showConfirmModal, setShowConfirmModal,
-    bookingError,
-    isVehicleSpace,
-    effectiveQuantity,
-    displayCapacity,
-    currentMonths,
-    totalPrice,
-    serviceFee,
-    grandTotal,
-    isMonthAvailable,
-    nextDate,
-    handleConfirmBooking,
-    isBookingDisabled,
-    showFreeCancellation,
+    months, setMonths, mode, setMode, dateRange, setDateRange,
+    quantity, setQuantity, startDate, setStartDate,
+    showConfirmModal, setShowConfirmModal, bookingError,
+    isVehicleSpace, effectiveQuantity, displayCapacity, currentMonths,
+    totalPrice, serviceFee, grandTotal, isMonthAvailable, nextDate,
+    handleConfirmBooking, isBookingDisabled, showFreeCancellation,
   } = useBookingLogic(space);
 
   const { isAuthenticated } = useAuth();
@@ -57,249 +47,129 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
   return (
     <>
       <div className="p-5 rounded-[24px] bg-white dark:bg-zinc-900 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-black/5 dark:ring-white/10">
-        {/* Price Header */}
         <div className="flex items-baseline gap-1.5 mb-4">
           <span className="text-2xl font-extrabold text-foreground tracking-tight">${space.pricePerMonth}</span>
           <span className="text-sm font-medium text-muted-foreground">/ mes</span>
         </div>
 
-        {/* Quantity Selector (Shared Capacity - Only for Garages/Parking) */}
         {isVehicleSpace && (
-          <div className="flex items-center justify-between mb-4 p-3 rounded-xl border border-border/60 bg-muted/20">
-            <div className="flex flex-col">
-              <span className="text-sm font-bold">Cantidad de espacios</span>
-              <span className="text-xs text-muted-foreground font-medium">Capacidad disponible: {displayCapacity}</span>
-            </div>
-            <div className="flex items-center gap-3">
-              <button
-                onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                disabled={quantity <= 1}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 dark:ring-white/10 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-all"
-              >
-                <Minus className="w-4 h-4" />
-              </button>
-              <span className="text-sm font-bold w-4 text-center">{quantity}</span>
-              <button
-                onClick={() => setQuantity(Math.min(displayCapacity, quantity + 1))}
-                disabled={quantity >= displayCapacity}
-                className="w-8 h-8 flex items-center justify-center rounded-full bg-white dark:bg-zinc-800 shadow-sm ring-1 ring-black/5 dark:ring-white/10 text-muted-foreground hover:text-foreground disabled:opacity-30 transition-all"
-              >
-                <Plus className="w-4 h-4" />
-              </button>
-            </div>
-          </div>
+          <BookingQuantitySelector
+            quantity={quantity}
+            displayCapacity={displayCapacity}
+            onDecrement={() => setQuantity(Math.max(1, quantity - 1))}
+            onIncrement={() => setQuantity(Math.min(displayCapacity, quantity + 1))}
+            className="mb-4"
+          />
         )}
 
-        {/* Segmented Control */}
-        <div className="flex p-1 bg-muted/40 rounded-xl mb-4 ring-1 ring-inset ring-black/5 dark:ring-white/5">
-          <button
-            onClick={() => { setMode("dates"); setMonths(1); }}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-300 ${
-              mode === "dates"
-                ? "bg-white dark:bg-zinc-800 text-foreground shadow-sm ring-1 ring-black/5"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Fechas exactas
-          </button>
-          <button
-            onClick={() => { setMode("months"); setDateRange(undefined); }}
-            className={`flex-1 py-2 text-sm font-bold rounded-lg transition-all duration-300 ${
-              mode === "months"
-                ? "bg-white dark:bg-zinc-800 text-foreground shadow-sm ring-1 ring-black/5"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            Meses
-          </button>
-        </div>
+        <BookingModeSelector
+          mode={mode}
+          onSelectDates={() => { setMode("dates"); setMonths(1); }}
+          onSelectMonths={() => { setMode("months"); setDateRange(undefined); }}
+          className="mb-4"
+        />
 
-        {/* Duration Selector Content */}
         <div className="mb-4 flex flex-col justify-center">
           {mode === "months" ? (
-            <div className="space-y-3">
-              <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
-                Duración del alquiler
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {AVAILABLE_MONTHS.map((m) => {
-                  const available = isMonthAvailable(m);
-                  return (
-                    <button
-                      key={m}
-                      onClick={() => available && setMonths(m)}
-                      disabled={!available}
-                      className={`py-2 px-2 rounded-xl text-sm font-bold transition-all duration-300 ${
-                        !available
-                          ? "bg-muted/10 text-muted-foreground/40 cursor-not-allowed opacity-50 ring-1 ring-inset ring-border/30"
-                          : months === m
-                          ? "bg-primary text-primary-foreground shadow-sm"
-                          : "bg-muted/30 text-muted-foreground hover:text-foreground hover:bg-muted/50 ring-1 ring-inset ring-border/50"
-                      }`}
-                    >
-                      {m} {m === 1 ? "mes" : "meses"}
-                    </button>
-                  );
-                })}
-              </div>
-              {!isMonthAvailable(months) && (
-                <div className="mt-3 p-4 rounded-xl bg-amber-500/10 border border-amber-500/20 space-y-2">
-                  <p className="text-[12px] text-amber-700 dark:text-amber-400 font-bold flex items-center gap-1.5">
-                    <Info className="w-3.5 h-3.5" />
-                    Cupo limitado para hoy
-                  </p>
-                  <p className="text-[11px] text-amber-600/80 dark:text-amber-400/60 leading-relaxed font-medium">
-                    Una reserva por meses requiere disponibilidad continua los {months * DAYS_PER_MONTH} días seguidos.
-                    Como hay fechas sueltas ya reservadas en este período, se interrumpe la disponibilidad y no podemos ofrecerte el <b>{isVehicleSpace ? effectiveQuantity + (effectiveQuantity === 1 ? ' espacio' : ' espacios') : 'lugar'}</b> sin pausas.
-                  </p>
-                  {nextDate && (
-                    <button
-                      onClick={() => setStartDate(nextDate)}
-                      className="text-[11px] text-primary font-extrabold hover:underline mt-1 block"
-                    >
-                      Disponible desde el {format(nextDate, "d 'de' MMMM", { locale: es })}. ¿Cambiar fecha?
-                    </button>
-                  )}
-                </div>
-              )}
-              {isMonthAvailable(months) && startDate.getTime() !== new Date(new Date().setHours(0, 0, 0, 0)).getTime() && (
-                <p className="text-[11px] text-emerald-600 font-bold mt-2">
-                  Iniciando el {format(startDate, "d 'de' MMMM", { locale: es })}
-                </p>
-              )}
-            </div>
+            <BookingMonthGrid
+              months={months}
+              setMonths={setMonths}
+              isMonthAvailable={isMonthAvailable}
+              isVehicleSpace={isVehicleSpace}
+              effectiveQuantity={effectiveQuantity}
+              startDate={startDate}
+              nextDate={nextDate}
+              setStartDate={setStartDate}
+            />
           ) : (
             <div className="space-y-3">
               <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Selecciona tu periodo
               </label>
-              <div className="grid gap-2">
-                <Popover>
-                  <PopoverTrigger asChild>
-                    <Button
-                      id="date"
-                      variant={"outline"}
-                      className={`w-full justify-start text-left font-semibold h-12 rounded-xl border-border bg-white dark:bg-zinc-900 ${
-                        !dateRange?.from ? "text-muted-foreground" : ""
-                      }`}
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4" />
-                      {dateRange?.from ? (
-                        dateRange.to ? (
-                          <>
-                            {format(dateRange.from, "LLL dd, y")} -{" "}
-                            {format(dateRange.to, "LLL dd, y")}
-                          </>
-                        ) : (
-                          format(dateRange.from, "LLL dd, y")
-                        )
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant="outline"
+                    className={`w-full justify-start text-left font-semibold h-12 rounded-xl border-border bg-white dark:bg-zinc-900 ${
+                      !dateRange?.from ? "text-muted-foreground" : ""
+                    }`}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {dateRange?.from ? (
+                      dateRange.to ? (
+                        <>{format(dateRange.from, "LLL dd, y")} - {format(dateRange.to, "LLL dd, y")}</>
                       ) : (
-                        <span className="font-medium">Seleccionar fechas</span>
-                      )}
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
-                    <Calendar
-                      initialFocus
-                      mode="range"
-                      defaultMonth={dateRange?.from}
-                      selected={dateRange}
-                      onSelect={(range) => {
-                        if (range?.from && range?.to) {
-                          const today = new Date(new Date().setHours(0, 0, 0, 0));
-                          if (range.from.getTime() === today.getTime()) {
-                            const tomorrow = new Date(today);
-                            tomorrow.setDate(today.getDate() + 1);
-                            setDateRange({ from: tomorrow, to: range.to });
-                            return;
-                          }
+                        format(dateRange.from, "LLL dd, y")
+                      )
+                    ) : (
+                      <span className="font-medium">Seleccionar fechas</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
+                  <Calendar
+                    initialFocus
+                    mode="range"
+                    defaultMonth={dateRange?.from}
+                    selected={dateRange}
+                    onSelect={(range) => {
+                      if (range?.from && range?.to) {
+                        const today = new Date(new Date().setHours(0, 0, 0, 0));
+                        if (range.from.getTime() === today.getTime()) {
+                          const tomorrow = new Date(today);
+                          tomorrow.setDate(today.getDate() + 1);
+                          setDateRange({ from: tomorrow, to: range.to });
+                          return;
                         }
-                        setDateRange(range);
-                      }}
-                      numberOfMonths={1}
-                      disabled={(date) => {
-                        if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true;
-                        const dateStr = format(date, "yyyy-MM-dd");
-                        const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
-                        return currentOccupancy + effectiveQuantity > displayCapacity;
-                      }}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-              {dateRange?.from && <p className="text-[11px] text-muted-foreground font-medium">Estadía mínima: {MIN_RENTAL_DAYS} días</p>}
+                      }
+                      setDateRange(range);
+                    }}
+                    numberOfMonths={1}
+                    disabled={(date) => {
+                      if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true;
+                      const dateStr = format(date, "yyyy-MM-dd");
+                      const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
+                      return currentOccupancy + effectiveQuantity > displayCapacity;
+                    }}
+                  />
+                </PopoverContent>
+              </Popover>
+              {dateRange?.from && (
+                <p className="text-[11px] text-muted-foreground font-medium">Estadía mínima: {MIN_RENTAL_DAYS} días</p>
+              )}
             </div>
           )}
         </div>
 
-        {/* Price Breakdown */}
-        {mode === "dates" && (!dateRange?.from || !dateRange?.to) ? (
-          <div className="mb-4 py-3 rounded-xl bg-muted/30 text-center">
-            <p className="text-sm text-muted-foreground font-medium">Selecciona las fechas para ver el total</p>
-          </div>
-        ) : (
-          <>
-            <div className="space-y-2 mb-4 pt-1">
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
-                  ${space.pricePerMonth} x {Number.isInteger(currentMonths) ? currentMonths : currentMonths.toFixed(1)} {currentMonths === 1 ? "mes" : "meses"} {isVehicleSpace && `x ${effectiveQuantity} unid.`}
-                </span>
-                <span className="text-foreground font-semibold">${totalPrice}</span>
-              </div>
-              <div className="flex justify-between items-center text-sm">
-                <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors flex items-center gap-1">
-                  Tarifa de servicio (5%)
-                  <Info className="w-3 h-3" />
-                </span>
-                <span className="text-foreground font-semibold">${serviceFee}</span>
-              </div>
-            </div>
+        <BookingPriceSummary
+          mode={mode}
+          dateRange={dateRange}
+          space={space}
+          currentMonths={currentMonths}
+          isVehicleSpace={isVehicleSpace}
+          effectiveQuantity={effectiveQuantity}
+          totalPrice={totalPrice}
+          serviceFee={serviceFee}
+          grandTotal={grandTotal}
+        />
 
-            <div className="h-px w-full bg-border/40 mb-4" />
+        {showFreeCancellation && <BookingFreeCancellation />}
 
-            {/* Total */}
-            <div className="flex justify-between items-center mb-4">
-              <span className="font-bold text-foreground">Total</span>
-              <span className="text-xl font-extrabold text-foreground tracking-tight">${grandTotal}</span>
-            </div>
-          </>
-        )}
-
-        {/* Cancelación Gratuita */}
-        {showFreeCancellation && (
-          <div className="flex items-center gap-2.5 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-950/30 ring-1 ring-emerald-200 dark:ring-emerald-800 mb-4">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400 shrink-0" />
-            <div>
-              <p className="text-xs font-bold text-emerald-700 dark:text-emerald-400">Cancelación gratuita</p>
-              <p className="text-[11px] text-emerald-600/80 dark:text-emerald-400/70">Cancela sin costo hasta 15 días antes.</p>
-            </div>
-          </div>
-        )}
-
-        {/* CTA Button */}
-        <div className="space-y-2">
-          {bookingError && (
-            <p className="text-red-500 text-sm text-center">{bookingError}</p>
-          )}
-          <Button
-            disabled={isBookingDisabled}
-            onClick={handleReserveClick}
-            className="w-full h-11 rounded-xl text-sm font-bold tracking-wide shadow-[0_8px_30px_rgb(0,0,0,0.12)] shadow-primary/20 bg-primary hover:bg-primary/90 hover:scale-[1.02] transition-all active:scale-95 disabled:opacity-50 disabled:scale-100 disabled:bg-muted disabled:text-muted-foreground disabled:shadow-none"
-          >
-            {mode === "months" && !isMonthAvailable(months) ? "Capacidad Excedida" : "Reservar ahora"}
-          </Button>
-          <p className="text-xs text-center text-muted-foreground font-medium">No se hará ningún cargo aún</p>
-        </div>
+        <BookingCTAButton
+          disabled={isBookingDisabled}
+          onClick={handleReserveClick}
+          bookingError={bookingError}
+          label="Reservar ahora"
+          capacityExceeded={mode === "months" && !isMonthAvailable(months)}
+        />
 
         <div className="h-px w-full bg-border/40 my-4" />
 
-        {/* Secondary Action */}
         <button className="w-full flex items-center justify-center gap-2 py-2 rounded-xl font-semibold text-sm transition-colors hover:bg-muted/50 text-foreground">
           <CalendarIconSVG className="w-4 h-4" />
           Agendar visita
         </button>
 
-        {/* Trust Badge */}
         <div className="flex items-center gap-2 mt-3 justify-center text-xs font-medium text-emerald-600 dark:text-emerald-400">
           <Shield className="w-3.5 h-3.5 shrink-0" />
           <span>Pago seguro 100% garantizado</span>

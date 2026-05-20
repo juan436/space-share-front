@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
 import { Space } from "@/core/domain/entities/Space";
-import { spaceRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 
 export function useFavoriteSpaces() {
+  const { spaceRepository } = useRepositories();
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { favorites, isFavorite, toggleFavorite } = useFavorites();

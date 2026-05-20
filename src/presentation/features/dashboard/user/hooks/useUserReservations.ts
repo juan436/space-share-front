@@ -8,12 +8,13 @@
  */
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { reservationRepository, reviewRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 const QUERY_KEY = ["reservations", "user"] as const;
 
 export function useUserReservations() {
+  const { reservationRepository, reviewRepository } = useRepositories();
   const queryClient = useQueryClient();
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
 

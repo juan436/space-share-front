@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { spaceRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { SpaceFilters } from "@/core/domain/ports/SpaceRepository";
 
 interface UseExploreSpacesOptions {
@@ -9,6 +9,7 @@ interface UseExploreSpacesOptions {
 }
 
 export function useExploreSpaces(options?: UseExploreSpacesOptions) {
+  const { spaceRepository } = useRepositories();
   const page = options?.page ?? 1;
   const limit = options?.limit ?? 50;
   const filters = options?.filters;

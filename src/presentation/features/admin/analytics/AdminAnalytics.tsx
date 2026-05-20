@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { adminRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { AdminAnalytics as AdminAnalyticsType } from "@/core/domain/entities/AdminStats";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
@@ -12,6 +12,7 @@ import {
 import { RESERVATION_STATUS_LABEL, RESERVATION_STATUS_COLOR } from "@/presentation/shared/constants/space-labels";
 
 export function AdminAnalytics() {
+  const { adminRepository } = useRepositories();
   const [data, setData] = useState<AdminAnalyticsType | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

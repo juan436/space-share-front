@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
-import { adminRepository } from "@/bootstrap/application";
+import { useRepositories } from "@/presentation/providers/repositories-context";
 import { AdminSpace } from "@/core/domain/entities/AdminStats";
 import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL, SPACE_TYPE_LABEL } from "@/presentation/shared/constants/space-labels";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
@@ -16,6 +16,7 @@ function isHostIdObject(value: unknown): value is HostIdObject {
 }
 
 export function AdminSpaces() {
+  const { adminRepository } = useRepositories();
   const [spaces, setSpaces] = useState<AdminSpace[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
