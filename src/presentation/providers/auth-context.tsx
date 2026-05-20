@@ -44,7 +44,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [authRepository]);
 
   const register = useCallback(async (input: CreateUserInput): Promise<User> => {
     setIsLoading(true);
@@ -55,7 +55,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [authRepository]);
 
   const logout = useCallback(async () => {
     setIsLoading(true);
@@ -65,7 +65,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [authRepository]);
 
   return (
     <AuthContext.Provider
