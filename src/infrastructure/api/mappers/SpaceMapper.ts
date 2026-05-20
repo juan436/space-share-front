@@ -1,6 +1,6 @@
 import { Space, CreateSpaceInput, UpdateSpaceInput } from "@/core/domain/entities/Space";
 import { SpaceDto, CreateSpaceRequestDto, UpdateSpaceRequestDto } from "../dtos/space";
-import { resolveImageUrl } from "@/presentation/utils/image";
+import { resolveImageUrl } from "@/infrastructure/utils/imageUrl";
 
 export class SpaceMapper {
   static toDomain(dto: SpaceDto): Space {

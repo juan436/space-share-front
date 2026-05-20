@@ -1,6 +1,6 @@
 import { Reservation, CreateReservationInput } from "@/core/domain/entities/Reservation";
 import { ReservationDto, CreateReservationRequestDto } from "../dtos/reservation";
-import { resolveImageUrl } from "@/presentation/utils/image";
+import { resolveImageUrl } from "@/infrastructure/utils/imageUrl";
 
 export class ReservationMapper {
   static toDomain(dto: ReservationDto): Reservation {

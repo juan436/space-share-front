@@ -1,7 +1,8 @@
 import { AdminStats, AdminUser, AdminSpace, AdminAnalytics } from "@/core/domain/entities/AdminStats";
+import { AdminRepository } from "@/core/domain/ports/AdminRepository";
 import { HttpClient } from "@/infrastructure/http/HttpClient";
 
-export class ApiAdminRepository {
+export class ApiAdminRepository implements AdminRepository {
   constructor(private http: HttpClient) {}
 
   async getStats(): Promise<AdminStats> {
