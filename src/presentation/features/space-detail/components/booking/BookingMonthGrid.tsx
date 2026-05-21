@@ -3,7 +3,7 @@
 import { Info } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { AVAILABLE_MONTHS, DAYS_PER_MONTH } from "@/presentation/features/space-detail/hooks/useBookingLogic";
+import { AVAILABLE_MONTHS, DAYS_PER_MONTH } from "@/core/domain/entities/Reservation";
 
 interface BookingMonthGridProps {
   months: number;

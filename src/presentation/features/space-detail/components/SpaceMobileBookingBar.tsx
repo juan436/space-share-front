@@ -10,7 +10,8 @@ import { format } from "date-fns";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
 import { BookingConfirmModal } from "./BookingConfirmModal";
-import { useBookingLogic, MIN_RENTAL_DAYS } from "../hooks/useBookingLogic";
+import { useBookingLogic } from "../hooks/useBookingLogic";
+import { MIN_RENTAL_DAYS } from "@/core/domain/entities/Reservation";
 import {
   BookingQuantitySelector,
   BookingModeSelector,

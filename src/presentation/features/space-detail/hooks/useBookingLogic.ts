@@ -2,13 +2,10 @@ import { useState } from "react";
 import { differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Space, checkSpaceAvailability, getNextAvailableDate } from "@/core/domain/entities/Space";
-import { calculateBookingPrice } from "@/core/domain/entities/Reservation";
+import { calculateBookingPrice, DAYS_PER_MONTH, AVAILABLE_MONTHS } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
-export const DAYS_PER_MONTH = 30;
-export const MIN_RENTAL_DAYS = 15;
-export const AVAILABLE_MONTHS = [1, 3, 6] as const;
 
 export function useBookingLogic(space: Space) {
   const { createReservationUseCase } = useUseCases();

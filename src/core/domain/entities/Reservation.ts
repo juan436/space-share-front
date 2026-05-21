@@ -36,6 +36,9 @@ export interface CreateReservationInput {
 }
 
 export const SERVICE_FEE_PERCENTAGE = 0.05;
+export const DAYS_PER_MONTH = 30;
+export const MIN_RENTAL_DAYS = 15;
+export const AVAILABLE_MONTHS = [1, 3, 6] as const;
 
 export function calculateBookingPrice(
   pricePerMonth: number,
