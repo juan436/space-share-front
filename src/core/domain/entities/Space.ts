@@ -81,6 +81,24 @@ export interface CreateSpaceInput {
   services?: BusinessServices;
 }
 
+export function isDateRangeAvailable(
+  space: Space,
+  from: Date,
+  to: Date,
+  quantity: number
+): boolean {
+  const capacity = space.capacity || 1;
+  const msPerDay = 86400000;
+  const days = Math.round((to.getTime() - from.getTime()) / msPerDay);
+  for (let i = 0; i < days; i++) {
+    const d = new Date(from.getTime() + i * msPerDay);
+    const dateStr = d.toISOString().slice(0, 10);
+    const occupied = space.occupancyMap?.[dateStr] ?? 0;
+    if (occupied + quantity > capacity) return false;
+  }
+  return true;
+}
+
 export function checkSpaceAvailability(
   space: Space,
   months: number,

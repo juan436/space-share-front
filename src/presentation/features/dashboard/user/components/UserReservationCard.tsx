@@ -27,12 +27,13 @@ export const UserReservationCard = memo(function UserReservationCard({
 }: UserReservationCardProps) {
   const statusCfg = STATUS_CONFIG[reservation.status] || STATUS_CONFIG.pending;
   const StatusIcon = statusCfg.icon;
+  const imageUrl = reservation.space?.images?.[0];
 
   return (
     <Card className="overflow-hidden hover:shadow-md transition-shadow flex flex-col">
       <div className="relative h-40 w-full bg-muted shrink-0 overflow-hidden">
-        {reservation.space?.images?.[0] ? (
-          <Image src={reservation.space.images[0]} alt={reservation.space.title ?? "Espacio"} fill className="object-cover" />
+        {imageUrl ? (
+          <Image src={imageUrl} alt={reservation.space?.title ?? "Espacio"} fill sizes="100vw" className="object-cover" />
         ) : (
           <div className="w-full h-full flex items-center justify-center">
             <Calendar className="w-8 h-8 text-muted-foreground/30" />

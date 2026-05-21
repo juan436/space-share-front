@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
-import { Space, checkSpaceAvailability, getNextAvailableDate } from "@/core/domain/entities/Space";
+import { Space, checkSpaceAvailability, getNextAvailableDate, isDateRangeAvailable } from "@/core/domain/entities/Space";
 import { calculateBookingPrice, DAYS_PER_MONTH, AVAILABLE_MONTHS } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
@@ -71,7 +71,11 @@ export function useBookingLogic(space: Space) {
   };
 
   const isBookingDisabled =
-    mode === "months" ? !isMonthAvailable(months) : !dateRange?.from || !dateRange?.to;
+    mode === "months"
+      ? !isMonthAvailable(months)
+      : !dateRange?.from ||
+        !dateRange?.to ||
+        !isDateRangeAvailable(space, dateRange.from, dateRange.to, effectiveQuantity);
 
   const showFreeCancellation =
     mode === "months"

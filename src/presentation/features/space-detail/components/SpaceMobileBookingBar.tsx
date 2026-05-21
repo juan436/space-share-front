@@ -42,7 +42,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
 
   const handleReserveClick = () => {
     if (!isAuthenticated) {
-      router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
       return;
     }
     setIsOpen(false);

@@ -21,13 +21,14 @@ export const HostReservationCard = memo(function HostReservationCard({
 }: HostReservationCardProps) {
   const statusCfg = STATUS_CONFIG[reservation.status] || STATUS_CONFIG.pending;
   const StatusIcon = statusCfg.icon;
+  const imageUrl = reservation.space?.images?.[0];
 
   return (
     <Card className="overflow-hidden">
       <div className="flex flex-col sm:flex-row">
-        <div className="relative h-40 sm:h-full sm:w-48 shrink-0 bg-muted overflow-hidden">
-          {reservation.space?.images?.[0] ? (
-            <Image src={reservation.space.images[0]} alt={reservation.space.title ?? "Espacio"} fill className="object-cover" />
+        <div className="relative h-40 sm:h-auto sm:self-stretch sm:w-48 shrink-0 bg-muted overflow-hidden">
+          {imageUrl ? (
+            <Image src={imageUrl} alt={reservation.space?.title ?? "Espacio"} fill sizes="(max-width: 640px) 100vw, 192px" className="object-cover" />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
               <Calendar className="w-8 h-8 text-muted-foreground/30" />

@@ -15,6 +15,12 @@ const nextConfig = {
         port: '3006',
         pathname: '/uploads/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'api-space-share.jvserver.com',
+        port: '',
+        pathname: '/uploads/**',
+      },
     ],
   },
 };

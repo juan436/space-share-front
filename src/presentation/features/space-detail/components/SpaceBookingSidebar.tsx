@@ -39,7 +39,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
 
   const handleReserveClick = () => {
     if (!isAuthenticated) {
-      router.push(`/auth/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
       return;
     }
     setShowConfirmModal(true);

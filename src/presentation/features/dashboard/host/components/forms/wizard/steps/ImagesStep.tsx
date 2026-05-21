@@ -168,39 +168,6 @@ export function ImagesStep({ images, onFilesSelected, onRemove }: ImagesStepProp
         <p className="text-xs text-muted-foreground mt-2">JPG, PNG hasta 10MB</p>
       </div>
 
-      {/* Uploading files */}
-      {uploadingFiles.length > 0 && (
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4">
-          {uploadingFiles.map((uf, index) => (
-            <div
-              key={`uploading-${index}`}
-              className="relative rounded-lg overflow-hidden aspect-video bg-muted"
-            >
-              <img
-                src={uf.preview}
-                alt="Subiendo..."
-                className="w-full h-full object-cover opacity-50"
-              />
-              <div className="absolute inset-0 flex items-center justify-center">
-                {uf.status === "uploading" && (
-                  <div className="flex flex-col items-center gap-2">
-                    <Loader2 className="h-8 w-8 animate-spin text-primary" />
-                    <span className="text-xs font-medium text-foreground bg-background/80 px-2 py-0.5 rounded">
-                      {formatFileSize(uf.file.size)}
-                    </span>
-                  </div>
-                )}
-                {uf.status === "error" && (
-                  <span className="text-xs font-medium text-red-600 bg-background/80 px-2 py-1 rounded">
-                    {uf.errorMessage}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
-
       {/* Uploaded images */}
       {images.length > 0 && (
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-4">
