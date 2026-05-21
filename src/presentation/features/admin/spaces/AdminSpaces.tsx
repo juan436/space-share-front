@@ -1,47 +1,14 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
 import Image from "next/image";
-import { useRepositories } from "@/presentation/providers/repositories-context";
-import { AdminSpace } from "@/core/domain/entities/AdminStats";
+import { useAdminSpaces, isHostIdObject } from "@/presentation/features/admin/hooks/useAdminSpaces";
 import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL, SPACE_TYPE_LABEL } from "@/presentation/shared/constants/space-labels";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { Building2, Loader2, AlertCircle, Search, Star, MapPin } from "lucide-react";
 
-
-interface HostIdObject { name: string }
-function isHostIdObject(value: unknown): value is HostIdObject {
-  return typeof value === "object" && value !== null && !Array.isArray(value) && "name" in value;
-}
-
 export function AdminSpaces() {
-  const { adminRepository } = useRepositories();
-  const [spaces, setSpaces] = useState<AdminSpace[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [search, setSearch] = useState("");
-
-  useEffect(() => {
-    adminRepository
-      .getSpaces()
-      .then(setSpaces)
-      .catch(() => setError("No se pudieron cargar los espacios"))
-      .finally(() => setIsLoading(false));
-  }, []);
-
-  const filtered = useMemo(() => {
-    const q = search.toLowerCase();
-    return spaces.filter((s) => {
-      const hostName = isHostIdObject(s.hostId) ? s.hostId.name : "";
-      return (
-        s.title.toLowerCase().includes(q) ||
-        s.location.city.toLowerCase().includes(q) ||
-        hostName.toLowerCase().includes(q) ||
-        s.type.toLowerCase().includes(q)
-      );
-    });
-  }, [spaces, search]);
+  const { spaces, filtered, isLoading, error, search, setSearch } = useAdminSpaces();
 
   return (
     <div className="space-y-6">

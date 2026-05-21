@@ -1,9 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { useRepositories } from "@/presentation/providers/repositories-context";
-import { AdminStats } from "@/core/domain/entities/AdminStats";
+import { useAdminStats } from "@/presentation/features/admin/hooks/useAdminStats";
 import { Users, Building2, Calendar, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
 
 function getGreeting(): string {
@@ -53,19 +51,8 @@ const statCards = [
 ];
 
 export function AdminHome() {
-    const { adminRepository } = useRepositories();
     const { user } = useAuth();
-    const [stats, setStats] = useState<AdminStats | null>(null);
-    const [isLoading, setIsLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
-
-    useEffect(() => {
-        adminRepository
-            .getStats()
-            .then(setStats)
-            .catch(() => setError("No se pudieron cargar las estadísticas"))
-            .finally(() => setIsLoading(false));
-    }, []);
+    const { stats, isLoading, error } = useAdminStats();
 
     return (
         <div className="space-y-8">

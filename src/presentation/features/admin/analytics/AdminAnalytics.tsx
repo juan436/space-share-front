@@ -1,8 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useRepositories } from "@/presentation/providers/repositories-context";
-import { AdminAnalytics as AdminAnalyticsType } from "@/core/domain/entities/AdminStats";
+import { useAdminAnalytics } from "@/presentation/features/admin/hooks/useAdminAnalytics";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import {
@@ -12,18 +10,7 @@ import {
 import { RESERVATION_STATUS_LABEL, RESERVATION_STATUS_COLOR } from "@/presentation/shared/constants/space-labels";
 
 export function AdminAnalytics() {
-  const { adminRepository } = useRepositories();
-  const [data, setData] = useState<AdminAnalyticsType | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-
-  useEffect(() => {
-    adminRepository
-      .getAnalytics()
-      .then(setData)
-      .catch((err) => setError(err instanceof Error ? err.message : "No se pudieron cargar las analíticas"))
-      .finally(() => setIsLoading(false));
-  }, []);
+  const { data, isLoading, error, totalStatusCount, totalRevenue, maxRevenue } = useAdminAnalytics();
 
   if (isLoading) {
     return (
@@ -47,9 +34,6 @@ export function AdminAnalytics() {
       </div>
     );
   }
-
-  const totalStatusCount = Object.values(data.reservationsByStatus).reduce((a, b) => a + b, 0) || 1;
-  const totalRevenue = data.monthlyRevenue.reduce((a, b) => a + b.total, 0);
 
   return (
     <div className="space-y-6">
@@ -126,23 +110,20 @@ export function AdminAnalytics() {
               <p className="text-sm text-muted-foreground text-center py-8">Sin datos de ingresos aún</p>
             ) : (
               <div className="space-y-3">
-                {data.monthlyRevenue.map((m) => {
-                  const maxRevenue = Math.max(...data.monthlyRevenue.map((r) => r.total), 0) || 1;
-                  return (
-                    <div key={m.month} className="space-y-1">
-                      <div className="flex items-center justify-between text-sm">
-                        <span className="text-muted-foreground">{m.month}</span>
-                        <span className="font-medium">${m.total.toLocaleString()} ({m.count} reservas)</span>
-                      </div>
-                      <div className="h-2 rounded-full bg-muted overflow-hidden">
-                        <div
-                          className="h-full rounded-full bg-emerald-500"
-                          style={{ width: `${(m.total / maxRevenue) * 100}%` }}
-                        />
-                      </div>
+                {data.monthlyRevenue.map((m) => (
+                  <div key={m.month} className="space-y-1">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="text-muted-foreground">{m.month}</span>
+                      <span className="font-medium">${m.total.toLocaleString()} ({m.count} reservas)</span>
                     </div>
-                  );
-                })}
+                    <div className="h-2 rounded-full bg-muted overflow-hidden">
+                      <div
+                        className="h-full rounded-full bg-emerald-500"
+                        style={{ width: `${(m.total / maxRevenue) * 100}%` }}
+                      />
+                    </div>
+                  </div>
+                ))}
               </div>
             )}
           </CardContent>
