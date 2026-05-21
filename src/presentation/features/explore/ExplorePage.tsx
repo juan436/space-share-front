@@ -6,22 +6,22 @@ import { ExploreHeader } from "./components/desktop/ExploreHeader";
 import { SearchFilters } from "./components/desktop/SearchFilters";
 import { SpacesList } from "./components/desktop/SpacesList";
 import { SpacesMap } from "./components/desktop/SpacesMap";
-import { useExploreSpaces } from "./hooks/useExploreSpaces";
-import { useExploreFilters } from "./hooks/useExploreFilters";
+import { useExplore } from "./hooks/useExplore";
 
 export function ExplorePage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
   const [showMap, setShowMap] = useState(false);
 
-  const { spaces, isLoading, isError } = useExploreSpaces();
   const {
+    filteredSpaces,
+    isLoading,
+    isError,
     searchQuery, setSearchQuery,
     spaceType, setSpaceType,
     priceRange, setPriceRange,
     sizeRange, setSizeRange,
     conditions, setConditions,
-    filteredSpaces,
-  } = useExploreFilters(spaces);
+  } = useExplore();
 
   return (
     <div className="h-screen bg-background flex flex-col overflow-hidden">

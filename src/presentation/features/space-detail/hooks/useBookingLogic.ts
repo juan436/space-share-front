@@ -80,8 +80,8 @@ export function useBookingLogic(space: Space) {
     mode === "months"
       ? true
       : dateRange?.from && dateRange?.to
-      ? differenceInDays(dateRange.to, dateRange.from) >= DAYS_PER_MONTH
-      : false;
+        ? differenceInDays(dateRange.to, dateRange.from) >= DAYS_PER_MONTH
+        : false;
 
   return {
     months, setMonths,

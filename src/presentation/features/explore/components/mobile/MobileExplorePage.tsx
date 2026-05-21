@@ -2,8 +2,7 @@
 
 import { useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
-import { useExploreSpaces } from "../../hooks/useExploreSpaces";
-import { useMobileExploreFilters } from "../../hooks/useMobileExploreFilters";
+import { useMobileExplore } from "../../hooks/useMobileExplore";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { MobileHeader } from "./MobileHeader";
 import { MobileSearchFilters } from "./MobileSearchFilters";
@@ -15,15 +14,12 @@ import { MobileBottomNav } from "./MobileBottomNav";
 type ViewMode = "list" | "map";
 
 export function MobileExplorePage() {
-  const { spaces } = useExploreSpaces();
+  const { searchQuery, setSearchQuery, filters, setFilters, filteredSpaces } = useMobileExplore();
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
   const { isFavorite, toggleFavorite } = useFavorites();
   const [mapSelectedSpace, setMapSelectedSpace] = useState<Space | null>(null);
-
-  const { searchQuery, setSearchQuery, filters, setFilters, filteredSpaces } =
-    useMobileExploreFilters(spaces);
 
   // Space Detail View
   if (selectedSpace) {
