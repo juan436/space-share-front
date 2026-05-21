@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { format, differenceInDays, addMonths } from "date-fns";
+import { differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
-import { Space } from "@/core/domain/entities/Space";
-import { SERVICE_FEE_PERCENTAGE } from "@/core/domain/entities/Reservation";
+import { Space, checkSpaceAvailability, getNextAvailableDate } from "@/core/domain/entities/Space";
+import { calculateBookingPrice } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
@@ -30,38 +30,16 @@ export function useBookingLogic(space: Space) {
     currentMonths = Math.max(1, diffDays / DAYS_PER_MONTH);
   }
 
-  const totalPrice = Math.round(space.pricePerMonth * currentMonths * effectiveQuantity);
-  const serviceFee = Math.round(totalPrice * SERVICE_FEE_PERCENTAGE);
-  const grandTotal = Math.round(totalPrice + serviceFee);
+  const { totalPrice, serviceFee, grandTotal } = calculateBookingPrice(
+    space.pricePerMonth,
+    currentMonths,
+    effectiveQuantity
+  );
 
-  const checkAvailability = (m: number, start: Date): boolean => {
-    const end = new Date(start);
-    end.setMonth(start.getMonth() + m);
-    const days = differenceInDays(end, start);
+  const isMonthAvailable = (m: number) =>
+    checkSpaceAvailability(space, m, startDate, effectiveQuantity);
 
-    for (let i = 0; i < days; i++) {
-      const d = new Date(start);
-      d.setDate(start.getDate() + i);
-      const dateStr = format(d, "yyyy-MM-dd");
-      const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
-      if (currentOccupancy + effectiveQuantity > displayCapacity) return false;
-    }
-    return true;
-  };
-
-  const isMonthAvailable = (m: number) => checkAvailability(m, startDate);
-
-  const getNextAvailableDate = (m: number): Date | null => {
-    const today = new Date(new Date().setHours(0, 0, 0, 0));
-    for (let i = 0; i < 365; i++) {
-      const d = new Date(today);
-      d.setDate(today.getDate() + i);
-      if (checkAvailability(m, d)) return d;
-    }
-    return null;
-  };
-
-  const nextDate = getNextAvailableDate(months);
+  const nextDate = getNextAvailableDate(space, months, effectiveQuantity);
 
   const getBookingDates = (): { start: string; end: string } => {
     if (mode === "dates" && dateRange?.from && dateRange?.to) {
@@ -121,7 +99,6 @@ export function useBookingLogic(space: Space) {
     serviceFee,
     grandTotal,
     isMonthAvailable,
-    getNextAvailableDate,
     nextDate,
     getBookingDates,
     handleConfirmBooking,

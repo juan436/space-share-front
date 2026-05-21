@@ -81,6 +81,40 @@ export interface CreateSpaceInput {
   services?: BusinessServices;
 }
 
+export function checkSpaceAvailability(
+  space: Space,
+  months: number,
+  startDate: Date,
+  quantity: number
+): boolean {
+  const end = new Date(startDate);
+  end.setMonth(startDate.getMonth() + months);
+  const capacity = space.capacity || 1;
+  const msPerDay = 86400000;
+  const days = Math.round((end.getTime() - startDate.getTime()) / msPerDay);
+  for (let i = 0; i < days; i++) {
+    const d = new Date(startDate.getTime() + i * msPerDay);
+    const dateStr = d.toISOString().slice(0, 10);
+    const occupied = space.occupancyMap?.[dateStr] ?? 0;
+    if (occupied + quantity > capacity) return false;
+  }
+  return true;
+}
+
+export function getNextAvailableDate(
+  space: Space,
+  months: number,
+  quantity: number
+): Date | null {
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
+  const msPerDay = 86400000;
+  for (let i = 0; i < 365; i++) {
+    const d = new Date(today.getTime() + i * msPerDay);
+    if (checkSpaceAvailability(space, months, d, quantity)) return d;
+  }
+  return null;
+}
+
 export interface UpdateSpaceInput {
   title?: string;
   description?: string;

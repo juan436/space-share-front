@@ -36,3 +36,13 @@ export interface CreateReservationInput {
 }
 
 export const SERVICE_FEE_PERCENTAGE = 0.05;
+
+export function calculateBookingPrice(
+  pricePerMonth: number,
+  months: number,
+  quantity: number
+): { totalPrice: number; serviceFee: number; grandTotal: number } {
+  const totalPrice = Math.round(pricePerMonth * months * quantity);
+  const serviceFee = Math.round(totalPrice * SERVICE_FEE_PERCENTAGE);
+  return { totalPrice, serviceFee, grandTotal: totalPrice + serviceFee };
+}
