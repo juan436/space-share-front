@@ -4,7 +4,8 @@ import { useCallback, useEffect, useMemo, useRef } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import { MapPin, Ruler, X } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
-import { spaceTypeLabels, spaceTypeColors, mapConfig } from "../../data";
+import { spaceTypeColors, mapConfig } from "../../data";
+import { spaceTypeLabels } from "@/presentation/types/spaces";
 
 interface MobileMapViewProps {
   spaces: Space[];

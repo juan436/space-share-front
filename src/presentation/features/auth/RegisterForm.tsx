@@ -5,7 +5,7 @@ import { Label } from "@/presentation/components/ui/label";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
 import { Checkbox } from "@/presentation/components/ui/checkbox";
-import { UserRoleType, roleOptions } from "@/presentation/types/auth";
+import { UserRole, roleOptions } from "@/presentation/types/auth";
 import { useRegisterForm } from "./hooks/useRegisterForm";
 import { TermsModal } from "./components/TermsModal";
 
@@ -91,7 +91,7 @@ export function RegisterForm() {
           </div>
           <div className="space-y-2">
             <Label htmlFor="role">Tipo de cuenta</Label>
-            <Select value={role} onValueChange={(value: UserRoleType) => setRole(value)}>
+            <Select value={role} onValueChange={(value: UserRole) => setRole(value)}>
               <SelectTrigger>
                 <SelectValue placeholder="Selecciona un tipo" />
               </SelectTrigger>

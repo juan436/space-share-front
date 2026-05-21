@@ -14,17 +14,4 @@ export class UserMapper {
       updatedAt: new Date(dto.updatedAt),
     };
   }
-
-  static toDto(user: User): UserDto {
-    return {
-      _id: user.id,
-      email: user.email,
-      name: user.name,
-      role: user.role,
-      avatar: user.avatar,
-      phone: user.phone,
-      createdAt: user.createdAt.toISOString(),
-      updatedAt: user.updatedAt.toISOString(),
-    };
-  }
 }

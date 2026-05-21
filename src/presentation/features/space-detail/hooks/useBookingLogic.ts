@@ -2,7 +2,7 @@ import { useState } from "react";
 import { format, differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Space } from "@/core/domain/entities/Space";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 export const SERVICE_FEE_RATE = 0.05;
@@ -11,7 +11,7 @@ export const MIN_RENTAL_DAYS = 15;
 export const AVAILABLE_MONTHS = [1, 3, 6] as const;
 
 export function useBookingLogic(space: Space) {
-  const { reservationRepository } = useRepositories();
+  const { createReservationUseCase } = useUseCases();
   const [months, setMonths] = useState(1);
   const [mode, setMode] = useState<"months" | "dates">("dates");
   const [dateRange, setDateRange] = useState<DateRange | undefined>();
@@ -80,7 +80,7 @@ export function useBookingLogic(space: Space) {
     setBookingError(null);
     try {
       const dates = getBookingDates();
-      await reservationRepository.create({
+      await createReservationUseCase.execute({
         spaceId: space.id,
         startDate: dates.start,
         endDate: dates.end,

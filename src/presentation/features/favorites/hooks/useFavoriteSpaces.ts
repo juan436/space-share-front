@@ -1,10 +1,10 @@
 import { useState, useEffect } from "react";
 import { Space } from "@/core/domain/entities/Space";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 
 export function useFavoriteSpaces() {
-  const { spaceRepository } = useRepositories();
+  const { findSpaceByIdUseCase } = useUseCases();
   const [spaces, setSpaces] = useState<Space[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const { favorites, isFavorite, toggleFavorite } = useFavorites();
@@ -19,7 +19,7 @@ export function useFavoriteSpaces() {
       setIsLoading(true);
       try {
         const ids = Array.from(favorites);
-        const results = await Promise.allSettled(ids.map((id) => spaceRepository.findById(id)));
+        const results = await Promise.allSettled(ids.map((id) => findSpaceByIdUseCase.execute(id)));
         setSpaces(
           results
             .filter((r): r is PromiseFulfilledResult<Space> => r.status === "fulfilled")

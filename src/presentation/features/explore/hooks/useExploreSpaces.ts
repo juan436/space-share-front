@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { SpaceFilters } from "@/core/domain/ports/SpaceRepository";
 
 interface UseExploreSpacesOptions {
@@ -9,17 +9,14 @@ interface UseExploreSpacesOptions {
 }
 
 export function useExploreSpaces(options?: UseExploreSpacesOptions) {
-  const { spaceRepository } = useRepositories();
+  const { listSpacesUseCase } = useUseCases();
   const page = options?.page ?? 1;
   const limit = options?.limit ?? 50;
   const filters = options?.filters;
 
   const query = useQuery({
     queryKey: ["explore-spaces", { filters, page, limit }],
-    queryFn: async () => {
-      const result = await spaceRepository.findAll(filters, page, limit);
-      return result;
-    },
+    queryFn: () => listSpacesUseCase.execute(filters, page, limit),
     staleTime: 30_000,
   });
 

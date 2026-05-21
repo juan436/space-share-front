@@ -1,7 +1,9 @@
-export type UserRoleType = "client" | "host" | "admin";
+import { UserRole } from "@/core/domain/entities/User";
+
+export type { UserRole };
 
 export interface RoleOption {
-  value: UserRoleType;
+  value: UserRole;
   label: string;
 }
 

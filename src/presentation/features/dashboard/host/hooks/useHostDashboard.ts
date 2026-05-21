@@ -12,11 +12,10 @@ import { toErrorMessage } from "@/presentation/utils/error";
 import {
   SpaceViewModel,
   NewSpaceFormData,
-  SpaceTypeValue,
   SpaceStatusValue,
-  SpaceCategoryValue,
   calculateRecommendedPriceForUI
 } from "@/presentation/types/spaces";
+import { spaceToViewModel } from "@/presentation/features/dashboard/host/mappers/spaceToViewModel";
 
 const initialFormState: NewSpaceFormData = {
   title: "",
@@ -46,32 +45,7 @@ export function useHostDashboard() {
   const [editingSpace, setEditingSpace] = useState<SpaceViewModel | null>(null);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
 
-  // Transform domain spaces to view models
-  const spaces: SpaceViewModel[] = rawSpaces.map((space) => ({
-    id: space.id,
-    title: space.title,
-    description: space.description,
-    type: space.type as SpaceTypeValue,
-    squareMeters: space.squareMeters,
-    pricePerMonth: space.pricePerMonth,
-    capacity: space.capacity,
-    status: space.status,
-    climateControlled: space.amenities.climateControlled,
-    securityCamera: space.amenities.securityCamera,
-    privateEntrance: space.amenities.privateEntrance,
-    address: space.location.address,
-    city: space.location.city,
-    state: space.location.state,
-    country: space.location.country,
-    images: space.images || [],
-    category: (space.category ?? "normal") as SpaceCategoryValue,
-    businessSpaceType: space.businessSpaceType,
-    pricePerHour: space.pricePerHour,
-    availableFrom: space.availableFrom,
-    availableTo: space.availableTo,
-    usageConditions: space.usageConditions,
-    services: space.services,
-  }));
+  const spaces: SpaceViewModel[] = rawSpaces.map(spaceToViewModel);
 
   const activeSpacesCount = spaces.filter(s => s.status === "active").length;
 

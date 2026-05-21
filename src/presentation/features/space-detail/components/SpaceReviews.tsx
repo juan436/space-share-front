@@ -3,8 +3,8 @@
 import { useState, useEffect } from "react";
 import Image from "next/image";
 import { Star, User } from "lucide-react";
-import { Review, CreateReviewInput } from "@/core/domain/entities/Review";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { Review } from "@/core/domain/entities/Review";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { Button } from "@/presentation/components/ui/button";
 
@@ -15,7 +15,7 @@ interface SpaceReviewsProps {
 }
 
 export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps) {
-  const { reviewRepository } = useRepositories();
+  const { getSpaceReviewsUseCase, deleteReviewUseCase } = useUseCases();
   const { user, isAuthenticated } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,8 +23,8 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
 
   useEffect(() => {
     setIsError(false);
-    reviewRepository
-      .findBySpaceId(spaceId)
+    getSpaceReviewsUseCase
+      .execute(spaceId)
       .then(setReviews)
       .catch(() => setIsError(true))
       .finally(() => setIsLoading(false));
@@ -32,7 +32,7 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
 
   const handleDelete = async (reviewId: string) => {
     try {
-      await reviewRepository.delete(reviewId);
+      await deleteReviewUseCase.execute(reviewId);
       setReviews((prev) => prev.filter((r) => r.id !== reviewId));
     } catch {
       // silently fail

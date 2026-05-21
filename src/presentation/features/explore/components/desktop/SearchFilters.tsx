@@ -2,6 +2,7 @@
 
 import { Search, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2 } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
+import { spaceTypeLabels } from "@/presentation/types/spaces";
 import {
   Select,
   SelectContent,
@@ -30,9 +31,6 @@ const conditionOptions = [
   { id: "privado", label: "Entrada privada", icon: DoorOpen },
 ];
 
-const spaceTypeLabels: Record<string, string> = {
-  garage: "Garaje", basement: "Sótano", attic: "Ático", storage: "Bodega", parking: "Parqueo", other: "Otro"
-};
 const priceLabels: Record<string, string> = {
   "0-100": "$0 – $100/mes", "100-300": "$100 – $300/mes", "300-500": "$300 – $500/mes", "500+": "$500+/mes"
 };
@@ -61,7 +59,7 @@ export function SearchFilters({
   };
 
   const activeFilters = [
-    spaceType !== "all" && { label: spaceTypeLabels[spaceType] || spaceType, type: "type", value: spaceType },
+    spaceType !== "all" && { label: spaceTypeLabels[spaceType as keyof typeof spaceTypeLabels] || spaceType, type: "type", value: spaceType },
     priceRange !== "all" && { label: priceLabels[priceRange] || priceRange, type: "price", value: priceRange },
     sizeRange !== "all" && { label: sizeLabels[sizeRange] || sizeRange, type: "size", value: sizeRange },
     ...conditions.map(c => ({ label: conditionOptions.find(q => q.id === c)?.label || c, type: "condition", value: c }))

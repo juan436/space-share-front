@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { UserRoleType } from "@/presentation/types/auth";
+import { UserRole } from "@/core/domain/entities/User";
 
 interface UseRegisterFormResult {
   name: string;
@@ -12,8 +12,8 @@ interface UseRegisterFormResult {
   setPassword: (password: string) => void;
   confirmPassword: string;
   setConfirmPassword: (confirmPassword: string) => void;
-  role: UserRoleType;
-  setRole: (role: UserRoleType) => void;
+  role: UserRole;
+  setRole: (role: UserRole) => void;
   acceptedTerms: boolean;
   setAcceptedTerms: (accepted: boolean) => void;
   isTermsModalOpen: boolean;
@@ -34,7 +34,7 @@ export function useRegisterForm(): UseRegisterFormResult {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [role, setRole] = useState<UserRoleType>("client");
+  const [role, setRole] = useState<UserRole>("client");
   const [acceptedTerms, setAcceptedTerms] = useState(false);
   const [isTermsModalOpen, setIsTermsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

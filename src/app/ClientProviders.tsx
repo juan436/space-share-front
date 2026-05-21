@@ -1,52 +1,76 @@
 "use client";
 
-import { RepositoriesProvider } from "@/presentation/providers/repositories-context";
 import { UseCasesProvider } from "@/presentation/providers/usecases-context";
 import { AuthProvider } from "@/presentation/providers/auth-context";
 import {
-  authRepository,
-  spaceRepository,
-  reservationRepository,
-  reviewRepository,
-  adminRepository,
-  favoritesRepository,
+  loginUseCase,
+  registerUseCase,
+  logoutUseCase,
+  getCurrentUserUseCase,
   createSpaceUseCase,
+  listSpacesUseCase,
   updateSpaceUseCase,
   deleteSpaceUseCase,
+  findSpaceByIdUseCase,
+  findHostSpacesUseCase,
+  uploadSpaceImagesUseCase,
+  getClientReservationsUseCase,
+  getHostReservationsUseCase,
+  createReservationUseCase,
+  updateReservationStatusUseCase,
+  getSpaceReviewsUseCase,
+  createReviewUseCase,
+  deleteReviewUseCase,
+  getFavoritesUseCase,
+  toggleFavoriteUseCase,
+  getAdminStatsUseCase,
+  getAdminSpacesUseCase,
+  getAdminUsersUseCase,
+  getAdminAnalyticsUseCase,
 } from "@/bootstrap/application";
 
-// Singletons de módulo — referencia estable, nunca provocan re-renders en los providers
-const repositories = {
-  authRepository,
-  spaceRepository,
-  reservationRepository,
-  reviewRepository,
-  adminRepository,
-  favoritesRepository,
-};
-
+// Singleton de módulo — referencia estable, nunca provoca re-renders en los providers
 const useCases = {
+  loginUseCase,
+  registerUseCase,
+  logoutUseCase,
+  getCurrentUserUseCase,
   createSpaceUseCase,
+  listSpacesUseCase,
   updateSpaceUseCase,
   deleteSpaceUseCase,
+  findSpaceByIdUseCase,
+  findHostSpacesUseCase,
+  uploadSpaceImagesUseCase,
+  getClientReservationsUseCase,
+  getHostReservationsUseCase,
+  createReservationUseCase,
+  updateReservationStatusUseCase,
+  getSpaceReviewsUseCase,
+  createReviewUseCase,
+  deleteReviewUseCase,
+  getFavoritesUseCase,
+  toggleFavoriteUseCase,
+  getAdminStatsUseCase,
+  getAdminSpacesUseCase,
+  getAdminUsersUseCase,
+  getAdminAnalyticsUseCase,
 };
 
 /**
  * ClientProviders
  *
  * Qué hace: composition root client-side — único punto que importa instancias concretas de bootstrap y las inyecta en el árbol de React vía context providers.
- * Recibe: `children` — toda la app que necesita acceso a repositorios, use cases y autenticación.
- * Genera: árbol RepositoriesProvider → UseCasesProvider → AuthProvider con los singletons de módulo.
- * Procesa: las constantes `repositories` y `useCases` se definen fuera del componente para garantizar referencia estable entre renders y evitar re-renders innecesarios en los consumidores de contexto.
+ * Recibe: `children` — toda la app que necesita acceso a use cases y autenticación.
+ * Genera: árbol UseCasesProvider → AuthProvider con los singletons de módulo.
+ * Procesa: la constante `useCases` se define fuera del componente para garantizar referencia estable entre renders.
  */
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
-    <RepositoriesProvider repositories={repositories}>
-      <UseCasesProvider useCases={useCases}>
-        <AuthProvider>
-          {children}
-        </AuthProvider>
-      </UseCasesProvider>
-    </RepositoriesProvider>
+    <UseCasesProvider useCases={useCases}>
+      <AuthProvider>
+        {children}
+      </AuthProvider>
+    </UseCasesProvider>
   );
 }

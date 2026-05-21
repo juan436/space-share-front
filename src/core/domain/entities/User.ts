@@ -18,9 +18,3 @@ export interface CreateUserInput {
   role: UserRole;
   phone?: string;
 }
-
-export interface UpdateUserInput {
-  name?: string;
-  phone?: string;
-  avatar?: string;
-}

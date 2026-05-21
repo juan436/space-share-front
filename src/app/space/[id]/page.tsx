@@ -4,15 +4,7 @@ import { useParams } from "next/navigation";
 import { SpaceDetailPage } from "@/presentation/features/space-detail";
 import { useSpaceById } from "@/presentation/hooks/useSpaces";
 import { spaceTypeLabels } from "@/presentation/types/spaces";
-
-const spaceTypeColors: Record<string, string> = {
-  garage: "bg-blue-500",
-  basement: "bg-purple-500",
-  attic: "bg-amber-500",
-  storage: "bg-emerald-500",
-  parking: "bg-sky-500",
-  other: "bg-gray-500",
-};
+import { spaceTypeColors } from "@/presentation/features/explore/data";
 
 export default function SpaceDetailRoute() {
   const params = useParams();

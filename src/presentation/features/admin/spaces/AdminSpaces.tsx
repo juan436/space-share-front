@@ -68,7 +68,7 @@ export function AdminSpaces() {
                 {filtered.map((space) => {
                   const hostName = isHostIdObject(space.hostId) ? space.hostId.name : "—";
                   return (
-                    <TableRow key={space._id}>
+                    <TableRow key={space.id}>
                       <TableCell>
                         <div className="flex items-center gap-3">
                           {space.images?.[0] ? (

@@ -3,7 +3,8 @@
 import { ArrowLeft, Heart, MapPin, Star, Ruler, Thermometer, Video, DoorOpen } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
-import { spaceTypeLabels, spaceTypeColors } from "../../data";
+import { spaceTypeColors } from "../../data";
+import { spaceTypeLabels } from "@/presentation/types/spaces";
 
 interface MobileSpaceDetailProps {
   space: Space;

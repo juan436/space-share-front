@@ -8,25 +8,25 @@
  */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReservationStatus } from "@/core/domain/entities/Reservation";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 const QUERY_KEY = ["reservations", "host"] as const;
 
 export function useHostReservations() {
-  const { reservationRepository } = useRepositories();
+  const { getHostReservationsUseCase, updateReservationStatusUseCase } = useUseCases();
   const queryClient = useQueryClient();
 
   const query = useQuery({
     queryKey: QUERY_KEY,
-    queryFn: () => reservationRepository.findByHostId(),
+    queryFn: () => getHostReservationsUseCase.execute(),
     staleTime: 0,
     refetchOnWindowFocus: true,
   });
 
   const updateMutation = useMutation({
     mutationFn: ({ id, status }: { id: string; status: ReservationStatus }) =>
-      reservationRepository.updateStatus(id, status),
+      updateReservationStatusUseCase.execute(id, status),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 

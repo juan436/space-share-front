@@ -150,7 +150,7 @@ export function AdminAnalytics() {
               </TableHeader>
               <TableBody>
                 {data.recentUsers.map((user) => (
-                  <TableRow key={user._id}>
+                  <TableRow key={user.id}>
                     <TableCell>
                       <div>
                         <p className="font-medium text-sm">{user.name}</p>
@@ -159,7 +159,7 @@ export function AdminAnalytics() {
                     </TableCell>
                     <TableCell className="text-xs capitalize">{user.role}</TableCell>
                     <TableCell className="text-xs text-muted-foreground">
-                      {new Date(user.createdAt).toLocaleDateString("es-ES", { day: "numeric", month: "short" })}
+                      {user.createdAt.toLocaleDateString("es-ES", { day: "numeric", month: "short" })}
                     </TableCell>
                   </TableRow>
                 ))}
@@ -187,7 +187,7 @@ export function AdminAnalytics() {
               </TableHeader>
               <TableBody>
                 {data.topSpaces.map((space) => (
-                  <TableRow key={space._id}>
+                  <TableRow key={space.id}>
                     <TableCell>
                       <div>
                         <p className="font-medium text-sm">{space.title}</p>

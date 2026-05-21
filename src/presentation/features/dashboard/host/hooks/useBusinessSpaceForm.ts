@@ -8,7 +8,7 @@
  */
 import { useState, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import type { SpaceViewModel } from "@/presentation/types/spaces";
 
 export type BusinessSpaceType = "office" | "commercial" | "warehouse" | "meeting_room" | "";
@@ -95,7 +95,7 @@ interface UseBusinessSpaceFormOptions {
 }
 
 export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusinessSpaceFormOptions) {
-  const { spaceRepository } = useRepositories();
+  const { uploadSpaceImagesUseCase } = useUseCases();
   const { create, isCreating, update, isUpdating } = useSpaces();
 
   const [images, setImages] = useState<string[]>(initialData?.images ?? []);
@@ -115,11 +115,11 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
 
   const handleFilesSelected = useCallback(
     async (files: File[]): Promise<string[]> => {
-      const uploaded = await spaceRepository.uploadImages(files);
+      const uploaded = await uploadSpaceImagesUseCase.execute(files);
       setImages((prev) => [...prev, ...uploaded]);
       return uploaded;
     },
-    []
+    [uploadSpaceImagesUseCase]
   );
 
   const removeImage = (index: number) =>

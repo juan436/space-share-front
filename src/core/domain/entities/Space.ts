@@ -100,8 +100,3 @@ export interface UpdateSpaceInput {
   usageConditions?: string;
   services?: BusinessServices;
 }
-
-export function calculateRecommendedPrice(squareMeters: number): number {
-  const basePrice = 5;
-  return Math.round(squareMeters * basePrice);
-}

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
 import { User, CreateUserInput } from "@/core/domain/entities/User";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 
 interface AuthContextType {
   user: User | null;
@@ -16,14 +16,14 @@ interface AuthContextType {
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { authRepository } = useRepositories();
+  const { loginUseCase, registerUseCase, logoutUseCase, getCurrentUserUseCase } = useUseCases();
   const [user, setUser] = useState<User | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     const initAuth = async () => {
       try {
-        const currentUser = await authRepository.getCurrentUser();
+        const currentUser = await getCurrentUserUseCase.execute();
         setUser(currentUser);
       } catch (error) {
         console.error("Error initializing auth:", error);
@@ -38,34 +38,34 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const login = useCallback(async (email: string, password: string): Promise<User> => {
     setIsLoading(true);
     try {
-      const response = await authRepository.login({ email, password });
-      setUser(response.user);
-      return response.user;
+      const user = await loginUseCase.execute({ email, password });
+      setUser(user);
+      return user;
     } finally {
       setIsLoading(false);
     }
-  }, [authRepository]);
+  }, [loginUseCase]);
 
   const register = useCallback(async (input: CreateUserInput): Promise<User> => {
     setIsLoading(true);
     try {
-      const response = await authRepository.register(input);
-      setUser(response.user);
-      return response.user;
+      const user = await registerUseCase.execute(input);
+      setUser(user);
+      return user;
     } finally {
       setIsLoading(false);
     }
-  }, [authRepository]);
+  }, [registerUseCase]);
 
   const logout = useCallback(async () => {
     setIsLoading(true);
     try {
-      await authRepository.logout();
+      await logoutUseCase.execute();
       setUser(null);
     } finally {
       setIsLoading(false);
     }
-  }, [authRepository]);
+  }, [logoutUseCase]);
 
   return (
     <AuthContext.Provider

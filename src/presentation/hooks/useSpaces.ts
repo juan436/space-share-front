@@ -1,7 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useAuth } from "../providers/auth-context";
 import { toErrorMessage } from "../utils/error";
-import { useRepositories } from "@/presentation/providers/repositories-context";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import type { Space, CreateSpaceInput, UpdateSpaceInput } from "@/core/domain/entities/Space";
 
@@ -12,23 +11,19 @@ interface UseSpacesOptions {
 }
 
 export function useSpaces(options?: UseSpacesOptions) {
-  const { spaceRepository } = useRepositories();
-  const { createSpaceUseCase, updateSpaceUseCase, deleteSpaceUseCase } = useUseCases();
+  const { findHostSpacesUseCase, createSpaceUseCase, updateSpaceUseCase, deleteSpaceUseCase } = useUseCases();
   const queryClient = useQueryClient();
   const { user } = useAuth();
 
   const effectiveHostId = options?.hostId ?? user?.id;
-  const page = options?.page ?? 1;
-  const limit = options?.limit ?? 20;
 
-  const listKey = ["spaces", { hostId: effectiveHostId, page, limit }];
+  const listKey = ["spaces", { hostId: effectiveHostId }];
 
   const listQuery = useQuery({
     queryKey: listKey,
     queryFn: async () => {
       if (!effectiveHostId) return [];
-      const spaces = await spaceRepository.findByHostId(effectiveHostId);
-      return spaces;
+      return findHostSpacesUseCase.execute(effectiveHostId);
     },
     enabled: !!effectiveHostId,
     staleTime: 30_000,
@@ -39,27 +34,19 @@ export function useSpaces(options?: UseSpacesOptions) {
   const createMutation = useMutation({
     mutationFn: async (input: Omit<CreateSpaceInput, "hostId">) => {
       if (!user?.id) throw new Error("Usuario no autenticado");
-      const space = await createSpaceUseCase.execute({
-        hostId: user.id,
-        ...input,
-      });
-      return space;
+      return createSpaceUseCase.execute({ hostId: user.id, ...input });
     },
     onSuccess: invalidate,
   });
 
   const updateMutation = useMutation({
-    mutationFn: async ({ id, input }: { id: string; input: UpdateSpaceInput }) => {
-      const space = await updateSpaceUseCase.execute(id, input);
-      return space;
-    },
+    mutationFn: async ({ id, input }: { id: string; input: UpdateSpaceInput }) =>
+      updateSpaceUseCase.execute(id, input),
     onSuccess: invalidate,
   });
 
   const deleteMutation = useMutation({
-    mutationFn: async (id: string) => {
-      await deleteSpaceUseCase.execute(id);
-    },
+    mutationFn: async (id: string) => deleteSpaceUseCase.execute(id),
     onSuccess: invalidate,
   });
 
@@ -81,14 +68,13 @@ export function useSpaces(options?: UseSpacesOptions) {
 }
 
 export function useSpaceById(id: string | null) {
-  const { spaceRepository } = useRepositories();
+  const { findSpaceByIdUseCase } = useUseCases();
   const query = useQuery({
     enabled: Boolean(id),
     queryKey: ["space", { id }],
     queryFn: async () => {
       if (!id) return null;
-      const space = await spaceRepository.findById(id);
-      return space;
+      return findSpaceByIdUseCase.execute(id);
     },
     staleTime: 15_000,
   });

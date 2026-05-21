@@ -76,7 +76,7 @@ export function AdminUsers() {
               </TableHeader>
               <TableBody>
                 {filtered.map((user) => (
-                  <TableRow key={user._id}>
+                  <TableRow key={user.id}>
                     <TableCell>
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-sm font-medium text-primary">
@@ -97,7 +97,7 @@ export function AdminUsers() {
                       </span>
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm">
-                      {new Date(user.createdAt).toLocaleDateString("es-ES", {
+                      {user.createdAt.toLocaleDateString("es-ES", {
                         day: "numeric",
                         month: "short",
                         year: "numeric",

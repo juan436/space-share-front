@@ -13,7 +13,7 @@ import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { Home } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 import { useLocationData } from "@/presentation/hooks/useLocationData";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { WizardStepper, WIZARD_STEPS } from "./WizardStepper";
 import { WizardFooter } from "./WizardFooter";
 import { canProceed } from "./validation";
@@ -44,7 +44,7 @@ export function SpaceWizard({
   recommendedPrice,
   editMode = false,
 }: SpaceWizardProps) {
-  const { spaceRepository } = useRepositories();
+  const { uploadSpaceImagesUseCase } = useUseCases();
   const [currentStep, setCurrentStep] = useState(1);
   const { countries, states, cities } = useLocationData(newSpace.country, newSpace.state);
 
@@ -72,7 +72,7 @@ export function SpaceWizard({
 
   const handleFilesSelected = useCallback(
     async (files: File[]): Promise<string[]> => {
-      const response = await spaceRepository.uploadImages(files);
+      const response = await uploadSpaceImagesUseCase.execute(files);
       const newImages = [...(newSpace.images || []), ...response];
       onUpdateNewSpace({ images: newImages });
       return response;

@@ -6,18 +6,24 @@ export interface AdminStats {
 }
 
 export interface AdminUser {
-  _id: string;
+  id: string;
   name: string;
   email: string;
   role: string;
   phone?: string;
   avatar?: string;
   isActive: boolean;
-  createdAt: string;
+  createdAt: Date;
+}
+
+export interface AdminSpaceHost {
+  id: string;
+  name: string;
+  email: string;
 }
 
 export interface AdminSpace {
-  _id: string;
+  id: string;
   title: string;
   type: string;
   squareMeters: number;
@@ -27,9 +33,9 @@ export interface AdminSpace {
   rating?: number;
   reviewCount?: number;
   bookingsCount?: number;
-  hostId: { _id: string; name: string; email: string } | string;
+  hostId: AdminSpaceHost | string;
   location: { city: string; state: string; country: string };
-  createdAt: string;
+  createdAt: Date;
 }
 
 export interface AdminAnalytics {
@@ -37,7 +43,7 @@ export interface AdminAnalytics {
   totalSpaces: number;
   totalReservations: number;
   reservationsByStatus: Record<string, number>;
-  recentUsers: { _id: string; name: string; email: string; role: string; createdAt: string }[];
-  topSpaces: { _id: string; title: string; type: string; pricePerMonth: number; bookingsCount: number; rating: number }[];
+  recentUsers: { id: string; name: string; email: string; role: string; createdAt: Date }[];
+  topSpaces: { id: string; title: string; type: string; pricePerMonth: number; bookingsCount: number; rating: number }[];
   monthlyRevenue: { month: string; total: number; count: number }[];
 }

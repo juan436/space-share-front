@@ -1,6 +1,8 @@
-export type SpaceTypeValue = "garage" | "parking" | "basement" | "attic" | "storage" | "other";
-export type SpaceStatusValue = "active" | "paused" | "pending" | "deactivated";
-export type SpaceCategoryValue = "normal" | "business";
+import { SpaceType, SpaceStatus, SpaceCategory } from "@/core/domain/entities/Space";
+
+export type SpaceTypeValue = SpaceType;
+export type SpaceStatusValue = SpaceStatus;
+export type SpaceCategoryValue = SpaceCategory;
 
 export interface BusinessServicesViewModel {
   wifi?: boolean;

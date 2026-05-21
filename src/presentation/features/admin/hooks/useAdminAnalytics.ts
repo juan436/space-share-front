@@ -5,18 +5,18 @@
  * Genera:   data, isLoading, error, totalStatusCount, totalRevenue, maxRevenue
  */
 import { useState, useEffect } from "react";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { AdminAnalytics as AdminAnalyticsData } from "@/core/domain/entities/AdminStats";
 
 export function useAdminAnalytics() {
-  const { adminRepository } = useRepositories();
+  const { getAdminAnalyticsUseCase } = useUseCases();
   const [data, setData] = useState<AdminAnalyticsData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    adminRepository
-      .getAnalytics()
+    getAdminAnalyticsUseCase
+      .execute()
       .then(setData)
       .catch((err) => setError(err instanceof Error ? err.message : "No se pudieron cargar las analíticas"))
       .finally(() => setIsLoading(false));

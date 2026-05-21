@@ -1,1 +1,1 @@
-export { spaceTypeLabels, spaceTypeColors, mapConfig } from "./spaceConstants";
+export { spaceTypeColors, mapConfig } from "./spaceConstants";

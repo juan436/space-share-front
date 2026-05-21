@@ -8,19 +8,19 @@
  */
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 const QUERY_KEY = ["reservations", "user"] as const;
 
 export function useUserReservations() {
-  const { reservationRepository, reviewRepository } = useRepositories();
+  const { getClientReservationsUseCase, updateReservationStatusUseCase, createReviewUseCase } = useUseCases();
   const queryClient = useQueryClient();
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
 
   const query = useQuery({
     queryKey: QUERY_KEY,
-    queryFn: () => reservationRepository.findByClientId(),
+    queryFn: () => getClientReservationsUseCase.execute(),
     staleTime: 30_000,
   });
 
@@ -28,14 +28,14 @@ export function useUserReservations() {
 
   const payMutation = useMutation({
     mutationFn: (reservationId: string) =>
-      reservationRepository.updateStatus(reservationId, "confirmed"),
+      updateReservationStatusUseCase.execute(reservationId, "confirmed"),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 
   const submitReview = async (reservationId: string, rating: number, comment: string): Promise<void> => {
     const reservation = reservations.find((r) => r.id === reservationId);
     if (!reservation?.spaceId) return;
-    await reviewRepository.create({ reservationId, rating, comment, spaceId: reservation.spaceId });
+    await createReviewUseCase.execute({ reservationId, rating, comment, spaceId: reservation.spaceId });
     setReviewedIds((prev) => new Set(prev).add(reservationId));
   };
 

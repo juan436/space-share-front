@@ -5,7 +5,7 @@
  * Genera:   spaces (total), filtered (por search), isLoading, error, search, setSearch
  */
 import { useState, useEffect, useMemo } from "react";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { AdminSpace } from "@/core/domain/entities/AdminStats";
 
 interface HostIdObject { name: string }
@@ -14,15 +14,15 @@ export function isHostIdObject(value: unknown): value is HostIdObject {
 }
 
 export function useAdminSpaces() {
-  const { adminRepository } = useRepositories();
+  const { getAdminSpacesUseCase } = useUseCases();
   const [spaces, setSpaces] = useState<AdminSpace[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [search, setSearch] = useState("");
 
   useEffect(() => {
-    adminRepository
-      .getSpaces()
+    getAdminSpacesUseCase
+      .execute()
       .then(setSpaces)
       .catch(() => setError("No se pudieron cargar los espacios"))
       .finally(() => setIsLoading(false));

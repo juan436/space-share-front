@@ -1,9 +1,9 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { useRepositories } from "@/presentation/providers/repositories-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 
 export function useFavorites() {
-  const { favoritesRepository } = useRepositories();
+  const { getFavoritesUseCase, toggleFavoriteUseCase } = useUseCases();
   const { isAuthenticated } = useAuth();
   const [favorites, setFavorites] = useState<Set<string>>(new Set());
   const [isLoading, setIsLoading] = useState(false);
@@ -16,7 +16,7 @@ export function useFavorites() {
 
     const fetchFavorites = async () => {
       try {
-        const ids = await favoritesRepository.getFavorites();
+        const ids = await getFavoritesUseCase.execute();
         setFavorites(new Set(ids));
       } catch {
         // silently fail — user stays with empty favorites
@@ -39,7 +39,7 @@ export function useFavorites() {
       });
 
       try {
-        const result = await favoritesRepository.toggleFavorite(spaceId);
+        const result = await toggleFavoriteUseCase.execute(spaceId);
         setFavorites(new Set(result.favorites));
         return result.added;
       } catch {
