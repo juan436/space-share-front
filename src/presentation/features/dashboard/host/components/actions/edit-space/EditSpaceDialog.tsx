@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * EditSpaceDialog
- *
- * Qué hace: Dialog de edición. Bifurca según space.category: empresarial → BusinessSpaceForm, normal → SpaceWizard.
- * Recibe:   space (SpaceViewModel | null), isOpen, onOpenChange, onSave, isSaving
- * Genera:   Dialog con el formulario adecuado precargado con los datos del espacio
- * Procesa:  convierte SpaceViewModel a NewSpaceFormData para el wizard normal
- */
 import { useEffect, useState } from "react";
 import { Dialog, DialogContent } from "@/presentation/components/ui/dialog";
 import { NewSpaceFormData, SpaceViewModel, calculateRecommendedPriceForUI } from "@/presentation/types/spaces";

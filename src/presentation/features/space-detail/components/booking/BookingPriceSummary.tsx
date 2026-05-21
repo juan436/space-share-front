@@ -3,13 +3,6 @@
 import { Info } from "lucide-react";
 import type { Space } from "@/core/domain/entities/Space";
 
-/**
- * Qué hace: desglose de precio (base × meses × unidades + tarifa de servicio + total).
- * Recibe: modo de reserva, rango de fechas, espacio, meses calculados, cantidad efectiva y valores de precio.
- * Genera: tabla de precios con separador y total, o placeholder "Selecciona las fechas" en modo fechas sin rango completo.
- * Procesa: oculta el desglose hasta tener from + to definidos cuando el modo es "dates".
- */
-
 interface BookingPriceSummaryProps {
   mode: "dates" | "months";
   dateRange: { from?: Date; to?: Date } | undefined;

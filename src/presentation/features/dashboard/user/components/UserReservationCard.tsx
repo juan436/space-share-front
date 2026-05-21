@@ -1,11 +1,3 @@
-/**
- * UserReservationCard
- *
- * Qué hace: Tarjeta de reservación para la vista del usuario. Muestra estado, fechas, anfitrión y acciones disponibles.
- * Recibe:   reservation, reviewedIds, simulatingPaymentId, onPay, onDetails, onReview callbacks
- * Genera:   Card con imagen, badge de status, fechas, total y botones contextuales según status
- * Procesa:  lee STATUS_CONFIG para colores y labels; memoizado con React.memo para evitar re-renders innecesarios
- */
 import { memo } from "react";
 import Image from "next/image";
 import { Card } from "@/presentation/components/ui/card";

@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * UserReservations
- *
- * Qué hace: Vista de todas las reservaciones del usuario con filtros por status y paginación.
- * Recibe:   nada — obtiene datos via useUserReservations (React Query)
- * Genera:   tabs de filtro, grid de UserReservationCard, paginación, ReviewDialog y ReservationDetailsDialog
- * Procesa:  filteredReservations y tabs memoizados; labels derivados de STATUS_CONFIG
- */
 import { useState } from "react";
 import { Card, CardContent } from "@/presentation/components/ui/card";
 import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";

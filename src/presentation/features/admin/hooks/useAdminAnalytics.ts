@@ -1,9 +1,3 @@
-/**
- * useAdminAnalytics
- *
- * Qué hace: Fetch de analíticas y cálculos derivados para el panel admin.
- * Genera:   data, isLoading, error, totalStatusCount, totalRevenue, maxRevenue
- */
 import { useState, useEffect } from "react";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { AdminAnalytics as AdminAnalyticsData } from "@/core/domain/entities/AdminStats";

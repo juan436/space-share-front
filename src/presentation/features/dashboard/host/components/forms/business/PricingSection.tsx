@@ -1,10 +1,3 @@
-/**
- * PricingSection
- *
- * Qué hace: Sección 5 del formulario empresarial — precios y condiciones contractuales.
- * Recibe:   formData (BusinessSpaceData), onUpdate callback
- * Genera:   inputs de precio mensual, depósito, duración mínima y términos del contrato
- */
 import { DollarSign, FileText } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";

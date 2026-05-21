@@ -1,7 +1,7 @@
 import { AuthRepository, LoginCredentials, AuthResponse, AuthTokens } from "@/core/domain/ports/AuthRepository";
 import { User, CreateUserInput } from "@/core/domain/entities/User";
 import { HttpClient } from "@/infrastructure/http/HttpClient";
-import { AuthResponseDto, LoginRequestDto, RegisterRequestDto } from "@/infrastructure/api/dtos/auth";
+import { AuthResponseDto, LoginRequestDto, RegisterRequestDto, UserDto } from "@/infrastructure/api/dtos/auth";
 import { UserMapper } from "@/infrastructure/api/mappers/UserMapper";
 import { TokenStorage } from "@/infrastructure/services/TokenStorage";
 
@@ -95,7 +95,7 @@ export class ApiAuthRepository implements AuthRepository {
 
     try {
       this.httpClient.setAuthToken(tokens.accessToken);
-      const response = await this.httpClient.get<{ user: import("@/infrastructure/api/dtos/auth").UserDto }>("/auth/me");
+      const response = await this.httpClient.get<{ user: UserDto }>("/auth/me");
       const user = UserMapper.toDomain(response.data.user);
       this.saveUser(user);
       return user;

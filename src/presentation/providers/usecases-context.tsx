@@ -26,13 +26,6 @@ import { GetAdminSpacesUseCase } from "@/core/application/use-cases/admin/GetAdm
 import { GetAdminUsersUseCase } from "@/core/application/use-cases/admin/GetAdminUsers";
 import { GetAdminAnalyticsUseCase } from "@/core/application/use-cases/admin/GetAdminAnalytics";
 
-/**
- * UseCases
- *
- * Qué hace: Tipado del objeto de use cases disponibles en el contexto.
- * Recibe:   —
- * Genera:   Interfaz con todos los use cases de la capa application.
- */
 export interface UseCases {
   // Auth
   loginUseCase: LoginUseCase;
@@ -68,14 +61,6 @@ export interface UseCases {
 
 const UseCasesContext = createContext<UseCases | null>(null);
 
-/**
- * UseCasesProvider
- *
- * Qué hace: Distribuye todos los use cases de aplicación vía React Context.
- * Recibe:   `children` — árbol de componentes; `useCases` — instancias inyectadas desde el composition root.
- * Genera:   Provider que pone los use cases a disposición de cualquier hook o componente hijo.
- * Procesa:  No importa de bootstrap — las instancias vienen del composition root (ClientProviders).
- */
 export function UseCasesProvider({
   children,
   useCases,
@@ -90,14 +75,6 @@ export function UseCasesProvider({
   );
 }
 
-/**
- * useUseCases
- *
- * Qué hace: Hook para acceder a todos los use cases desde cualquier componente o hook.
- * Recibe:   — (debe estar dentro de `UseCasesProvider`).
- * Genera:   Objeto `UseCases` con todos los use cases de la aplicación.
- * Procesa:  Lanza error si se usa fuera del provider.
- */
 export function useUseCases(): UseCases {
   const ctx = useContext(UseCasesContext);
   if (!ctx) throw new Error("useUseCases must be used within UseCasesProvider");

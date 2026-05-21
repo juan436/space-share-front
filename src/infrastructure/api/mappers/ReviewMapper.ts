@@ -1,14 +1,5 @@
 import { Review } from "@/core/domain/entities/Review";
-
-export interface ReviewDto {
-  _id: string;
-  spaceId: string;
-  clientId: string | { _id: string; name: string; email: string; avatar?: string };
-  reservationId: string;
-  rating: number;
-  comment: string;
-  createdAt: string;
-}
+import { ReviewDto } from "@/infrastructure/api/dtos/review";
 
 export class ReviewMapper {
   static toDomain(dto: ReviewDto): Review {

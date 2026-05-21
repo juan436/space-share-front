@@ -1,10 +1,3 @@
-/**
- * PreviewStep (mobile)
- *
- * Qué hace: Paso 5 del wizard mobile — previsualización compacta de la ficha antes de publicar.
- * Recibe:   newSpace (formData), images (URLs)
- * Genera:   tarjeta resumen con imagen, título, ubicación, precio y chips de comodidades; layout mobile
- */
 import { MapPin, ImageIcon } from "lucide-react";
 import { NewSpaceFormData, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
 import { resolveImageUrl } from "@/presentation/utils/image";

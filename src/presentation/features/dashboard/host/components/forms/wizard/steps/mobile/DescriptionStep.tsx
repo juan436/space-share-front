@@ -1,11 +1,3 @@
-/**
- * DescriptionStep (mobile)
- *
- * Qué hace: Paso 1 del wizard mobile — captura datos básicos del espacio con layout compacto.
- * Recibe:   newSpace (formData), onUpdateNewSpace, recommendedPrice
- * Genera:   formulario mobile con título, descripción, tipo, m², precio y capacidad (tipos vehiculares)
- * Procesa:  misma lógica que versión desktop; layout optimizado para pantallas pequeñas
- */
 import { Label } from "@/presentation/components/ui/label";
 import { Input } from "@/presentation/components/ui/input";
 import { Textarea } from "@/presentation/components/ui/textarea";

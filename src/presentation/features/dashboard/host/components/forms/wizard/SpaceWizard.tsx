@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * SpaceWizard
- *
- * Qué hace: Orquestador del wizard de 5 pasos para alta/edición de espacio normal. Versión desktop.
- * Recibe:   newSpace (formData), onUpdateNewSpace, onAddSpace, onBack, isCreating, isFormValid, recommendedPrice, editMode?
- * Genera:   header con stepper + contenido del paso activo + footer de navegación
- * Procesa:  canProceed() valida campos requeridos por paso; handleFilesSelected sube imágenes al backend via spaceRepository
- */
 import { useState, useCallback } from "react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { Home } from "lucide-react";

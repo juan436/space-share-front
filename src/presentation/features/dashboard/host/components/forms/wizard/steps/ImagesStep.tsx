@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * ImagesStep (desktop)
- *
- * Qué hace: Paso 2 del wizard — carga y previsualización de imágenes del espacio.
- * Recibe:   images (URLs confirmadas), onFilesSelected (async upload al backend), onRemove
- * Genera:   zona drag-and-drop, grid de uploads en progreso y grid de imágenes confirmadas
- * Procesa:  valida tipo (JPG/PNG) y tamaño (≤10MB); muestra estado uploading/done/error por archivo; libera object URLs
- */
 import { useRef, useState, useCallback } from "react";
 import { Upload, X, Loader2, AlertCircle, ImageIcon } from "lucide-react";
 import { resolveImageUrl } from "@/presentation/utils/image";

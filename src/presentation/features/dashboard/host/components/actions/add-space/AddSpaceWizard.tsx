@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * AddSpaceWizard
- *
- * Qué hace: Dialog desktop para dar de alta un espacio. Bifurca entre flujo normal (wizard 5 pasos) y empresarial (form single-page).
- * Recibe:   isOpen, onOpenChange, newSpace (formData), onUpdateNewSpace, onAddSpace, isCreating, isFormValid, recommendedPrice
- * Genera:   Dialog con SpaceTypeSelector → SpaceWizard (normal) o BusinessSpaceForm (empresarial)
- * Procesa:  resetea spaceMode al cerrar para volver al selector en la próxima apertura
- */
 import { useState } from "react";
 import { Button } from "@/presentation/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/presentation/components/ui/dialog";

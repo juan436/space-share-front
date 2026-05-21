@@ -1,11 +1,3 @@
-/**
- * useHostDashboard
- *
- * Qué hace: Hook central del módulo host. Centraliza estado del formulario, edición y operaciones CRUD de espacios.
- * Recibe:   nada
- * Genera:   spaces (SpaceViewModel[]), handlers CRUD, estado de dialogs, validación del formulario, recommendedPrice
- * Procesa:  transforma entidades de dominio a SpaceViewModel; usa ref para evitar stale closure en handleAddSpace
- */
 import { useState, useRef, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
 import { toErrorMessage } from "@/presentation/utils/error";

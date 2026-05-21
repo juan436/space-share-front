@@ -1,10 +1,3 @@
-/**
- * AmenitiesStep (mobile)
- *
- * Qué hace: Paso 3 del wizard mobile — selección de comodidades con layout compacto.
- * Recibe:   newSpace (formData), onUpdateNewSpace
- * Genera:   3 tarjetas toggle para climateControlled, securityCamera y privateEntrance
- */
 import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { Thermometer, Shield, DoorOpen } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";

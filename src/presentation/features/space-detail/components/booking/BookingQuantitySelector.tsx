@@ -2,13 +2,6 @@
 
 import { Minus, Plus } from "lucide-react";
 
-/**
- * Qué hace: selector de cantidad de espacios (garajes/parking) con botones +/−.
- * Recibe: cantidad actual, capacidad máxima, callbacks de incremento/decremento, className opcional para espaciado externo.
- * Genera: fila con label de capacidad y controles +/−.
- * Procesa: deshabilita decremento en 1, deshabilita incremento al llegar a capacidad máxima.
- */
-
 interface BookingQuantitySelectorProps {
   quantity: number;
   displayCapacity: number;

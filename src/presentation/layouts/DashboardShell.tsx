@@ -11,40 +11,25 @@ import {
 import { LogOut, Compass, ChevronDown, LayoutDashboard, ArrowRight } from "lucide-react";
 import Link from "next/link";
 import { cn } from "@/presentation/utils/cn";
+import React from "react";
 import { TabDef } from "@/presentation/hooks/useDashboardTabs";
 import { User } from "@/core/domain/entities/User";
 
 interface DashboardShellProps {
-  /** Usuario autenticado — provee nombre, email y rol para el header. */
   user: User;
-  /** Tabs del rol activo generadas por `useDashboardTabs`. */
   tabs: TabDef[];
-  /** Id de la tab actualmente seleccionada. */
   activeTab: string;
-  /** Callback al cambiar de tab (sidebar desktop y nav mobile). */
-  onTabChange: (tab: string) => void;
-  /** Callback de cierre de sesión. */
+  onTabChange: (tabId: string) => void;
   onLogout: () => void;
-  /** Contenido de la tab activa. */
   children: React.ReactNode;
 }
 
 const roleNames: Record<string, string> = {
   client: "Cliente",
   host: "Anfitrión",
-  admin: "Admin",
+  admin: "Administrador",
 };
 
-/**
- * DashboardShell
- *
- * Qué hace: Renderiza la estructura visual completa del dashboard (header, sidebar, nav mobile, área principal).
- * Recibe:   `user` (nombre/email/rol para header), `tabs` (navegación del rol activo),
- *           `activeTab` (tab seleccionada), `onTabChange` (callback de cambio de tab),
- *           `onLogout` (callback de cierre de sesión), `children` (contenido de la tab activa).
- * Genera:   Layout de pantalla completa con header sticky, sidebar desktop, nav mobile fija y área de contenido.
- * Procesa:  Calcula iniciales del usuario y nombre del rol para el header; no contiene lógica de auth ni de negocio.
- */
 export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, children }: DashboardShellProps) {
   const initials = user.name
     ? user.name.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase()

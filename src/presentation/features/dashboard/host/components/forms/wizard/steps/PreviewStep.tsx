@@ -1,11 +1,3 @@
-/**
- * PreviewStep (desktop)
- *
- * Qué hace: Paso 5 del wizard — previsualización de la ficha del espacio antes de publicar.
- * Recibe:   newSpace (formData), images (URLs)
- * Genera:   tarjeta resumen con imagen principal, título, ubicación, precio y chips de comodidades
- * Procesa:  resuelve URLs de imágenes locales vs remotas; muestra chip de capacidad solo en tipos vehiculares
- */
 import { ImageIcon, MapPin } from "lucide-react";
 import { NewSpaceFormData, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
 import { resolveImageUrl } from "@/presentation/utils/image";

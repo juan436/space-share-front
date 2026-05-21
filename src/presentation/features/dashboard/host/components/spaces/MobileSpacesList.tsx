@@ -1,18 +1,11 @@
 "use client";
 
-/**
- * MobileSpacesList
- *
- * Qué hace: Lista mobile del inventario de espacios del host. Alternativa responsive a SpacesTable.
- * Recibe:   spaces (SpaceViewModel[]), isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace
- * Genera:   tarjetas apiladas con título, ubicación, estado y chips de tipo/m²/precio
- * Procesa:  misma lógica de menú contextual que SpacesTable; estado vacío y cargando incluidos
- */
 import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
 import { MoreHorizontal, Building2, Ruler, DollarSign, MapPin } from "lucide-react";
-import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
+import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels } from "@/presentation/types/spaces";
+import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
 
 interface MobileSpacesListProps {
   spaces: SpaceViewModel[];
@@ -61,8 +54,8 @@ export function MobileSpacesList({ spaces, isLoading, isDeleting, isUpdating, on
             </div>
 
             <div className="flex items-center gap-2">
-              <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${getStatusColor(space.status)}`}>
-                {getStatusLabel(space.status)}
+              <span className={`px-2 py-1 rounded-full text-[10px] font-medium ${SPACE_STATUS_BADGE[space.status]}`}>
+                {SPACE_STATUS_LABEL[space.status]}
               </span>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>

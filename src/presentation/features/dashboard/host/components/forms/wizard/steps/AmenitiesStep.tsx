@@ -1,10 +1,3 @@
-/**
- * AmenitiesStep (desktop)
- *
- * Qué hace: Paso 3 del wizard — selección de comodidades del espacio.
- * Recibe:   newSpace (formData), onUpdateNewSpace
- * Genera:   3 tarjetas toggle para climateControlled, securityCamera y privateEntrance
- */
 import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { Thermometer, Shield, DoorOpen, Check } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";

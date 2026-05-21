@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * HostReservations
- *
- * Qué hace: Vista de todas las reservaciones del host con filtros por status y paginación.
- * Recibe:   nada — obtiene datos via useHostReservations (React Query)
- * Genera:   tabs de filtro, grid de HostReservationCard, paginación y dialogs de detalle
- * Procesa:  filteredReservations y tabs memoizados; updateStatus con invalidación de cache automática
- */
 import { Card, CardContent } from "@/presentation/components/ui/card";
 import { Button } from "@/presentation/components/ui/button";
 import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";

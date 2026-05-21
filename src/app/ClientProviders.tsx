@@ -57,14 +57,6 @@ const useCases = {
   getAdminAnalyticsUseCase,
 };
 
-/**
- * ClientProviders
- *
- * Qué hace: composition root client-side — único punto que importa instancias concretas de bootstrap y las inyecta en el árbol de React vía context providers.
- * Recibe: `children` — toda la app que necesita acceso a use cases y autenticación.
- * Genera: árbol UseCasesProvider → AuthProvider con los singletons de módulo.
- * Procesa: la constante `useCases` se define fuera del componente para garantizar referencia estable entre renders.
- */
 export function ClientProviders({ children }: { children: React.ReactNode }) {
   return (
     <UseCasesProvider useCases={useCases}>

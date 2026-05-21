@@ -1,19 +1,12 @@
 "use client";
 
-/**
- * SpacesTable
- *
- * Qué hace: Tabla desktop del inventario de espacios del host con acciones por fila.
- * Recibe:   spaces (SpaceViewModel[]), isLoading, isDeleting, isUpdating, onDeleteSpace, onUpdateStatus, onEditSpace
- * Genera:   Table con columnas título/tipo/estado/m²/precio/acciones; estados vacío y cargando incluidos
- * Procesa:  menú contextual con opciones de activar/pausar/desactivar según estado actual del espacio
- */
 import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
 import { MoreHorizontal, Building2 } from "lucide-react";
-import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, getStatusColor, getStatusLabel } from "@/presentation/types/spaces";
+import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels } from "@/presentation/types/spaces";
+import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
 
 interface SpacesTableProps {
   spaces: SpaceViewModel[];
@@ -64,8 +57,8 @@ export function SpacesTable({ spaces, isLoading, isDeleting, isUpdating, onDelet
             <TableCell className="font-medium">{space.title}</TableCell>
             <TableCell>{spaceTypeLabels[space.type]}</TableCell>
             <TableCell>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(space.status)}`}>
-                {getStatusLabel(space.status)}
+              <span className={`px-2 py-1 rounded-full text-xs font-medium ${SPACE_STATUS_BADGE[space.status]}`}>
+                {SPACE_STATUS_LABEL[space.status]}
               </span>
             </TableCell>
             <TableCell>{space.squareMeters}</TableCell>

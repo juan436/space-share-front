@@ -1,11 +1,3 @@
-/**
- * HostHome
- *
- * Qué hace: Pantalla de inicio del host. Muestra métricas de resumen y accesos rápidos a secciones.
- * Recibe:   onNavigate — callback para cambiar de tab dentro del dashboard
- * Genera:   cards de estadísticas y grid de acciones rápidas
- * Procesa:  saludo dinámico según hora del día; stats de ingresos/ocupación aún hardcodeados (P3 pendiente)
- */
 import { useAuth } from "@/presentation/providers/auth-context";
 import { Building2, TrendingUp, DollarSign, Calendar, ArrowRight, Plus, MessageSquare, Heart } from "lucide-react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";

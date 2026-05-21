@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * BusinessSpaceForm
- *
- * Qué hace: Wizard de 4 pasos para alta y edición de espacio empresarial. Autocontenido: incluye título, stepper, contenido y footer.
- * Recibe:   onClose — callback al cancelar o completar; initialData — SpaceViewModel si es edición; spaceId — id si es edición
- * Genera:   DialogHeader con título + stepper + contenido del paso actual + WizardFooter
- * Procesa:  delega estado y submit a useBusinessSpaceForm; valida cada paso antes de avanzar
- */
 import { useState } from "react";
 import { AlertCircle, Building2, MapPin, Wifi, ImageIcon } from "lucide-react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";

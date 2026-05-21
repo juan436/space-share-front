@@ -2,10 +2,10 @@ import { useState } from "react";
 import { format, differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
 import { Space } from "@/core/domain/entities/Space";
+import { SERVICE_FEE_PERCENTAGE } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
-export const SERVICE_FEE_RATE = 0.05;
 export const DAYS_PER_MONTH = 30;
 export const MIN_RENTAL_DAYS = 15;
 export const AVAILABLE_MONTHS = [1, 3, 6] as const;
@@ -31,7 +31,7 @@ export function useBookingLogic(space: Space) {
   }
 
   const totalPrice = Math.round(space.pricePerMonth * currentMonths * effectiveQuantity);
-  const serviceFee = Math.round(totalPrice * SERVICE_FEE_RATE);
+  const serviceFee = Math.round(totalPrice * SERVICE_FEE_PERCENTAGE);
   const grandTotal = Math.round(totalPrice + serviceFee);
 
   const checkAvailability = (m: number, start: Date): boolean => {

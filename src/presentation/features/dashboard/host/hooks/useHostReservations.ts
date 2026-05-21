@@ -1,11 +1,3 @@
-/**
- * useHostReservations
- *
- * Qué hace: Fetch y mutaciones de reservaciones del host via React Query.
- * Recibe:   nada — usa el userId del contexto de auth
- * Genera:   reservations[], isLoading, isError, errorMessage, updateStatus (mutation)
- * Procesa:  cache compartido con staleTime 30s; invalidación automática tras updateStatus
- */
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { ReservationStatus } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";

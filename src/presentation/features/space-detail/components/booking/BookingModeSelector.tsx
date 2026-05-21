@@ -1,12 +1,5 @@
 "use client";
 
-/**
- * Qué hace: control segmentado para elegir entre modo "Fechas exactas" y "Meses".
- * Recibe: modo activo, callbacks de selección, className opcional para espaciado externo.
- * Genera: dos botones pill con estado activo resaltado (fondo blanco + sombra).
- * Procesa: aplica estilos de selección al modo activo; el modo inactivo queda en muted.
- */
-
 interface BookingModeSelectorProps {
   mode: "dates" | "months";
   onSelectDates: () => void;

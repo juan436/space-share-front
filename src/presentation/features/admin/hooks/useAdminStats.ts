@@ -1,9 +1,3 @@
-/**
- * useAdminStats
- *
- * Qué hace: Fetch de estadísticas globales del admin.
- * Genera:   stats, isLoading, error
- */
 import { useState, useEffect } from "react";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { AdminStats } from "@/core/domain/entities/AdminStats";

@@ -1,11 +1,3 @@
-/**
- * HostDashboard
- *
- * Qué hace: Vista principal del panel del host. Orquesta la gestión completa de espacios.
- * Recibe:   nada (consume useHostDashboard internamente)
- * Genera:   tabla/lista de espacios + dialogs de alta y edición
- * Procesa:  adapta vista entre SpacesTable (desktop) y MobileSpacesList según media query
- */
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { AlertCircle, Building2 } from "lucide-react";
 import { useHostDashboard } from "./hooks";

@@ -1,13 +1,5 @@
 "use client";
 
-/**
- * AddSpaceWizardMobile
- *
- * Qué hace: Dialog mobile para dar de alta un espacio normal en 5 pasos. No incluye flujo empresarial.
- * Recibe:   isOpen, onOpenChange, newSpace (formData), onUpdateNewSpace, onAddSpace, isCreating, isFormValid, recommendedPrice
- * Genera:   Dialog mobile con WizardHeader (progreso), steps de contenido y WizardFooter de navegación
- * Procesa:  canProceed() valida campos requeridos por paso; manejo de imágenes con estado local
- */
 import { useMemo, useState } from "react";
 import { Button } from "@/presentation/components/ui/button";
 import { Dialog, DialogContent, DialogTrigger } from "@/presentation/components/ui/dialog";

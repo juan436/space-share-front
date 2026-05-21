@@ -2,13 +2,6 @@
 
 import { Button } from "@/presentation/components/ui/button";
 
-/**
- * Qué hace: botón CTA de acción principal de reserva con manejo de error y nota "sin cargo inmediato".
- * Recibe: estado disabled, callback de click, error de reserva, label de acción, flag de capacidad excedida, className opcional.
- * Genera: botón primario full-width + texto aclaratorio; reemplaza el label por "Capacidad Excedida" si aplica.
- * Procesa: muestra el error encima del botón si existe; delega el estilo de disabled al componente Button.
- */
-
 interface BookingCTAButtonProps {
   disabled: boolean;
   onClick: () => void;

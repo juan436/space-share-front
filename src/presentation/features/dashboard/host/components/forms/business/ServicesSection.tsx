@@ -1,10 +1,3 @@
-/**
- * ServicesSection
- *
- * Qué hace: Sección 4 del formulario empresarial — servicios incluidos en el espacio corporativo.
- * Recibe:   services (Record<string, boolean>), onToggle callback
- * Genera:   grid de checkboxes para WiFi, estacionamiento, café, impresora, teléfono, seguridad, A/C
- */
 import { Wifi, Car, Coffee, Printer, Phone, Shield, Snowflake, Check } from "lucide-react";
 import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { cn } from "@/presentation/utils/cn";

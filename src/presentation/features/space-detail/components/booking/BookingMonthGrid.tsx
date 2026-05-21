@@ -5,13 +5,6 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { AVAILABLE_MONTHS, DAYS_PER_MONTH } from "@/presentation/features/space-detail/hooks/useBookingLogic";
 
-/**
- * Qué hace: grid de selección de duración en meses con banner de indisponibilidad y confirmación de fecha de inicio.
- * Recibe: meses seleccionados, función de disponibilidad, datos del espacio (tipo vehículo, cantidad), fecha de inicio, próxima fecha disponible.
- * Genera: grid 3×N de botones de meses, banner ámbar si hay bloqueo de disponibilidad, mensaje verde si el inicio es en fecha futura.
- * Procesa: deshabilita meses sin disponibilidad continua; permite saltar al siguiente slot disponible via nextDate.
- */
-
 interface BookingMonthGridProps {
   months: number;
   setMonths: (m: number) => void;

@@ -7,7 +7,7 @@ import { Space } from "@/core/domain/entities/Space";
 import { cn } from "@/presentation/utils/cn";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
-import { SPACE_TYPE_LABEL } from "@/presentation/shared/constants/space-labels";
+import { spaceTypeLabels } from "@/presentation/types/spaces";
 import { resolveHostId } from "@/presentation/utils/resolveHostId";
 
 interface SpaceCardProps {
@@ -56,7 +56,7 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
         )}
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
         <div className="absolute top-2.5 left-2.5 px-2.5 py-1 bg-card/90 backdrop-blur-sm text-foreground text-[11px] font-semibold rounded-lg shadow-sm">
-          {SPACE_TYPE_LABEL[space.type] ?? space.type}
+          {spaceTypeLabels[space.type] ?? space.type}
         </div>
         {space.verified && (
           <div className="absolute top-2.5 right-2.5 p-1.5 bg-emerald-500 text-white rounded-lg shadow-sm">

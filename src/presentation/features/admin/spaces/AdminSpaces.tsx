@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import { useAdminSpaces, isHostIdObject } from "@/presentation/features/admin/hooks/useAdminSpaces";
-import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL, SPACE_TYPE_LABEL } from "@/presentation/shared/constants/space-labels";
+import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
+import { spaceTypeLabels } from "@/presentation/types/spaces";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { Building2, Loader2, AlertCircle, Search, Star, MapPin } from "lucide-react";
@@ -90,7 +91,7 @@ export function AdminSpaces() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm">{SPACE_TYPE_LABEL[space.type] || space.type}</TableCell>
+                      <TableCell className="text-sm">{spaceTypeLabels[space.type as keyof typeof spaceTypeLabels] || space.type}</TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                           <MapPin className="w-3.5 h-3.5" />

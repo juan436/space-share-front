@@ -1,11 +1,3 @@
-/**
- * useUserReservations
- *
- * Qué hace: Fetch y mutaciones de reservaciones del usuario via React Query.
- * Recibe:   nada — usa el userId del contexto de auth
- * Genera:   reservations[], isLoading, isError, errorMessage, submitReview, simulatePayment, reviewedIds, simulatingPaymentId
- * Procesa:  cache con staleTime 30s; invalidación automática tras simulatePayment; spaceId extraído de la reservación al crear review
- */
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUseCases } from "@/presentation/providers/usecases-context";

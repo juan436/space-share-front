@@ -1,37 +1,33 @@
 import { useState, useMemo } from "react";
+import React from "react";
 import { Home, Building2, Calendar, MessageSquare, Users, BarChart3 } from "lucide-react";
 
-/** Definición de una tab del dashboard. */
-export type TabDef = { id: string; icon: typeof Home; label: string };
+export type TabDef = {
+  id: string;
+  label: string;
+  icon: React.ElementType;
+};
 
 const tabsByRole: Record<string, TabDef[]> = {
   client: [
-    { id: "home", icon: Home, label: "Inicio" },
-    { id: "reservations", icon: Calendar, label: "Mis Reservaciones" },
-    { id: "messages", icon: MessageSquare, label: "Mensajes" },
+    { id: "home", label: "Inicio", icon: Home },
+    { id: "reservations", label: "Reservaciones", icon: Calendar },
+    { id: "messages", label: "Mensajes", icon: MessageSquare },
   ],
   host: [
-    { id: "home", icon: Home, label: "Inicio" },
-    { id: "spaces", icon: Building2, label: "Mis Espacios" },
-    { id: "reservations", icon: Calendar, label: "Reservaciones" },
-    { id: "messages", icon: MessageSquare, label: "Mensajes" },
+    { id: "home", label: "Inicio", icon: Home },
+    { id: "spaces", label: "Mis Espacios", icon: Building2 },
+    { id: "reservations", label: "Reservaciones", icon: Calendar },
+    { id: "messages", label: "Mensajes", icon: MessageSquare },
   ],
   admin: [
-    { id: "home", icon: Home, label: "Inicio" },
-    { id: "users", icon: Users, label: "Usuarios" },
-    { id: "spaces", icon: Building2, label: "Espacios" },
-    { id: "analytics", icon: BarChart3, label: "Analíticas" },
+    { id: "home", label: "Dashboard", icon: Home },
+    { id: "users", label: "Usuarios", icon: Users },
+    { id: "spaces", label: "Espacios", icon: Building2 },
+    { id: "analytics", label: "Analíticas", icon: BarChart3 },
   ],
 };
 
-/**
- * useDashboardTabs
- *
- * Qué hace: Gestiona las tabs de navegación del dashboard según el rol del usuario.
- * Recibe:   `role` — rol del usuario (`"client"` | `"host"` | `"admin"`).
- * Genera:   `{ tabs, activeTab, setActiveTab }` — lista de tabs del rol, tab activa y setter.
- * Procesa:  Deriva `tabs` del mapa `tabsByRole` con `useMemo`; mantiene `activeTab` en estado local.
- */
 export function useDashboardTabs(role: string) {
   const [activeTab, setActiveTab] = useState("home");
   const tabs = useMemo(() => tabsByRole[role] ?? tabsByRole.client, [role]);

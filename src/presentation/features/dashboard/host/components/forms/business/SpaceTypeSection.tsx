@@ -1,10 +1,3 @@
-/**
- * SpaceTypeSection
- *
- * Qué hace: Sección 1 del formulario empresarial — selección del tipo de espacio corporativo.
- * Recibe:   spaceType (BusinessSpaceType), onSelect callback
- * Genera:   tarjetas clickeables para oficina, local, bodega y sala de reuniones
- */
 import { Building2, Users } from "lucide-react";
 import { cn } from "@/presentation/utils/cn";
 import type { BusinessSpaceType } from "../../../hooks/useBusinessSpaceForm";

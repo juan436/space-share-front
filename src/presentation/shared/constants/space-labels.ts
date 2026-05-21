@@ -28,11 +28,3 @@ export const SPACE_STATUS_LABEL: Record<string, string> = {
   deactivated: "Desactivado",
 };
 
-export const SPACE_TYPE_LABEL: Record<string, string> = {
-  garage: "Garaje",
-  parking: "Parking",
-  basement: "Sótano",
-  attic: "Ático",
-  storage: "Almacén",
-  other: "Otro",
-};

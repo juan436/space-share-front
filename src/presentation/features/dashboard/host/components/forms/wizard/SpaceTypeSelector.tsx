@@ -1,10 +1,3 @@
-/**
- * SpaceTypeSelector
- *
- * Qué hace: Pantalla de selección de tipo de espacio (Normal o Empresarial) dentro del dialog de alta.
- * Recibe:   onSelectMode — callback con el modo elegido ("normal" | "business")
- * Genera:   dos tarjetas clickeables con descripción de cada tipo de espacio
- */
 import { Home, Building2 } from "lucide-react";
 
 export type SpaceMode = "normal" | "business" | null;

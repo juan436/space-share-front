@@ -1,10 +1,3 @@
-/**
- * ReservationDetailsDialog
- *
- * Qué hace: Dialog de detalle de una reservación confirmada del usuario.
- * Recibe:   isOpen, onClose, reservation (Reservation | null)
- * Genera:   Dialog con imagen del espacio, fechas, anfitrión, total pagado y nota de confirmación
- */
 import { Calendar, MapPin, DollarSign, User, CheckCircle2, ArrowRight } from "lucide-react";
 import { Reservation } from "@/core/domain/entities/Reservation";
 import { format } from "date-fns";

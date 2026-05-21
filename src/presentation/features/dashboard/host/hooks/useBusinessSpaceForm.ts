@@ -1,11 +1,3 @@
-/**
- * useBusinessSpaceForm
- *
- * Qué hace: Maneja estado y submit del formulario de espacio empresarial (alta y edición).
- * Recibe:   onClose — callback al cerrar; initialData — SpaceViewModel si es edición; spaceId — id si es edición
- * Genera:   formData, handlers de campo, handleSubmit conectado a useSpaces (create o update), isSubmitting
- * Procesa:  mapea BusinessSpaceData ↔ CreateSpaceInput / UpdateSpaceInput
- */
 import { useState, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
 import { useUseCases } from "@/presentation/providers/usecases-context";

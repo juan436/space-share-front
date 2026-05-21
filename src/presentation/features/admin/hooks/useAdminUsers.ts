@@ -1,9 +1,3 @@
-/**
- * useAdminUsers
- *
- * Qué hace: Fetch y filtrado de usuarios para el panel admin.
- * Genera:   users (total), filtered (por search), isLoading, error, search, setSearch
- */
 import { useState, useEffect, useMemo } from "react";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { AdminUser } from "@/core/domain/entities/AdminStats";

@@ -1,9 +1,3 @@
-/**
- * useAdminSpaces
- *
- * Qué hace: Fetch y filtrado de espacios para el panel admin.
- * Genera:   spaces (total), filtered (por search), isLoading, error, search, setSearch
- */
 import { useState, useEffect, useMemo } from "react";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { AdminSpace } from "@/core/domain/entities/AdminStats";
