@@ -4,3 +4,4 @@ export * from "./ReservationRepository";
 export * from "./ReviewRepository";
 export * from "./FavoritesRepository";
 export * from "./AdminRepository";
+export * from "./PaymentRepository";

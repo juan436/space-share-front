@@ -4,6 +4,7 @@ import { ApiReservationRepository } from "@/infrastructure/repositories/api/ApiR
 import { ApiReviewRepository } from "@/infrastructure/repositories/api/ApiReviewRepository";
 import { ApiAdminRepository } from "@/infrastructure/repositories/api/ApiAdminRepository";
 import { ApiFavoritesRepository } from "@/infrastructure/repositories/api/ApiFavoritesRepository";
+import { ApiPaymentRepository } from "@/infrastructure/repositories/api/ApiPaymentRepository";
 import { httpClient } from "./http";
 
 export const authRepository = new ApiAuthRepository(httpClient);
@@ -12,3 +13,4 @@ export const reservationRepository = new ApiReservationRepository(httpClient);
 export const reviewRepository = new ApiReviewRepository(httpClient);
 export const adminRepository = new ApiAdminRepository(httpClient);
 export const favoritesRepository = new ApiFavoritesRepository(httpClient);
+export const paymentRepository = new ApiPaymentRepository(httpClient);

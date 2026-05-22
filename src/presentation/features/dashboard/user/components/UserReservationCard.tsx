@@ -11,7 +11,7 @@ import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-statu
 interface UserReservationCardProps {
   reservation: Reservation;
   reviewedIds: Set<string>;
-  simulatingPaymentId: string | null;
+  initiatingPaymentId: string | null;
   onPay: (id: string) => void;
   onDetails: (id: string) => void;
   onReview: (id: string) => void;
@@ -20,7 +20,7 @@ interface UserReservationCardProps {
 export const UserReservationCard = memo(function UserReservationCard({
   reservation,
   reviewedIds,
-  simulatingPaymentId,
+  initiatingPaymentId,
   onPay,
   onDetails,
   onReview,
@@ -93,9 +93,9 @@ export const UserReservationCard = memo(function UserReservationCard({
         )}
 
         {(reservation.status === "awaiting_payment" || reservation.status === "accepted") && (
-          <Button size="sm" onClick={() => onPay(reservation.id)} disabled={simulatingPaymentId === reservation.id} className="w-full rounded-xl gap-2 mt-1 bg-violet-600 hover:bg-violet-700 text-white">
-            {simulatingPaymentId === reservation.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
-            {simulatingPaymentId === reservation.id ? "Procesando..." : "Pagar ahora"}
+          <Button size="sm" onClick={() => onPay(reservation.id)} disabled={initiatingPaymentId === reservation.id} className="w-full rounded-xl gap-2 mt-1 bg-violet-600 hover:bg-violet-700 text-white">
+            {initiatingPaymentId === reservation.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
+            {initiatingPaymentId === reservation.id ? "Procesando..." : "Pagar ahora"}
           </Button>
         )}
         {reservation.status === "confirmed" && (

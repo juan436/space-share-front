@@ -4,3 +4,4 @@ export * from "./ApiReservationRepository";
 export * from "./ApiReviewRepository";
 export * from "./ApiAdminRepository";
 export * from "./ApiFavoritesRepository";
+export * from "./ApiPaymentRepository";

@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { useUseCases } from "@/presentation/providers/usecases-context";
+import { useAuth } from "@/presentation/providers/auth-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 const QUERY_KEY = ["reservations", "user"] as const;
 
 export function useUserReservations() {
-  const { getClientReservationsUseCase, updateReservationStatusUseCase, createReviewUseCase } = useUseCases();
+  const { getClientReservationsUseCase, createReviewUseCase, initiatePaymentUseCase } = useUseCases();
+  const { user } = useAuth();
   const queryClient = useQueryClient();
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
 
@@ -19,8 +21,14 @@ export function useUserReservations() {
   const reservations = query.data ?? [];
 
   const payMutation = useMutation({
-    mutationFn: (reservationId: string) =>
-      updateReservationStatusUseCase.execute(reservationId, "confirmed"),
+    mutationFn: async (reservationId: string) => {
+      const { checkoutUrl } = await initiatePaymentUseCase.execute({
+        reservationId,
+        customerEmail: user?.email ?? "",
+        redirectUrl: `${window.location.origin}/dashboard/reservaciones?payment=result`,
+      });
+      window.location.href = checkoutUrl;
+    },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 
@@ -31,7 +39,7 @@ export function useUserReservations() {
     setReviewedIds((prev) => new Set(prev).add(reservationId));
   };
 
-  const simulatePayment = async (reservationId: string): Promise<void> => {
+  const initiatePayment = async (reservationId: string): Promise<void> => {
     await payMutation.mutateAsync(reservationId);
   };
 
@@ -41,8 +49,8 @@ export function useUserReservations() {
     isError: query.isError,
     errorMessage: query.error ? toErrorMessage(query.error) : null,
     reviewedIds,
-    simulatingPaymentId: payMutation.isPending ? payMutation.variables ?? null : null,
+    initiatingPaymentId: payMutation.isPending ? payMutation.variables ?? null : null,
     submitReview,
-    simulatePayment,
+    initiatePayment,
   };
 }

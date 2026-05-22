@@ -1,6 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent } from "@/presentation/components/ui/card";
 import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/presentation/components/ui/button";
@@ -8,11 +10,23 @@ import { ReviewDialog, ReservationDetailsDialog, UserReservationCard } from "../
 import { useUserReservations } from "../hooks/useUserReservations";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
+import { useToast } from "@/presentation/hooks/use-toast";
 
-const PAGE_SIZE = 4; // user ve tarjetas más compactas (grid 2 cols) → caben más por página
+const PAGE_SIZE = 4;
 
 export function UserReservations() {
-  const { reservations, isLoading, isError, errorMessage, reviewedIds, simulatingPaymentId, submitReview, simulatePayment } = useUserReservations();
+  const { reservations, isLoading, isError, errorMessage, reviewedIds, initiatingPaymentId, submitReview, initiatePayment } = useUserReservations();
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const queryClient = useQueryClient();
+  const { toast } = useToast();
+
+  useEffect(() => {
+    if (searchParams.get("payment") !== "result") return;
+    queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
+    toast({ title: "Pago procesado", description: "Verifica el estado de tu reservación." });
+    router.replace("/dashboard/user/reservations");
+  }, [searchParams, queryClient, toast, router]);
   const { activeTab, currentPage, setCurrentPage, handleTabChange, filteredReservations, paginatedReservations, totalPages, tabs } = usePaginatedReservations(reservations, PAGE_SIZE);
   const [reviewingId, setReviewingId] = useState<string | null>(null);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
@@ -92,8 +106,8 @@ export function UserReservations() {
                 key={reservation.id}
                 reservation={reservation}
                 reviewedIds={reviewedIds}
-                simulatingPaymentId={simulatingPaymentId}
-                onPay={simulatePayment}
+                initiatingPaymentId={initiatingPaymentId}
+                onPay={initiatePayment}
                 onDetails={setDetailsId}
                 onReview={setReviewingId}
               />
