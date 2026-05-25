@@ -22,12 +22,20 @@ export function useUserReservations() {
 
   const payMutation = useMutation({
     mutationFn: async (reservationId: string) => {
+      const w = 520, h = 680;
+      const left = window.screenX + (window.outerWidth - w) / 2;
+      const top = window.screenY + (window.outerHeight - h) / 2;
+      const newWindow = window.open("", "_blank", `width=${w},height=${h},left=${left},top=${top},toolbar=no,menubar=no,location=no,status=no`);
       const { checkoutUrl } = await initiatePaymentUseCase.execute({
         reservationId,
         customerEmail: user?.email ?? "",
         redirectUrl: `${window.location.origin}/dashboard/reservaciones?payment=result`,
       });
-      window.location.href = checkoutUrl;
+      if (newWindow) {
+        newWindow.location.href = checkoutUrl;
+      } else {
+        window.location.href = checkoutUrl;
+      }
     },
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
