@@ -9,7 +9,6 @@ interface SpaceHostCardProps {
 }
 
 export function SpaceHostCard({ hostId }: SpaceHostCardProps) {
-  // Mock host data - in real app, fetch from API
   const host = {
     name: "Carlos Martínez",
     avatar: null,
@@ -24,22 +23,15 @@ export function SpaceHostCard({ hostId }: SpaceHostCardProps) {
   return (
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground">Conoce al anfitrión</h2>
-      
-      <div className="p-6 rounded-2xl border bg-card">
-        {/* Host Info */}
+
+      <div className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
         <div className="flex items-start gap-4">
-          <div className="relative">
+          <div className="relative shrink-0">
             {host.avatar ? (
-              <Image
-                src={host.avatar}
-                alt={host.name}
-                width={64}
-                height={64}
-                className="w-16 h-16 rounded-full object-cover"
-              />
+              <Image src={host.avatar} alt={host.name} width={56} height={56} className="w-14 h-14 rounded-full object-cover" />
             ) : (
-              <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center">
-                <User className="w-8 h-8 text-primary" />
+              <div className="w-14 h-14 rounded-full bg-muted/60 flex items-center justify-center">
+                <User className="w-7 h-7 text-muted-foreground" />
               </div>
             )}
             {host.verified && (
@@ -48,41 +40,38 @@ export function SpaceHostCard({ hostId }: SpaceHostCardProps) {
               </div>
             )}
           </div>
-          
-          <div className="flex-1">
-            <h3 className="text-lg font-semibold text-foreground">{host.name}</h3>
-            <div className="flex items-center gap-2 mt-1">
-              <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-              <span className="font-medium">{host.rating}</span>
-              <span className="text-muted-foreground">({host.reviewCount} reseñas)</span>
+
+          <div className="flex-1 min-w-0">
+            <h3 className="text-base font-semibold text-foreground">{host.name}</h3>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className="text-sm font-medium text-foreground">{host.rating}</span>
+              <span className="text-xs text-muted-foreground">({host.reviewCount} reseñas)</span>
             </div>
           </div>
         </div>
 
-        {/* Stats */}
-        <div className="grid grid-cols-3 gap-4 mt-6 pt-6 border-t">
+        <div className="grid grid-cols-3 gap-3 mt-5 pt-5 border-t border-border/40">
           <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">{host.reviewCount}</p>
+            <p className="text-xl font-bold text-foreground">{host.reviewCount}</p>
             <p className="text-xs text-muted-foreground">Reseñas</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">{host.responseRate}%</p>
+            <p className="text-xl font-bold text-foreground">{host.responseRate}%</p>
             <p className="text-xs text-muted-foreground">Respuesta</p>
           </div>
           <div className="text-center">
-            <p className="text-2xl font-bold text-foreground">{host.responseTime}</p>
+            <p className="text-xl font-bold text-foreground">{host.responseTime}</p>
             <p className="text-xs text-muted-foreground">Tiempo resp.</p>
           </div>
         </div>
 
-        {/* Member Since */}
-        <div className="flex items-center gap-2 mt-4 text-sm text-muted-foreground">
-          <Calendar className="w-4 h-4" />
+        <div className="flex items-center gap-2 mt-4 text-xs text-muted-foreground">
+          <Calendar className="w-3.5 h-3.5 shrink-0" />
           <span>Miembro desde {host.memberSince}</span>
         </div>
 
-        {/* Contact Button */}
-        <Button aria-label="Contactar al anfitrión" className="w-full mt-6 gap-2">
+        <Button aria-label="Contactar al anfitrión" className="w-full mt-4 gap-2 rounded-xl h-10">
           <MessageCircle className="w-4 h-4" />
           Contactar al anfitrión
         </Button>

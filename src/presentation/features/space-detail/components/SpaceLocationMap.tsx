@@ -51,8 +51,8 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
       </div>
 
       {/* Address Info */}
-      <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/50">
-        <MapPin className="w-5 h-5 text-primary mt-0.5" />
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
+        <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
         <div>
           <p className="font-medium text-foreground">{location.address}</p>
           <p className="text-sm text-muted-foreground">
@@ -62,7 +62,7 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
       </div>
 
       {/* Map */}
-      <div className="rounded-xl overflow-hidden border">
+      <div className="rounded-xl overflow-hidden border border-border/60">
         {isLoaded ? (
           <GoogleMap
             mapContainerStyle={mapContainerStyle}
@@ -84,11 +84,11 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
 
       {/* Neighborhood Info */}
       <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="p-3 rounded-lg bg-muted/30">
+        <div className="p-3 rounded-lg bg-white dark:bg-card border border-border/40">
           <p className="text-muted-foreground">Zona</p>
           <p className="font-medium">{location.city}</p>
         </div>
-        <div className="p-3 rounded-lg bg-muted/30">
+        <div className="p-3 rounded-lg bg-white dark:bg-card border border-border/40">
           <p className="text-muted-foreground">Departamento</p>
           <p className="font-medium">{location.state}</p>
         </div>

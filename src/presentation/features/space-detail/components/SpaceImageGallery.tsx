@@ -131,7 +131,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
               priority
             />
           ) : (
-            <div className="w-full h-full bg-gradient-to-br from-primary/20 to-accent/20 flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-muted/80 to-muted/40 flex items-center justify-center">
               <Images aria-hidden="true" className="w-16 h-16 text-muted-foreground/30" />
             </div>
           )}

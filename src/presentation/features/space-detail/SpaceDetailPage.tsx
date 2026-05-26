@@ -44,7 +44,7 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
   }, []);
 
   return (
-    <div className="min-h-screen bg-background pb-32 md:pb-12 font-sans selection:bg-primary/20">
+    <div className="min-h-screen bg-white dark:bg-background pb-32 md:pb-12 font-sans selection:bg-primary/20">
       {/* Floating Navigation Bar */}
       <div className="fixed top-4 left-0 right-0 z-50 pointer-events-none px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-start">
         <Link href={returnPath} className="pointer-events-auto">
@@ -95,9 +95,9 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
           <div className="hidden lg:block lg:col-span-4">
             <div className="sticky top-28">
               {isOwner ? (
-                <div className="p-8 rounded-[24px] bg-white dark:bg-zinc-900 shadow-[0_8px_30px_rgb(0,0,0,0.06)] ring-1 ring-black/5 dark:ring-white/10">
+                <div className="p-6 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
                   <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+                    <div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center">
                       <span className="text-lg">🏠</span>
                     </div>
                     <div>
@@ -123,9 +123,9 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
       {isOwner ? (
         <div className="fixed bottom-4 left-4 right-4 md:hidden z-40 safe-area-bottom">
           <Link href="/dashboard/host">
-            <div className="flex items-center justify-between gap-4 p-4 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-1 ring-black/5">
+            <div className="flex items-center justify-between gap-4 p-4 bg-white dark:bg-card border border-border/60 rounded-2xl shadow-[0_4px_16px_rgba(0,0,0,0.10)]">
               <div className="flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                <div className="w-9 h-9 rounded-xl bg-muted/60 flex items-center justify-center shrink-0">
                   <span className="text-base">🏠</span>
                 </div>
                 <div>

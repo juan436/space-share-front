@@ -1,9 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Heart, Share2, MapPin, Star } from "lucide-react";
+import { Heart, Share2, MapPin, Star, Sparkles, Check, Link as LinkIcon } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
-import { Button } from "@/presentation/components/ui/button";
 
 interface SpaceDetailHeaderProps {
   space: Space;
@@ -28,9 +27,7 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
       try {
         await navigator.share({ title: space.title, text: space.description, url: window.location.href });
         return;
-      } catch {
-        // User cancelled — fall through to clipboard
-      }
+      } catch { /* user cancelled */ }
     }
     try {
       await navigator.clipboard.writeText(window.location.href);
@@ -44,78 +41,88 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
     }
   };
 
+  const hasRating = space.rating && space.rating > 0;
+
   return (
-    <div className="flex flex-col gap-6">
-      {/* Top Meta info */}
-      <div className="flex items-center gap-3 text-sm">
-        <span className={`px-3 py-1 rounded-full text-foreground/90 font-semibold ring-1 ring-inset ${spaceTypeColor}`}>
-          {spaceTypeLabel}
-        </span>
+    <div className="flex flex-col gap-5">
 
-        {space.rating && space.rating > 0 ? (
-          <div className="flex items-center gap-1.5 pl-1">
-            <Star className="w-4 h-4 fill-amber-400 text-amber-400" />
-            <span className="font-bold text-foreground">{space.rating}</span>
-            <span className="text-muted-foreground">·</span>
-            <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
-              {space.reviewCount} {space.reviewCount === 1 ? "reseña" : "reseñas"}
-            </span>
-          </div>
-        ) : (
-          <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 px-3 py-1 rounded-full ring-1 ring-emerald-200 dark:ring-emerald-800">
-            Nuevo en SpaceShare
+      {/* Row 1: tipo + acciones */}
+      <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className={`inline-flex items-center px-3 py-1 rounded-full text-xs font-semibold ring-1 ring-inset ${spaceTypeColor}`}>
+            {spaceTypeLabel}
           </span>
-        )}
-      </div>
 
-      {/* Main Title & Actions inline row */}
-      <div className="flex items-start justify-between gap-6">
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-[1.15]">
-          {space.title}
-        </h1>
+          {hasRating ? (
+            <div className="flex items-center gap-1.5">
+              <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <span className="text-sm font-bold text-foreground">{space.rating}</span>
+              <span className="text-muted-foreground text-sm">·</span>
+              <span className="text-sm text-muted-foreground hover:text-foreground cursor-pointer transition-colors underline underline-offset-2 decoration-muted-foreground/30">
+                {space.reviewCount} {space.reviewCount === 1 ? "reseña" : "reseñas"}
+              </span>
+            </div>
+          ) : (
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 ring-1 ring-inset ring-amber-200 dark:ring-amber-800/50">
+              <Sparkles className="w-3 h-3" />
+              Nuevo en SpaceShare
+            </span>
+          )}
+        </div>
 
-        {/* Action Buttons (Icons only for minimalist look) */}
-        <div className="flex flex-col items-end gap-1 pt-1">
-          <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
+        {/* Botones acción */}
+        <div className="flex items-center gap-1.5 shrink-0">
+          <button
             onClick={handleShare}
-            className="rounded-full shadow-sm hover:shadow-md transition-all border-border/50 hover:bg-muted/50"
             title="Compartir"
+            className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-muted-foreground hover:text-foreground bg-white dark:bg-card border border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all"
           >
-            <Share2 className="w-4 h-4" />
-          </Button>
-          <Button
-            variant="outline"
-            size="icon"
+            {shareStatus === "copied" ? (
+              <><Check className="w-3.5 h-3.5 text-emerald-600" /><span className="text-emerald-600">Copiado</span></>
+            ) : (
+              <><Share2 className="w-3.5 h-3.5" />Compartir</>
+            )}
+          </button>
+
+          <button
             onClick={onToggleFavorite}
-            className={`rounded-full shadow-sm hover:shadow-md transition-all border-border/50 ${
+            title={isFavorite ? "Quitar de favoritos" : "Guardar"}
+            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold border shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.08)] transition-all ${
               isFavorite
-                ? "bg-rose-50 border-rose-200 hover:bg-rose-100 dark:bg-rose-950/30 dark:border-rose-800"
-                : "hover:bg-muted/50"
+                ? "bg-rose-50 border-rose-200 text-rose-600 hover:bg-rose-100 dark:bg-rose-950/30 dark:border-rose-800 dark:text-rose-400"
+                : "bg-white dark:bg-card border-border/60 text-muted-foreground hover:text-foreground"
             }`}
-            title={isFavorite ? "Quitar de favoritos" : "Guardar en favoritos"}
           >
-            <Heart className={`w-4 h-4 transition-colors ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`} />
-          </Button>
-          </div>
-          {shareStatus === "copied" && (
-            <span className="text-[11px] font-medium text-emerald-600 animate-in fade-in duration-200">Enlace copiado</span>
-          )}
-          {shareStatus === "error" && (
-            <span className="text-[11px] font-medium text-destructive animate-in fade-in duration-200">No se pudo compartir</span>
-          )}
+            <Heart className={`w-3.5 h-3.5 transition-colors ${isFavorite ? "fill-rose-500 text-rose-500" : ""}`} />
+            {isFavorite ? "Guardado" : "Guardar"}
+          </button>
         </div>
       </div>
 
-      {/* Location line under title */}
-      <div className="flex items-center gap-2 text-muted-foreground font-medium">
-        <MapPin className="w-4 h-4 shrink-0" />
-        <span className="underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
-          {space.location.address}, {space.location.city}, {space.location.state}
-        </span>
+      {/* Row 2: Título */}
+      <div>
+        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-[1.1]">
+          {space.title}
+        </h1>
       </div>
+
+      {/* Row 3: Precio + ubicación */}
+      <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
+        <div className="flex items-baseline gap-1">
+          <span className="text-2xl md:text-3xl font-extrabold text-foreground">${space.pricePerMonth.toLocaleString()}</span>
+          <span className="text-sm font-medium text-muted-foreground">/mes</span>
+        </div>
+
+        <div className="w-px h-5 bg-border/60 hidden sm:block" />
+
+        <div className="flex items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground transition-colors cursor-pointer group">
+          <MapPin className="w-4 h-4 shrink-0 text-primary group-hover:text-primary" />
+          <span className="underline underline-offset-2 decoration-muted-foreground/30 group-hover:decoration-foreground">
+            {space.location.address}, {space.location.city}, {space.location.state}
+          </span>
+        </div>
+      </div>
+
     </div>
   );
 }

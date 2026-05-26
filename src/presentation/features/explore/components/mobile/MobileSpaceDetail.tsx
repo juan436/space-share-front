@@ -44,7 +44,7 @@ export function MobileSpaceDetail({ space, isFavorite, onToggleFavorite, onClose
         <div className="p-4 space-y-4">
           {/* Type & Rating */}
           <div className="flex items-center justify-between">
-            <span className={`px-3 py-1 rounded-full text-white text-sm font-medium ${spaceTypeColors[space.type]}`}>
+            <span className={`px-3 py-1 rounded-full text-xs font-semibold ring-1 ring-inset ${spaceTypeColors[space.type]}`}>
               {spaceTypeLabels[space.type]}
             </span>
             {space.rating && (

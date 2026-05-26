@@ -72,7 +72,7 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
           {reviews.map((review) => (
             <div
               key={review.id}
-              className="p-5 rounded-2xl border border-border/50 bg-card/50 space-y-3"
+              className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.05)] space-y-3"
             >
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">

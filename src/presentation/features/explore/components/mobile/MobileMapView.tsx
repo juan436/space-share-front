@@ -115,7 +115,7 @@ export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDet
               </div>
               
               <div className="flex-1 min-w-0">
-                <div className={`inline-block px-2 py-0.5 rounded-full text-white text-xs font-medium mb-1 ${spaceTypeColors[selectedSpace.type]}`}>
+                <div className={`inline-block px-2 py-0.5 rounded-full text-xs font-semibold ring-1 ring-inset mb-1 ${spaceTypeColors[selectedSpace.type]}`}>
                   {spaceTypeLabels[selectedSpace.type]}
                 </div>
                 <h3 className="font-semibold text-sm leading-tight line-clamp-2">{selectedSpace.title}</h3>

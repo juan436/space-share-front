@@ -39,7 +39,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
             <Ruler className="w-16 h-16 text-muted-foreground/20" />
           </div>
         )}
-        <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-white text-xs font-semibold ${spaceTypeColors[space.type]}`}>
+        <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold ring-1 ring-inset backdrop-blur-sm ${spaceTypeColors[space.type]}`}>
           {spaceTypeLabels[space.type]}
         </div>
         <button

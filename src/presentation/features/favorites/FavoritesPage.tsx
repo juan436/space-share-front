@@ -1,74 +1,132 @@
 "use client";
 
+import { useState } from "react";
 import Link from "next/link";
-import { Heart, Search, ArrowRight, Loader2 } from "lucide-react";
+import { Heart, Search, ArrowRight, Loader2, Compass } from "lucide-react";
 import { ExploreHeader } from "@/presentation/features/explore/components/desktop/ExploreHeader";
 import { MobileHeader } from "@/presentation/features/explore/components/mobile/MobileHeader";
 import { SpaceCard } from "@/presentation/features/explore/components/desktop/SpaceCard";
 import { MobileSpaceCard } from "@/presentation/features/explore/components/mobile/MobileSpaceCard";
+import { MainFooter } from "@/presentation/components/shared/layout/MainFooter";
+import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
 import { useFavoriteSpaces } from "./hooks/useFavoriteSpaces";
 import { useMediaQuery } from "@/presentation/hooks/useMediaQuery";
+
+const PAGE_SIZE = 12;
 
 export function FavoritesPage() {
   const isMobile = useMediaQuery("(max-width: 767px)");
   const { spaces, isLoading, isFavorite, handleToggleFavorite } = useFavoriteSpaces();
+  const [page, setPage] = useState(1);
+
+  const totalPages = Math.ceil(spaces.length / PAGE_SIZE);
+  const pagedSpaces = spaces.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
+
+  const handlePageChange = (p: number) => {
+    setPage(p);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  };
 
   return (
-    <div className="min-h-screen bg-background flex flex-col">
+    <div className="min-h-screen bg-white dark:bg-background flex flex-col">
       {isMobile ? <MobileHeader /> : <ExploreHeader />}
 
       <main className="flex-1 max-w-screen-xl mx-auto w-full px-4 sm:px-6 py-8 md:py-12">
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8 md:mb-12">
-          <div>
-            <div className="flex items-center gap-3 mb-2">
-              <div className="p-2.5 bg-rose-500/10 rounded-xl">
-                <Heart className="w-6 h-6 text-rose-500 fill-rose-500" />
-              </div>
-              <h1 className="text-3xl md:text-4xl font-extrabold text-foreground tracking-tight">Guardados</h1>
+
+        {/* Hero */}
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 md:mb-10">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] flex items-center justify-center shrink-0">
+              <Heart className="w-5 h-5 text-rose-500 fill-rose-500" />
             </div>
-            <p className="text-muted-foreground text-sm md:text-base max-w-2xl">
-              Tus espacios de interés guardados para alquilar más tarde. Revisa disponibilidad y completa tu reserva cuando estés listo.
-            </p>
+            <div>
+              <div className="flex items-center gap-2.5">
+                <h1 className="text-2xl md:text-3xl font-extrabold text-foreground tracking-tight">Guardados</h1>
+                {!isLoading && spaces.length > 0 && (
+                  <span className="text-xs font-semibold bg-rose-50 text-rose-600 dark:bg-rose-950/30 dark:text-rose-400 px-2.5 py-0.5 rounded-full border border-rose-200/60 dark:border-rose-800/40">
+                    {spaces.length} {spaces.length === 1 ? "espacio" : "espacios"}
+                  </span>
+                )}
+              </div>
+              <p className="text-sm text-muted-foreground mt-0.5 max-w-lg">
+                Espacios que guardaste para revisar o reservar más tarde
+              </p>
+            </div>
           </div>
-          <Link href="/explore" className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white dark:bg-zinc-900 border border-border/60 text-foreground font-semibold rounded-xl hover:bg-gray-50 dark:hover:bg-zinc-800 transition-all shadow-sm active:scale-95 shrink-0">
+
+          <Link
+            href="/explore"
+            className="inline-flex items-center justify-center gap-2 px-5 py-2.5 bg-white dark:bg-card border border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.09)] text-foreground font-semibold rounded-xl transition-all active:scale-95 shrink-0 text-sm"
+          >
+            <Compass className="w-4 h-4" />
             Explorar espacios
-            <ArrowRight className="w-4 h-4 ml-1" />
           </Link>
         </div>
 
+        {/* Contenido */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-20">
-            <Loader2 className="w-8 h-8 animate-spin text-primary mb-3" />
+          <div className="flex flex-col items-center justify-center py-24">
+            <div className="w-14 h-14 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] flex items-center justify-center mb-4">
+              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            </div>
             <p className="text-sm text-muted-foreground">Cargando favoritos...</p>
           </div>
+
         ) : spaces.length > 0 ? (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
-            {spaces.map((space) => (
-              <div key={space.id} className="relative group/fav">
-                {isMobile ? (
-                  <MobileSpaceCard space={space} isFavorite={true} onToggleFavorite={handleToggleFavorite} onClick={() => {}} returnPath="/favorites" />
-                ) : (
-                  <SpaceCard space={space} isFavorite={true} onToggleFavorite={handleToggleFavorite} returnPath="/favorites" />
-                )}
-              </div>
-            ))}
-          </div>
-        ) : (
-          <div className="flex flex-col items-center justify-center py-20 px-4 text-center bg-muted/20 border border-border/50 rounded-3xl">
-            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-6 ring-8 ring-muted/30">
-              <Search className="w-8 h-8 text-muted-foreground" />
+          <>
+            <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+              {pagedSpaces.map((space) => (
+                <div key={space.id}>
+                  {isMobile ? (
+                    <MobileSpaceCard
+                      space={space}
+                      isFavorite={true}
+                      onToggleFavorite={handleToggleFavorite}
+                      onClick={() => {}}
+                      returnPath="/favorites"
+                    />
+                  ) : (
+                    <SpaceCard
+                      space={space}
+                      isFavorite={true}
+                      onToggleFavorite={handleToggleFavorite}
+                      returnPath="/favorites"
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-            <h2 className="text-2xl font-bold text-foreground mb-3">Aún no tienes espacios guardados</h2>
-            <p className="text-muted-foreground max-w-md mb-8 leading-relaxed">
-              Explora nuestra colección y guarda los espacios que más te gusten haciendo clic en el ícono del corazón.
+
+            <PaginationBar
+              page={page}
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              className="mt-8"
+            />
+          </>
+
+        ) : (
+          <div className="flex flex-col items-center justify-center py-20 px-6 text-center bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl">
+            <div className="w-16 h-16 rounded-2xl bg-muted/60 flex items-center justify-center mb-5">
+              <Search className="w-7 h-7 text-muted-foreground" />
+            </div>
+            <h2 className="text-xl font-bold text-foreground mb-2">Aún no tienes espacios guardados</h2>
+            <p className="text-sm text-muted-foreground max-w-sm mb-7 leading-relaxed">
+              Explora nuestra colección y guarda los espacios que más te gusten tocando el ícono del corazón.
             </p>
-            <Link href="/explore" className="inline-flex items-center justify-center gap-2 px-6 py-3.5 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-all shadow-md hover:shadow-lg active:scale-95">
+            <Link
+              href="/explore"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-foreground text-background font-semibold rounded-xl hover:bg-foreground/90 transition-all shadow-md hover:shadow-lg active:scale-95 text-sm"
+            >
+              <Compass className="w-4 h-4" />
               Explorar espacios
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         )}
       </main>
+
+      <MainFooter />
     </div>
   );
 }

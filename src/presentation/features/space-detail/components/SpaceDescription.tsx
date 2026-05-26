@@ -12,28 +12,28 @@ export function SpaceDescription({ description, squareMeters }: SpaceDescription
     <div className="space-y-6">
       {/* Quick Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 sm:gap-4">
-        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-primary/5 border border-primary/10">
-          <div className="p-2 rounded-lg bg-primary/10 shrink-0">
-            <Ruler className="w-5 h-5 text-primary" />
+        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+          <div className="p-2 rounded-lg bg-muted/60 shrink-0">
+            <Ruler className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="min-w-0">
             <p className="text-xl sm:text-2xl font-bold text-foreground truncate">{squareMeters}</p>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">metros²</p>
           </div>
         </div>
-        
-        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-accent/5 border border-accent/10">
-          <div className="p-2 rounded-lg bg-accent/10 shrink-0">
-            <Calendar className="w-5 h-5 text-accent" />
+
+        <div className="flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.06)]">
+          <div className="p-2 rounded-lg bg-muted/60 shrink-0">
+            <Calendar className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="min-w-0">
             <p className="text-xl sm:text-2xl font-bold text-foreground truncate">Flexible</p>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">duración</p>
           </div>
         </div>
-        
-        <div className="flex items-center justify-center sm:justify-start gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-emerald-500/5 border border-emerald-500/10 col-span-2 sm:col-span-1">
-          <div className="p-2 rounded-lg bg-emerald-500/10 shrink-0">
+
+        <div className="flex items-center justify-center sm:justify-start gap-2.5 sm:gap-3 p-3 sm:p-4 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.06)] col-span-2 sm:col-span-1">
+          <div className="p-2 rounded-lg bg-emerald-50 dark:bg-emerald-950/30 shrink-0">
             <CheckCircle2 className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="min-w-0">
