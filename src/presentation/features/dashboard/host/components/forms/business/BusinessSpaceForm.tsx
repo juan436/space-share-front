@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, Building2, MapPin, Wifi, ImageIcon } from "lucide-react";
+import { AlertCircle, Building2, MapPin, Wifi, ImageIcon, Eye } from "lucide-react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { useBusinessSpaceForm } from "../../../hooks/useBusinessSpaceForm";
 import { SpaceTypeSection } from "./SpaceTypeSection";
@@ -9,6 +9,7 @@ import { BasicInfoSection } from "./BasicInfoSection";
 import { LocationSection } from "./LocationSection";
 import { ServicesSection } from "./ServicesSection";
 import { PricingSection } from "./PricingSection";
+import { BusinessPreviewStep } from "./BusinessPreviewStep";
 import { ImagesStep } from "../wizard/steps/ImagesStep";
 import { WizardFooter } from "../wizard/WizardFooter";
 import { WizardStepper } from "../wizard/WizardStepper";
@@ -19,6 +20,7 @@ const STEPS = [
   { id: 2, title: "Ubicación",   icon: MapPin     },
   { id: 3, title: "Servicios",   icon: Wifi       },
   { id: 4, title: "Fotos",       icon: ImageIcon  },
+  { id: 5, title: "Vista previa",icon: Eye        },
 ];
 
 interface BusinessSpaceFormProps {
@@ -47,12 +49,12 @@ export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpa
   return (
     <>
       {/* Header: título + stepper */}
-      <div className="border-b bg-muted/30">
-        <DialogHeader className="p-4 pb-0">
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-purple-600" />
+      <div className="border-b border-border/40 bg-white dark:bg-card">
+        <DialogHeader className="px-5 pt-5 pb-0">
+          <DialogTitle className="text-base font-semibold text-foreground">
             {spaceId ? "Editar Espacio Empresarial" : "Publicar Espacio Empresarial"}
           </DialogTitle>
+          <p className="text-xs text-muted-foreground mt-0.5">Paso {currentStep} de {STEPS.length}</p>
         </DialogHeader>
         <WizardStepper currentStep={currentStep} steps={STEPS} />
       </div>
@@ -92,6 +94,10 @@ export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpa
             onFilesSelected={handleFilesSelected}
             onRemove={removeImage}
           />
+        )}
+
+        {currentStep === 5 && (
+          <BusinessPreviewStep formData={formData} images={images} />
         )}
       </div>
 

@@ -105,22 +105,19 @@ export function ImagesStep({ images, onFilesSelected, onRemove }: ImagesStepProp
 
   return (
     <div className="space-y-6 animate-in fade-in duration-300">
-      <div className="text-center mb-6">
-        <h3 className="text-lg font-semibold">Agrega fotos de tu espacio</h3>
-        <p className="text-muted-foreground text-sm">
-          Las fotos ayudan a los clientes a conocer mejor tu espacio
-        </p>
+      <div className="mb-6 pb-4 border-b border-border/40">
+        <h3 className="text-base font-semibold text-foreground">Agrega fotos de tu espacio</h3>
+        <p className="text-sm text-muted-foreground mt-0.5">Las fotos ayudan a los clientes a conocer mejor tu espacio</p>
       </div>
 
-      {/* Recomendaciones */}
-      <div className="flex items-start gap-3 p-4 rounded-xl bg-blue-50 dark:bg-blue-950/30 border border-blue-200 dark:border-blue-800">
-        <ImageIcon className="h-5 w-5 text-blue-600 dark:text-blue-400 mt-0.5 shrink-0" />
-        <div className="text-sm text-blue-800 dark:text-blue-300">
-          <p className="font-semibold mb-1">Para un resultado premium:</p>
-          <ul className="text-xs space-y-0.5 text-blue-700 dark:text-blue-400">
+      <div className="flex items-start gap-3 p-4 rounded-xl bg-muted/40 border border-border/50">
+        <ImageIcon className="h-5 w-5 text-muted-foreground mt-0.5 shrink-0" />
+        <div className="text-sm text-foreground/80">
+          <p className="font-semibold mb-1 text-foreground">Para un resultado premium:</p>
+          <ul className="text-xs space-y-0.5 text-muted-foreground">
             <li>Relación de aspecto panorámica <b>16:9</b></li>
             <li>Resolución mínima recomendada: <b>1200 x 800 px</b></li>
-            <li>Formatos aceptados: <b>JPG, PNG</b> (se optimizan a WebP)</li>
+            <li>Formatos aceptados: <b>JPG, PNG</b></li>
             <li>Peso máximo por imagen: <b>10 MB</b></li>
           </ul>
         </div>
@@ -149,10 +146,10 @@ export function ImagesStep({ images, onFilesSelected, onRemove }: ImagesStepProp
         }}
       />
       <div
-        className={`border-2 border-dashed rounded-xl p-8 text-center transition-colors cursor-pointer ${
+        className={`border-2 border-dashed rounded-2xl p-8 text-center transition-all cursor-pointer ${
           dragOver
-            ? "border-primary bg-primary/5"
-            : "hover:border-primary/50 bg-muted/20"
+            ? "border-border bg-muted/30"
+            : "border-border/50 bg-white dark:bg-card hover:border-border hover:bg-muted/20"
         }`}
         onClick={() => fileInputRef.current?.click()}
         onDragOver={(e) => {
@@ -188,7 +185,7 @@ export function ImagesStep({ images, onFilesSelected, onRemove }: ImagesStepProp
                 <X className="h-4 w-4" />
               </button>
               {index === 0 && (
-                <span className="absolute bottom-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
+                <span className="absolute bottom-2 left-2 bg-foreground/80 text-background text-xs px-2 py-1 rounded-md font-medium">
                   Principal
                 </span>
               )}

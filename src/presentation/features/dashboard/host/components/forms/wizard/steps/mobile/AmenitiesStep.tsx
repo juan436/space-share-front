@@ -23,13 +23,13 @@ export function AmenitiesStep({
         <label
           className={cn(
             "bg-background rounded-xl p-4 border flex items-center justify-between",
-            newSpace.climateControlled && "border-primary bg-primary/5"
+            newSpace.climateControlled && "border-border bg-muted/40"
           )}
         >
           <div className="flex items-center gap-3">
             <div className={cn(
               "h-10 w-10 rounded-lg flex items-center justify-center",
-              newSpace.climateControlled ? "bg-primary text-primary-foreground" : "bg-muted"
+              newSpace.climateControlled ? "bg-blue-100 dark:bg-blue-950/40" : "bg-muted/60"
             )}>
               <Thermometer className="h-5 w-5" />
             </div>
@@ -47,13 +47,13 @@ export function AmenitiesStep({
         <label
           className={cn(
             "bg-background rounded-xl p-4 border flex items-center justify-between",
-            newSpace.securityCamera && "border-primary bg-primary/5"
+            newSpace.securityCamera && "border-border bg-muted/40"
           )}
         >
           <div className="flex items-center gap-3">
             <div className={cn(
               "h-10 w-10 rounded-lg flex items-center justify-center",
-              newSpace.securityCamera ? "bg-primary text-primary-foreground" : "bg-muted"
+              newSpace.securityCamera ? "bg-emerald-100 dark:bg-emerald-950/40" : "bg-muted/60"
             )}>
               <Shield className="h-5 w-5" />
             </div>
@@ -71,13 +71,13 @@ export function AmenitiesStep({
         <label
           className={cn(
             "bg-background rounded-xl p-4 border flex items-center justify-between",
-            newSpace.privateEntrance && "border-primary bg-primary/5"
+            newSpace.privateEntrance && "border-border bg-muted/40"
           )}
         >
           <div className="flex items-center gap-3">
             <div className={cn(
               "h-10 w-10 rounded-lg flex items-center justify-center",
-              newSpace.privateEntrance ? "bg-primary text-primary-foreground" : "bg-muted"
+              newSpace.privateEntrance ? "bg-violet-100 dark:bg-violet-950/40" : "bg-muted/60"
             )}>
               <DoorOpen className="h-5 w-5" />
             </div>

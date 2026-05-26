@@ -53,11 +53,11 @@ export function AddSpaceWizard({
           Agregar Espacio
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0">
+      <DialogContent className="w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0 rounded-2xl">
         {spaceMode === null && (
           <>
-            <div className="border-b bg-muted/30">
-              <DialogHeader className="p-4">
+            <div className="border-b border-border/40 bg-white dark:bg-card">
+              <DialogHeader className="px-4 py-4 sm:px-6">
                 <DialogTitle className="text-xl font-semibold">
                   ¿Qué tipo de espacio deseas publicar?
                 </DialogTitle>

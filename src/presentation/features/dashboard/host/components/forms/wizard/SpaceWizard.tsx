@@ -2,7 +2,6 @@
 
 import { useState, useCallback } from "react";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
-import { Home } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 import { useLocationData } from "@/presentation/hooks/useLocationData";
 import { useUseCases } from "@/presentation/providers/usecases-context";
@@ -80,18 +79,20 @@ export function SpaceWizard({
   return (
     <>
       {/* Header con Stepper */}
-      <div className="border-b bg-muted/30">
-        <DialogHeader className="p-4 pb-0">
-          <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-            <Home className="h-5 w-5 text-blue-600" />
-            {editMode ? "Editar Espacio" : "Publicar Espacio Normal"}
+      <div className="border-b border-border/40 bg-white dark:bg-card">
+        <DialogHeader className="px-4 pt-5 pb-1 sm:px-6">
+          <DialogTitle className="text-xl font-semibold text-foreground">
+            {editMode ? "Editar Espacio" : "Publicar Espacio"}
           </DialogTitle>
+          <p className="text-sm text-muted-foreground">
+            Paso {currentStep} de {WIZARD_STEPS.length} — completa cada sección
+          </p>
         </DialogHeader>
         <WizardStepper currentStep={currentStep} />
       </div>
 
       {/* Content */}
-      <div className="flex-1 p-4 sm:p-6 overflow-y-auto">
+      <div className="flex-1 px-4 py-6 sm:px-6 overflow-y-auto">
         {currentStep === 1 && (
           <DescriptionStep
             newSpace={newSpace}

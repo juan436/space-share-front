@@ -17,7 +17,7 @@ export function ImagesStep({
     <div className="space-y-4">
       <div className="bg-background rounded-xl p-4 border">
         <div className="flex items-start gap-3">
-          <div className="h-10 w-10 rounded-lg bg-primary/10 text-primary flex items-center justify-center">
+          <div className="h-10 w-10 rounded-lg bg-muted/60 text-muted-foreground flex items-center justify-center">
             <ImageIcon className="h-5 w-5" />
           </div>
           <div>
@@ -46,7 +46,7 @@ export function ImagesStep({
                   <X className="h-4 w-4" />
                 </button>
                 {idx === 0 && (
-                  <span className="absolute bottom-2 left-2 bg-primary text-primary-foreground text-xs px-2 py-1 rounded">
+                  <span className="absolute bottom-2 left-2 bg-foreground/80 text-background text-xs px-2 py-1 rounded-md font-medium">
                     Principal
                   </span>
                 )}

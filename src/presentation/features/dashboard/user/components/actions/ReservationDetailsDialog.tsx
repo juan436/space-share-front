@@ -54,7 +54,7 @@ export function ReservationDetailsDialog({
           )}
 
           {/* Dates */}
-          <div className="flex items-center gap-2 text-sm bg-muted/40 rounded-xl p-3">
+          <div className="flex items-center gap-2 text-sm bg-muted/30 border border-border/40 rounded-xl p-3">
             <Calendar className="w-4 h-4 text-primary shrink-0" />
             <span className="font-medium">
               {format(reservation.startDate, "d MMM yyyy", { locale: es })}
@@ -80,9 +80,9 @@ export function ReservationDetailsDialog({
           )}
 
           {/* Total */}
-          <div className="flex items-center justify-between p-3 bg-primary/5 rounded-xl border border-primary/10">
+          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl border border-border/40">
             <span className="text-sm text-muted-foreground">Total pagado</span>
-            <span className="font-bold text-lg flex items-center gap-1 text-primary">
+            <span className="font-bold text-lg flex items-center gap-1 text-emerald-600">
               <DollarSign className="w-4 h-4" />
               {reservation.totalPrice}
             </span>

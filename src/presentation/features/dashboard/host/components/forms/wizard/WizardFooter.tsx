@@ -29,13 +29,13 @@ export function WizardFooter({
   const isLastStep = currentStep === totalSteps;
 
   return (
-    <div className="border-t p-3 sm:p-4 flex justify-between items-center bg-background shrink-0">
+    <div className="border-t border-border/40 px-4 py-3 sm:px-6 sm:py-4 flex justify-between items-center bg-white dark:bg-card shrink-0">
       <Button
         variant="outline"
         onClick={onBack}
         className={cn(
-          "gap-2",
-          isFirstStep && "border-orange-500 text-orange-500 hover:bg-orange-50 hover:text-orange-600"
+          "gap-2 rounded-xl",
+          isFirstStep && "border-border/60 text-muted-foreground hover:text-foreground"
         )}
       >
         <ChevronLeft className="h-4 w-4" />
@@ -44,7 +44,7 @@ export function WizardFooter({
 
       <div className="flex gap-2">
         {!isLastStep ? (
-          <Button onClick={onNext} disabled={!canProceed} className="gap-2">
+          <Button onClick={onNext} disabled={!canProceed} className="gap-2 rounded-xl">
             Siguiente
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -52,7 +52,7 @@ export function WizardFooter({
           <Button
             onClick={onSubmit}
             disabled={isCreating || !isFormValid}
-            className="gap-2 bg-green-600 hover:bg-green-700"
+            className="gap-2 rounded-xl bg-emerald-600 hover:bg-emerald-700"
           >
             {isCreating ? (editMode ? "Guardando..." : "Publicando...") : (editMode ? "Guardar cambios" : "Publicar espacio")}
             <Check className="h-4 w-4" />
