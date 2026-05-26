@@ -26,6 +26,8 @@ FROM base AS runner
 
 ENV NODE_ENV=production
 
+RUN chown node:node /app
+
 COPY --from=build --chown=node:node /app/package.json ./package.json
 COPY --from=build --chown=node:node /app/node_modules ./node_modules
 COPY --from=build --chown=node:node /app/.next ./.next
@@ -35,4 +37,4 @@ EXPOSE 3000
 
 USER node
 
-CMD ["pnpm", "start", "-p", "3000", "-H", "0.0.0.0"]
+CMD ["node_modules/.bin/next", "start", "-p", "3000", "-H", "0.0.0.0"]
