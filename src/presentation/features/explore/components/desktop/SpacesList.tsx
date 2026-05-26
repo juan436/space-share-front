@@ -6,6 +6,13 @@ import { Space } from "@/core/domain/entities/Space";
 import { SpaceCard } from "./SpaceCard";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { cn } from "@/presentation/utils/cn";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/presentation/components/ui/select";
 
 interface SpacesListProps {
   spaces: Space[];
@@ -98,19 +105,22 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
             <span className="font-bold text-foreground">{displayTotal}</span> espacios disponibles
           </p>
         </div>
-        <select
-          aria-label="Ordenar espacios"
-          value={sortBy}
-          onChange={(e) => setSortBy(e.target.value)}
-          className="text-xs font-medium bg-background/50 border border-border/50 rounded-full px-3 py-1.5 text-muted-foreground cursor-pointer focus:outline-none focus:border-primary/40 transition-colors"
-        >
-          <option value="recommended">Recomendados</option>
-          <option value="price-asc">Precio ↑</option>
-          <option value="price-desc">Precio ↓</option>
-          <option value="size-asc">Tamaño ↑</option>
-          <option value="size-desc">Tamaño ↓</option>
-          <option value="rating">Mejor valorados</option>
-        </select>
+        <div className="flex items-center gap-1.5">
+          <span className="text-xs text-muted-foreground">Ordenar por:</span>
+          <Select value={sortBy} onValueChange={setSortBy}>
+            <SelectTrigger className="h-8 text-xs font-semibold bg-white dark:bg-card border border-border/50 rounded-xl px-3 w-auto focus:ring-0 focus:ring-offset-0 hover:border-border transition-colors gap-1.5">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="recommended">Recomendados</SelectItem>
+              <SelectItem value="price-asc">Precio ↑</SelectItem>
+              <SelectItem value="price-desc">Precio ↓</SelectItem>
+              <SelectItem value="size-asc">Tamaño ↑</SelectItem>
+              <SelectItem value="size-desc">Tamaño ↓</SelectItem>
+              <SelectItem value="rating">Mejor valorados</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
       </div>
 
       {/* Cards */}
