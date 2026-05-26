@@ -4,7 +4,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "@/presentation/components/ui/dropdown-menu";
-import { MoreHorizontal, Building2 } from "lucide-react";
+import { MoreHorizontal, Building2, ImageIcon } from "lucide-react";
 import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels } from "@/presentation/types/spaces";
 import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
 
@@ -45,6 +45,7 @@ export function SpacesTable({ spaces, isLoading, isDeleting, isUpdating, onDelet
         <TableRow>
           <TableHead>Espacio</TableHead>
           <TableHead>Tipo</TableHead>
+          <TableHead>Ubicación</TableHead>
           <TableHead>Estado</TableHead>
           <TableHead>m²</TableHead>
           <TableHead>Precio/mes</TableHead>
@@ -54,8 +55,22 @@ export function SpacesTable({ spaces, isLoading, isDeleting, isUpdating, onDelet
       <TableBody>
         {spaces.map((space) => (
           <TableRow key={space.id}>
-            <TableCell className="font-medium">{space.title}</TableCell>
+            <TableCell>
+                <div className="flex items-center gap-3">
+                  <div className="w-10 h-8 rounded-md overflow-hidden flex-shrink-0 bg-muted">
+                    {space.images?.[0] ? (
+                      <img src={space.images[0]} alt={space.title} className="w-full h-full object-cover" />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center">
+                        <ImageIcon className="w-3.5 h-3.5 text-muted-foreground/40" />
+                      </div>
+                    )}
+                  </div>
+                  <span className="font-medium text-sm">{space.title}</span>
+                </div>
+              </TableCell>
             <TableCell>{spaceTypeLabels[space.type]}</TableCell>
+            <TableCell className="text-muted-foreground">{space.city}{space.state ? `, ${space.state}` : ""}</TableCell>
             <TableCell>
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${SPACE_STATUS_BADGE[space.status]}`}>
                 {SPACE_STATUS_LABEL[space.status]}

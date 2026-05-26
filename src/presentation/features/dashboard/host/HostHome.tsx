@@ -1,5 +1,5 @@
 import { useAuth } from "@/presentation/providers/auth-context";
-import { Building2, TrendingUp, DollarSign, Calendar, ArrowRight, Plus, MessageSquare, Heart } from "lucide-react";
+import { Building2, TrendingUp, DollarSign, Calendar, ArrowRight, Plus, MessageSquare, Heart, MessageCircle } from "lucide-react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
 import Link from "next/link";
 
@@ -106,11 +106,11 @@ export function HostHome({ onNavigate }: HostHomeProps) {
           return (
             <div
               key={stat.label}
-              className="group relative p-5 rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 animate-fade-in-up"
+              className="group relative p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${idx * 80}ms` }}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
+                <div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center">
                   <Icon className={`w-5 h-5 ${stat.iconColor}`} />
                 </div>
               </div>
@@ -128,10 +128,10 @@ export function HostHome({ onNavigate }: HostHomeProps) {
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           {quickActions.map((action, idx) => {
             const Icon = action.icon;
-            const sharedClass = "group flex items-center gap-4 p-4 rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-md transition-all duration-300 animate-fade-in-up text-left";
+            const sharedClass = "group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up text-left";
             const content = (
               <>
-                <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/12 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center flex-shrink-0 group-hover:bg-muted/80 transition-colors">
                   <Icon className="w-5 h-5 text-primary" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -161,6 +161,45 @@ export function HostHome({ onNavigate }: HostHomeProps) {
               </button>
             );
           })}
+        </div>
+      </div>
+      {/* Promo + Soporte */}
+      <div className="grid sm:grid-cols-2 gap-5">
+        <div className="relative rounded-2xl bg-foreground dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.10)] p-6 overflow-hidden">
+          <div className="absolute inset-0 opacity-[0.06] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-white via-white to-transparent pointer-events-none" />
+          <div className="relative">
+            <TrendingUp className="w-6 h-6 text-background/60 mb-3" />
+            <h3 className="text-lg font-bold text-background leading-snug">Maximiza tus ingresos con SpaceShare</h3>
+            <p className="text-sm text-background/55 mt-2 leading-relaxed">
+              Hemos notado una alta demanda en tu zona. ¡Considera ajustar tus precios para obtener un 15% más de rentabilidad!
+            </p>
+            <Link
+              href="/contact"
+              className="inline-flex items-center gap-1.5 mt-4 text-xs font-semibold px-4 py-2 rounded-lg bg-background/10 hover:bg-background/18 text-background transition-colors border border-background/20"
+            >
+              Ver reporte completo
+            </Link>
+          </div>
+        </div>
+
+        <div className="rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] p-6 flex flex-col justify-between">
+          <div>
+            <div className="flex items-center gap-2 mb-3">
+              <div className="w-8 h-8 rounded-lg bg-muted/60 flex items-center justify-center">
+                <MessageCircle className="w-4 h-4 text-muted-foreground" />
+              </div>
+              <p className="text-sm font-semibold text-foreground">Soporte Host</p>
+            </div>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              ¿Necesitas ayuda para configurar un nuevo espacio o resolver dudas sobre pagos?
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-1 mt-5 text-xs font-semibold text-primary hover:underline"
+          >
+            Contactar Asesoría →
+          </Link>
         </div>
       </div>
     </div>

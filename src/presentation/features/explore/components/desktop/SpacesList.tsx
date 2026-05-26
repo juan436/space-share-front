@@ -1,11 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { SpaceCard } from "./SpaceCard";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { cn } from "@/presentation/utils/cn";
+import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
 import {
   Select,
   SelectContent,
@@ -26,17 +26,6 @@ interface SpacesListProps {
   onPageChange?: (page: number) => void;
 }
 
-function getPageNumbers(current: number, total: number): (number | "...")[] {
-  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-  const pages: (number | "...")[] = [1];
-  if (current > 3) pages.push("...");
-  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
-    pages.push(i);
-  }
-  if (current < total - 2) pages.push("...");
-  pages.push(total);
-  return pages;
-}
 
 export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, showMap, totalSpaces, page = 1, totalPages = 1, onPageChange }: SpacesListProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
@@ -93,7 +82,6 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
   }
 
   const displayTotal = totalSpaces ?? spaces.length;
-  const pageNumbers = getPageNumbers(page, totalPages);
 
   return (
     <div className="px-6 py-5 pb-8 space-y-4">
@@ -150,48 +138,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
       </div>
 
       {/* Pagination */}
-      {totalPages > 1 && (
-        <div className="flex items-center justify-center gap-1 pt-6">
-          <button
-            onClick={() => onPageChange?.(page - 1)}
-            disabled={page === 1}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            aria-label="Página anterior"
-          >
-            <ChevronLeft className="w-4 h-4" />
-          </button>
-
-          {pageNumbers.map((p, i) =>
-            p === "..." ? (
-              <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center text-sm text-muted-foreground">
-                …
-              </span>
-            ) : (
-              <button
-                key={p}
-                onClick={() => onPageChange?.(p as number)}
-                className={cn(
-                  "w-9 h-9 rounded-lg text-sm font-medium transition-colors",
-                  p === page
-                    ? "bg-primary text-primary-foreground shadow-sm"
-                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                )}
-              >
-                {p}
-              </button>
-            )
-          )}
-
-          <button
-            onClick={() => onPageChange?.(page + 1)}
-            disabled={page === totalPages}
-            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
-            aria-label="Página siguiente"
-          >
-            <ChevronRight className="w-4 h-4" />
-          </button>
-        </div>
-      )}
+      <PaginationBar page={page} totalPages={totalPages} onPageChange={(p) => onPageChange?.(p)} className="pt-6" />
     </div>
   );
 }

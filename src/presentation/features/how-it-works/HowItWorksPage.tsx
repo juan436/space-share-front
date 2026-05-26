@@ -70,8 +70,8 @@ export function HowItWorksPage() {
         </Link>
 
         <div className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/8 border border-primary/15 text-primary text-xs font-semibold mb-5">
-            <Star className="w-3.5 h-3.5 fill-primary" />
+          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-muted/60 border border-border/40 text-muted-foreground text-xs font-semibold mb-5">
+            <Star className="w-3.5 h-3.5" />
             Simple, seguro y rápido
           </div>
           <h1 className="text-5xl font-bold tracking-tight text-foreground mb-5 max-w-2xl mx-auto leading-tight">
@@ -109,19 +109,19 @@ export function HowItWorksPage() {
             return (
               <div
                 key={step.number}
-                className="relative p-8 rounded-2xl bg-white dark:bg-card border border-border/50 hover:border-primary/20 hover:shadow-lg transition-all duration-300 group"
+                className="relative p-8 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 group"
               >
                 <div className="text-6xl font-bold text-muted-foreground/10 absolute top-6 right-7 select-none">
                   {step.number}
                 </div>
-                <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-5 group-hover:bg-primary/15 transition-colors">
+                <div className="w-12 h-12 rounded-xl bg-muted/60 flex items-center justify-center mb-5 group-hover:bg-muted/80 transition-colors">
                   <Icon className="w-6 h-6 text-primary" />
                 </div>
                 <h3 className="text-xl font-bold text-foreground mb-3">{step.title}</h3>
                 <p className="text-sm text-muted-foreground leading-relaxed">{step.description}</p>
                 {idx < steps.length - 1 && (
                   <div className="hidden md:block absolute -right-3 top-1/2 -translate-y-1/2 z-10">
-                    <div className="w-6 h-6 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center">
+                    <div className="w-6 h-6 rounded-full bg-muted border border-border/40 flex items-center justify-center">
                       <ArrowRight className="w-3 h-3 text-primary" />
                     </div>
                   </div>
@@ -147,9 +147,9 @@ export function HowItWorksPage() {
               return (
                 <div
                   key={b.title}
-                  className="p-6 rounded-xl bg-white dark:bg-card border border-border/40 hover:border-primary/20 hover:shadow-sm transition-all duration-200"
+                  className="p-6 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-200"
                 >
-                  <div className="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center mb-4">
+                  <div className="w-10 h-10 rounded-lg bg-muted/60 flex items-center justify-center mb-4">
                     <Icon className="w-5 h-5 text-primary" />
                   </div>
                   <h4 className="font-semibold text-foreground mb-1.5">{b.title}</h4>

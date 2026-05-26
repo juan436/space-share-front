@@ -1,5 +1,5 @@
 import { useAuth } from "@/presentation/providers/auth-context";
-import { Calendar, DollarSign, Package, TrendingUp, ArrowRight, Compass, MessageSquare } from "lucide-react";
+import { Calendar, DollarSign, Package, TrendingUp, ArrowRight, Compass, MessageSquare, ShieldCheck, Clock, Star, Zap } from "lucide-react";
 import Link from "next/link";
 
 function getGreeting(): string {
@@ -17,14 +17,14 @@ function getTodayDate(): string {
   });
 }
 
-const stats = [
+const STATS = [
   {
     label: "Reservaciones Activas",
     value: "3",
     delta: "1 finalizando esta semana",
     icon: Calendar,
-    color: "from-primary/15 to-primary/5",
-    iconColor: "text-primary",
+    iconClass: "text-primary",
+    bgClass: "bg-primary/8 dark:bg-primary/15",
   },
   {
     label: "Gasto Mensual",
@@ -32,28 +32,28 @@ const stats = [
     delta: "-8% vs mes anterior",
     deltaDown: true,
     icon: DollarSign,
-    color: "from-emerald-500/15 to-emerald-500/5",
-    iconColor: "text-emerald-600",
+    iconClass: "text-emerald-600",
+    bgClass: "bg-emerald-50 dark:bg-emerald-950/30",
   },
   {
     label: "Espacios Alquilados",
     value: "2",
     delta: "Diferentes anfitriones",
     icon: Package,
-    color: "from-violet-500/15 to-violet-500/5",
-    iconColor: "text-violet-600",
+    iconClass: "text-violet-600",
+    bgClass: "bg-violet-50 dark:bg-violet-950/30",
   },
   {
     label: "Tiempo Total",
     value: "45d",
     delta: "Acumulado este año",
     icon: TrendingUp,
-    color: "from-accent/15 to-accent/5",
-    iconColor: "text-accent",
+    iconClass: "text-amber-600",
+    bgClass: "bg-amber-50 dark:bg-amber-950/30",
   },
 ];
 
-const quickActions = [
+const QUICK_ACTIONS = [
   {
     icon: Compass,
     label: "Explorar Espacios",
@@ -74,6 +74,13 @@ const quickActions = [
   },
 ];
 
+const BENEFITS = [
+  { icon: ShieldCheck, label: "Pagos protegidos", desc: "Tu dinero seguro hasta confirmar el espacio" },
+  { icon: Clock, label: "Acceso 24/7", desc: "Entra a tu espacio cuando lo necesites" },
+  { icon: Star, label: "Anfitriones verificados", desc: "Cada espacio revisado por nuestro equipo" },
+  { icon: Zap, label: "Reserva en minutos", desc: "Sin papeleo, sin complicaciones" },
+];
+
 export function UserHome() {
   const { user } = useAuth();
 
@@ -90,22 +97,22 @@ export function UserHome() {
 
       {/* Stat Cards */}
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        {stats.map((stat, idx) => {
+        {STATS.map((stat, idx) => {
           const Icon = stat.icon;
           return (
             <div
               key={stat.label}
-              className="group relative p-5 rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-lg hover:shadow-primary/5 transition-all duration-300 animate-fade-in-up"
+              className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${idx * 80}ms` }}
             >
               <div className="flex items-start justify-between mb-4">
-                <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${stat.color} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 ${stat.iconColor}`} />
+                <div className={`w-10 h-10 rounded-xl ${stat.bgClass} flex items-center justify-center`}>
+                  <Icon className={`w-5 h-5 ${stat.iconClass}`} />
                 </div>
               </div>
               <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
-              <p className={`text-[11px] mt-2 ${stat.deltaDown ? "text-red-500" : "text-muted-foreground/70"}`}>
+              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mt-1">{stat.label}</p>
+              <p className={`text-[11px] mt-1 ${stat.deltaDown ? "text-red-500" : "text-muted-foreground/70"}`}>
                 {stat.delta}
               </p>
             </div>
@@ -117,17 +124,17 @@ export function UserHome() {
       <div>
         <h2 className="text-lg font-semibold text-foreground mb-4">Acciones rápidas</h2>
         <div className="grid gap-3 sm:grid-cols-3">
-          {quickActions.map((action, idx) => {
+          {QUICK_ACTIONS.map((action, idx) => {
             const Icon = action.icon;
             return (
               <Link
                 key={action.label}
                 href={action.href}
-                className="group flex items-center gap-4 p-4 rounded-2xl bg-card border border-border/50 hover:border-primary/20 hover:shadow-md transition-all duration-300 animate-fade-in-up"
+                className="group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
                 style={{ animationDelay: `${(idx + 4) * 80}ms` }}
               >
-                <div className="w-10 h-10 rounded-xl bg-primary/8 flex items-center justify-center flex-shrink-0 group-hover:bg-primary/12 transition-colors">
-                  <Icon className="w-5 h-5 text-primary" />
+                <div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center flex-shrink-0 group-hover:bg-muted/80 transition-colors">
+                  <Icon className="w-5 h-5 text-foreground/60" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-sm font-semibold text-foreground">{action.label}</p>
@@ -135,6 +142,51 @@ export function UserHome() {
                 </div>
                 <ArrowRight className="w-4 h-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all flex-shrink-0" />
               </Link>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Promo section */}
+      <div className="grid sm:grid-cols-5 gap-5">
+        {/* Dark banner — become a host */}
+        <div className="sm:col-span-3 relative rounded-2xl bg-foreground dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.10)] p-7 overflow-hidden flex flex-col justify-between min-h-[200px]">
+          <div className="absolute inset-0 pointer-events-none opacity-[0.07] bg-[radial-gradient(ellipse_at_bottom_left,_var(--tw-gradient-stops))] from-primary via-accent to-transparent" />
+          <div className="relative space-y-3">
+            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-background/10 border border-background/15 text-background/70 text-[11px] font-semibold">
+              <Zap className="w-3 h-3" /> Para ti
+            </span>
+            <h3 className="text-xl font-bold text-background leading-snug max-w-xs">
+              ¿Tienes espacio disponible? Genera ingresos extra con SpaceShare
+            </h3>
+            <p className="text-sm text-background/55 leading-relaxed max-w-sm">
+              Publica tu garaje, bodega o cuarto en minutos. Miles de personas buscan exactamente lo que tú tienes.
+            </p>
+          </div>
+          <Link
+            href="/contact"
+            className="relative inline-flex items-center gap-2 mt-5 self-start text-sm font-semibold px-5 py-2.5 rounded-xl bg-background/10 hover:bg-background/18 text-background border border-background/20 transition-colors"
+          >
+            Quiero ser Anfitrión
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+
+        {/* Benefits grid */}
+        <div className="sm:col-span-2 grid grid-cols-2 gap-3">
+          {BENEFITS.map((b) => {
+            const Icon = b.icon;
+            return (
+              <div
+                key={b.label}
+                className="p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] flex flex-col gap-2"
+              >
+                <div className="w-8 h-8 rounded-lg bg-muted/60 flex items-center justify-center">
+                  <Icon className="w-4 h-4 text-muted-foreground" />
+                </div>
+                <p className="text-xs font-semibold text-foreground leading-snug">{b.label}</p>
+                <p className="text-[10px] text-muted-foreground leading-relaxed">{b.desc}</p>
+              </div>
             );
           })}
         </div>

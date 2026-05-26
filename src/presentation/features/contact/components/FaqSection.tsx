@@ -36,7 +36,7 @@ export function FaqSection() {
           return (
             <div
               key={idx}
-              className="rounded-xl border border-border/40 bg-white dark:bg-card overflow-hidden transition-colors hover:border-primary/20"
+              className="rounded-xl border border-border/60 bg-white dark:bg-card shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)] hover:border-border/80 overflow-hidden transition-all duration-200"
             >
               <button
                 onClick={() => setOpenIdx(isOpen ? null : idx)}

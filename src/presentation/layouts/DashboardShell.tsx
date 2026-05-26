@@ -37,7 +37,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
   const roleName = roleNames[user.role] ?? user.role;
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
+    <div className="h-screen bg-white dark:bg-background flex flex-col overflow-hidden">
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 w-full glass-strong border-b border-border/40 shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]">
         <div className="flex h-14 items-center justify-between px-6">
@@ -49,7 +49,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
           </Link>
 
           <div className="flex items-center gap-3">
-            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md bg-primary/8 text-primary text-xs font-semibold">
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md bg-muted/70 text-muted-foreground text-xs font-semibold">
               <LayoutDashboard className="w-3 h-3 mr-1.5" />
               {roleName}
             </span>
@@ -95,7 +95,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
       {/* ── Body ── */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* ── Sidebar ── */}
-        <aside className="hidden md:flex w-60 flex-col bg-card/50 border-r border-border/40">
+        <aside className="hidden md:flex w-60 flex-col bg-white dark:bg-card/50 border-r border-border/40">
           <nav className="flex-1 px-3 py-4 space-y-1">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -106,7 +106,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
                   className={cn(
                     "w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-left",
                     isActive
-                      ? "bg-primary/10 text-primary border-l-2 border-primary ml-0"
+                      ? "bg-muted/70 text-foreground font-semibold border-l-2 border-primary"
                       : "text-muted-foreground hover:text-foreground hover:bg-muted/50 border-l-2 border-transparent"
                   )}
                 >
@@ -151,7 +151,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
         </nav>
 
         {/* ── Main Content ── */}
-        <main className="flex-1 overflow-y-auto thin-scrollbar pb-20 md:pb-0">
+        <main className="flex-1 overflow-y-auto thin-scrollbar pb-20 md:pb-0 bg-slate-50/60 dark:bg-background">
           <div className="mx-auto w-full max-w-6xl px-6 py-6">
             {children}
           </div>

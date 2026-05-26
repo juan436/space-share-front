@@ -9,7 +9,7 @@ export function ContactForm() {
   const { formState, setFormState, sent, handleSubmit } = useContactForm();
 
   return (
-    <div className="p-8 rounded-2xl bg-card border border-border/50">
+    <div className="p-8 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
       <h2 className="text-xl font-bold text-foreground mb-1">Envíanos un mensaje</h2>
       <p className="text-sm text-muted-foreground mb-6">Te respondemos en menos de 24 horas hábiles.</p>
 

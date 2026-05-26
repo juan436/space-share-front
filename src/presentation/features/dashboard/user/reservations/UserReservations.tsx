@@ -3,16 +3,17 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { Card, CardContent } from "@/presentation/components/ui/card";
-import { Calendar, Loader2, ChevronLeft, ChevronRight } from "lucide-react";
+import { Calendar, Loader2, Search } from "lucide-react";
 import { Button } from "@/presentation/components/ui/button";
+import { Input } from "@/presentation/components/ui/input";
+import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
 import { ReviewDialog, ReservationDetailsDialog, UserReservationCard } from "../components";
 import { useUserReservations } from "../hooks/useUserReservations";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { useToast } from "@/presentation/hooks/use-toast";
 
-const PAGE_SIZE = 4;
+const PAGE_SIZE = 6;
 
 export function UserReservations() {
   const { reservations, isLoading, isError, errorMessage, reviewedIds, initiatingPaymentId, submitReview, initiatePayment } = useUserReservations();
@@ -27,7 +28,15 @@ export function UserReservations() {
     toast({ title: "Pago procesado", description: "Verifica el estado de tu reservación." });
     router.replace("/dashboard/user/reservations");
   }, [searchParams, queryClient, toast, router]);
-  const { activeTab, currentPage, setCurrentPage, handleTabChange, filteredReservations, paginatedReservations, totalPages, tabs } = usePaginatedReservations(reservations, PAGE_SIZE);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const searchedReservations = searchQuery.trim()
+    ? reservations.filter((r) =>
+        r.space?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        r.host?.name?.toLowerCase().includes(searchQuery.toLowerCase())
+      )
+    : reservations;
+  const { activeTab, currentPage, setCurrentPage, handleTabChange, filteredReservations, paginatedReservations, totalPages, tabs } = usePaginatedReservations(searchedReservations, PAGE_SIZE);
   const [reviewingId, setReviewingId] = useState<string | null>(null);
   const [reviewSubmitting, setReviewSubmitting] = useState(false);
   const [reviewError, setReviewError] = useState<string | null>(null);
@@ -54,23 +63,37 @@ export function UserReservations() {
         <p className="text-muted-foreground">Historial y estado de tus solicitudes de reserva</p>
       </div>
 
-      <div className="flex gap-2 flex-wrap">
-        {tabs.map((tab) => (
-          <button
-            key={tab.key}
-            onClick={() => handleTabChange(tab.key)}
-            className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
-              activeTab === tab.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
-            }`}
-          >
-            {tab.label}
-            {tab.count > 0 && (
-              <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-xs ${activeTab === tab.key ? "bg-primary-foreground/20" : "bg-background"}`}>
-                {tab.count}
-              </span>
-            )}
-          </button>
-        ))}
+      {/* Search + Filters */}
+      <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-4 space-y-3">
+        <div className="relative">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/40 pointer-events-none" />
+          <Input
+            placeholder="Buscar espacio o anfitrión..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-9 h-9 text-sm rounded-xl bg-muted/30 border-border/40 focus-visible:ring-primary/20"
+          />
+        </div>
+        <div className="h-px bg-border/40" />
+        <div className="flex items-center gap-2 flex-wrap">
+          <span className="text-xs text-muted-foreground font-medium shrink-0">Estado:</span>
+          {tabs.map((tab) => (
+            <button
+              key={tab.key}
+              onClick={() => handleTabChange(tab.key)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+                activeTab === tab.key ? "bg-primary text-primary-foreground shadow-sm" : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
+              }`}
+            >
+              {tab.label}
+              {tab.count > 0 && (
+                <span className={`ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] ${activeTab === tab.key ? "bg-primary-foreground/20" : "bg-muted"}`}>
+                  {tab.count}
+                </span>
+              )}
+            </button>
+          ))}
+        </div>
       </div>
 
       {isLoading ? (
@@ -79,28 +102,20 @@ export function UserReservations() {
           <p className="text-sm text-muted-foreground mt-2">Cargando reservaciones...</p>
         </div>
       ) : isError ? (
-        <Card>
-          <CardContent>
-            <div className="text-center py-12 text-muted-foreground">
-              <Calendar className="mx-auto h-12 w-12 mb-4 opacity-50" />
-              <p className="text-lg font-medium">Error al cargar las reservaciones</p>
-              <p className="text-sm">{errorMessage ?? "Intenta recargar la página"}</p>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-8 text-center text-muted-foreground">
+          <Calendar className="mx-auto h-10 w-10 mb-4 opacity-40" />
+          <p className="text-base font-semibold text-foreground">Error al cargar las reservaciones</p>
+          <p className="text-sm mt-1">{errorMessage ?? "Intenta recargar la página"}</p>
+        </div>
       ) : filteredReservations.length === 0 ? (
-        <Card>
-          <CardContent>
-            <div className="text-center py-12 text-muted-foreground">
-              <Calendar className="mx-auto h-12 w-12 mb-4 opacity-50" />
-              <p className="text-lg font-medium">No tienes reservaciones {activeTab !== "all" ? STATUS_CONFIG[activeTab]?.label.toLowerCase() + "s" : "aún"}</p>
-              <p className="text-sm">Cuando reserves un espacio, aparecerá aquí</p>
-            </div>
-          </CardContent>
-        </Card>
+        <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-8 text-center text-muted-foreground">
+          <Calendar className="mx-auto h-10 w-10 mb-4 opacity-40" />
+          <p className="text-base font-semibold text-foreground">No tienes reservaciones {activeTab !== "all" ? STATUS_CONFIG[activeTab]?.label.toLowerCase() + "s" : "aún"}</p>
+          <p className="text-sm mt-1">Cuando reserves un espacio, aparecerá aquí</p>
+        </div>
       ) : (
         <>
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
             {paginatedReservations.map((reservation) => (
               <UserReservationCard
                 key={reservation.id}
@@ -114,24 +129,7 @@ export function UserReservations() {
             ))}
           </div>
 
-          {totalPages > 1 && (
-            <div className="flex items-center justify-between pt-4">
-              <p className="text-sm text-muted-foreground">
-                {(currentPage - 1) * PAGE_SIZE + 1}–{Math.min(currentPage * PAGE_SIZE, filteredReservations.length)} de {filteredReservations.length}
-              </p>
-              <div className="flex items-center gap-2">
-                <Button variant="outline" size="sm" disabled={currentPage <= 1} onClick={() => setCurrentPage((p) => p - 1)} className="rounded-xl">
-                  <ChevronLeft className="w-4 h-4" />
-                </Button>
-                {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
-                  <Button key={p} variant={p === currentPage ? "default" : "outline"} size="sm" onClick={() => setCurrentPage(p)} className="rounded-xl w-9 h-9 p-0">{p}</Button>
-                ))}
-                <Button variant="outline" size="sm" disabled={currentPage >= totalPages} onClick={() => setCurrentPage((p) => p + 1)} className="rounded-xl">
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              </div>
-            </div>
-          )}
+          <PaginationBar page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} className="pt-4" />
         </>
       )}
 

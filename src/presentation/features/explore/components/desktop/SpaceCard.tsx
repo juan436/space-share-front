@@ -41,8 +41,8 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
       onClick={handleClick}
       className={cn(
         "group flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300",
-        "bg-white dark:bg-card border border-border/40",
-        "hover:shadow-[0_8px_30px_rgb(0,0,0,0.10)] hover:border-border/60",
+        "bg-white dark:bg-card border border-border/60",
+        "shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80",
         isSelected && "shadow-[0_8px_30px_rgb(0,0,0,0.10)] border-primary/30 ring-1 ring-primary/10"
       )}
     >
@@ -51,7 +51,7 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
         {space.images && space.images.length > 0 ? (
           <Image src={space.images[0]} alt={space.title} fill className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out" />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">
+          <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-muted/80 to-muted/40">
             <Ruler className="w-10 h-10 text-muted-foreground/30" />
           </div>
         )}

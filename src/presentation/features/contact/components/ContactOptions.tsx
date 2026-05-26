@@ -32,9 +32,9 @@ export function ContactOptions() {
         return (
           <div
             key={opt.title}
-            className="flex flex-col gap-3 p-6 rounded-2xl bg-white dark:bg-card border border-border/50 hover:border-primary/20 hover:shadow-md transition-all duration-300 group"
+            className="flex flex-col gap-3 p-6 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 group"
           >
-            <div className="w-11 h-11 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/15 transition-colors">
+            <div className="w-11 h-11 rounded-xl bg-muted/60 flex items-center justify-center group-hover:bg-muted/80 transition-colors">
               <Icon className="w-5 h-5 text-primary" />
             </div>
             <div>
