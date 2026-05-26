@@ -31,7 +31,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
 
   return (
     <div onClick={handleClick} className="bg-card rounded-2xl overflow-hidden shadow-sm border active:scale-[0.98] transition-transform">
-      <div className="relative aspect-[16/10] bg-gradient-to-br from-primary/10 to-accent/10">
+      <div className="relative aspect-[16/10] bg-gradient-to-br from-muted/80 to-muted/40">
         {space.images && space.images.length > 0 ? (
           <Image src={space.images[0]} alt={space.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
         ) : (
@@ -50,11 +50,11 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
           <Heart className={`w-5 h-5 ${isFavorite ? "fill-rose-500 text-rose-500" : "text-muted-foreground"}`} />
         </button>
         <div className="absolute bottom-3 right-3 px-3 py-1.5 rounded-xl bg-white/95 backdrop-blur-sm shadow-sm">
-          <span className="text-lg font-bold text-primary">${space.pricePerMonth}</span>
+          <span className="text-lg font-bold text-foreground">${space.pricePerMonth}</span>
           <span className="text-xs text-muted-foreground">/mes</span>
         </div>
         {isOwner && (
-          <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-primary/90 backdrop-blur-sm text-primary-foreground text-xs font-bold shadow-sm">
+          <div className="absolute bottom-3 left-3 px-3 py-1.5 rounded-xl bg-foreground/80 backdrop-blur-sm text-background text-xs font-bold shadow-sm">
             Tu publicación
           </div>
         )}
@@ -62,7 +62,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
 
       <div className="p-4">
         <div className="flex items-start justify-between gap-2">
-          <h3 className="font-semibold text-base leading-tight">{space.title}</h3>
+          <h3 className="font-semibold text-sm leading-tight line-clamp-1 min-w-0">{space.title}</h3>
           {space.rating && space.rating > 0 ? (
             <div className="flex items-center gap-1 shrink-0">
               <Star className="w-4 h-4 fill-amber-400 text-amber-400" />

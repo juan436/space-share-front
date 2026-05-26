@@ -99,7 +99,7 @@ export function MobileSearchFilters({
             placeholder="¿Dónde necesitas espacio?"
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-11 pr-10 h-12 bg-muted/40 border border-border/40 rounded-2xl text-base shadow-sm focus:shadow-md focus:bg-card transition-all"
+            className="pl-11 pr-10 h-11 bg-white dark:bg-card border border-border/50 rounded-2xl text-sm shadow-[0_1px_4px_rgba(0,0,0,0.05)] focus:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all"
           />
           {searchQuery && (
             <button
@@ -175,9 +175,9 @@ export function MobileSearchFilters({
                         key={range}
                         onClick={() => setLocalFilters({ ...localFilters, priceRange: isActive ? null : range })}
                         className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
-                          isActive 
-                            ? "border-primary bg-primary/10 text-primary" 
-                            : "border-border/60 hover:border-primary/50 text-muted-foreground"
+                          isActive
+                            ? "border-foreground/30 bg-foreground/8 text-foreground font-semibold"
+                            : "border-border/60 hover:border-border text-muted-foreground"
                         }`}
                       >
                         {range}/mes
@@ -198,13 +198,13 @@ export function MobileSearchFilters({
                         key={id}
                         onClick={() => setLocalFilters({ ...localFilters, size: isActive ? null : id })}
                         className={`py-3 px-4 rounded-xl border text-left transition-all ${
-                          isActive 
-                            ? "border-primary bg-primary/10" 
-                            : "border-border/60 hover:border-primary/50"
+                          isActive
+                            ? "border-foreground/30 bg-foreground/8"
+                            : "border-border/60 hover:border-border"
                         }`}
                       >
-                        <span className={`block text-sm font-medium ${isActive ? 'text-primary' : 'text-foreground'}`}>{label}</span>
-                        <span className={`block text-xs mt-0.5 ${isActive ? 'text-primary/70' : 'text-muted-foreground'}`}>{sub}</span>
+                        <span className={`block text-sm font-medium ${isActive ? "text-foreground" : "text-foreground"}`}>{label}</span>
+                        <span className={`block text-xs mt-0.5 ${isActive ? "text-muted-foreground" : "text-muted-foreground"}`}>{sub}</span>
                       </button>
                     );
                   })}

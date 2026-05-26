@@ -7,7 +7,7 @@ const HOST_LINKS = ["Publica tu espacio", "Recursos", "Materiales para Anfitrion
 
 export function MainFooter() {
   return (
-    <footer className="bg-white dark:bg-card border-t border-border/30">
+    <footer className="glass-strong border-t border-border/40 shadow-[0_-1px_12px_0_rgb(0,0,0,0.05)]">
       <div className="max-w-screen-2xl mx-auto px-6 py-12">
         <div className="grid grid-cols-4 gap-10">
 

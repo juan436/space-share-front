@@ -34,9 +34,9 @@ export function MobileExplorePage() {
   }
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
+    <div className="h-screen bg-white dark:bg-background flex flex-col overflow-hidden">
       {/* Sticky Header */}
-      <header className="sticky top-0 z-50 bg-card border-b safe-area-top shadow-sm">
+      <header className="sticky top-0 z-50 bg-card border-b border-border/40 safe-area-top shadow-[0_1px_8px_rgba(0,0,0,0.06)]">
         <MobileHeader />
 
         <MobileSearchFilters
