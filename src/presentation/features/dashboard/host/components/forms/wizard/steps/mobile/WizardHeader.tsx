@@ -1,7 +1,6 @@
 import { Button } from "@/presentation/components/ui/button";
 import { DialogHeader, DialogTitle } from "@/presentation/components/ui/dialog";
 import { ArrowLeft } from "lucide-react";
-import { cn } from "@/presentation/utils/cn";
 
 interface WizardHeaderProps {
   currentStep: number;
@@ -12,32 +11,22 @@ interface WizardHeaderProps {
   onClose: () => void;
 }
 
-export function WizardHeader({
-  currentStep,
-  totalSteps,
-  stepTitle,
-  progress,
-  onBack,
-  onClose,
-}: WizardHeaderProps) {
+export function WizardHeader({ currentStep, totalSteps, stepTitle, progress, onBack, onClose }: WizardHeaderProps) {
   return (
-    <div className="border-b bg-background">
+    <div className="border-b border-border/40 bg-white dark:bg-card">
       <DialogHeader className="px-4 pt-4 pb-3">
         <div className="flex items-center justify-between">
           <Button
             variant="ghost"
             size="sm"
             onClick={() => (currentStep === 1 ? onClose() : onBack())}
-            className={cn(
-              "px-2",
-              currentStep === 1 && "text-orange-600 hover:text-orange-700 hover:bg-orange-50"
-            )}
+            className="px-2 text-muted-foreground hover:text-foreground hover:bg-muted/60"
           >
             <ArrowLeft className="h-5 w-5" />
           </Button>
 
           <div className="text-center">
-            <DialogTitle className="text-base font-semibold leading-tight">
+            <DialogTitle className="text-sm font-semibold leading-tight">
               Publicar espacio
             </DialogTitle>
             <p className="text-xs text-muted-foreground">
@@ -49,9 +38,9 @@ export function WizardHeader({
         </div>
 
         <div className="mt-3">
-          <div className="h-1.5 rounded-full bg-muted overflow-hidden">
+          <div className="h-1 rounded-full bg-muted overflow-hidden">
             <div
-              className="h-full bg-primary transition-all"
+              className="h-full bg-primary transition-all duration-300"
               style={{ width: `${progress}%` }}
             />
           </div>

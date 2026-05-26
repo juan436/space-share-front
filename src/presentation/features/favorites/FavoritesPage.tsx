@@ -31,7 +31,7 @@ export function FavoritesPage() {
     <div className="min-h-screen bg-white dark:bg-background flex flex-col">
       {isMobile ? <MobileHeader /> : <ExploreHeader />}
 
-      <main className="flex-1 max-w-screen-xl mx-auto w-full px-4 sm:px-6 py-8 md:py-12">
+      <main className="flex-1 max-w-screen-xl mx-auto w-full px-4 sm:px-6 py-8 md:py-12 pb-24 md:pb-12">
 
         {/* Hero */}
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8 md:mb-10">
@@ -126,7 +126,7 @@ export function FavoritesPage() {
         )}
       </main>
 
-      <MainFooter />
+      {!isMobile && <MainFooter />}
     </div>
   );
 }

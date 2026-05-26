@@ -132,20 +132,20 @@ export function HostDashboard() {
       )}
 
       {/* Stat cards */}
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
         {STATS_CONFIG.map((stat) => {
           const Icon = stat.icon;
           return (
             <div
               key={stat.key}
-              className="flex items-center gap-3 px-4 py-3.5 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)] hover:border-border/80 transition-all duration-200"
+              className="flex flex-col gap-2 p-3 sm:p-4 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.10)] hover:border-border/80 transition-all duration-200"
             >
-              <div className={`w-9 h-9 rounded-lg ${stat.bgClass} flex items-center justify-center flex-shrink-0`}>
+              <div className={`w-8 h-8 rounded-lg ${stat.bgClass} flex items-center justify-center flex-shrink-0`}>
                 <Icon className={`w-4 h-4 ${stat.iconClass}`} />
               </div>
               <div className="min-w-0">
-                <p className="text-xl font-bold text-foreground tracking-tight leading-none">{statValues[stat.key]}</p>
-                <p className="text-[11px] font-semibold text-muted-foreground mt-0.5 truncate">{stat.label}</p>
+                <p className="text-lg sm:text-xl font-bold text-foreground tracking-tight leading-none">{statValues[stat.key]}</p>
+                <p className="text-[10px] sm:text-[11px] font-semibold text-muted-foreground mt-0.5 truncate">{stat.label}</p>
                 <p className="text-[10px] text-muted-foreground/60 truncate">{stat.sub(activeSpacesCount)}</p>
               </div>
             </div>
@@ -167,7 +167,7 @@ export function HostDashboard() {
             />
           </div>
         </div>
-        <div className="max-h-[400px] overflow-y-auto">
+        <div className="max-h-[520px] overflow-y-auto p-4 bg-muted/20">
           {isMobile ? (
             <MobileSpacesList
               spaces={filteredSpaces}

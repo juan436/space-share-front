@@ -52,32 +52,30 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
   return (
     <>
       <div className="fixed bottom-4 left-4 right-4 md:hidden z-40 animate-in slide-in-from-bottom-6 fade-in duration-500 ease-out safe-area-bottom">
-        <div className="flex items-center justify-between gap-4 p-3 bg-white dark:bg-zinc-900 border border-black/5 dark:border-white/10 rounded-2xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] ring-1 ring-black/5">
-          <div className="pl-3 flex flex-col justify-center">
-            <div className="flex items-end gap-1.5 leading-none">
-              <span className="text-[1.35rem] font-extrabold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-                ${space.pricePerMonth}
-              </span>
-              <span className="text-xs font-medium text-muted-foreground uppercase tracking-wider mb-0.5">/mes</span>
+        <div className="flex items-center justify-between gap-4 p-3 bg-white dark:bg-card border border-border/60 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
+          <div className="pl-2 flex flex-col justify-center">
+            <div className="flex items-baseline gap-1 leading-none">
+              <span className="text-xl font-extrabold text-foreground">${space.pricePerMonth}</span>
+              <span className="text-xs font-medium text-muted-foreground">/mes</span>
             </div>
             {space.rating && space.rating > 0 ? (
-              <div className="flex items-center gap-1.5 mt-1.5">
-                <Star className="w-3.5 h-3.5 fill-amber-400 text-amber-400" />
+              <div className="flex items-center gap-1 mt-1">
+                <Star className="w-3 h-3 fill-amber-400 text-amber-400" />
                 <span className="text-xs font-bold">{space.rating}</span>
                 <span className="text-[10px] text-muted-foreground">
                   ({space.reviewCount} {space.reviewCount === 1 ? "reseña" : "reseñas"})
                 </span>
               </div>
             ) : (
-              <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 dark:bg-emerald-950/40 dark:text-emerald-400 px-2 py-0.5 rounded-full ring-1 ring-emerald-200 dark:ring-emerald-800 mt-1.5 w-fit">
-                Nuevo en SpaceShare
+              <span className="text-[10px] font-semibold text-amber-700 bg-amber-50 dark:bg-amber-950/30 dark:text-amber-400 px-2 py-0.5 rounded-full mt-1 w-fit">
+                Nuevo
               </span>
             )}
           </div>
 
           <Dialog open={isOpen} onOpenChange={setIsOpen}>
             <DialogTrigger asChild>
-              <Button className="h-[3.25rem] px-7 rounded-xl font-bold tracking-wide shadow-lg shadow-primary/20 bg-primary hover:bg-primary/90 hover:scale-[1.02] transition-all active:scale-95 text-[15px]">
+              <Button className="h-12 px-6 rounded-xl font-bold text-sm shadow-md shadow-primary/20 hover:scale-[1.02] transition-all active:scale-95">
                 Reservar
               </Button>
             </DialogTrigger>
@@ -121,7 +119,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                       <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground self-start w-full">
                         Selecciona tu periodo
                       </label>
-                      <div className="w-full bg-white dark:bg-zinc-900 border border-border rounded-2xl overflow-hidden self-center">
+                      <div className="w-full bg-white dark:bg-card border border-border/60 rounded-2xl overflow-hidden self-center">
                         <Calendar
                           initialFocus
                           mode="range"

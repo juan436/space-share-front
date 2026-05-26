@@ -23,8 +23,8 @@ const STATS = [
     value: "3",
     delta: "1 finalizando esta semana",
     icon: Calendar,
-    iconClass: "text-primary",
-    bgClass: "bg-primary/8 dark:bg-primary/15",
+    iconClass: "text-sky-600",
+    bgClass: "bg-sky-50 dark:bg-sky-950/30",
   },
   {
     label: "Gasto Mensual",
@@ -96,23 +96,23 @@ export function UserHome() {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
         {STATS.map((stat, idx) => {
           const Icon = stat.icon;
           return (
             <div
               key={stat.label}
-              className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
+              className="p-3 sm:p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${idx * 80}ms` }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className={`w-10 h-10 rounded-xl ${stat.bgClass} flex items-center justify-center`}>
-                  <Icon className={`w-5 h-5 ${stat.iconClass}`} />
+              <div className="mb-2.5">
+                <div className={`w-8 h-8 rounded-xl ${stat.bgClass} flex items-center justify-center`}>
+                  <Icon className={`w-4 h-4 ${stat.iconClass}`} />
                 </div>
               </div>
-              <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
-              <p className="text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mt-1">{stat.label}</p>
-              <p className={`text-[11px] mt-1 ${stat.deltaDown ? "text-red-500" : "text-muted-foreground/70"}`}>
+              <p className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
+              <p className="text-[10px] sm:text-[11px] font-semibold text-muted-foreground uppercase tracking-wider mt-0.5 leading-snug">{stat.label}</p>
+              <p className={`text-[10px] mt-1 leading-snug ${stat.deltaDown ? "text-red-500" : "text-muted-foreground/70"}`}>
                 {stat.delta}
               </p>
             </div>

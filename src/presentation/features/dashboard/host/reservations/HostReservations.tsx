@@ -48,16 +48,15 @@ export function HostReservations() {
           />
         </div>
         <div className="h-px bg-border/40" />
-        <div className="flex items-center gap-2 flex-wrap">
-          <span className="text-xs text-muted-foreground font-medium shrink-0">Estado:</span>
+        <div className="flex gap-2 overflow-x-auto scrollbar-hide -mx-4 px-4 pb-0.5">
           {tabs.map((tab) => (
             <button
               key={tab.key}
               onClick={() => handleTabChange(tab.key)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold transition-all ${
+              className={`shrink-0 px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
                 activeTab === tab.key
                   ? "bg-primary text-primary-foreground shadow-sm"
-                  : "bg-muted/40 text-muted-foreground hover:bg-muted/60"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted/70"
               }`}
             >
               {tab.label}

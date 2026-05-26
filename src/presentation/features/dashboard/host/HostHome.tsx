@@ -100,23 +100,23 @@ export function HostHome({ onNavigate }: HostHomeProps) {
       </div>
 
       {/* Stat Cards */}
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-2.5 lg:grid-cols-4">
         {stats.map((stat, idx) => {
           const Icon = stat.icon;
           return (
             <div
               key={stat.label}
-              className="group relative p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
+              className="group relative p-3 sm:p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80 transition-all duration-300 animate-fade-in-up"
               style={{ animationDelay: `${idx * 80}ms` }}
             >
-              <div className="flex items-start justify-between mb-4">
-                <div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center">
-                  <Icon className={`w-5 h-5 ${stat.iconColor}`} />
+              <div className="mb-2.5">
+                <div className="w-8 h-8 rounded-xl bg-muted/60 flex items-center justify-center">
+                  <Icon className={`w-4 h-4 ${stat.iconColor}`} />
                 </div>
               </div>
-              <p className="text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
-              <p className="text-xs text-muted-foreground mt-1">{stat.label}</p>
-              <p className="text-[11px] mt-2 text-muted-foreground/70">{stat.delta}</p>
+              <p className="text-xl sm:text-2xl font-bold text-foreground tracking-tight">{stat.value}</p>
+              <p className="text-[10px] sm:text-xs text-muted-foreground mt-0.5 leading-snug">{stat.label}</p>
+              <p className="text-[10px] mt-1 text-muted-foreground/70 leading-snug">{stat.delta}</p>
             </div>
           );
         })}
