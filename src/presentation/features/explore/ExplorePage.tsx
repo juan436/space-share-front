@@ -7,6 +7,7 @@ import { SearchFilters } from "./components/desktop/SearchFilters";
 import { SpacesList } from "./components/desktop/SpacesList";
 import { SpacesMap } from "./components/desktop/SpacesMap";
 import { useExplore } from "./hooks/useExplore";
+import { MainFooter } from "@/presentation/components/shared/layout/MainFooter";
 
 export function ExplorePage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
@@ -14,6 +15,10 @@ export function ExplorePage() {
 
   const {
     filteredSpaces,
+    totalSpaces,
+    page,
+    setPage,
+    totalPages,
     isLoading,
     isError,
     searchQuery, setSearchQuery,
@@ -24,7 +29,7 @@ export function ExplorePage() {
   } = useExplore();
 
   return (
-    <div className="h-screen bg-background flex flex-col overflow-hidden">
+    <div className="bg-white dark:bg-background flex flex-col min-h-screen">
       <ExploreHeader />
       <SearchFilters
         searchQuery={searchQuery}
@@ -45,25 +50,26 @@ export function ExplorePage() {
         </div>
       )}
 
-      <div className="flex-1 min-h-0 max-w-screen-2xl mx-auto w-full flex overflow-hidden">
+      <div className="max-w-screen-2xl mx-auto w-full flex flex-1">
         <div
-          className="overflow-y-auto thin-scrollbar relative transition-all duration-500 ease-in-out"
+          className="relative transition-all duration-500 ease-in-out"
           style={{ width: showMap ? "45%" : "100%" }}
         >
-          <SpacesList spaces={filteredSpaces} selectedSpaceId={selectedSpaceId} onSpaceSelect={setSelectedSpaceId} showMap={showMap} isLoading={isLoading} />
-          <div className="sticky bottom-6 flex justify-center pointer-events-none">
-            <button
-              onClick={() => setShowMap((v) => !v)}
-              aria-label={showMap ? "Ver solo listado" : "Mostrar mapa"}
-              className="pointer-events-auto flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold shadow-xl hover:scale-105 active:scale-95 transition-all duration-200"
-            >
-              {showMap ? (<><List className="w-4 h-4" />Solo listado</>) : (<><Map className="w-4 h-4" />Mostrar mapa</>)}
-            </button>
-          </div>
+          <SpacesList
+            spaces={filteredSpaces}
+            selectedSpaceId={selectedSpaceId}
+            onSpaceSelect={setSelectedSpaceId}
+            showMap={showMap}
+            isLoading={isLoading}
+            totalSpaces={totalSpaces}
+            page={page}
+            totalPages={totalPages}
+            onPageChange={setPage}
+          />
         </div>
 
         <div
-          className="overflow-hidden flex-shrink-0 transition-all duration-500 ease-in-out"
+          className="flex-shrink-0 transition-all duration-500 ease-in-out overflow-hidden sticky top-0 h-screen"
           style={{ width: showMap ? "55%" : "0%", opacity: showMap ? 1 : 0 }}
         >
           <div className="w-full h-full p-4 border-l border-border/30">
@@ -73,6 +79,18 @@ export function ExplorePage() {
           </div>
         </div>
       </div>
+
+      <div className="fixed bottom-6 left-0 right-0 flex justify-center pointer-events-none z-10">
+        <button
+          onClick={() => setShowMap((v) => !v)}
+          aria-label={showMap ? "Ver solo listado" : "Mostrar mapa"}
+          className="pointer-events-auto flex items-center gap-2 px-5 py-2.5 rounded-full bg-foreground text-background text-sm font-semibold shadow-xl hover:scale-105 active:scale-95 transition-all duration-200"
+        >
+          {showMap ? (<><List className="w-4 h-4" />Solo listado</>) : (<><Map className="w-4 h-4" />Mostrar mapa</>)}
+        </button>
+      </div>
+
+      <MainFooter />
     </div>
   );
 }

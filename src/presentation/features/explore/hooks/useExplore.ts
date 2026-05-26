@@ -1,6 +1,8 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { SpaceFilters } from "@/core/domain/ports/SpaceRepository";
 import { useExploreSpaces } from "./useExploreSpaces";
+
+const ITEMS_PER_PAGE = 10;
 
 export function useExplore() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -8,6 +10,11 @@ export function useExplore() {
   const [priceRange, setPriceRange] = useState("all");
   const [sizeRange, setSizeRange] = useState("all");
   const [conditions, setConditions] = useState<string[]>([]);
+  const [page, setPage] = useState(1);
+
+  useEffect(() => {
+    setPage(1);
+  }, [searchQuery, spaceType, priceRange, sizeRange, conditions]);
 
   const serverFilters = useMemo((): SpaceFilters | undefined => {
     const f: SpaceFilters = {};
@@ -56,8 +63,20 @@ export function useExplore() {
     });
   }, [rawSpaces, searchQuery, sizeRange, conditions]);
 
+  const totalSpaces = filteredSpaces.length;
+  const totalPages = Math.max(1, Math.ceil(totalSpaces / ITEMS_PER_PAGE));
+
+  const pagedSpaces = useMemo(
+    () => filteredSpaces.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE),
+    [filteredSpaces, page]
+  );
+
   return {
-    filteredSpaces,
+    filteredSpaces: pagedSpaces,
+    totalSpaces,
+    page,
+    setPage,
+    totalPages,
     isLoading,
     isError,
     searchQuery,

@@ -1,9 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { SpaceCard } from "./SpaceCard";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
+import { cn } from "@/presentation/utils/cn";
 
 interface SpacesListProps {
   spaces: Space[];
@@ -11,9 +13,25 @@ interface SpacesListProps {
   onSpaceSelect?: (spaceId: string) => void;
   isLoading?: boolean;
   showMap?: boolean;
+  totalSpaces?: number;
+  page?: number;
+  totalPages?: number;
+  onPageChange?: (page: number) => void;
 }
 
-export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, showMap }: SpacesListProps) {
+function getPageNumbers(current: number, total: number): (number | "...")[] {
+  if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+  const pages: (number | "...")[] = [1];
+  if (current > 3) pages.push("...");
+  for (let i = Math.max(2, current - 1); i <= Math.min(total - 1, current + 1); i++) {
+    pages.push(i);
+  }
+  if (current < total - 2) pages.push("...");
+  pages.push(total);
+  return pages;
+}
+
+export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, showMap, totalSpaces, page = 1, totalPages = 1, onPageChange }: SpacesListProps) {
   const { isFavorite, toggleFavorite } = useFavorites();
   const [sortBy, setSortBy] = useState("recommended");
 
@@ -31,18 +49,19 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
 
   if (isLoading) {
     return (
-      <div className={showMap ? "space-y-3 px-6 py-5" : "grid grid-cols-2 gap-4 px-6 py-5"}>
-        {[1, 2, 3, 4].map((i) => (
-          <div key={i} className="flex gap-4 p-3 rounded-2xl">
-            <div className="w-52 h-40 shimmer rounded-xl" />
-            <div className="flex-1 space-y-3 py-1">
-              <div className="h-5 shimmer rounded-lg w-3/4" />
-              <div className="h-4 shimmer rounded-lg w-1/2" />
-              <div className="flex gap-1.5 mt-3">
-                <div className="h-5 shimmer rounded-md w-16" />
-                <div className="h-5 shimmer rounded-md w-14" />
-              </div>
-              <div className="h-6 shimmer rounded-lg w-24 mt-auto" />
+      <div className={cn(
+        "px-6 py-5",
+        showMap
+          ? "grid grid-cols-1 sm:grid-cols-2 gap-3"
+          : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
+      )}>
+        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
+          <div key={i} className="rounded-2xl overflow-hidden border border-border/40">
+            <div className="w-full aspect-[4/3] shimmer" />
+            <div className="p-3.5 space-y-2">
+              <div className="h-4 shimmer rounded-lg w-3/4" />
+              <div className="h-3 shimmer rounded-lg w-1/2" />
+              <div className="h-5 shimmer rounded-lg w-1/3 mt-2" />
             </div>
           </div>
         ))}
@@ -66,14 +85,17 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
     );
   }
 
+  const displayTotal = totalSpaces ?? spaces.length;
+  const pageNumbers = getPageNumbers(page, totalPages);
+
   return (
-    <div className="px-6 py-5 pb-20 space-y-4">
+    <div className="px-6 py-5 pb-8 space-y-4">
       {/* Results header */}
       <div className="flex items-center justify-between pb-1">
         <div className="flex items-center gap-2">
           <div className="w-1.5 h-1.5 rounded-full bg-primary" />
           <p className="text-sm text-muted-foreground">
-            <span className="font-bold text-foreground">{spaces.length}</span> espacios disponibles
+            <span className="font-bold text-foreground">{displayTotal}</span> espacios disponibles
           </p>
         </div>
         <select
@@ -91,12 +113,14 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
         </select>
       </div>
 
-      {/* Cards — single column with map, 2-column grid without */}
+      {/* Cards */}
       <div
-        className={`transition-all duration-500 ${showMap
-            ? "space-y-2"
-            : "grid grid-cols-1 lg:grid-cols-2 gap-4"
-          }`}
+        className={cn(
+          "transition-all duration-500",
+          showMap
+            ? "grid grid-cols-1 sm:grid-cols-2 gap-3"
+            : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
+        )}
       >
         {sortedSpaces.map((space, idx) => (
           <div
@@ -114,6 +138,50 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
           </div>
         ))}
       </div>
+
+      {/* Pagination */}
+      {totalPages > 1 && (
+        <div className="flex items-center justify-center gap-1 pt-6">
+          <button
+            onClick={() => onPageChange?.(page - 1)}
+            disabled={page === 1}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Página anterior"
+          >
+            <ChevronLeft className="w-4 h-4" />
+          </button>
+
+          {pageNumbers.map((p, i) =>
+            p === "..." ? (
+              <span key={`ellipsis-${i}`} className="w-9 h-9 flex items-center justify-center text-sm text-muted-foreground">
+                …
+              </span>
+            ) : (
+              <button
+                key={p}
+                onClick={() => onPageChange?.(p as number)}
+                className={cn(
+                  "w-9 h-9 rounded-lg text-sm font-medium transition-colors",
+                  p === page
+                    ? "bg-primary text-primary-foreground shadow-sm"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                )}
+              >
+                {p}
+              </button>
+            )
+          )}
+
+          <button
+            onClick={() => onPageChange?.(page + 1)}
+            disabled={page === totalPages}
+            className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            aria-label="Página siguiente"
+          >
+            <ChevronRight className="w-4 h-4" />
+          </button>
+        </div>
+      )}
     </div>
   );
 }

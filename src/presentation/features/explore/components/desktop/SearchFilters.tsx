@@ -1,6 +1,6 @@
 "use client";
 
-import { Search, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2 } from "lucide-react";
+import { MapPin, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2 } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { spaceTypeLabels } from "@/presentation/types/spaces";
 import {
@@ -85,14 +85,14 @@ export function SearchFilters({
   };
 
   return (
-    <div className="border-b border-border/40 bg-card/80 glass-strong">
+    <div className="border-b border-border/30 bg-white dark:bg-card">
       <div className="max-w-screen-2xl mx-auto px-6 py-3">
         {/* Centered search bar — unified pill */}
         <div className="flex items-center justify-center">
-          <div className="flex items-center gap-0 bg-background/60 border border-border/50 rounded-xl shadow-sm overflow-hidden w-full max-w-4xl">
+          <div className="flex items-center gap-0 bg-white dark:bg-background/60 border border-border/50 rounded-2xl shadow-sm overflow-hidden w-full max-w-4xl">
             {/* Search input */}
             <div className="relative flex-1 min-w-0">
-              <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+              <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
               <Input
                 type="text"
                 aria-label="Buscar espacios"
@@ -182,8 +182,8 @@ export function SearchFilters({
                 className={`
                   flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 whitespace-nowrap border
                   ${isActive
-                    ? "bg-primary/10 text-primary border-primary/20 shadow-sm"
-                    : "text-muted-foreground hover:text-foreground bg-background/50 border-border/40 hover:border-border hover:bg-background/80"
+                    ? "bg-primary text-primary-foreground border-primary shadow-sm"
+                    : "text-muted-foreground hover:text-foreground bg-white dark:bg-background/50 border-border/40 hover:border-border hover:bg-muted/50"
                   }
                 `}
               >

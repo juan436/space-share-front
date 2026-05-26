@@ -40,85 +40,90 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
     <div
       onClick={handleClick}
       className={cn(
-        "group flex gap-4 p-3 rounded-2xl transition-all duration-300 cursor-pointer",
-        "border border-transparent",
-        "hover:bg-card hover:shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:border-border/60",
-        isSelected && "bg-card shadow-[0_8px_30px_rgb(0,0,0,0.08)] border-primary/30 ring-1 ring-primary/10"
+        "group flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300",
+        "bg-white dark:bg-card border border-border/40",
+        "hover:shadow-[0_8px_30px_rgb(0,0,0,0.10)] hover:border-border/60",
+        isSelected && "shadow-[0_8px_30px_rgb(0,0,0,0.10)] border-primary/30 ring-1 ring-primary/10"
       )}
     >
-      <div className="relative w-52 h-40 flex-shrink-0 rounded-xl overflow-hidden bg-muted">
+      {/* Image */}
+      <div className="relative w-full aspect-[4/3] flex-shrink-0 bg-muted">
         {space.images && space.images.length > 0 ? (
-          <Image src={space.images[0]} alt={space.title} fill className="object-cover group-hover:scale-[1.06] transition-transform duration-500 ease-out" />
+          <Image src={space.images[0]} alt={space.title} fill className="object-cover group-hover:scale-[1.04] transition-transform duration-500 ease-out" />
         ) : (
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/10 to-accent/10">
             <Ruler className="w-10 h-10 text-muted-foreground/30" />
           </div>
         )}
         <div className="absolute inset-x-0 bottom-0 h-16 bg-gradient-to-t from-black/30 to-transparent" />
-        <div className="absolute top-2.5 left-2.5 px-2.5 py-1 bg-card/90 backdrop-blur-sm text-foreground text-[11px] font-semibold rounded-lg shadow-sm">
+
+        {/* Type + verified badge */}
+        <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2.5 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm text-foreground text-[11px] font-semibold rounded-lg shadow-sm">
           {spaceTypeLabels[space.type] ?? space.type}
+          {space.verified && <ShieldCheck className="w-3 h-3 text-emerald-500" />}
         </div>
-        {space.verified && (
-          <div className="absolute top-2.5 right-2.5 p-1.5 bg-emerald-500 text-white rounded-lg shadow-sm">
-            <ShieldCheck className="w-3 h-3" />
-          </div>
+
+        {/* Heart */}
+        {onToggleFavorite && (
+          <button
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite(space.id); }}
+            className="absolute top-2.5 right-2.5 p-1.5 rounded-full bg-white/90 dark:bg-card/90 backdrop-blur-sm hover:bg-white dark:hover:bg-card shadow-sm transition-colors"
+            aria-label={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
+            title={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
+          >
+            <Heart className={cn("w-4 h-4 transition-colors", isFavorite ? "fill-rose-500 text-rose-500" : "text-muted-foreground group-hover:text-rose-500")} />
+          </button>
         )}
+
+        {/* Owner badge */}
         {isOwner && (
           <div className="absolute bottom-2.5 right-2.5 px-2.5 py-1 bg-primary/90 backdrop-blur-sm text-primary-foreground text-[11px] font-bold rounded-lg shadow-sm">
             Tu publicación
           </div>
         )}
+
+        {/* Size */}
         <div className="absolute bottom-2.5 left-2.5 flex items-center gap-1 text-white text-xs font-medium">
           <Ruler className="w-3.5 h-3.5" /><span>{space.squareMeters} m²</span>
         </div>
       </div>
 
-      <div className="flex-1 flex flex-col justify-between min-w-0 py-0.5">
-        <div>
-          <div className="flex items-start justify-between gap-2">
-            <h3 className="font-semibold text-foreground text-base leading-snug line-clamp-2 group-hover:text-primary transition-colors">
-              {space.title}
-            </h3>
-            <div className="flex items-center gap-2 flex-shrink-0">
-              {space.rating && space.rating > 0 ? (
-                <div className="flex items-center gap-1 bg-accent/10 px-2 py-0.5 rounded-md">
-                  <Star className="w-3.5 h-3.5 fill-accent text-accent" />
-                  <span className="text-xs font-bold text-accent">{space.rating.toFixed(1)}</span>
-                  {space.reviewCount && space.reviewCount > 0 && (
-                    <span className="text-[10px] text-muted-foreground">({space.reviewCount})</span>
-                  )}
-                </div>
-              ) : (
-                <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md ring-1 ring-emerald-200 dark:ring-emerald-800">Nuevo</span>
-              )}
-              {onToggleFavorite && (
-                <button
-                  onClick={(e) => { e.stopPropagation(); onToggleFavorite(space.id); }}
-                  className="p-1.5 rounded-full hover:bg-rose-50 transition-colors group/heart"
-                  aria-label={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
-                  title={isFavorite ? "Quitar de guardados" : "Guardar espacio"}
-                >
-                  <Heart className={cn("w-4 h-4 transition-colors", isFavorite ? "fill-rose-500 text-rose-500" : "text-muted-foreground group-hover/heart:text-rose-500")} />
-                </button>
+      {/* Info */}
+      <div className="flex flex-col gap-1.5 p-3.5">
+        <div className="flex items-start justify-between gap-2">
+          <h3 className="font-semibold text-foreground text-sm leading-snug line-clamp-2 group-hover:text-primary transition-colors">
+            {space.title}
+          </h3>
+          {space.rating && space.rating > 0 ? (
+            <div className="flex items-center gap-1 bg-accent/10 px-2 py-0.5 rounded-md flex-shrink-0">
+              <Star className="w-3.5 h-3.5 fill-accent text-accent" />
+              <span className="text-xs font-bold text-accent">{space.rating.toFixed(1)}</span>
+              {space.reviewCount && space.reviewCount > 0 && (
+                <span className="text-[10px] text-muted-foreground">({space.reviewCount})</span>
               )}
             </div>
-          </div>
-          <p className="text-sm text-muted-foreground mt-1.5">{space.location.city}, {space.location.state}</p>
-          {amenities.length > 0 && (
-            <div className="flex items-center gap-1.5 mt-3 flex-wrap">
-              {amenities.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-medium text-muted-foreground bg-muted/70 rounded-md">
-                  <Icon className="w-3 h-3" /><span>{label}</span>
-                </div>
-              ))}
-            </div>
+          ) : (
+            <span className="text-[10px] font-semibold text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/40 px-2 py-0.5 rounded-md ring-1 ring-emerald-200 dark:ring-emerald-800 flex-shrink-0">Nuevo</span>
           )}
         </div>
-        <div className="mt-auto pt-2">
-          <span className="text-lg font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
-            ${space.pricePerMonth.toLocaleString()}
-          </span>
-          <span className="text-xs text-muted-foreground ml-0.5">/mes</span>
+        <p className="text-xs text-muted-foreground">{space.location.city}, {space.location.state}</p>
+        {amenities.length > 0 && (
+          <div className="flex items-center gap-1.5 flex-wrap">
+            {amenities.map(({ icon: Icon, label }) => (
+              <div key={label} className="flex items-center gap-1 px-2 py-0.5 text-[11px] font-medium text-muted-foreground bg-muted/70 rounded-md">
+                <Icon className="w-3 h-3" /><span>{label}</span>
+              </div>
+            ))}
+          </div>
+        )}
+        <div className="flex items-center justify-between mt-1">
+          <div>
+            <span className="text-base font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+              ${space.pricePerMonth.toLocaleString()}
+            </span>
+            <span className="text-xs text-muted-foreground ml-0.5">/mes</span>
+          </div>
+          <span className="text-xs font-semibold text-primary">Ver detalles</span>
         </div>
       </div>
     </div>
