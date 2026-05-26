@@ -47,7 +47,18 @@ export function ContactForm() {
             />
           </div>
           <div>
-            <label htmlFor="contact-message" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Mensaje</label>
+            <label htmlFor="contact-subject" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Asunto</label>
+            <Input
+              id="contact-subject"
+              placeholder="¿En qué podemos ayudarte?"
+              value={formState.subject}
+              onChange={(e) => setFormState({ ...formState, subject: e.target.value })}
+              required
+              className="h-10 bg-background/60 border-border/50 rounded-lg"
+            />
+          </div>
+          <div>
+            <label htmlFor="contact-message" className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1.5 block">Tu mensaje</label>
             <textarea
               id="contact-message"
               placeholder="¿En qué podemos ayudarte?"
@@ -60,7 +71,7 @@ export function ContactForm() {
           </div>
           <Button type="submit" className="w-full h-10 rounded-lg bg-gradient-to-r from-primary to-primary/90 shadow-sm shadow-primary/20 font-medium gap-2">
             <Send className="w-4 h-4" />
-            Enviar mensaje
+            Crear mensaje
           </Button>
         </form>
       )}

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 export function useContactForm() {
-  const [formState, setFormState] = useState({ name: "", email: "", message: "" });
+  const [formState, setFormState] = useState({ name: "", email: "", subject: "", message: "" });
   const [sent, setSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
