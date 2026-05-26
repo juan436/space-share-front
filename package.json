@@ -33,6 +33,9 @@
     "vaul": "^1.1.2",
     "zustand": "4.5.5"
   },
+  "pnpm": {
+    "onlyBuiltDependencies": ["unrs-resolver"]
+  },
   "devDependencies": {
     "@types/node": "22.8.1",
     "@types/react": "18.3.12",
