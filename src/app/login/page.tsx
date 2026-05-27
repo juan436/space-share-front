@@ -1,5 +1,3 @@
-"use client";
-
 import { LoginForm } from "@/presentation/features/auth";
 
 export default function LoginPage() {

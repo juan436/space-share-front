@@ -5,14 +5,9 @@ import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { useLoginForm } from "./hooks/useLoginForm";
-import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, Zap, Heart } from "lucide-react";
+import { Mail, Lock, ArrowRight, Loader2 } from "lucide-react";
 import { Logo } from "@/presentation/components/shared/Logo";
-
-const TRUST_POINTS = [
-  { icon: ShieldCheck, text: "Pagos seguros y protegidos" },
-  { icon: Zap, text: "Reserva en minutos, sin papeleo" },
-  { icon: Heart, text: "Anfitriones verificados" },
-];
+import { TRUST_POINTS } from "./data/authConstants";
 
 export function LoginForm() {
   const { email, setEmail, password, setPassword, isLoading, error, handleLogin } = useLoginForm();

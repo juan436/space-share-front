@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { List, Map } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { useMobileExplore } from "../../hooks/useMobileExplore";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
@@ -71,8 +72,10 @@ export function MobileExplorePage() {
 
       {/* Bottom Navigation */}
       <MobileBottomNav
-        viewMode={viewMode}
-        onViewModeChange={setViewMode}
+        items={[
+          { key: "list", label: "Lista", icon: List, onClick: () => setViewMode("list"), active: viewMode === "list" },
+          { key: "map", label: "Mapa", icon: Map, onClick: () => setViewMode("map"), active: viewMode === "map" },
+        ]}
       />
     </div>
   );

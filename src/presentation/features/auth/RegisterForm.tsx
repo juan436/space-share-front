@@ -8,15 +8,10 @@ import { Checkbox } from "@/presentation/components/ui/checkbox";
 import { UserRole } from "@/presentation/types/auth";
 import { useRegisterForm } from "./hooks/useRegisterForm";
 import { TermsModal } from "./components/TermsModal";
-import { Mail, Lock, User, ArrowRight, Loader2, ShieldCheck, Zap, Heart, Compass, Building2, Check } from "lucide-react";
+import { Mail, Lock, User, ArrowRight, Loader2, Compass, Building2, Check } from "lucide-react";
 import { Logo } from "@/presentation/components/shared/Logo";
 import { cn } from "@/presentation/utils/cn";
-
-const TRUST_POINTS = [
-  { icon: ShieldCheck, text: "Pagos seguros y protegidos" },
-  { icon: Zap, text: "Reserva en minutos, sin papeleo" },
-  { icon: Heart, text: "Anfitriones verificados" },
-];
+import { TRUST_POINTS } from "./data/authConstants";
 
 const ROLE_CARDS: { value: UserRole; label: string; description: string; icon: typeof Compass }[] = [
   {
