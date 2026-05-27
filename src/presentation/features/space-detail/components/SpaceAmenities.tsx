@@ -54,7 +54,7 @@ export function SpaceAmenities({ amenities }: SpaceAmenitiesProps) {
           return (
             <div
               key={amenity.key}
-              className="flex items-start gap-4 p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.09)] transition-shadow"
+              className="flex items-start gap-4 p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.13)] transition-shadow"
             >
               <div className={`p-2.5 rounded-xl shrink-0 ${amenity.iconClass}`}>
                 <Icon className="w-5 h-5" />

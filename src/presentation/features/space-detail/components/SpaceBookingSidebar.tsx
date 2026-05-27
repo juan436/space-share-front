@@ -47,7 +47,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
 
   return (
     <>
-      <div className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
+      <div className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_4px_16px_rgba(0,0,0,0.10)]">
         <div className="flex items-baseline gap-1.5 mb-4">
           <span className="text-2xl font-extrabold text-foreground tracking-tight">${space.pricePerMonth}</span>
           <span className="text-sm font-medium text-muted-foreground">/ mes</span>

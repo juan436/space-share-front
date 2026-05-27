@@ -24,7 +24,7 @@ export function SpaceHostCard({ hostId }: SpaceHostCardProps) {
     <div className="space-y-4">
       <h2 className="text-xl font-semibold text-foreground">Conoce al anfitrión</h2>
 
-      <div className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
+      <div className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_4px_16px_rgba(0,0,0,0.10)]">
         <div className="flex items-start gap-4">
           <div className="relative shrink-0">
             {host.avatar ? (

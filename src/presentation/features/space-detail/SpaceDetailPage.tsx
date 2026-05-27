@@ -44,7 +44,7 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
   }, []);
 
   return (
-    <div className="min-h-screen bg-white dark:bg-background pb-32 md:pb-12 font-sans selection:bg-primary/20">
+    <div className="min-h-screen bg-slate-50 dark:bg-background pb-32 md:pb-12 font-sans selection:bg-primary/20">
       {/* Floating Navigation Bar */}
       <div className="fixed top-4 left-0 right-0 z-50 pointer-events-none px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-start">
         <Link href={returnPath} className="pointer-events-auto">
@@ -95,7 +95,7 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
           <div className="hidden lg:block lg:col-span-4">
             <div className="sticky top-28">
               {isOwner ? (
-                <div className="p-6 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
+                <div className="p-6 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_4px_16px_rgba(0,0,0,0.10)]">
                   <div className="flex items-center gap-3 mb-4">
                     <div className="w-10 h-10 rounded-xl bg-muted/60 flex items-center justify-center">
                       <span className="text-lg">🏠</span>

@@ -15,7 +15,7 @@ interface MobileSpaceDetailProps {
 
 export function MobileSpaceDetail({ space, isFavorite, onToggleFavorite, onClose }: MobileSpaceDetailProps) {
   return (
-    <div className="fixed inset-0 bg-white dark:bg-background z-50 flex flex-col">
+    <div className="fixed inset-0 bg-slate-50 dark:bg-background z-50 flex flex-col">
       {/* Header */}
       <div className="flex items-center gap-3 p-4 border-b border-border/60 bg-white dark:bg-card">
         <button
@@ -66,14 +66,14 @@ export function MobileSpaceDetail({ space, isFavorite, onToggleFavorite, onClose
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-card border border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.05)] rounded-xl p-4 text-center">
+            <div className="bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] rounded-xl p-4 text-center">
               <div className="w-8 h-8 rounded-lg bg-muted/60 flex items-center justify-center mx-auto mb-2">
                 <Ruler className="w-4 h-4 text-muted-foreground" />
               </div>
               <p className="text-xl font-bold text-foreground">{space.squareMeters}</p>
               <p className="text-xs text-muted-foreground">metros²</p>
             </div>
-            <div className="bg-white dark:bg-card border border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.05)] rounded-xl p-4 text-center">
+            <div className="bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] rounded-xl p-4 text-center">
               <p className="text-xl font-bold text-foreground">${space.pricePerMonth}</p>
               <p className="text-xs text-muted-foreground">por mes</p>
             </div>

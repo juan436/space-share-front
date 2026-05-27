@@ -1,6 +1,7 @@
 "use client";
 
 import { Info } from "lucide-react";
+import { DAYS_PER_MONTH } from "@/core/domain/entities/Reservation";
 import type { Space } from "@/core/domain/entities/Space";
 
 interface BookingPriceSummaryProps {
@@ -38,8 +39,10 @@ export function BookingPriceSummary({
     <div className="space-y-2 mb-4 pt-1">
       <div className="flex justify-between items-center text-sm">
         <span className="text-muted-foreground font-medium underline decoration-muted-foreground/30 hover:decoration-foreground cursor-pointer transition-colors">
-          ${space.pricePerMonth} x {Number.isInteger(currentMonths) ? currentMonths : currentMonths.toFixed(1)}{" "}
-          {currentMonths === 1 ? "mes" : "meses"} {isVehicleSpace && `x ${effectiveQuantity} unid.`}
+          {currentMonths < 1
+            ? `$${space.pricePerMonth}/mes × ${Math.round(currentMonths * DAYS_PER_MONTH)} días`
+            : `$${space.pricePerMonth} × ${Number.isInteger(currentMonths) ? currentMonths : currentMonths.toFixed(1)} ${currentMonths === 1 ? "mes" : "meses"}`}
+          {isVehicleSpace && ` × ${effectiveQuantity} unid.`}
         </span>
         <span className="text-foreground font-semibold">${totalPrice}</span>
       </div>

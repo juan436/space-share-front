@@ -24,7 +24,7 @@ export function useBookingLogic(space: Space) {
   let currentMonths = months;
   if (mode === "dates" && dateRange?.from && dateRange?.to) {
     const diffDays = differenceInDays(dateRange.to, dateRange.from);
-    currentMonths = Math.max(1, diffDays / DAYS_PER_MONTH);
+    currentMonths = diffDays / DAYS_PER_MONTH;
   }
 
   const { totalPrice, serviceFee, grandTotal } = calculateBookingPrice(
