@@ -6,6 +6,7 @@ import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { useLoginForm } from "./hooks/useLoginForm";
 import { Mail, Lock, ArrowRight, Loader2, ShieldCheck, Zap, Heart } from "lucide-react";
+import { Logo } from "@/presentation/components/shared/Logo";
 
 const TRUST_POINTS = [
   { icon: ShieldCheck, text: "Pagos seguros y protegidos" },
@@ -26,10 +27,7 @@ export function LoginForm() {
 
         {/* Logo */}
         <Link href="/" className="relative inline-flex">
-          <span className="text-2xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-            <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-          </span>
+          <Logo className="h-28 w-28" />
         </Link>
 
         {/* Hero text */}
@@ -62,12 +60,9 @@ export function LoginForm() {
         <div className="w-full max-w-[380px] space-y-7">
 
           {/* Mobile logo */}
-          <div className="lg:hidden text-center">
+          <div className="lg:hidden flex justify-center">
             <Link href="/">
-              <span className="text-2xl font-bold">
-                <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-                <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-              </span>
+              <img src="/images/logo.svg" alt="SpaceShare" className="h-20 w-20 rounded-2xl" />
             </Link>
           </div>
 

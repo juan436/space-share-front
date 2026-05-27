@@ -46,10 +46,7 @@ export function MainHeader({ activeLink }: MainHeaderProps) {
         <div className="flex h-16 items-center justify-between gap-8">
 
           <Link href="/" className="flex items-center flex-shrink-0">
-            <span className="text-[1.4rem] font-bold tracking-tight leading-none">
-              <span className="bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-              <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-            </span>
+            <img src="/images/logo.svg" alt="SpaceShare" className="h-20 w-20 rounded-xl" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">

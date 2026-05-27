@@ -9,6 +9,7 @@ import { UserRole } from "@/presentation/types/auth";
 import { useRegisterForm } from "./hooks/useRegisterForm";
 import { TermsModal } from "./components/TermsModal";
 import { Mail, Lock, User, ArrowRight, Loader2, ShieldCheck, Zap, Heart, Compass, Building2, Check } from "lucide-react";
+import { Logo } from "@/presentation/components/shared/Logo";
 import { cn } from "@/presentation/utils/cn";
 
 const TRUST_POINTS = [
@@ -54,10 +55,7 @@ export function RegisterForm() {
         <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-accent/15 blur-3xl pointer-events-none" />
 
         <Link href="/" className="relative inline-flex">
-          <span className="text-2xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-            <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-          </span>
+          <Logo className="h-28 w-28" />
         </Link>
 
         <div className="relative space-y-8">
@@ -89,12 +87,9 @@ export function RegisterForm() {
         <div className="w-full max-w-[400px] space-y-6">
 
           {/* Mobile logo */}
-          <div className="lg:hidden text-center">
+          <div className="lg:hidden flex justify-center">
             <Link href="/">
-              <span className="text-2xl font-bold">
-                <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-                <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-              </span>
+              <img src="/images/logo.svg" alt="SpaceShare" className="h-20 w-20 rounded-2xl" />
             </Link>
           </div>
 

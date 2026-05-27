@@ -14,10 +14,7 @@ export function MainFooter() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center">
-              <span className="text-[1.3rem] font-bold tracking-tight leading-none">
-                <span className="bg-gradient-to-r from-primary via-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-                <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-              </span>
+              <img src="/images/logo.svg" alt="SpaceShare" className="h-11 w-11 rounded-lg" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               La plataforma líder en el intercambio de espacios de confianza.

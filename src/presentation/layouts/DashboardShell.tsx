@@ -40,12 +40,9 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
     <div className="h-screen bg-white dark:bg-background flex flex-col overflow-hidden">
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 w-full glass-strong border-b border-border/40 shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]">
-        <div className="flex h-14 items-center justify-between px-6">
+        <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem]">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <span className="text-xl font-bold tracking-tight leading-none">
-              <span className="bg-gradient-to-r from-primary to-primary/70 bg-clip-text text-transparent">Space</span>
-              <span className="bg-gradient-to-r from-accent to-accent/80 bg-clip-text text-transparent">Share</span>
-            </span>
+            <img src="/images/logo.svg" alt="SpaceShare" className="h-12 w-12 rounded-xl" />
           </Link>
 
           <div className="flex items-center gap-3">

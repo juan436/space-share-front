@@ -39,10 +39,9 @@ export function MobileHeader() {
     : "U";
 
   return (
-    <div className="flex items-center justify-between px-4 py-3">
-      <Link href="/" className="text-xl font-bold tracking-tight">
-        <span className="text-primary">Space</span>
-        <span className="text-accent">Share</span>
+    <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem] border-b border-border/50">
+      <Link href="/" className="flex items-center">
+        <img src="/images/logo.svg" alt="SpaceShare" className="h-12 w-12 rounded-xl" />
       </Link>
 
       {/* User Icon & Dropdown */}
