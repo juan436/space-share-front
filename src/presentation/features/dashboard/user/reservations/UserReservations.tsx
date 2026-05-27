@@ -3,7 +3,8 @@
 import { useState, useEffect } from "react";
 import { useSearchParams, useRouter } from "next/navigation";
 import { useQueryClient } from "@tanstack/react-query";
-import { Calendar, Loader2, Search } from "lucide-react";
+import { Calendar, Search } from "lucide-react";
+import { ReservationsSkeleton } from "@/presentation/components/shared/skeletons/ReservationCardSkeleton";
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
@@ -98,10 +99,7 @@ export function UserReservations() {
       </div>
 
       {isLoading ? (
-        <div className="text-center py-12">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-primary" />
-          <p className="text-sm text-muted-foreground mt-2">Cargando reservaciones...</p>
-        </div>
+        <ReservationsSkeleton />
       ) : isError ? (
         <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-8 text-center text-muted-foreground">
           <Calendar className="mx-auto h-10 w-10 mb-4 opacity-40" />

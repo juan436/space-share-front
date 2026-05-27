@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import { MapPin, Ruler, X } from "lucide-react";
+import { MapSkeleton } from "@/presentation/components/shared/skeletons/MapSkeleton";
 import { Space } from "@/core/domain/entities/Space";
 import { spaceTypeColors, mapConfig } from "../../data";
 import { spaceTypeLabels } from "@/presentation/types/spaces";
@@ -55,14 +56,7 @@ export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDet
   }, [bounds]);
 
   if (!isLoaded) {
-    return (
-      <div className="absolute inset-0 flex items-center justify-center bg-muted">
-        <div className="text-center">
-          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-          <p className="text-sm text-muted-foreground">Cargando mapa...</p>
-        </div>
-      </div>
-    );
+    return <MapSkeleton className="absolute inset-0 rounded-none" />;
   }
 
   return (

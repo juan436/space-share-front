@@ -3,6 +3,7 @@
 import { useCallback } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
 import { MapPin, Navigation } from "lucide-react";
+import { MapSkeleton } from "@/presentation/components/shared/skeletons/MapSkeleton";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 
@@ -73,12 +74,7 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
             <Marker position={center} />
           </GoogleMap>
         ) : (
-          <div className="w-full h-[300px] bg-muted flex items-center justify-center">
-            <div className="text-center">
-              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary mx-auto mb-2"></div>
-              <p className="text-sm text-muted-foreground">Cargando mapa...</p>
-            </div>
-          </div>
+          <MapSkeleton className="h-[300px] rounded-xl" />
         )}
       </div>
 

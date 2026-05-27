@@ -12,6 +12,7 @@ import {
 } from "@/presentation/components/ui/dropdown-menu";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { LogIn, ChevronRight, LayoutDashboard, LogOut, ChevronDown, Heart } from "lucide-react";
+import { Logo } from "@/presentation/components/shared/Logo";
 
 const NAV_LINKS = [
   { href: "/explore", label: "Explorar Espacios" },
@@ -46,7 +47,7 @@ export function MainHeader({ activeLink }: MainHeaderProps) {
         <div className="flex h-16 items-center justify-between gap-8">
 
           <Link href="/" className="flex items-center flex-shrink-0">
-            <img src="/images/logo.svg" alt="SpaceShare" className="h-20 w-20 rounded-xl" />
+            <Logo className="h-20 w-20" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">

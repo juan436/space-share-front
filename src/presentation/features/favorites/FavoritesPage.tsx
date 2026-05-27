@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Heart, Search, ArrowRight, Loader2, Compass } from "lucide-react";
+import { Heart, Search, ArrowRight, Compass } from "lucide-react";
 import { ExploreHeader } from "@/presentation/features/explore/components/desktop/ExploreHeader";
 import { MobileHeader } from "@/presentation/features/explore/components/mobile/MobileHeader";
 import { SpaceCard } from "@/presentation/features/explore/components/desktop/SpaceCard";
@@ -65,11 +65,20 @@ export function FavoritesPage() {
 
         {/* Contenido */}
         {isLoading ? (
-          <div className="flex flex-col items-center justify-center py-24">
-            <div className="w-14 h-14 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] flex items-center justify-center mb-4">
-              <Loader2 className="w-6 h-6 animate-spin text-primary" />
-            </div>
-            <p className="text-sm text-muted-foreground">Cargando favoritos...</p>
+          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="bg-white dark:bg-card rounded-2xl border border-border/30 shadow-[0_8px_32px_rgba(0,0,0,0.10)] overflow-hidden animate-pulse">
+                <div className="aspect-[4/3] bg-gradient-to-r from-muted/80 via-muted/40 to-muted/80" />
+                <div className="p-3 space-y-2">
+                  <div className="h-4 w-3/4 bg-muted/60 rounded-lg" />
+                  <div className="h-3 w-1/2 bg-muted/50 rounded-md" />
+                  <div className="flex items-center justify-between pt-1">
+                    <div className="h-4 w-16 bg-muted/60 rounded-md" />
+                    <div className="h-7 w-7 bg-muted/50 rounded-full" />
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
 
         ) : spaces.length > 0 ? (

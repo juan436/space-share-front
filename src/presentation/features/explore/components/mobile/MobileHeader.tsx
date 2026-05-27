@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { Logo } from "@/presentation/components/shared/Logo";
 import { useRouter } from "next/navigation";
 import { UserCircle2, LogIn, UserPlus, LayoutDashboard, LogOut, Heart } from "lucide-react";
 import { useAuth } from "@/presentation/providers/auth-context";
@@ -41,7 +42,7 @@ export function MobileHeader() {
   return (
     <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem] border-b border-border/50">
       <Link href="/" className="flex items-center">
-        <img src="/images/logo.svg" alt="SpaceShare" className="h-12 w-12 rounded-xl" />
+        <Logo className="h-12 w-12" />
       </Link>
 
       {/* User Icon & Dropdown */}

@@ -9,6 +9,7 @@ import {
   DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
 import { LogOut, Compass, ChevronDown, LayoutDashboard, ArrowRight } from "lucide-react";
+import { Logo } from "@/presentation/components/shared/Logo";
 import Link from "next/link";
 import { cn } from "@/presentation/utils/cn";
 import React from "react";
@@ -42,7 +43,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
       <header className="sticky top-0 z-50 w-full glass-strong border-b border-border/40 shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]">
         <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem]">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <img src="/images/logo.svg" alt="SpaceShare" className="h-12 w-12 rounded-xl" />
+            <Logo className="h-12 w-12" />
           </Link>
 
           <div className="flex items-center gap-3">

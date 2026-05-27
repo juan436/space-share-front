@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { Globe, Share2, Mail } from "lucide-react";
+import { Logo } from "@/presentation/components/shared/Logo";
 
 const COMPANY_LINKS = ["Sobre nosotros", "Carreras", "Prensa", "Blog"];
 const SUPPORT_LINKS = ["Centro de Ayuda", "Política de Privacidad", "Términos y Condiciones"];
@@ -14,7 +15,7 @@ export function MainFooter() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center">
-              <img src="/images/logo.svg" alt="SpaceShare" className="h-20 w-20 rounded-lg" />
+              <Logo className="h-20 w-20" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               La plataforma líder en el intercambio de espacios de confianza.

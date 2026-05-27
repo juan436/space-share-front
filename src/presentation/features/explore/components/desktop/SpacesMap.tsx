@@ -3,6 +3,7 @@
 import { useState, useCallback, useEffect, useMemo, useRef } from "react";
 import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import { MapPin } from "lucide-react";
+import { MapSkeleton } from "@/presentation/components/shared/skeletons/MapSkeleton";
 import { Space } from "@/core/domain/entities/Space";
 
 interface SpacesMapProps {
@@ -152,14 +153,7 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
   }
 
   if (!isLoaded) {
-    return (
-      <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-primary/5 to-accent/5 rounded-2xl">
-        <div className="text-center">
-          <div className="w-10 h-10 mx-auto mb-3 border-2 border-primary/30 border-t-primary rounded-full animate-spin" />
-          <p className="text-sm text-muted-foreground">Cargando mapa...</p>
-        </div>
-      </div>
-    );
+    return <MapSkeleton className="rounded-2xl" />;
   }
 
   return (
