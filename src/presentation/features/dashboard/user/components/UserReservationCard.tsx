@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Image from "next/image";
-import { Calendar, MapPin, DollarSign, ArrowRight, Star, CreditCard, Info, Loader2, CheckCircle2 } from "lucide-react";
+import { Calendar, MapPin, DollarSign, ArrowRight, Star, CreditCard, Info, CheckCircle2 } from "lucide-react";
 import { Reservation } from "@/core/domain/entities/Reservation";
 import { Button } from "@/presentation/components/ui/button";
 import { format } from "date-fns";
@@ -10,7 +10,6 @@ import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-statu
 interface UserReservationCardProps {
   reservation: Reservation;
   reviewedIds: Set<string>;
-  initiatingPaymentId: string | null;
   onPay: (id: string) => void;
   onDetails: (id: string) => void;
   onReview: (id: string) => void;
@@ -19,7 +18,6 @@ interface UserReservationCardProps {
 export const UserReservationCard = memo(function UserReservationCard({
   reservation,
   reviewedIds,
-  initiatingPaymentId,
   onPay,
   onDetails,
   onReview,
@@ -91,9 +89,9 @@ export const UserReservationCard = memo(function UserReservationCard({
         )}
 
         {(reservation.status === "awaiting_payment" || reservation.status === "accepted") && (
-          <Button size="sm" onClick={() => onPay(reservation.id)} disabled={initiatingPaymentId === reservation.id} className="w-full rounded-xl gap-2 mt-1 bg-violet-600 hover:bg-violet-700 text-white">
-            {initiatingPaymentId === reservation.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <CreditCard className="w-3.5 h-3.5" />}
-            {initiatingPaymentId === reservation.id ? "Procesando..." : "Pagar ahora"}
+          <Button size="sm" onClick={() => onPay(reservation.id)} className="w-full rounded-xl gap-2 mt-1 bg-violet-600 hover:bg-violet-700 text-white">
+            <CreditCard className="w-3.5 h-3.5" />
+            Pagar ahora
           </Button>
         )}
         {reservation.status === "confirmed" && (

@@ -26,6 +26,7 @@ import { GetAdminSpacesUseCase } from "@/core/application/use-cases/admin/GetAdm
 import { GetAdminUsersUseCase } from "@/core/application/use-cases/admin/GetAdminUsers";
 import { GetAdminAnalyticsUseCase } from "@/core/application/use-cases/admin/GetAdminAnalytics";
 import { InitiatePaymentUseCase } from "@/core/application/use-cases/payments/InitiatePayment";
+import { InitiateDirectPaymentUseCase } from "@/core/application/use-cases/payments/InitiateDirectPayment";
 
 export interface UseCases {
   // Auth
@@ -60,6 +61,7 @@ export interface UseCases {
   getAdminAnalyticsUseCase: GetAdminAnalyticsUseCase;
   // Payments
   initiatePaymentUseCase: InitiatePaymentUseCase;
+  initiateDirectPaymentUseCase: InitiateDirectPaymentUseCase;
 }
 
 const UseCasesContext = createContext<UseCases | null>(null);

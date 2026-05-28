@@ -1,4 +1,4 @@
-import { PaymentRepository, InitiatePaymentInput, InitiatePaymentOutput } from "@/core/domain/ports/PaymentRepository";
+import { PaymentRepository, InitiatePaymentInput, InitiatePaymentOutput, InitiateCheckoutInput, InitiateCheckoutOutput } from "@/core/domain/ports/PaymentRepository";
 import { HttpClient } from "@/infrastructure/http/HttpClient";
 
 export class ApiPaymentRepository implements PaymentRepository {
@@ -6,6 +6,11 @@ export class ApiPaymentRepository implements PaymentRepository {
 
   async initiate(input: InitiatePaymentInput): Promise<InitiatePaymentOutput> {
     const response = await this.httpClient.post<InitiatePaymentOutput>("/payments/initiate", input);
+    return response.data;
+  }
+
+  async initiateCheckout(input: InitiateCheckoutInput): Promise<InitiateCheckoutOutput> {
+    const response = await this.httpClient.post<InitiateCheckoutOutput>("/payments/initiate-checkout", input);
     return response.data;
   }
 }

@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useQuery } from "@tanstack/react-query";
 import { useUseCases } from "@/presentation/providers/usecases-context";
-import { useAuth } from "@/presentation/providers/auth-context";
 import { toErrorMessage } from "@/presentation/utils/error";
+import { Reservation } from "@/core/domain/entities/Reservation";
 
 const QUERY_KEY = ["reservations", "user"] as const;
 
 export function useUserReservations() {
-  const { getClientReservationsUseCase, createReviewUseCase, initiatePaymentUseCase } = useUseCases();
-  const { user } = useAuth();
-  const queryClient = useQueryClient();
+  const { getClientReservationsUseCase, createReviewUseCase } = useUseCases();
   const [reviewedIds, setReviewedIds] = useState<Set<string>>(new Set());
+  const [checkoutReservation, setCheckoutReservation] = useState<Reservation | null>(null);
 
   const query = useQuery({
     queryKey: QUERY_KEY,
@@ -20,26 +19,6 @@ export function useUserReservations() {
 
   const reservations = query.data ?? [];
 
-  const payMutation = useMutation({
-    mutationFn: async (reservationId: string) => {
-      const w = 520, h = 680;
-      const left = window.screenX + (window.outerWidth - w) / 2;
-      const top = window.screenY + (window.outerHeight - h) / 2;
-      const newWindow = window.open("", "_blank", `width=${w},height=${h},left=${left},top=${top},toolbar=no,menubar=no,location=no,status=no`);
-      const { checkoutUrl } = await initiatePaymentUseCase.execute({
-        reservationId,
-        customerEmail: user?.email ?? "",
-        redirectUrl: `${window.location.origin}/dashboard/reservaciones?payment=result`,
-      });
-      if (newWindow) {
-        newWindow.location.href = checkoutUrl;
-      } else {
-        window.location.href = checkoutUrl;
-      }
-    },
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
-  });
-
   const submitReview = async (reservationId: string, rating: number, comment: string): Promise<void> => {
     const reservation = reservations.find((r) => r.id === reservationId);
     if (!reservation?.spaceId) return;
@@ -47,8 +26,9 @@ export function useUserReservations() {
     setReviewedIds((prev) => new Set(prev).add(reservationId));
   };
 
-  const initiatePayment = async (reservationId: string): Promise<void> => {
-    await payMutation.mutateAsync(reservationId);
+  const openCheckout = (reservationId: string) => {
+    const reservation = reservations.find((r) => r.id === reservationId) ?? null;
+    setCheckoutReservation(reservation);
   };
 
   return {
@@ -57,8 +37,9 @@ export function useUserReservations() {
     isError: query.isError,
     errorMessage: query.error ? toErrorMessage(query.error) : null,
     reviewedIds,
-    initiatingPaymentId: payMutation.isPending ? payMutation.variables ?? null : null,
+    checkoutReservation,
+    openCheckout,
+    closeCheckout: () => setCheckoutReservation(null),
     submitReview,
-    initiatePayment,
   };
 }

@@ -9,6 +9,7 @@ import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
 import { ReviewDialog, ReservationDetailsDialog, UserReservationCard } from "../components";
+import { WompiCheckoutModal } from "../components/WompiCheckoutModal";
 import { useUserReservations } from "../hooks/useUserReservations";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
@@ -17,7 +18,7 @@ import { useToast } from "@/presentation/hooks/use-toast";
 const PAGE_SIZE = 6;
 
 export function UserReservations() {
-  const { reservations, isLoading, isError, errorMessage, reviewedIds, initiatingPaymentId, submitReview, initiatePayment } = useUserReservations();
+  const { reservations, isLoading, isError, errorMessage, reviewedIds, checkoutReservation, openCheckout, closeCheckout, submitReview } = useUserReservations();
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -120,8 +121,7 @@ export function UserReservations() {
                 key={reservation.id}
                 reservation={reservation}
                 reviewedIds={reviewedIds}
-                initiatingPaymentId={initiatingPaymentId}
-                onPay={initiatePayment}
+                onPay={openCheckout}
                 onDetails={setDetailsId}
                 onReview={setReviewingId}
               />
@@ -134,6 +134,7 @@ export function UserReservations() {
 
       <ReviewDialog isOpen={!!reviewingId} onClose={() => { setReviewingId(null); setReviewError(null); }} onSubmit={handleSubmitReview} isSubmitting={reviewSubmitting} error={reviewError} />
       <ReservationDetailsDialog isOpen={!!detailsId} onClose={() => setDetailsId(null)} reservation={reservations.find((r) => r.id === detailsId) ?? null} />
+      <WompiCheckoutModal open={!!checkoutReservation} onOpenChange={(v) => { if (!v) closeCheckout(); }} reservation={checkoutReservation} />
     </div>
   );
 }
