@@ -14,6 +14,7 @@ import { useUserReservations } from "../hooks/useUserReservations";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { useToast } from "@/presentation/hooks/use-toast";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 
 const PAGE_SIZE = 6;
 
@@ -23,13 +24,34 @@ export function UserReservations() {
   const router = useRouter();
   const queryClient = useQueryClient();
   const { toast } = useToast();
+  const { verifyCheckoutUseCase } = useUseCases();
 
   useEffect(() => {
     if (searchParams.get("payment") !== "result") return;
-    queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
-    toast({ title: "Pago procesado", description: "Verifica el estado de tu reservación." });
     router.replace("/dashboard/user/reservations");
-  }, [searchParams, queryClient, toast, router]);
+
+    const transactionId = sessionStorage.getItem("pendingWompiTransactionId");
+    sessionStorage.removeItem("pendingWompiTransactionId");
+
+    if (!transactionId) {
+      queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
+      return;
+    }
+
+    verifyCheckoutUseCase.execute(transactionId)
+      .then(({ paymentStatus }) => {
+        queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
+        if (paymentStatus === "APPROVED") {
+          toast({ title: "¡Pago aprobado!", description: "Tu reservación ha sido confirmada." });
+        } else {
+          toast({ title: "Pago no aprobado", description: "El pago fue rechazado. Intenta de nuevo.", variant: "destructive" });
+        }
+      })
+      .catch(() => {
+        queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
+        toast({ title: "Pago procesado", description: "Verifica el estado de tu reservación." });
+      });
+  }, [searchParams, queryClient, toast, router, verifyCheckoutUseCase]);
   const [searchQuery, setSearchQuery] = useState("");
 
   const searchedReservations = searchQuery.trim()

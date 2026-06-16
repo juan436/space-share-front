@@ -96,7 +96,7 @@ export function useWompiCheckout(reservation: Reservation | null) {
     setError(null);
 
     try {
-      const { redirectUrl } = await initiateDirectPaymentUseCase.execute({
+      const { redirectUrl, transactionId } = await initiateDirectPaymentUseCase.execute({
         reservationId: reservation.id,
         card: {
           numeroTarjeta: form.numeroTarjeta.replace(/\s/g, ""),
@@ -115,7 +115,7 @@ export function useWompiCheckout(reservation: Reservation | null) {
         redirectUrl: `${window.location.origin}/dashboard/user/reservations?payment=result`,
       });
 
-      await queryClient.invalidateQueries({ queryKey: RESERVATIONS_QUERY_KEY });
+      sessionStorage.setItem("pendingWompiTransactionId", transactionId);
       window.location.href = redirectUrl;
     } catch (err: unknown) {
       setError(err instanceof Error ? err.message : "Error al procesar el pago");

@@ -27,6 +27,7 @@ import { GetAdminUsersUseCase } from "@/core/application/use-cases/admin/GetAdmi
 import { GetAdminAnalyticsUseCase } from "@/core/application/use-cases/admin/GetAdminAnalytics";
 import { InitiatePaymentUseCase } from "@/core/application/use-cases/payments/InitiatePayment";
 import { InitiateDirectPaymentUseCase } from "@/core/application/use-cases/payments/InitiateDirectPayment";
+import { VerifyCheckoutUseCase } from "@/core/application/use-cases/payments/VerifyCheckout";
 
 export interface UseCases {
   // Auth
@@ -62,6 +63,7 @@ export interface UseCases {
   // Payments
   initiatePaymentUseCase: InitiatePaymentUseCase;
   initiateDirectPaymentUseCase: InitiateDirectPaymentUseCase;
+  verifyCheckoutUseCase: VerifyCheckoutUseCase;
 }
 
 const UseCasesContext = createContext<UseCases | null>(null);

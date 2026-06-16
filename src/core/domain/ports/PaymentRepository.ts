@@ -33,7 +33,12 @@ export interface InitiateCheckoutOutput {
   transactionId: string;
 }
 
+export interface VerifyCheckoutOutput {
+  paymentStatus: string;
+}
+
 export interface PaymentRepository {
   initiate(input: InitiatePaymentInput): Promise<InitiatePaymentOutput>;
   initiateCheckout(input: InitiateCheckoutInput): Promise<InitiateCheckoutOutput>;
+  verifyCheckout(transactionId: string): Promise<VerifyCheckoutOutput>;
 }

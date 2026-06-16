@@ -4,7 +4,7 @@ import { GetClientReservationsUseCase, GetHostReservationsUseCase, CreateReserva
 import { GetSpaceReviewsUseCase, CreateReviewUseCase, DeleteReviewUseCase } from "@/core/application/use-cases/reviews";
 import { GetFavoritesUseCase, ToggleFavoriteUseCase } from "@/core/application/use-cases/favorites";
 import { GetAdminStatsUseCase, GetAdminSpacesUseCase, GetAdminUsersUseCase, GetAdminAnalyticsUseCase } from "@/core/application/use-cases/admin";
-import { InitiatePaymentUseCase, InitiateDirectPaymentUseCase } from "@/core/application/use-cases/payments";
+import { InitiatePaymentUseCase, InitiateDirectPaymentUseCase, VerifyCheckoutUseCase } from "@/core/application/use-cases/payments";
 import { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository } from "./repositories";
 
 // Auth
@@ -46,5 +46,6 @@ export const getAdminAnalyticsUseCase = new GetAdminAnalyticsUseCase(adminReposi
 // Payments
 export const initiatePaymentUseCase = new InitiatePaymentUseCase(paymentRepository);
 export const initiateDirectPaymentUseCase = new InitiateDirectPaymentUseCase(paymentRepository);
+export const verifyCheckoutUseCase = new VerifyCheckoutUseCase(paymentRepository);
 
 export { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository };

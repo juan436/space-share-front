@@ -29,6 +29,7 @@ import {
   getAdminAnalyticsUseCase,
   initiatePaymentUseCase,
   initiateDirectPaymentUseCase,
+  verifyCheckoutUseCase,
 } from "@/bootstrap/application";
 
 // Singleton de módulo — referencia estable, nunca provoca re-renders en los providers
@@ -59,6 +60,7 @@ const useCases = {
   getAdminAnalyticsUseCase,
   initiatePaymentUseCase,
   initiateDirectPaymentUseCase,
+  verifyCheckoutUseCase,
 };
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {
