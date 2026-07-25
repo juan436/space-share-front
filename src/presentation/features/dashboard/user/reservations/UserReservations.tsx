@@ -8,13 +8,18 @@ import { ReservationsSkeleton } from "@/presentation/components/shared/skeletons
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
-import { ReviewDialog, ReservationDetailsDialog, UserReservationCard } from "../components";
+import { ReviewDialog, ReservationDetailsDialog, UserReservationCard, PaymentResultBanner } from "../components";
 import { WompiCheckoutModal } from "../components/WompiCheckoutModal";
 import { useUserReservations } from "../hooks/useUserReservations";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { useToast } from "@/presentation/hooks/use-toast";
 import { useUseCases } from "@/presentation/providers/usecases-context";
+
+interface PaymentResult {
+  status: "APPROVED" | "DECLINED";
+  reason?: string;
+}
 
 const PAGE_SIZE = 6;
 
@@ -25,6 +30,7 @@ export function UserReservations() {
   const queryClient = useQueryClient();
   const { toast } = useToast();
   const { verifyCheckoutUseCase } = useUseCases();
+  const [paymentResult, setPaymentResult] = useState<PaymentResult | null>(null);
 
   useEffect(() => {
     if (searchParams.get("payment") !== "result") return;
@@ -41,15 +47,11 @@ export function UserReservations() {
     verifyCheckoutUseCase.execute(transactionId)
       .then(({ paymentStatus, declineReason }) => {
         queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
-        if (paymentStatus === "APPROVED") {
-          toast({ title: "¡Pago aprobado!", description: "Tu reservación ha sido confirmada." });
-        } else {
-          toast({
-            title: "Pago no aprobado",
-            description: declineReason ? `El pago fue rechazado: ${declineReason}` : "El pago fue rechazado. Intenta de nuevo.",
-            variant: "destructive",
-          });
-        }
+        setPaymentResult(
+          paymentStatus === "APPROVED"
+            ? { status: "APPROVED" }
+            : { status: "DECLINED", reason: declineReason }
+        );
       })
       .catch(() => {
         queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
@@ -87,9 +89,17 @@ export function UserReservations() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Mis Reservaciones</h1>
-        <p className="text-muted-foreground">Historial y estado de tus solicitudes de reserva</p>
+        <h1 className="text-2xl font-bold text-foreground">Mis Reservaciones</h1>
+        <p className="text-sm text-muted-foreground">Historial y estado de tus solicitudes de reserva</p>
       </div>
+
+      {paymentResult && (
+        <PaymentResultBanner
+          status={paymentResult.status}
+          reason={paymentResult.reason}
+          onDismiss={() => setPaymentResult(null)}
+        />
+      )}
 
       {/* Search + Filters */}
       <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-4 space-y-3">

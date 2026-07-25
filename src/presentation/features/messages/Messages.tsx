@@ -5,13 +5,13 @@ export function Messages() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Mensajes</h1>
-        <p className="text-muted-foreground">Comunicación con otros usuarios</p>
+        <h1 className="text-2xl font-bold text-foreground">Mensajes</h1>
+        <p className="text-sm text-muted-foreground">Comunicación con otros usuarios</p>
       </div>
 
       <Card>
         <CardHeader>
-          <CardTitle>Bandeja de Entrada</CardTitle>
+          <CardTitle className="text-lg">Bandeja de Entrada</CardTitle>
           <CardDescription>Tus conversaciones</CardDescription>
         </CardHeader>
         <CardContent>

@@ -23,15 +23,15 @@ export function AdminUsers() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Gestión de Usuarios</h1>
-        <p className="text-muted-foreground">Administra los usuarios de la plataforma</p>
+        <h1 className="text-2xl font-bold text-foreground">Gestión de Usuarios</h1>
+        <p className="text-sm text-muted-foreground">Administra los usuarios de la plataforma</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Usuarios</CardTitle>
+              <CardTitle className="text-lg">Usuarios</CardTitle>
               <CardDescription>{users.length} usuarios registrados</CardDescription>
             </div>
             <div className="relative">

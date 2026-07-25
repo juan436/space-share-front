@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useAdminSpaces, isHostIdObject } from "@/presentation/features/admin/hooks/useAdminSpaces";
 import { SPACE_STATUS_BADGE, SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
 import { spaceTypeLabels } from "@/presentation/types/spaces";
+import { resolveImageUrl } from "@/presentation/utils/image";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
 import { Building2, Loader2, AlertCircle, Search, Star, MapPin } from "lucide-react";
@@ -14,15 +15,15 @@ export function AdminSpaces() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-3xl font-bold text-foreground">Gestión de Espacios</h1>
-        <p className="text-muted-foreground">Administra los espacios de la plataforma</p>
+        <h1 className="text-2xl font-bold text-foreground">Gestión de Espacios</h1>
+        <p className="text-sm text-muted-foreground">Administra los espacios de la plataforma</p>
       </div>
 
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle>Espacios</CardTitle>
+              <CardTitle className="text-lg">Espacios</CardTitle>
               <CardDescription>{spaces.length} espacios registrados</CardDescription>
             </div>
             <div className="relative">
@@ -74,7 +75,7 @@ export function AdminSpaces() {
                         <div className="flex items-center gap-3">
                           {space.images?.[0] ? (
                             <Image
-                              src={space.images?.[0] as string}
+                              src={resolveImageUrl(space.images[0] as string)}
                               alt={space.title}
                               width={40}
                               height={40}

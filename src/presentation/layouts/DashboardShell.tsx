@@ -41,9 +41,9 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
     <div className="h-screen bg-white dark:bg-background flex flex-col overflow-hidden">
       {/* ── Header ── */}
       <header className="sticky top-0 z-50 w-full glass-strong border-b border-border/40 shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]">
-        <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem]">
+        <div className="flex h-16 items-center justify-between px-6">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo className="h-12 w-12" />
+            <Logo className="h-14 w-14" />
           </Link>
 
           <div className="flex items-center gap-3">
