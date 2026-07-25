@@ -35,6 +35,7 @@ export interface InitiateCheckoutOutput {
 
 export interface VerifyCheckoutOutput {
   paymentStatus: string;
+  declineReason?: string;
 }
 
 export interface PaymentRepository {

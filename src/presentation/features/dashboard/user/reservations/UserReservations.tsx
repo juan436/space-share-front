@@ -39,12 +39,16 @@ export function UserReservations() {
     }
 
     verifyCheckoutUseCase.execute(transactionId)
-      .then(({ paymentStatus }) => {
+      .then(({ paymentStatus, declineReason }) => {
         queryClient.invalidateQueries({ queryKey: ["reservations", "user"] });
         if (paymentStatus === "APPROVED") {
           toast({ title: "¡Pago aprobado!", description: "Tu reservación ha sido confirmada." });
         } else {
-          toast({ title: "Pago no aprobado", description: "El pago fue rechazado. Intenta de nuevo.", variant: "destructive" });
+          toast({
+            title: "Pago no aprobado",
+            description: declineReason ? `El pago fue rechazado: ${declineReason}` : "El pago fue rechazado. Intenta de nuevo.",
+            variant: "destructive",
+          });
         }
       })
       .catch(() => {
