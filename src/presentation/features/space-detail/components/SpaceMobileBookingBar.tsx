@@ -141,7 +141,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                           className="w-full flex justify-center"
                           disabled={(date) => {
                             if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true;
-                            const dateStr = format(date, "yyyy-MM-dd");
+                            const dateStr = date.toISOString().slice(0, 10);
                             const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
                             return currentOccupancy + effectiveQuantity > displayCapacity;
                           }}

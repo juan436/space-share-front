@@ -90,7 +90,7 @@ export function isDateRangeAvailable(
   const capacity = space.capacity || 1;
   const msPerDay = 86400000;
   const days = Math.round((to.getTime() - from.getTime()) / msPerDay);
-  for (let i = 0; i < days; i++) {
+  for (let i = 0; i <= days; i++) {
     const d = new Date(from.getTime() + i * msPerDay);
     const dateStr = d.toISOString().slice(0, 10);
     const occupied = space.occupancyMap?.[dateStr] ?? 0;
@@ -110,7 +110,7 @@ export function checkSpaceAvailability(
   const capacity = space.capacity || 1;
   const msPerDay = 86400000;
   const days = Math.round((end.getTime() - startDate.getTime()) / msPerDay);
-  for (let i = 0; i < days; i++) {
+  for (let i = 0; i <= days; i++) {
     const d = new Date(startDate.getTime() + i * msPerDay);
     const dateStr = d.toISOString().slice(0, 10);
     const occupied = space.occupancyMap?.[dateStr] ?? 0;

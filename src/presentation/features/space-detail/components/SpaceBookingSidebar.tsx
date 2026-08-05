@@ -128,7 +128,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
                     numberOfMonths={1}
                     disabled={(date) => {
                       if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true;
-                      const dateStr = format(date, "yyyy-MM-dd");
+                      const dateStr = date.toISOString().slice(0, 10);
                       const currentOccupancy = space.occupancyMap?.[dateStr] || 0;
                       return currentOccupancy + effectiveQuantity > displayCapacity;
                     }}
