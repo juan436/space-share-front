@@ -27,6 +27,7 @@ export interface ReservationDto {
   totalPrice: number;
   status: string;
   notes: string;
+  quantity?: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -39,4 +40,5 @@ export interface CreateReservationRequestDto {
   serviceFee: number;
   totalPrice: number;
   notes?: string;
+  quantity?: number;
 }

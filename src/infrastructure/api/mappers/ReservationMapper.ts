@@ -36,6 +36,7 @@ export class ReservationMapper {
       totalPrice: dto.totalPrice,
       status: dto.status as Reservation["status"],
       notes: dto.notes,
+      quantity: dto.quantity ?? 1,
       space,
       client,
       host,
@@ -53,6 +54,7 @@ export class ReservationMapper {
       serviceFee: input.serviceFee,
       totalPrice: input.totalPrice,
       notes: input.notes,
+      quantity: input.quantity,
     };
   }
 }

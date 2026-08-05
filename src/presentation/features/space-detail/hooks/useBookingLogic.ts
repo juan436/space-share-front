@@ -63,6 +63,7 @@ export function useBookingLogic(space: Space) {
         serviceFee,
         totalPrice: grandTotal,
         notes,
+        quantity: effectiveQuantity,
       });
     } catch (err) {
       setBookingError(toErrorMessage(err));

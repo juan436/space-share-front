@@ -12,6 +12,7 @@ export interface Reservation {
   totalPrice: number;
   status: ReservationStatus;
   notes: string;
+  quantity: number;
   space?: {
     title: string;
     images: string[];
@@ -33,6 +34,7 @@ export interface CreateReservationInput {
   serviceFee: number;
   totalPrice: number;
   notes?: string;
+  quantity?: number;
 }
 
 export const SERVICE_FEE_PERCENTAGE = 0.05;
