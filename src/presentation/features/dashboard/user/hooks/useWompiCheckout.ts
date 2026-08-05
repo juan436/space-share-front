@@ -1,9 +1,10 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef, useEffect } from "react";
 import { Reservation } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { useQueryClient } from "@tanstack/react-query";
+import { useToast } from "@/presentation/hooks/use-toast";
 
 export interface CheckoutForm {
   numeroTarjeta: string;
@@ -38,14 +39,37 @@ function formatExpiry(value: string): string {
   return digits;
 }
 
-export function useWompiCheckout(reservation: Reservation | null) {
-  const { initiateDirectPaymentUseCase } = useUseCases();
+export function useWompiCheckout(reservation: Reservation | null, onPopupOpened?: () => void) {
+  const { initiateDirectPaymentUseCase, verifyCheckoutUseCase } = useUseCases();
   const queryClient = useQueryClient();
+  const { toast } = useToast();
 
   const [step, setStep] = useState(0);
   const [form, setForm] = useState<CheckoutForm>(EMPTY_FORM);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (pollRef.current) clearInterval(pollRef.current);
+    };
+  }, []);
+
+  const verifyAndFinish = useCallback(async (transactionId: string) => {
+    try {
+      const { paymentStatus, declineReason } = await verifyCheckoutUseCase.execute(transactionId);
+      toast(
+        paymentStatus === "APPROVED"
+          ? { title: "Pago aprobado", description: "Tu reservación fue confirmada." }
+          : { title: "Pago declinado", description: declineReason || "Intenta con otro método de pago." }
+      );
+    } catch {
+      toast({ title: "Pago procesado", description: "Verifica el estado de tu reservación." });
+    } finally {
+      queryClient.invalidateQueries({ queryKey: RESERVATIONS_QUERY_KEY });
+    }
+  }, [verifyCheckoutUseCase, queryClient, toast]);
 
   const setField = useCallback(
     (field: keyof CheckoutForm) =>
@@ -95,6 +119,8 @@ export function useWompiCheckout(reservation: Reservation | null) {
     setIsSubmitting(true);
     setError(null);
 
+    const popup = window.open("", "wompi_checkout", "width=430,height=720,menubar=no,toolbar=no,location=no,status=no");
+
     try {
       const { redirectUrl, transactionId } = await initiateDirectPaymentUseCase.execute({
         reservationId: reservation.id,
@@ -115,9 +141,24 @@ export function useWompiCheckout(reservation: Reservation | null) {
         redirectUrl: `${window.location.origin}/dashboard/user/reservations?payment=result`,
       });
 
-      sessionStorage.setItem("pendingWompiTransactionId", transactionId);
-      window.location.href = redirectUrl;
+      if (popup && !popup.closed) {
+        popup.location.href = redirectUrl;
+        reset();
+        onPopupOpened?.();
+
+        pollRef.current = setInterval(() => {
+          if (popup.closed) {
+            if (pollRef.current) clearInterval(pollRef.current);
+            pollRef.current = null;
+            verifyAndFinish(transactionId);
+          }
+        }, 700);
+      } else {
+        sessionStorage.setItem("pendingWompiTransactionId", transactionId);
+        window.location.href = redirectUrl;
+      }
     } catch (err: unknown) {
+      popup?.close();
       setError(err instanceof Error ? err.message : "Error al procesar el pago");
       setIsSubmitting(false);
     }

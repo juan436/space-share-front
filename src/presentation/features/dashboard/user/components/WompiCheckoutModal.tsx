@@ -20,7 +20,7 @@ const STEPS = [
 ];
 
 export function WompiCheckoutModal({ open, onOpenChange, reservation }: WompiCheckoutModalProps) {
-  const checkout = useWompiCheckout(reservation);
+  const checkout = useWompiCheckout(reservation, () => onOpenChange(false));
 
   const handleClose = () => {
     if (checkout.isSubmitting) return;
