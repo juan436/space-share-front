@@ -138,7 +138,9 @@ export function useWompiCheckout(reservation: Reservation | null, onPopupOpened?
         ciudad: form.ciudad,
         idRegion: form.idRegion,
         codigoPostal: form.codigoPostal,
-        redirectUrl: `${window.location.origin}/dashboard/user/reservations?payment=result`,
+        redirectUrl: popup && !popup.closed
+          ? `${window.location.origin}/payment-result`
+          : `${window.location.origin}/dashboard/user/reservations?payment=result`,
       });
 
       if (popup && !popup.closed) {
