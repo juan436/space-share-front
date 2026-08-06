@@ -81,6 +81,20 @@ export interface CreateSpaceInput {
   services?: BusinessServices;
 }
 
+export function getRemainingCapacity(space: Space, from: Date, to: Date): number {
+  const capacity = space.capacity || 1;
+  const msPerDay = 86400000;
+  const days = Math.round((to.getTime() - from.getTime()) / msPerDay);
+  let maxOccupied = 0;
+  for (let i = 0; i <= days; i++) {
+    const d = new Date(from.getTime() + i * msPerDay);
+    const dateStr = d.toISOString().slice(0, 10);
+    const occupied = space.occupancyMap?.[dateStr] ?? 0;
+    if (occupied > maxOccupied) maxOccupied = occupied;
+  }
+  return Math.max(0, capacity - maxOccupied);
+}
+
 export function isDateRangeAvailable(
   space: Space,
   from: Date,

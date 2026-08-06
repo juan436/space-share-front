@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { differenceInDays, addMonths } from "date-fns";
 import { DateRange } from "react-day-picker";
-import { Space, checkSpaceAvailability, getNextAvailableDate, isDateRangeAvailable } from "@/core/domain/entities/Space";
+import { Space, checkSpaceAvailability, getNextAvailableDate, isDateRangeAvailable, getRemainingCapacity } from "@/core/domain/entities/Space";
 import { calculateBookingPrice, DAYS_PER_MONTH, AVAILABLE_MONTHS } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
@@ -19,7 +19,16 @@ export function useBookingLogic(space: Space) {
 
   const isVehicleSpace = space.type === "garage" || space.type === "parking";
   const effectiveQuantity = isVehicleSpace ? quantity : 1;
-  const displayCapacity = space.capacity || 1;
+  const displayCapacity =
+    mode === "dates" && dateRange?.from
+      ? getRemainingCapacity(space, dateRange.from, dateRange.to ?? dateRange.from)
+      : mode === "months"
+        ? getRemainingCapacity(space, startDate, addMonths(startDate, months))
+        : space.capacity || 1;
+
+  useEffect(() => {
+    setQuantity((q) => Math.min(q, Math.max(1, displayCapacity)));
+  }, [displayCapacity]);
 
   let currentMonths = months;
   if (mode === "dates" && dateRange?.from && dateRange?.to) {
