@@ -113,18 +113,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
                     mode="range"
                     defaultMonth={dateRange?.from}
                     selected={dateRange}
-                    onSelect={(range) => {
-                      if (range?.from && range?.to) {
-                        const today = new Date(new Date().setHours(0, 0, 0, 0));
-                        if (range.from.getTime() === today.getTime()) {
-                          const tomorrow = new Date(today);
-                          tomorrow.setDate(today.getDate() + 1);
-                          setDateRange({ from: tomorrow, to: range.to });
-                          return;
-                        }
-                      }
-                      setDateRange(range);
-                    }}
+                    onSelect={setDateRange}
                     numberOfMonths={1}
                     disabled={(date) => {
                       if (date < new Date(new Date().setHours(0, 0, 0, 0))) return true;

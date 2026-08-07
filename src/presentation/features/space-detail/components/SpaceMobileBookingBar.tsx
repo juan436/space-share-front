@@ -125,18 +125,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                           mode="range"
                           defaultMonth={dateRange?.from}
                           selected={dateRange}
-                          onSelect={(range) => {
-                            if (range?.from && range?.to) {
-                              const today = new Date(new Date().setHours(0, 0, 0, 0));
-                              if (range.from.getTime() === today.getTime()) {
-                                const tomorrow = new Date(today);
-                                tomorrow.setDate(today.getDate() + 1);
-                                setDateRange({ from: tomorrow, to: range.to });
-                                return;
-                              }
-                            }
-                            setDateRange(range);
-                          }}
+                          onSelect={setDateRange}
                           numberOfMonths={1}
                           className="w-full flex justify-center"
                           disabled={(date) => {
