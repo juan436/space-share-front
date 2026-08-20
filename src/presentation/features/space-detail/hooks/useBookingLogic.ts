@@ -32,7 +32,7 @@ export function useBookingLogic(space: Space) {
 
   let currentMonths = months;
   if (mode === "dates" && dateRange?.from && dateRange?.to) {
-    const diffDays = differenceInDays(dateRange.to, dateRange.from);
+    const diffDays = differenceInDays(dateRange.to, dateRange.from) + 1;
     currentMonths = diffDays / DAYS_PER_MONTH;
   }
 
@@ -91,7 +91,7 @@ export function useBookingLogic(space: Space) {
     mode === "months"
       ? true
       : dateRange?.from && dateRange?.to
-        ? differenceInDays(dateRange.to, dateRange.from) >= DAYS_PER_MONTH
+        ? differenceInDays(dateRange.to, dateRange.from) + 1 >= DAYS_PER_MONTH
         : false;
 
   return {
