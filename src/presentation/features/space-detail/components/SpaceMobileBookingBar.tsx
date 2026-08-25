@@ -55,7 +55,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
         <div className="flex items-center justify-between gap-4 p-3 bg-white dark:bg-card border border-border/60 rounded-2xl shadow-[0_4px_20px_rgba(0,0,0,0.12)]">
           <div className="pl-2 flex flex-col justify-center">
             <div className="flex items-baseline gap-1 leading-none">
-              <span className="text-xl font-extrabold text-foreground">${space.pricePerMonth}</span>
+              <span className="text-lg font-bold text-foreground">${space.pricePerMonth}</span>
               <span className="text-xs font-medium text-muted-foreground">/mes</span>
             </div>
             {space.rating && space.rating > 0 ? (

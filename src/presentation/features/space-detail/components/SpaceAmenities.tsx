@@ -1,87 +1,81 @@
 "use client";
 
-import { Thermometer, Video, DoorOpen, Shield, Clock, Lock } from "lucide-react";
+import { useState } from "react";
+import {
+  Thermometer, Video, DoorOpen, Clock,
+  Wifi, ParkingCircle, Coffee, Printer, Bell, ShieldCheck, Wind,
+  LucideIcon,
+} from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 
 interface SpaceAmenitiesProps {
   amenities: Space["amenities"];
+  category?: Space["category"];
+  services?: Space["services"];
 }
 
-const amenityConfig = [
-  {
-    key: "climateControlled",
-    label: "Clima controlado",
-    description: "Temperatura y humedad reguladas",
-    icon: Thermometer,
-    iconClass: "text-blue-600 bg-blue-50 dark:bg-blue-950/30",
-  },
-  {
-    key: "securityCamera",
-    label: "Cámara de seguridad",
-    description: "Vigilancia 24/7",
-    icon: Video,
-    iconClass: "text-emerald-600 bg-emerald-50 dark:bg-emerald-950/30",
-  },
-  {
-    key: "privateEntrance",
-    label: "Entrada privada",
-    description: "Acceso independiente",
-    icon: DoorOpen,
-    iconClass: "text-violet-600 bg-violet-50 dark:bg-violet-950/30",
-  },
-];
+interface AmenityRow {
+  key: string;
+  label: string;
+  icon: LucideIcon;
+  available: boolean;
+}
 
-const additionalFeatures = [
-  { icon: Shield, label: "Seguro incluido",  chipClass: "bg-emerald-50 text-emerald-700 dark:bg-emerald-950/20 dark:text-emerald-400" },
-  { icon: Clock,  label: "Acceso 24/7",      chipClass: "bg-orange-50 text-orange-700 dark:bg-orange-950/20 dark:text-orange-400"   },
-  { icon: Lock,   label: "Candado propio",   chipClass: "bg-muted text-muted-foreground"                                            },
-];
+const PREVIEW_COUNT = 6;
 
-export function SpaceAmenities({ amenities }: SpaceAmenitiesProps) {
-  const activeAmenities = amenityConfig.filter(
-    (amenity) => amenities[amenity.key as keyof typeof amenities]
-  );
+export function SpaceAmenities({ amenities, category, services }: SpaceAmenitiesProps) {
+  const [expanded, setExpanded] = useState(false);
 
-  if (activeAmenities.length === 0) return null;
+  const rows: AmenityRow[] = [
+    { key: "climateControlled", label: "Clima controlado", icon: Thermometer, available: amenities.climateControlled },
+    { key: "securityCamera", label: "Cámara de seguridad", icon: Video, available: amenities.securityCamera },
+    { key: "privateEntrance", label: "Entrada privada", icon: DoorOpen, available: amenities.privateEntrance },
+    ...(amenities.access247 !== undefined
+      ? [{ key: "access247", label: "Acceso 24/7", icon: Clock, available: amenities.access247 }]
+      : []),
+  ];
+
+  if (category === "business" && services) {
+    rows.push(
+      { key: "wifi", label: "Wifi", icon: Wifi, available: Boolean(services.wifi) },
+      { key: "parking", label: "Parqueo", icon: ParkingCircle, available: Boolean(services.parking) },
+      { key: "cafeteria", label: "Cafetería", icon: Coffee, available: Boolean(services.cafeteria) },
+      { key: "printer", label: "Impresora", icon: Printer, available: Boolean(services.printer) },
+      { key: "reception", label: "Recepción", icon: Bell, available: Boolean(services.reception) },
+      { key: "security", label: "Seguridad", icon: ShieldCheck, available: Boolean(services.security) },
+      { key: "airConditioning", label: "Aire acondicionado", icon: Wind, available: Boolean(services.airConditioning) }
+    );
+  }
+
+  const visibleRows = expanded ? rows : rows.slice(0, PREVIEW_COUNT);
+  const hasMore = rows.length > PREVIEW_COUNT;
 
   return (
-    <div className="space-y-6">
-      <h2 className="text-xl font-semibold text-foreground">Características del espacio</h2>
+    <div className="space-y-5">
+      <h2 className="text-xl font-semibold text-foreground">Lo que este lugar ofrece</h2>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-        {activeAmenities.map((amenity) => {
-          const Icon = amenity.icon;
-          return (
-            <div
-              key={amenity.key}
-              className="flex items-start gap-4 p-4 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.13)] transition-shadow"
-            >
-              <div className={`p-2.5 rounded-xl shrink-0 ${amenity.iconClass}`}>
-                <Icon className="w-5 h-5" />
-              </div>
-              <div>
-                <h3 className="font-semibold text-sm text-foreground">{amenity.label}</h3>
-                <p className="text-xs text-muted-foreground mt-0.5">{amenity.description}</p>
-              </div>
-            </div>
-          );
-        })}
-      </div>
+      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
+        {visibleRows.map(({ key, label, icon: Icon, available }) => (
+          <li
+            key={key}
+            className={`flex items-center gap-4 text-base ${available ? "text-foreground" : "text-muted-foreground/60"}`}
+          >
+            <Icon className={`w-7 h-7 shrink-0 ${available ? "text-foreground" : "text-muted-foreground/50"}`} />
+            <span className={available ? "" : "line-through"}>
+              {available ? label : `No disponible: ${label}`}
+            </span>
+          </li>
+        ))}
+      </ul>
 
-      <div className="pt-4 border-t border-border/40">
-        <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-3">También incluye</p>
-        <div className="flex flex-wrap gap-2">
-          {additionalFeatures.map((feature, index) => {
-            const Icon = feature.icon;
-            return (
-              <span key={index} className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium ${feature.chipClass}`}>
-                <Icon className="w-3.5 h-3.5" />
-                {feature.label}
-              </span>
-            );
-          })}
-        </div>
-      </div>
+      {hasMore && (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="px-4 py-2.5 rounded-xl border border-border text-sm font-semibold text-foreground hover:bg-muted/40 transition-colors"
+        >
+          {expanded ? "Mostrar menos" : `Mostrar los ${rows.length} servicios`}
+        </button>
+      )}
     </div>
   );
 }

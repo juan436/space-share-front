@@ -56,7 +56,7 @@ export function BookingPriceSummary({
       <div className="h-px w-full bg-border/40" />
       <div className="flex justify-between items-center">
         <span className="font-bold text-foreground">Total</span>
-        <span className="text-xl font-extrabold text-foreground tracking-tight">${grandTotal}</span>
+        <span className="text-lg font-bold text-foreground tracking-tight">${grandTotal}</span>
       </div>
     </div>
   );

@@ -101,7 +101,7 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
 
       {/* Row 2: Título */}
       <div>
-        <h1 className="text-3xl md:text-4xl lg:text-5xl font-extrabold text-foreground tracking-tight leading-[1.1]">
+        <h1 className="text-2xl md:text-3xl font-bold text-foreground tracking-tight leading-tight">
           {space.title}
         </h1>
       </div>
@@ -109,7 +109,7 @@ export function SpaceDetailHeader({ space, spaceTypeLabel, spaceTypeColor, isFav
       {/* Row 3: Precio + ubicación */}
       <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
         <div className="flex items-baseline gap-1">
-          <span className="text-2xl md:text-3xl font-extrabold text-foreground">${space.pricePerMonth.toLocaleString()}</span>
+          <span className="text-xl md:text-2xl font-bold text-foreground">${space.pricePerMonth.toLocaleString()}</span>
           <span className="text-sm font-medium text-muted-foreground">/mes</span>
         </div>
 

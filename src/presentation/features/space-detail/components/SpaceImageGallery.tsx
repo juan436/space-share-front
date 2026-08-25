@@ -49,10 +49,10 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
       <div className="relative w-full mb-8">
 
         {/* Desktop: Grid Layout */}
-        <div className="hidden md:grid md:grid-cols-12 md:grid-rows-2 gap-3 h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group/gallery">
+        <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 gap-3 h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group/gallery">
           {/* Main Hero Image */}
           <div
-            className="col-span-8 row-span-2 relative group cursor-pointer"
+            className="col-span-2 row-span-2 relative group cursor-pointer"
             onClick={() => openLightbox(0)}
           >
             {hasImages ? (
@@ -71,44 +71,31 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
             <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
           </div>
 
-          {/* Secondary Stacked Images */}
-          <div
-            className="col-span-4 row-span-1 relative group cursor-pointer"
-            onClick={() => openLightbox(1)}
-          >
-            {displayImages[1] ? (
-              <Image
-                src={displayImages[1]}
-                alt={`${title} - 2`}
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full bg-muted/40 flex items-center justify-center">
-                <Images aria-hidden="true" className="w-8 h-8 text-muted-foreground/20" />
+          {/* Secondary 2x2 Grid */}
+          {[1, 2, 3, 4].map((index) => {
+            const hasImage = Boolean(displayImages[index]);
+            return (
+              <div
+                key={index}
+                className={`relative group ${hasImage ? "cursor-pointer" : "cursor-default"}`}
+                onClick={hasImage ? () => openLightbox(index) : undefined}
+              >
+                {hasImage ? (
+                  <Image
+                    src={displayImages[index]}
+                    alt={`${title} - ${index + 1}`}
+                    fill
+                    className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
+                  />
+                ) : (
+                  <div className="w-full h-full bg-muted/40 flex items-center justify-center">
+                    <Images aria-hidden="true" className="w-6 h-6 text-muted-foreground/20" />
+                  </div>
+                )}
+                <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
               </div>
-            )}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-          </div>
-
-          <div
-            className="col-span-4 row-span-1 relative group cursor-pointer"
-            onClick={() => openLightbox(2)}
-          >
-            {displayImages[2] ? (
-              <Image
-                src={displayImages[2]}
-                alt={`${title} - 3`}
-                fill
-                className="object-cover transition-transform duration-700 ease-out group-hover:scale-105"
-              />
-            ) : (
-              <div className="w-full h-full bg-muted/50 flex items-center justify-center">
-                <Images aria-hidden="true" className="w-8 h-8 text-muted-foreground/20" />
-              </div>
-            )}
-            <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-colors duration-300" />
-          </div>
+            );
+          })}
 
           {/* Show All Button */}
           <button

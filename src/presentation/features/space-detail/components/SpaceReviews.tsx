@@ -44,10 +44,10 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
       {/* Header */}
       <div className="flex items-center gap-3">
         <Star className="w-6 h-6 fill-amber-400 text-amber-400" />
-        <h2 className="text-2xl font-bold text-foreground">
+        <h2 className="text-xl font-semibold text-foreground">
           {rating && rating > 0 ? (
             <>
-              {rating} <span className="text-muted-foreground font-normal text-lg">· {reviewCount} {reviewCount === 1 ? "reseña" : "reseñas"}</span>
+              {rating} <span className="text-muted-foreground font-normal text-base">· {reviewCount} {reviewCount === 1 ? "reseña" : "reseñas"}</span>
             </>
           ) : (
             "Reseñas"

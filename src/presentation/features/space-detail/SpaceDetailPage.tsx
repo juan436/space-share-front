@@ -1,10 +1,12 @@
 "use client";
 
-import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
+import { MainHeader } from "@/presentation/components/shared/layout/MainHeader";
+import { CompactSearchFilters } from "@/presentation/features/explore/components/desktop/CompactSearchFilters";
 import { useFavorites } from "@/presentation/hooks/useFavorites";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { resolveHostId } from "@/presentation/utils/resolveHostId";
@@ -27,41 +29,51 @@ interface SpaceDetailPageProps {
 }
 
 export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: SpaceDetailPageProps) {
-  const [returnPath, setReturnPath] = useState("/explore");
+  const router = useRouter();
+  const [searchQuery, setSearchQuery] = useState("");
+  const [spaceType, setSpaceType] = useState("all");
+  const [priceRange, setPriceRange] = useState("all");
+  const [sizeRange, setSizeRange] = useState("all");
   const { isFavorite, toggleFavorite } = useFavorites();
   const { user } = useAuth();
   const isOwner = user?.id === resolveHostId(space.hostId);
 
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const params = new URLSearchParams(window.location.search);
-      const fromParam = params.get("from");
-      const ALLOWED_PREFIXES = ["/explore", "/favorites", "/dashboard"];
-      if (fromParam && ALLOWED_PREFIXES.some((p) => fromParam.startsWith(p))) {
-        setReturnPath(fromParam);
-      }
-    }
-  }, []);
+  const goToExplore = (overrides: Partial<{ q: string; type: string; price: string; size: string }> = {}) => {
+    const params = new URLSearchParams();
+    const q = overrides.q ?? searchQuery;
+    const type = overrides.type ?? spaceType;
+    const price = overrides.price ?? priceRange;
+    const size = overrides.size ?? sizeRange;
+    if (q) params.set("q", q);
+    if (type !== "all") params.set("type", type);
+    if (price !== "all") params.set("price", price);
+    if (size !== "all") params.set("size", size);
+    const qs = params.toString();
+    router.push(qs ? `/explore?${qs}` : "/explore");
+  };
 
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-background pb-32 md:pb-12 font-sans selection:bg-primary/20">
-      {/* Floating Navigation Bar */}
-      <div className="fixed top-4 left-0 right-0 z-50 pointer-events-none px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto flex justify-between items-start">
-        <Link href={returnPath} className="pointer-events-auto">
-          <Button 
-            variant="secondary" 
-            size="sm" 
-            className="gap-2.5 rounded-full bg-white/90 dark:bg-zinc-900/90 backdrop-blur-md shadow-[0_4px_20px_rgb(0,0,0,0.08)] border border-black/5 dark:border-white/10 hover:scale-105 transition-transform duration-300 h-10 px-4"
-          >
-            <ArrowLeft className="w-4 h-4" />
-            <span className="hidden sm:inline font-medium text-[13px] tracking-wide">Volver</span>
-            <span className="sm:hidden font-medium text-[13px] tracking-wide">Volver</span>
-          </Button>
-        </Link>
-      </div>
+      <MainHeader
+        showCompactSlot
+        hideOnScroll
+        scrollCompactSlot={
+          <CompactSearchFilters
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            onSearchSubmit={() => goToExplore()}
+            spaceType={spaceType}
+            onSpaceTypeChange={(v) => { setSpaceType(v); goToExplore({ type: v }); }}
+            priceRange={priceRange}
+            onPriceRangeChange={(v) => { setPriceRange(v); goToExplore({ price: v }); }}
+            sizeRange={sizeRange}
+            onSizeRangeChange={(v) => { setSizeRange(v); goToExplore({ size: v }); }}
+          />
+        }
+      />
 
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-20 pb-12">
+      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
         {/* Image Gallery */}
         <SpaceImageGallery images={space.images} title={space.title} />
 
@@ -82,11 +94,19 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
               squareMeters={space.squareMeters}
             />
             
-            <SpaceAmenities amenities={space.amenities} />
-            
+            <hr className="border-border/60" />
+
+            <SpaceAmenities amenities={space.amenities} category={space.category} services={space.services} />
+
+            <hr className="border-border/60" />
+
             <SpaceLocationMap location={space.location} />
-            
+
+            <hr className="border-border/60" />
+
             <SpaceReviews spaceId={space.id} rating={space.rating} reviewCount={space.reviewCount} />
+
+            <hr className="border-border/60" />
 
             <SpaceHostCard hostId={space.hostId} />
           </div>

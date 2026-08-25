@@ -73,7 +73,7 @@ export function BookingMonthGrid({
           {nextDate && (
             <button
               onClick={() => setStartDate(nextDate)}
-              className="text-[11px] text-primary font-extrabold hover:underline mt-1 block text-left"
+              className="text-[11px] text-primary font-bold hover:underline mt-1 block text-left"
             >
               Disponible desde el {format(nextDate, "d 'de' MMMM", { locale: es })}. ¿Cambiar fecha?
             </button>

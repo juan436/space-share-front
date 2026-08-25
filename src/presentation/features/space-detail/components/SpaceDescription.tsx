@@ -17,7 +17,7 @@ export function SpaceDescription({ description, squareMeters }: SpaceDescription
             <Ruler className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="min-w-0">
-            <p className="text-xl sm:text-2xl font-bold text-foreground truncate">{squareMeters}</p>
+            <p className="text-base sm:text-lg font-semibold text-foreground truncate">{squareMeters}</p>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">metros²</p>
           </div>
         </div>
@@ -27,7 +27,7 @@ export function SpaceDescription({ description, squareMeters }: SpaceDescription
             <Calendar className="w-5 h-5 text-muted-foreground" />
           </div>
           <div className="min-w-0">
-            <p className="text-xl sm:text-2xl font-bold text-foreground truncate">Flexible</p>
+            <p className="text-base sm:text-lg font-semibold text-foreground truncate">Flexible</p>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">duración</p>
           </div>
         </div>
@@ -37,7 +37,7 @@ export function SpaceDescription({ description, squareMeters }: SpaceDescription
             <CheckCircle2 className="w-5 h-5 text-emerald-600" />
           </div>
           <div className="min-w-0">
-            <p className="text-xl sm:text-2xl font-bold text-foreground truncate">Verificado</p>
+            <p className="text-base sm:text-lg font-semibold text-foreground truncate">Verificado</p>
             <p className="text-xs sm:text-sm text-muted-foreground truncate">por SpaceShare</p>
           </div>
         </div>

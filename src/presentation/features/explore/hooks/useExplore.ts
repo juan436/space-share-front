@@ -1,14 +1,16 @@
 import { useState, useMemo, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 import { SpaceFilters } from "@/core/domain/ports/SpaceRepository";
 import { useExploreSpaces } from "./useExploreSpaces";
 
 const ITEMS_PER_PAGE = 40;
 
 export function useExplore() {
-  const [searchQuery, setSearchQuery] = useState("");
-  const [spaceType, setSpaceType] = useState("all");
-  const [priceRange, setPriceRange] = useState("all");
-  const [sizeRange, setSizeRange] = useState("all");
+  const searchParams = useSearchParams();
+  const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "");
+  const [spaceType, setSpaceType] = useState(() => searchParams.get("type") ?? "all");
+  const [priceRange, setPriceRange] = useState(() => searchParams.get("price") ?? "all");
+  const [sizeRange, setSizeRange] = useState(() => searchParams.get("size") ?? "all");
   const [conditions, setConditions] = useState<string[]>([]);
   const [page, setPage] = useState(1);
 

@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useEffect, useState } from "react";
+import { ReactNode, useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
@@ -25,20 +25,30 @@ interface MainHeaderProps {
   activeLink?: string;
   scrollCompactSlot?: ReactNode;
   showCompactSlot?: boolean;
+  hideOnScroll?: boolean;
 }
 
-export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot }: MainHeaderProps) {
+export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hideOnScroll }: MainHeaderProps) {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hidden, setHidden] = useState(false);
+  const lastScrollY = useRef(0);
   const showCompact = showCompactSlot ?? isScrolled;
 
   useEffect(() => {
-    const onScroll = () => setIsScrolled(window.scrollY > 4);
+    const onScroll = () => {
+      const currentY = window.scrollY;
+      setIsScrolled(currentY > 4);
+      if (hideOnScroll) {
+        setHidden(currentY > lastScrollY.current && currentY > 80);
+        lastScrollY.current = currentY;
+      }
+    };
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
-  }, []);
+  }, [hideOnScroll]);
 
   const dashboardPath = user?.role === "client"
     ? "/dashboard/user"
@@ -55,9 +65,9 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot }: M
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full bg-[#F7F7F7] dark:bg-card transition-shadow duration-500 ease-in-out ${
+      className={`sticky top-0 z-50 w-full bg-[#F7F7F7] dark:bg-card transition-[transform,box-shadow] duration-300 ease-in-out ${
         showCompact ? "border-b border-border shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]" : ""
-      }`}
+      } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)]">
         <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-24" : "h-20"}`}>
