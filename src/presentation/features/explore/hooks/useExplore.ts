@@ -2,7 +2,7 @@ import { useState, useMemo, useEffect } from "react";
 import { SpaceFilters } from "@/core/domain/ports/SpaceRepository";
 import { useExploreSpaces } from "./useExploreSpaces";
 
-const ITEMS_PER_PAGE = 10;
+const ITEMS_PER_PAGE = 40;
 
 export function useExplore() {
   const [searchQuery, setSearchQuery] = useState("");

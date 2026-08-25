@@ -85,11 +85,11 @@ export function SearchFilters({
   };
 
   return (
-    <div className="border-b border-border/30 bg-white dark:bg-card">
-      <div className="max-w-screen-2xl mx-auto px-6 py-3">
+    <div className="border-b border-border bg-[#F7F7F7] dark:bg-card">
+      <div className="max-w-screen-2xl mx-auto px-6 pt-1 pb-3">
         {/* Centered search bar — unified pill */}
         <div className="flex items-center justify-center">
-          <div className="flex items-center gap-0 bg-white dark:bg-background/60 border border-border/50 rounded-2xl shadow-sm overflow-hidden w-full max-w-4xl">
+          <div className="flex items-center gap-0 bg-white border border-border rounded-2xl shadow-sm overflow-hidden w-full max-w-4xl">
             {/* Search input */}
             <div className="relative flex-1 min-w-0">
               <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
@@ -99,7 +99,7 @@ export function SearchFilters({
                 placeholder="Buscar ciudad o zona..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 h-10 bg-transparent border-none shadow-none rounded-none text-sm placeholder:text-muted-foreground/40 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="pl-10 h-10 bg-transparent border-none shadow-none rounded-none text-sm placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               {searchQuery && (
                 <button
@@ -112,7 +112,7 @@ export function SearchFilters({
             </div>
 
             {/* Divider */}
-            <div className="w-px h-6 bg-border/50 flex-shrink-0" />
+            <div className="w-px h-6 bg-border flex-shrink-0" />
 
             {/* Tipo */}
             <Select value={spaceType} onValueChange={onSpaceTypeChange}>
@@ -132,7 +132,7 @@ export function SearchFilters({
             </Select>
 
             {/* Divider */}
-            <div className="w-px h-6 bg-border/50 flex-shrink-0" />
+            <div className="w-px h-6 bg-border flex-shrink-0" />
 
             {/* Precio */}
             <Select value={priceRange} onValueChange={onPriceRangeChange}>
@@ -150,7 +150,7 @@ export function SearchFilters({
             </Select>
 
             {/* Divider */}
-            <div className="w-px h-6 bg-border/50 flex-shrink-0" />
+            <div className="w-px h-6 bg-border flex-shrink-0" />
 
             {/* Tamaño */}
             <Select value={sizeRange} onValueChange={onSizeRangeChange}>
@@ -183,7 +183,7 @@ export function SearchFilters({
                   flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all duration-150 whitespace-nowrap border
                   ${isActive
                     ? "bg-primary text-primary-foreground border-primary shadow-sm"
-                    : "text-muted-foreground hover:text-foreground bg-white dark:bg-background/50 border-border/40 hover:border-border hover:bg-muted/50"
+                    : "text-muted-foreground hover:text-foreground bg-white dark:bg-background/50 border-border hover:border-foreground/25 hover:bg-muted/50"
                   }
                 `}
               >

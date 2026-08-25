@@ -36,6 +36,10 @@ const config: Config = {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
         },
+        "select-hover": {
+          DEFAULT: "hsl(var(--select-hover))",
+          foreground: "hsl(var(--select-hover-foreground))",
+        },
         popover: {
           DEFAULT: "hsl(var(--popover))",
           foreground: "hsl(var(--popover-foreground))",

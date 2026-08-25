@@ -52,7 +52,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
           : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
       )}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
-          <div key={i} className="rounded-2xl overflow-hidden border border-border/40">
+          <div key={i} className="rounded-2xl overflow-hidden border border-border">
             <div className="w-full aspect-[4/3] shimmer" />
             <div className="p-3.5 space-y-2">
               <div className="h-4 shimmer rounded-lg w-3/4" />
@@ -96,7 +96,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
         <div className="flex items-center gap-1.5">
           <span className="text-xs text-muted-foreground">Ordenar por:</span>
           <Select value={sortBy} onValueChange={setSortBy}>
-            <SelectTrigger className="h-8 text-xs font-semibold bg-white dark:bg-card border border-border/50 rounded-xl px-3 w-auto focus:ring-0 focus:ring-offset-0 hover:border-border transition-colors gap-1.5">
+            <SelectTrigger className="h-8 text-xs font-semibold glass-strong border border-border rounded-xl px-3 w-auto focus:ring-0 focus:ring-offset-0 hover:border-foreground/25 transition-colors gap-1.5">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>

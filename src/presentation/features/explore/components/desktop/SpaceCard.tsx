@@ -41,8 +41,8 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
       onClick={handleClick}
       className={cn(
         "group flex flex-col rounded-2xl overflow-hidden cursor-pointer transition-all duration-300",
-        "bg-white dark:bg-card border border-border/60",
-        "shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-border/80",
+        "bg-white dark:bg-card border border-border",
+        "shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-foreground/20",
         isSelected && "shadow-[0_8px_30px_rgb(0,0,0,0.10)] border-primary/30 ring-1 ring-primary/10"
       )}
     >

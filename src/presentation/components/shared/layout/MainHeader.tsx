@@ -1,5 +1,6 @@
 "use client";
 
+import { ReactNode, useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Button } from "@/presentation/components/ui/button";
@@ -22,11 +23,22 @@ const NAV_LINKS = [
 
 interface MainHeaderProps {
   activeLink?: string;
+  scrollCompactSlot?: ReactNode;
+  showCompactSlot?: boolean;
 }
 
-export function MainHeader({ activeLink }: MainHeaderProps) {
+export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot }: MainHeaderProps) {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
+  const [isScrolled, setIsScrolled] = useState(false);
+  const showCompact = showCompactSlot ?? isScrolled;
+
+  useEffect(() => {
+    const onScroll = () => setIsScrolled(window.scrollY > 4);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   const dashboardPath = user?.role === "client"
     ? "/dashboard/user"
@@ -42,32 +54,38 @@ export function MainHeader({ activeLink }: MainHeaderProps) {
     : "U";
 
   return (
-    <header className="sticky top-0 z-50 w-full glass-strong border-b border-border/40 shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]">
+    <header
+      className={`sticky top-0 z-50 w-full bg-[#F7F7F7] dark:bg-card transition-shadow duration-500 ease-in-out ${
+        showCompact ? "border-b border-border shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]" : ""
+      }`}
+    >
       <div className="max-w-screen-2xl mx-auto px-6">
-        <div className="flex h-16 items-center justify-between gap-8">
+        <div className="flex h-24 items-center justify-between gap-8">
 
           <Link href="/" className="flex items-center flex-shrink-0">
             <Logo className="h-20 w-20" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
-            {NAV_LINKS.map((link) => {
-              const isActive = activeLink === link.href;
-              return (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={`relative px-4 py-2 text-sm font-medium rounded-lg transition-all duration-200 ${
-                    isActive ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
-                  }`}
-                >
-                  {link.label}
-                  {isActive && (
-                    <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-primary rounded-full" />
-                  )}
-                </Link>
-              );
-            })}
+            {showCompact && scrollCompactSlot
+              ? scrollCompactSlot
+              : NAV_LINKS.map((link) => {
+                  const isActive = activeLink === link.href;
+                  return (
+                    <Link
+                      key={link.href}
+                      href={link.href}
+                      className={`relative px-5 py-2.5 text-base font-medium rounded-lg transition-all duration-200 ${
+                        isActive ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                      }`}
+                    >
+                      {link.label}
+                      {isActive && (
+                        <span className="absolute bottom-1 left-1/2 -translate-x-1/2 w-4 h-0.5 bg-primary rounded-full" />
+                      )}
+                    </Link>
+                  );
+                })}
           </nav>
 
           <div className="flex items-center gap-2 flex-shrink-0">
@@ -113,15 +131,15 @@ export function MainHeader({ activeLink }: MainHeaderProps) {
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="gap-2 rounded-full h-9 px-4 text-muted-foreground hover:text-foreground">
-                    <LogIn className="w-4 h-4" />
+                  <Button variant="ghost" size="sm" className="gap-2 rounded-full h-11 px-5 text-base text-muted-foreground hover:bg-select-hover hover:text-select-hover-foreground focus-visible:ring-select-hover">
+                    <LogIn className="w-[18px] h-[18px]" />
                     Iniciar Sesión
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button size="sm" className="rounded-full h-9 px-5 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-sm shadow-primary/20 font-medium">
+                  <Button size="sm" className="rounded-full h-11 px-6 text-base bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-sm shadow-primary/20 font-medium">
                     Registrarse
-                    <ChevronRight className="w-4 h-4 ml-1" />
+                    <ChevronRight className="w-[18px] h-[18px] ml-1" />
                   </Button>
                 </Link>
               </>

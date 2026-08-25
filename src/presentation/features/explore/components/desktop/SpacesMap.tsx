@@ -90,17 +90,11 @@ function SpaceMarker({
 export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapProps) {
   const [hoveredSpaceId, setHoveredSpaceId] = useState<string | null>(null);
   const [map, setMap] = useState<google.maps.Map | null>(null);
-  const zoomTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const wrapperRef = useRef<HTMLDivElement>(null);
 
   const { isLoaded, loadError } = useJsApiLoader({
     googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
   });
-
-  useEffect(() => {
-    return () => {
-      if (zoomTimeoutRef.current) clearTimeout(zoomTimeoutRef.current);
-    };
-  }, []);
 
   const onUnmount = useCallback(() => {
     setMap(null);
@@ -117,13 +111,32 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
     return bounds;
   }, [isLoaded, spaces]);
 
+  const MIN_ZOOM = 10;
+
+  const applyBounds = useCallback((targetMap: google.maps.Map) => {
+    if (!bounds || bounds.isEmpty()) return;
+    targetMap.fitBounds(bounds, 48);
+    google.maps.event.addListenerOnce(targetMap, "bounds_changed", () => {
+      const z = targetMap.getZoom();
+      if (z !== undefined && z < MIN_ZOOM) targetMap.setZoom(MIN_ZOOM);
+    });
+  }, [bounds]);
+
+  useEffect(() => {
+    if (!map || !wrapperRef.current) return;
+
+    const observer = new ResizeObserver(() => {
+      google.maps.event.trigger(map, "resize");
+      applyBounds(map);
+    });
+    observer.observe(wrapperRef.current);
+    return () => observer.disconnect();
+  }, [map, applyBounds]);
+
   const handleMapLoad = useCallback((map: google.maps.Map) => {
     setMap(map);
-    if (bounds && !bounds.isEmpty()) {
-      map.fitBounds(bounds);
-      zoomTimeoutRef.current = setTimeout(() => map.setZoom((map.getZoom() || 12) - 1), 100);
-    }
-  }, [bounds]);
+    applyBounds(map);
+  }, [applyBounds]);
 
   const getSpaceCoordinates = (space: Space, index: number) => {
     if (space.location.latitude && space.location.longitude) {
@@ -157,7 +170,7 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
   }
 
   return (
-    <div className="relative w-full h-full rounded-2xl overflow-hidden">
+    <div ref={wrapperRef} className="relative w-full h-full rounded-2xl overflow-hidden">
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={defaultCenter}

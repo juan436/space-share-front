@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Map, List } from "lucide-react";
 import { ExploreHeader } from "./components/desktop/ExploreHeader";
 import { SearchFilters } from "./components/desktop/SearchFilters";
@@ -12,6 +12,23 @@ import { MainFooter } from "@/presentation/components/shared/layout/MainFooter";
 export function ExplorePage() {
   const [selectedSpaceId, setSelectedSpaceId] = useState<string | undefined>();
   const [showMap, setShowMap] = useState(false);
+  const [showCompactHeader, setShowCompactHeader] = useState(false);
+  const searchFiltersRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const target = searchFiltersRef.current;
+    if (!target) return;
+
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        setShowCompactHeader(!entry.isIntersecting && entry.boundingClientRect.top < 0);
+      },
+      { rootMargin: "-96px 0px 0px 0px", threshold: 0 }
+    );
+
+    observer.observe(target);
+    return () => observer.disconnect();
+  }, []);
 
   const {
     filteredSpaces,
@@ -30,8 +47,8 @@ export function ExplorePage() {
 
   return (
     <div className="bg-white dark:bg-background flex flex-col min-h-screen">
-      <ExploreHeader />
-      <SearchFilters
+      <ExploreHeader
+        showCompactSlot={showCompactHeader}
         searchQuery={searchQuery}
         onSearchChange={setSearchQuery}
         spaceType={spaceType}
@@ -40,9 +57,21 @@ export function ExplorePage() {
         onPriceRangeChange={setPriceRange}
         sizeRange={sizeRange}
         onSizeRangeChange={setSizeRange}
-        conditions={conditions}
-        onConditionsChange={setConditions}
       />
+      <div ref={searchFiltersRef}>
+        <SearchFilters
+          searchQuery={searchQuery}
+          onSearchChange={setSearchQuery}
+          spaceType={spaceType}
+          onSpaceTypeChange={setSpaceType}
+          priceRange={priceRange}
+          onPriceRangeChange={setPriceRange}
+          sizeRange={sizeRange}
+          onSizeRangeChange={setSizeRange}
+          conditions={conditions}
+          onConditionsChange={setConditions}
+        />
+      </div>
 
       {isError && (
         <div className="px-6 py-3 bg-destructive/10 border-b border-destructive/20">
@@ -72,8 +101,8 @@ export function ExplorePage() {
           className="flex-shrink-0 transition-all duration-500 ease-in-out overflow-hidden sticky top-0 h-screen"
           style={{ width: showMap ? "55%" : "0%", opacity: showMap ? 1 : 0 }}
         >
-          <div className="w-full h-full p-4 border-l border-border/30">
-            <div className="w-full h-full rounded-2xl overflow-hidden shadow-sm border border-border/30">
+          <div className="w-full h-full p-4 border-l border-border">
+            <div className="w-full h-full rounded-2xl overflow-hidden shadow-sm border border-border">
               <SpacesMap spaces={filteredSpaces} selectedSpaceId={selectedSpaceId} onSpaceSelect={setSelectedSpaceId} />
             </div>
           </div>
