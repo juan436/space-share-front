@@ -49,7 +49,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
         "px-6 py-5",
         showMap
           ? "grid grid-cols-1 sm:grid-cols-2 gap-3"
-          : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
+          : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4"
       )}>
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((i) => (
           <div key={i} className="rounded-2xl overflow-hidden border border-border">
@@ -117,7 +117,7 @@ export function SpacesList({ spaces, selectedSpaceId, onSpaceSelect, isLoading, 
           "transition-all duration-500",
           showMap
             ? "grid grid-cols-1 sm:grid-cols-2 gap-3"
-            : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 gap-4"
+            : "grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 2xl:grid-cols-5 3xl:grid-cols-6 gap-4"
         )}
       >
         {sortedSpaces.map((space, idx) => (

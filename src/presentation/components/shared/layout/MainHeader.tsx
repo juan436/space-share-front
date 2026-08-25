@@ -59,8 +59,8 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot }: M
         showCompact ? "border-b border-border shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]" : ""
       }`}
     >
-      <div className="max-w-screen-2xl mx-auto px-6">
-        <div className="flex h-24 items-center justify-between gap-8">
+      <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)]">
+        <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-24" : "h-20"}`}>
 
           <Link href="/" className="flex items-center flex-shrink-0">
             <Logo className="h-20 w-20" />

@@ -79,7 +79,7 @@ export function ExplorePage() {
         </div>
       )}
 
-      <div className="max-w-screen-2xl mx-auto w-full flex flex-1">
+      <div className="max-w-[2520px] mx-auto w-full flex flex-1">
         <div
           className="relative transition-all duration-500 ease-in-out"
           style={{ width: showMap ? "45%" : "100%" }}

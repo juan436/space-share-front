@@ -86,7 +86,7 @@ export function SearchFilters({
 
   return (
     <div className="border-b border-border bg-[#F7F7F7] dark:bg-card">
-      <div className="max-w-screen-2xl mx-auto px-6 pt-1 pb-3">
+      <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)] pt-1 pb-3">
         {/* Centered search bar — unified pill */}
         <div className="flex items-center justify-center">
           <div className="flex items-center gap-0 bg-white border border-border rounded-2xl shadow-sm overflow-hidden w-full max-w-4xl">
