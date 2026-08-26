@@ -7,6 +7,15 @@ export class SpaceMapper {
     return {
       id: dto._id,
       hostId: typeof dto.hostId === "object" ? dto.hostId._id : dto.hostId,
+      host: typeof dto.hostId === "object"
+        ? {
+            id: dto.hostId._id,
+            name: dto.hostId.name,
+            email: dto.hostId.email,
+            avatar: dto.hostId.avatar,
+            hostSince: dto.hostId.createdAt ? new Date(dto.hostId.createdAt) : undefined,
+          }
+        : undefined,
       title: dto.title,
       description: dto.description,
       type: dto.type,

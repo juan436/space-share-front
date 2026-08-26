@@ -12,7 +12,9 @@ import { useAuth } from "@/presentation/providers/auth-context";
 import { resolveHostId } from "@/presentation/utils/resolveHostId";
 import {
   SpaceImageGallery,
+  SpaceTitleBar,
   SpaceDetailHeader,
+  SpaceRatingSummary,
   SpaceDescription,
   SpaceAmenities,
   SpaceLocationMap,
@@ -74,41 +76,60 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
 
       {/* Main Content */}
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-6 pb-12">
+        {/* Title + acciones */}
+        <SpaceTitleBar
+          title={space.title}
+          description={space.description}
+          isFavorite={isFavorite(space.id)}
+          onToggleFavorite={() => toggleFavorite(space.id)}
+        />
+
         {/* Image Gallery */}
-        <SpaceImageGallery images={space.images} title={space.title} />
+        <div className="mt-6">
+          <SpaceImageGallery images={space.images} title={space.title} />
+        </div>
 
         {/* Content Grid */}
-        <div className="mt-12 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+        <div className="mt-8 grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
           {/* Left Column - Details */}
-          <div className="lg:col-span-8 flex flex-col gap-12 lg:gap-16">
-            <SpaceDetailHeader
-              space={space}
-              spaceTypeLabel={spaceTypeLabel}
-              spaceTypeColor={spaceTypeColor}
-              isFavorite={isFavorite(space.id)}
-              onToggleFavorite={() => toggleFavorite(space.id)}
-            />
-            
+          <div className="lg:col-span-8 flex flex-col gap-8 lg:gap-10">
+            <div className="flex flex-col gap-5">
+              <SpaceDetailHeader
+                space={space}
+                spaceTypeLabel={spaceTypeLabel}
+                spaceTypeColor={spaceTypeColor}
+              />
+
+              <SpaceRatingSummary
+                rating={space.rating}
+                reviewCount={space.reviewCount}
+                host={space.host}
+              />
+            </div>
+
             <SpaceDescription
               description={space.description}
               squareMeters={space.squareMeters}
+              capacity={space.capacity}
+              bookingsCount={space.bookingsCount}
+              createdAt={space.createdAt}
             />
-            
-            <hr className="border-border/60" />
+
+            <hr className="border-t-2 border-border" />
 
             <SpaceAmenities amenities={space.amenities} category={space.category} services={space.services} />
 
-            <hr className="border-border/60" />
+            <hr className="border-t-2 border-border" />
 
             <SpaceLocationMap location={space.location} />
 
-            <hr className="border-border/60" />
+            <hr className="border-t-2 border-border" />
 
             <SpaceReviews spaceId={space.id} rating={space.rating} reviewCount={space.reviewCount} />
 
-            <hr className="border-border/60" />
+            <hr className="border-t-2 border-border" />
 
-            <SpaceHostCard hostId={space.hostId} />
+            <SpaceHostCard host={space.host} />
           </div>
 
           {/* Right Column - Booking Sidebar (Desktop) */}

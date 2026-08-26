@@ -51,14 +51,14 @@ export function SpaceAmenities({ amenities, category, services }: SpaceAmenities
   const hasMore = rows.length > PREVIEW_COUNT;
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
       <h2 className="text-xl font-semibold text-foreground">Lo que este lugar ofrece</h2>
 
       <ul className="grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-6">
         {visibleRows.map(({ key, label, icon: Icon, available }) => (
           <li
             key={key}
-            className={`flex items-center gap-4 text-base ${available ? "text-foreground" : "text-muted-foreground/60"}`}
+            className={`flex items-center gap-4 text-[17px] font-medium ${available ? "text-foreground" : "text-muted-foreground/60"}`}
           >
             <Icon className={`w-7 h-7 shrink-0 ${available ? "text-foreground" : "text-muted-foreground/50"}`} />
             <span className={available ? "" : "line-through"}>

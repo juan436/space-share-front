@@ -30,9 +30,18 @@ export interface SpaceLocation {
   longitude?: number;
 }
 
+export interface SpaceHostSummary {
+  id: string;
+  name: string;
+  email: string;
+  avatar?: string;
+  hostSince?: Date;
+}
+
 export interface Space {
   id: string;
   hostId: string;
+  host?: SpaceHostSummary;
   title: string;
   description: string;
   type: SpaceType;

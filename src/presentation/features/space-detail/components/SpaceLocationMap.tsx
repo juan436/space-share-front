@@ -1,11 +1,9 @@
 "use client";
 
-import { useCallback } from "react";
 import { GoogleMap, useJsApiLoader, Marker } from "@react-google-maps/api";
-import { MapPin, Navigation } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { MapSkeleton } from "@/presentation/components/shared/skeletons/MapSkeleton";
 import { Space } from "@/core/domain/entities/Space";
-import { Button } from "@/presentation/components/ui/button";
 
 interface SpaceLocationMapProps {
   location: Space["location"];
@@ -33,26 +31,12 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
     lng: location.longitude || -89.2182,
   };
 
-  const handleGetDirections = () => {
-    const destination = location.latitude && location.longitude
-      ? `${location.latitude},${location.longitude}`
-      : encodeURIComponent(`${location.address}, ${location.city}, ${location.country}`);
-    const url = `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
-    window.open(url, "_blank");
-  };
-
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <h2 className="text-xl font-semibold text-foreground">Ubicación</h2>
-        <Button variant="outline" size="sm" onClick={handleGetDirections} className="gap-2">
-          <Navigation className="w-4 h-4" />
-          Cómo llegar
-        </Button>
-      </div>
+    <div className="space-y-6">
+      <h2 className="text-xl font-semibold text-foreground">Dónde se encuentra</h2>
 
       {/* Address Info */}
-      <div className="flex items-start gap-3 p-4 rounded-xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.08)]">
+      <div className="flex items-start gap-3">
         <MapPin className="w-5 h-5 text-muted-foreground mt-0.5" />
         <div>
           <p className="font-medium text-foreground">{location.address}</p>
@@ -76,18 +60,6 @@ export function SpaceLocationMap({ location }: SpaceLocationMapProps) {
         ) : (
           <MapSkeleton className="h-[300px] rounded-xl" />
         )}
-      </div>
-
-      {/* Neighborhood Info */}
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div className="p-3 rounded-lg bg-white dark:bg-card border border-border/40 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
-          <p className="text-muted-foreground">Zona</p>
-          <p className="font-medium">{location.city}</p>
-        </div>
-        <div className="p-3 rounded-lg bg-white dark:bg-card border border-border/40 shadow-[0_2px_8px_rgba(0,0,0,0.07)]">
-          <p className="text-muted-foreground">Departamento</p>
-          <p className="font-medium">{location.state}</p>
-        </div>
       </div>
     </div>
   );

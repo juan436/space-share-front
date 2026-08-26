@@ -1,5 +1,7 @@
 export { SpaceImageGallery } from "./SpaceImageGallery";
+export { SpaceTitleBar } from "./SpaceTitleBar";
 export { SpaceDetailHeader } from "./SpaceDetailHeader";
+export { SpaceRatingSummary } from "./SpaceRatingSummary";
 export { SpaceDescription } from "./SpaceDescription";
 export { SpaceAmenities } from "./SpaceAmenities";
 export { SpaceLocationMap } from "./SpaceLocationMap";

@@ -49,7 +49,7 @@ export function SpaceImageGallery({ images, title }: SpaceImageGalleryProps) {
       <div className="relative w-full mb-8">
 
         {/* Desktop: Grid Layout */}
-        <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 gap-3 h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group/gallery">
+        <div className="hidden md:grid md:grid-cols-4 md:grid-rows-2 gap-1.5 h-[400px] lg:h-[500px] rounded-3xl overflow-hidden shadow-[0_8px_30px_rgb(0,0,0,0.06)] group/gallery">
           {/* Main Hero Image */}
           <div
             className="col-span-2 row-span-2 relative group cursor-pointer"

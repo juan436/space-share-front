@@ -2,11 +2,10 @@
 
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Star, User } from "lucide-react";
+import { Star, Trash2 } from "lucide-react";
 import { Review } from "@/core/domain/entities/Review";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { useAuth } from "@/presentation/providers/auth-context";
-import { Button } from "@/presentation/components/ui/button";
 
 interface SpaceReviewsProps {
   spaceId: string;
@@ -68,61 +67,71 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
           ))}
         </div>
       ) : reviews.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {reviews.map((review) => (
-            <div
-              key={review.id}
-              className="p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] space-y-3"
-            >
-              <div className="flex items-center justify-between">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-10 gap-y-8">
+          {reviews.map((review) => {
+            const initials = (review.client?.name || "U")
+              .split(" ")
+              .map((part) => part[0])
+              .slice(0, 2)
+              .join("")
+              .toUpperCase();
+
+            return (
+              <div key={review.id} className="group flex flex-col gap-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center">
-                    {review.client?.avatar ? (
-                      <Image src={review.client.avatar} alt={review.client.name ?? "Avatar"} width={40} height={40} className="w-10 h-10 rounded-full object-cover" />
-                    ) : (
-                      <User className="w-5 h-5 text-muted-foreground" />
-                    )}
-                  </div>
-                  <div>
-                    <p className="font-semibold text-sm text-foreground">
+                  {review.client?.avatar ? (
+                    <Image
+                      src={review.client.avatar}
+                      alt={review.client.name ?? "Avatar"}
+                      width={48}
+                      height={48}
+                      className="w-12 h-12 rounded-full object-cover flex-shrink-0"
+                    />
+                  ) : (
+                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
+                      {initials}
+                    </div>
+                  )}
+                  <div className="min-w-0">
+                    <p className="font-semibold text-base text-foreground truncate">
                       {review.client?.name || "Usuario"}
                     </p>
-                    <p className="text-xs text-muted-foreground">
-                      {review.createdAt.toLocaleDateString("es", { month: "long", year: "numeric" })}
-                    </p>
+                    <div className="flex items-center gap-1.5 text-sm text-muted-foreground">
+                      <div className="flex items-center" aria-label={`Calificación: ${review.rating} de 5 estrellas`}>
+                        {Array.from({ length: 5 }).map((_, i) => (
+                          <Star
+                            key={i}
+                            aria-hidden="true"
+                            className={`w-3 h-3 ${
+                              i < review.rating
+                                ? "fill-foreground text-foreground"
+                                : "text-muted-foreground/30"
+                            }`}
+                          />
+                        ))}
+                      </div>
+                      <span>·</span>
+                      <span>{review.createdAt.toLocaleDateString("es", { month: "long", year: "numeric" })}</span>
+                    </div>
                   </div>
                 </div>
-                <div className="flex items-center gap-1" aria-label={`Calificación: ${review.rating} de 5 estrellas`}>
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      aria-hidden="true"
-                      className={`w-3.5 h-3.5 ${
-                        i < review.rating
-                          ? "fill-amber-400 text-amber-400"
-                          : "text-muted-foreground/30"
-                      }`}
-                    />
-                  ))}
-                </div>
+                {review.comment && (
+                  <p className="text-[17px] font-medium text-foreground/80 leading-relaxed line-clamp-4">
+                    {review.comment}
+                  </p>
+                )}
+                {isAuthenticated && user?.id === review.clientId && (
+                  <button
+                    onClick={() => handleDelete(review.id)}
+                    className="self-start flex items-center gap-1 text-xs text-muted-foreground hover:text-destructive opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <Trash2 className="w-3.5 h-3.5" />
+                    Eliminar
+                  </button>
+                )}
               </div>
-              {review.comment && (
-                <p className="text-sm text-muted-foreground leading-relaxed">
-                  {review.comment}
-                </p>
-              )}
-              {isAuthenticated && user?.id === review.clientId && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  className="text-xs text-destructive hover:text-destructive"
-                  onClick={() => handleDelete(review.id)}
-                >
-                  Eliminar
-                </Button>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <p className="text-muted-foreground text-sm">
