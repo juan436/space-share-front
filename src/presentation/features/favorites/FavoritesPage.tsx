@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Heart, Search, ArrowRight, Compass } from "lucide-react";
-import { ExploreHeader } from "@/presentation/features/explore/components/desktop/ExploreHeader";
+import { MainHeader } from "@/presentation/components/shared/layout/MainHeader";
 import { MobileHeader } from "@/presentation/features/explore/components/mobile/MobileHeader";
 import { SpaceCard } from "@/presentation/features/explore/components/desktop/SpaceCard";
 import { MobileSpaceCard } from "@/presentation/features/explore/components/mobile/MobileSpaceCard";
@@ -29,7 +29,7 @@ export function FavoritesPage() {
 
   return (
     <div className="min-h-screen bg-white dark:bg-background flex flex-col">
-      {isMobile ? <MobileHeader /> : <ExploreHeader />}
+      {isMobile ? <MobileHeader /> : <MainHeader />}
 
       <main className="flex-1 max-w-screen-xl mx-auto w-full px-4 sm:px-6 py-8 md:py-12 pb-24 md:pb-12">
 
