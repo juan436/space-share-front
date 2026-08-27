@@ -13,7 +13,7 @@ interface SpaceReviewsProps {
   reviewCount?: number;
 }
 
-export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps) {
+export function SpaceReviews({ spaceId }: SpaceReviewsProps) {
   const { getSpaceReviewsUseCase, deleteReviewUseCase } = useUseCases();
   const { user, isAuthenticated } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -41,18 +41,7 @@ export function SpaceReviews({ spaceId, rating, reviewCount }: SpaceReviewsProps
   return (
     <div className="flex flex-col gap-6">
       {/* Header */}
-      <div className="flex items-center gap-3">
-        <Star className="w-6 h-6 fill-amber-400 text-amber-400" />
-        <h2 className="text-xl font-semibold text-foreground">
-          {rating && rating > 0 ? (
-            <>
-              {rating} <span className="text-muted-foreground font-normal text-base">· {reviewCount} {reviewCount === 1 ? "reseña" : "reseñas"}</span>
-            </>
-          ) : (
-            "Reseñas"
-          )}
-        </h2>
-      </div>
+      <h2 className="text-xl font-semibold text-foreground">Reseñas y Rating</h2>
 
       {/* Reviews List */}
       {isError ? (

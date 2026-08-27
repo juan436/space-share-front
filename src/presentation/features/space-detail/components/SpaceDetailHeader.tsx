@@ -1,6 +1,5 @@
 "use client";
 
-import { Sparkles } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 
 interface SpaceDetailHeaderProps {
@@ -22,9 +21,8 @@ export function SpaceDetailHeader({ space, spaceTypeLabel }: SpaceDetailHeaderPr
         </h2>
 
         {!hasRating && (
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 dark:bg-amber-950/30 dark:text-amber-400 ring-1 ring-inset ring-amber-200 dark:ring-amber-800/50 self-start">
-            <Sparkles className="w-3 h-3" />
-            Nuevo en SpaceShare
+          <span className="text-base font-semibold text-foreground underline underline-offset-4 decoration-1">
+            Recién publicado
           </span>
         )}
       </div>
