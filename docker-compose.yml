@@ -3,14 +3,14 @@ services:
     build:
       context: .
       args:
-        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://api-space-share.jvserver.com/api}
+        NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://tu-dominio.com/api}
     environment:
-      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://api-space-share.jvserver.com/api}
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL:-https://tu-dominio.com/api}
       NODE_ENV: production
     restart: unless-stopped
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.space-share-front.rule=Host(`space-share.jvserver.com`)"
+      - "traefik.http.routers.space-share-front.rule=Host(`tu-dominio.com`)"
       - "traefik.http.routers.space-share-front.entrypoints=websecure"
       - "traefik.http.routers.space-share-front.tls=true"
       - "traefik.http.routers.space-share-front.tls.certresolver=myresolver"
