@@ -13,6 +13,7 @@ export interface Reservation {
   status: ReservationStatus;
   notes: string;
   quantity: number;
+  eventCode?: string;
   space?: {
     title: string;
     images: string[];

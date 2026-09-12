@@ -37,6 +37,7 @@ export class ReservationMapper {
       status: dto.status as Reservation["status"],
       notes: dto.notes,
       quantity: dto.quantity ?? 1,
+      eventCode: dto.eventCode,
       space,
       client,
       host,

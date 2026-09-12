@@ -1,6 +1,6 @@
 import { memo } from "react";
 import Image from "next/image";
-import { Calendar, MapPin, DollarSign, ArrowRight, Star, CreditCard, Info, CheckCircle2 } from "lucide-react";
+import { Calendar, MapPin, DollarSign, ArrowRight, Star, CreditCard, Info, CheckCircle2, KeyRound } from "lucide-react";
 import { Reservation } from "@/core/domain/entities/Reservation";
 import { Button } from "@/presentation/components/ui/button";
 import { format } from "date-fns";
@@ -94,6 +94,15 @@ export const UserReservationCard = memo(function UserReservationCard({
             Pagar ahora
           </Button>
         )}
+        {reservation.eventCode && (
+          <div className="flex items-center justify-between p-2 rounded-lg bg-violet-50 dark:bg-violet-950/20 border border-violet-200/60 dark:border-violet-800/40">
+            <span className="text-[11px] font-semibold text-violet-700 dark:text-violet-400 flex items-center gap-1">
+              <KeyRound className="w-3 h-3" />Código de entrega/retiro
+            </span>
+            <span className="text-sm font-bold tracking-wider text-violet-700 dark:text-violet-400">{reservation.eventCode}</span>
+          </div>
+        )}
+
         {reservation.status === "confirmed" && (
           <Button variant="outline" size="sm" onClick={() => onDetails(reservation.id)} className="w-full rounded-xl gap-2 mt-1">
             <Info className="w-3.5 h-3.5" />Ver detalles

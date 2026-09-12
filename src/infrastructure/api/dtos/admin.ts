@@ -6,6 +6,10 @@ export interface AdminUserDto {
   phone?: string;
   avatar?: string;
   isActive: boolean;
+  kycStatus?: "none" | "pending" | "approved" | "rejected";
+  duiImageUrl?: string;
+  selfieImageUrl?: string;
+  kycRejectionReason?: string;
   createdAt: string;
 }
 

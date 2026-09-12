@@ -1,9 +1,9 @@
-import { LoginUseCase, RegisterUseCase, LogoutUseCase, GetCurrentUserUseCase } from "@/core/application/use-cases/auth";
+import { LoginUseCase, RegisterUseCase, LogoutUseCase, GetCurrentUserUseCase, SubmitKycUseCase } from "@/core/application/use-cases/auth";
 import { CreateSpaceUseCase, ListSpacesUseCase, UpdateSpaceUseCase, DeleteSpaceUseCase, FindSpaceByIdUseCase, FindHostSpacesUseCase, UploadSpaceImagesUseCase } from "@/core/application/use-cases/spaces";
 import { GetClientReservationsUseCase, GetHostReservationsUseCase, CreateReservationUseCase, UpdateReservationStatusUseCase } from "@/core/application/use-cases/reservations";
 import { GetSpaceReviewsUseCase, CreateReviewUseCase, DeleteReviewUseCase } from "@/core/application/use-cases/reviews";
 import { GetFavoritesUseCase, ToggleFavoriteUseCase } from "@/core/application/use-cases/favorites";
-import { GetAdminStatsUseCase, GetAdminSpacesUseCase, GetAdminUsersUseCase, GetAdminAnalyticsUseCase } from "@/core/application/use-cases/admin";
+import { GetAdminStatsUseCase, GetAdminSpacesUseCase, GetAdminUsersUseCase, GetAdminAnalyticsUseCase, ReviewKycUseCase } from "@/core/application/use-cases/admin";
 import { InitiatePaymentUseCase, InitiateDirectPaymentUseCase, VerifyCheckoutUseCase } from "@/core/application/use-cases/payments";
 import { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository } from "./repositories";
 
@@ -12,6 +12,7 @@ export const loginUseCase = new LoginUseCase(authRepository);
 export const registerUseCase = new RegisterUseCase(authRepository);
 export const logoutUseCase = new LogoutUseCase(authRepository);
 export const getCurrentUserUseCase = new GetCurrentUserUseCase(authRepository);
+export const submitKycUseCase = new SubmitKycUseCase(authRepository);
 
 // Spaces
 export const createSpaceUseCase = new CreateSpaceUseCase(spaceRepository);
@@ -42,6 +43,7 @@ export const getAdminStatsUseCase = new GetAdminStatsUseCase(adminRepository);
 export const getAdminSpacesUseCase = new GetAdminSpacesUseCase(adminRepository);
 export const getAdminUsersUseCase = new GetAdminUsersUseCase(adminRepository);
 export const getAdminAnalyticsUseCase = new GetAdminAnalyticsUseCase(adminRepository);
+export const reviewKycUseCase = new ReviewKycUseCase(adminRepository);
 
 // Payments
 export const initiatePaymentUseCase = new InitiatePaymentUseCase(paymentRepository);

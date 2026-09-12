@@ -18,6 +18,8 @@ export interface UserDto {
   role: "client" | "host" | "admin";
   avatar?: string;
   phone?: string;
+  kycStatus?: "none" | "pending" | "approved" | "rejected";
+  kycRejectionReason?: string;
   createdAt: string;
   updatedAt: string;
 }

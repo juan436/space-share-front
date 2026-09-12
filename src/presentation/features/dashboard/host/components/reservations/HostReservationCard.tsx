@@ -1,7 +1,7 @@
 import { memo } from "react";
 import Image from "next/image";
 import { Button } from "@/presentation/components/ui/button";
-import { Calendar, MapPin, User, MessageSquare, DollarSign, Info, Settings2 } from "lucide-react";
+import { Calendar, MapPin, User, MessageSquare, DollarSign, Info, Settings2, KeyRound } from "lucide-react";
 import { Reservation } from "@/core/domain/entities/Reservation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
@@ -78,6 +78,15 @@ export const HostReservationCard = memo(function HostReservationCard({
           </div>
           <span className="text-xs text-muted-foreground">Total: <span className="font-bold text-foreground">${reservation.totalPrice}</span></span>
         </div>
+
+        {reservation.eventCode && (
+          <div className="flex items-center justify-between p-2 rounded-lg bg-violet-50 dark:bg-violet-950/20 border border-violet-200/60 dark:border-violet-800/40">
+            <span className="text-[11px] font-semibold text-violet-700 dark:text-violet-400 flex items-center gap-1">
+              <KeyRound className="w-3 h-3" />Código de entrega/retiro
+            </span>
+            <span className="text-sm font-bold tracking-wider text-violet-700 dark:text-violet-400">{reservation.eventCode}</span>
+          </div>
+        )}
 
         {/* Notes */}
         {reservation.notes && (

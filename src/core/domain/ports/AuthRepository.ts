@@ -21,4 +21,5 @@ export interface AuthRepository {
   logout(): Promise<void>;
   refreshSession(refreshToken: string): Promise<AuthTokens>;
   getCurrentUser(): Promise<User | null>;
+  submitKyc(dui: File, selfie: File): Promise<User>;
 }

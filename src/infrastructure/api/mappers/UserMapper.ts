@@ -10,6 +10,8 @@ export class UserMapper {
       role: dto.role,
       avatar: dto.avatar,
       phone: dto.phone,
+      kycStatus: dto.kycStatus ?? "none",
+      kycRejectionReason: dto.kycRejectionReason,
       createdAt: new Date(dto.createdAt),
       updatedAt: new Date(dto.updatedAt),
     };

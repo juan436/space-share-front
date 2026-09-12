@@ -1,5 +1,6 @@
 import { AdminUser, AdminSpace, AdminSpaceHost, AdminAnalytics } from "@/core/domain/entities/AdminStats";
 import { AdminUserDto, AdminSpaceDto, AdminSpaceHostDto, AdminAnalyticsDto } from "../dtos/admin";
+import { resolveImageUrl } from "@/infrastructure/utils/imageUrl";
 
 export class AdminMapper {
   static userToDomain(dto: AdminUserDto): AdminUser {
@@ -11,6 +12,10 @@ export class AdminMapper {
       phone: dto.phone,
       avatar: dto.avatar,
       isActive: dto.isActive,
+      kycStatus: dto.kycStatus ?? "none",
+      duiImageUrl: dto.duiImageUrl ? resolveImageUrl(dto.duiImageUrl) : undefined,
+      selfieImageUrl: dto.selfieImageUrl ? resolveImageUrl(dto.selfieImageUrl) : undefined,
+      kycRejectionReason: dto.kycRejectionReason,
       createdAt: new Date(dto.createdAt),
     };
   }

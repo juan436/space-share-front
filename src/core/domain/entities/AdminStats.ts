@@ -13,6 +13,10 @@ export interface AdminUser {
   phone?: string;
   avatar?: string;
   isActive: boolean;
+  kycStatus: "none" | "pending" | "approved" | "rejected";
+  duiImageUrl?: string;
+  selfieImageUrl?: string;
+  kycRejectionReason?: string;
   createdAt: Date;
 }
 

@@ -28,6 +28,7 @@ export interface ReservationDto {
   status: string;
   notes: string;
   quantity?: number;
+  eventCode?: string;
   createdAt: string;
   updatedAt: string;
 }

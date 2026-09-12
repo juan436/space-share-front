@@ -26,4 +26,9 @@ export class ApiAdminRepository implements AdminRepository {
     const res = await this.httpClient.get<AdminAnalyticsDto>("/admin/analytics");
     return AdminMapper.analyticsToDomain(res.data);
   }
+
+  async reviewKyc(userId: string, approve: boolean, rejectionReason?: string): Promise<AdminUser> {
+    const res = await this.httpClient.patch<AdminUserDto>(`/admin/users/${userId}/kyc`, { approve, rejectionReason });
+    return AdminMapper.userToDomain(res.data);
+  }
 }

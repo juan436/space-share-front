@@ -9,12 +9,14 @@ import { useDashboardTabs } from "@/presentation/hooks/useDashboardTabs";
 import { UserHome, UserReservations } from "@/presentation/features/dashboard/user";
 import { HostHome, HostDashboard, HostReservations } from "@/presentation/features/dashboard/host";
 import { Messages } from "@/presentation/features/messages";
+import { KycVerification } from "@/presentation/features/dashboard/verification/KycVerification";
 import { AdminHome, AdminUsers, AdminSpaces, AdminAnalytics } from "@/presentation/features/admin";
 
 function ClientContent({ tab }: { tab: string }) {
   switch (tab) {
     case "reservations": return <UserReservations />;
     case "messages": return <Messages />;
+    case "verification": return <KycVerification />;
     default: return <UserHome />;
   }
 }
@@ -24,6 +26,7 @@ function HostContent({ tab, onNavigate }: { tab: string; onNavigate: (tab: strin
     case "spaces": return <HostDashboard />;
     case "reservations": return <HostReservations />;
     case "messages": return <Messages />;
+    case "verification": return <KycVerification />;
     default: return <HostHome onNavigate={onNavigate} />;
   }
 }

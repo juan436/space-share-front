@@ -1,5 +1,7 @@
 export type UserRole = "client" | "host" | "admin";
 
+export type KycStatus = "none" | "pending" | "approved" | "rejected";
+
 export interface User {
   id: string;
   email: string;
@@ -7,6 +9,8 @@ export interface User {
   role: UserRole;
   avatar?: string;
   phone?: string;
+  kycStatus: KycStatus;
+  kycRejectionReason?: string;
   createdAt: Date;
   updatedAt: Date;
 }

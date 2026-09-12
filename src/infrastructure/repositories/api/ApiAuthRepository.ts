@@ -105,6 +105,16 @@ export class ApiAuthRepository implements AuthRepository {
     }
   }
 
+  async submitKyc(dui: File, selfie: File): Promise<User> {
+    const formData = new FormData();
+    formData.append("dui", dui);
+    formData.append("selfie", selfie);
+    const response = await this.httpClient.postFormData<UserDto>("/users/kyc", formData);
+    const user = UserMapper.toDomain(response.data);
+    this.saveUser(user);
+    return user;
+  }
+
   private saveUser(user: User): void {
     if (typeof window !== "undefined") {
       localStorage.setItem(USER_KEY, JSON.stringify(user));

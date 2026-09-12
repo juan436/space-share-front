@@ -5,4 +5,5 @@ export interface AdminRepository {
   getUsers(): Promise<AdminUser[]>;
   getSpaces(): Promise<AdminSpace[]>;
   getAnalytics(): Promise<AdminAnalytics>;
+  reviewKyc(userId: string, approve: boolean, rejectionReason?: string): Promise<AdminUser>;
 }

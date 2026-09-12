@@ -5,6 +5,7 @@ import { LoginUseCase } from "@/core/application/use-cases/auth/Login";
 import { RegisterUseCase } from "@/core/application/use-cases/auth/Register";
 import { LogoutUseCase } from "@/core/application/use-cases/auth/Logout";
 import { GetCurrentUserUseCase } from "@/core/application/use-cases/auth/GetCurrentUser";
+import { SubmitKycUseCase } from "@/core/application/use-cases/auth/SubmitKyc";
 import { CreateSpaceUseCase } from "@/core/application/use-cases/spaces/CreateSpace";
 import { ListSpacesUseCase } from "@/core/application/use-cases/spaces/ListSpaces";
 import { UpdateSpaceUseCase } from "@/core/application/use-cases/spaces/UpdateSpace";
@@ -25,6 +26,7 @@ import { GetAdminStatsUseCase } from "@/core/application/use-cases/admin/GetAdmi
 import { GetAdminSpacesUseCase } from "@/core/application/use-cases/admin/GetAdminSpaces";
 import { GetAdminUsersUseCase } from "@/core/application/use-cases/admin/GetAdminUsers";
 import { GetAdminAnalyticsUseCase } from "@/core/application/use-cases/admin/GetAdminAnalytics";
+import { ReviewKycUseCase } from "@/core/application/use-cases/admin/ReviewKyc";
 import { InitiatePaymentUseCase } from "@/core/application/use-cases/payments/InitiatePayment";
 import { InitiateDirectPaymentUseCase } from "@/core/application/use-cases/payments/InitiateDirectPayment";
 import { VerifyCheckoutUseCase } from "@/core/application/use-cases/payments/VerifyCheckout";
@@ -35,6 +37,7 @@ export interface UseCases {
   registerUseCase: RegisterUseCase;
   logoutUseCase: LogoutUseCase;
   getCurrentUserUseCase: GetCurrentUserUseCase;
+  submitKycUseCase: SubmitKycUseCase;
   // Spaces
   createSpaceUseCase: CreateSpaceUseCase;
   listSpacesUseCase: ListSpacesUseCase;
@@ -60,6 +63,7 @@ export interface UseCases {
   getAdminSpacesUseCase: GetAdminSpacesUseCase;
   getAdminUsersUseCase: GetAdminUsersUseCase;
   getAdminAnalyticsUseCase: GetAdminAnalyticsUseCase;
+  reviewKycUseCase: ReviewKycUseCase;
   // Payments
   initiatePaymentUseCase: InitiatePaymentUseCase;
   initiateDirectPaymentUseCase: InitiateDirectPaymentUseCase;

@@ -1,6 +1,6 @@
 import { useState, useMemo } from "react";
 import React from "react";
-import { Home, Building2, Calendar, MessageSquare, Users, BarChart3 } from "lucide-react";
+import { Home, Building2, Calendar, MessageSquare, Users, BarChart3, ShieldCheck } from "lucide-react";
 
 export type TabDef = {
   id: string;
@@ -13,12 +13,14 @@ const tabsByRole: Record<string, TabDef[]> = {
     { id: "home", label: "Inicio", icon: Home },
     { id: "reservations", label: "Reservaciones", icon: Calendar },
     { id: "messages", label: "Mensajes", icon: MessageSquare },
+    { id: "verification", label: "Verificación", icon: ShieldCheck },
   ],
   host: [
     { id: "home", label: "Inicio", icon: Home },
     { id: "spaces", label: "Mis Espacios", icon: Building2 },
     { id: "reservations", label: "Reservaciones", icon: Calendar },
     { id: "messages", label: "Mensajes", icon: MessageSquare },
+    { id: "verification", label: "Verificación", icon: ShieldCheck },
   ],
   admin: [
     { id: "home", label: "Dashboard", icon: Home },
