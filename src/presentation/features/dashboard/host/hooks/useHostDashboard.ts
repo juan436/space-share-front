@@ -32,6 +32,7 @@ export function useHostDashboard() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [newSpace, setNewSpace] = useState<NewSpaceFormData>(initialFormState);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [actionNotice, setActionNotice] = useState<string | null>(null);
   const newSpaceRef = useRef(newSpace);
 
   // Edit state
@@ -60,7 +61,7 @@ export function useHostDashboard() {
   const handleAddSpace = useCallback(async () => {
     const current = newSpaceRef.current;
     try {
-      await create({
+      const created = await create({
         title: current.title,
         description: current.description,
         type: current.type,
@@ -84,6 +85,9 @@ export function useHostDashboard() {
       });
       resetForm();
       setIsDialogOpen(false);
+      if (created.status === "pending") {
+        setActionNotice("Tu espacio quedó guardado. Se publica automáticamente en cuanto se apruebe tu verificación de identidad.");
+      }
     } catch (error) {
       setActionError(toErrorMessage(error));
     }
@@ -175,5 +179,7 @@ export function useHostDashboard() {
     recommendedPrice,
     actionError,
     clearActionError: () => setActionError(null),
+    actionNotice,
+    clearActionNotice: () => setActionNotice(null),
   };
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { AlertCircle, Building2, CheckCircle2, Clock, DollarSign, Search } from "lucide-react";
+import { AlertCircle, Building2, CheckCircle2, Clock, DollarSign, Search, Info } from "lucide-react";
 import { useHostDashboard } from "./hooks";
 import { AddSpaceWizard, AddSpaceWizardMobile } from "./components/actions/add-space";
 import { EditSpaceDialog } from "./components/actions/edit-space";
@@ -71,6 +71,8 @@ export function HostDashboard() {
     recommendedPrice,
     actionError,
     clearActionError,
+    actionNotice,
+    clearActionNotice,
   } = useHostDashboard();
 
   const filteredSpaces = searchQuery.trim()
@@ -128,6 +130,14 @@ export function HostDashboard() {
           <AlertCircle className="h-4 w-4 shrink-0" />
           <span>{actionError}</span>
           <button onClick={clearActionError} className="ml-auto text-xs underline">Cerrar</button>
+        </div>
+      )}
+
+      {actionNotice && (
+        <div className="flex items-center gap-2 rounded-lg border border-blue-300/40 bg-blue-50 dark:bg-blue-950/20 px-4 py-3 text-sm text-blue-700 dark:text-blue-400">
+          <Info className="h-4 w-4 shrink-0" />
+          <span>{actionNotice}</span>
+          <button onClick={clearActionNotice} className="ml-auto text-xs underline">Cerrar</button>
         </div>
       )}
 
