@@ -1,4 +1,5 @@
 export { SpaceTypeSelector, type SpaceMode } from "./SpaceTypeSelector";
+export { ListingTypeSelector } from "./ListingTypeSelector";
 export { WizardStepper, WIZARD_STEPS } from "./WizardStepper";
 export { WizardFooter } from "./WizardFooter";
 export { SpaceWizard } from "./SpaceWizard";

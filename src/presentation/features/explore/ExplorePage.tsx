@@ -39,6 +39,7 @@ export function ExplorePage() {
     isLoading,
     isError,
     searchQuery, setSearchQuery,
+    listingType, setListingType,
     spaceType, setSpaceType,
     priceRange, setPriceRange,
     sizeRange, setSizeRange,
@@ -62,6 +63,8 @@ export function ExplorePage() {
         <SearchFilters
           searchQuery={searchQuery}
           onSearchChange={setSearchQuery}
+          listingType={listingType}
+          onListingTypeChange={setListingType}
           spaceType={spaceType}
           onSpaceTypeChange={setSpaceType}
           priceRange={priceRange}

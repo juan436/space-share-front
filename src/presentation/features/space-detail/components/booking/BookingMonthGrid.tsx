@@ -9,7 +9,7 @@ interface BookingMonthGridProps {
   months: number;
   setMonths: (m: number) => void;
   isMonthAvailable: (m: number) => boolean;
-  isVehicleSpace: boolean;
+  allowsMultiUnit: boolean;
   effectiveQuantity: number;
   startDate: Date;
   nextDate: Date | null;
@@ -20,7 +20,7 @@ export function BookingMonthGrid({
   months,
   setMonths,
   isMonthAvailable,
-  isVehicleSpace,
+  allowsMultiUnit,
   effectiveQuantity,
   startDate,
   nextDate,
@@ -64,7 +64,7 @@ export function BookingMonthGrid({
             Como hay fechas sueltas ya reservadas en este período, se interrumpe la disponibilidad y no podemos
             ofrecerte el{" "}
             <b>
-              {isVehicleSpace
+              {allowsMultiUnit
                 ? effectiveQuantity + (effectiveQuantity === 1 ? " espacio" : " espacios")
                 : "lugar"}
             </b>{" "}

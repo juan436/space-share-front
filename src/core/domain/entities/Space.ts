@@ -2,6 +2,8 @@ export type SpaceType = "garage" | "basement" | "attic" | "storage" | "parking" 
 
 export type SpaceCategory = "normal" | "business";
 
+export type ListingType = "lodging" | "storage";
+
 export interface BusinessServices {
   wifi?: boolean;
   parking?: boolean;
@@ -45,6 +47,7 @@ export interface Space {
   title: string;
   description: string;
   type: SpaceType;
+  listingType: ListingType;
   squareMeters: number;
   pricePerMonth: number;
   amenities: SpaceAmenities;
@@ -75,6 +78,7 @@ export interface CreateSpaceInput {
   title: string;
   description: string;
   type: SpaceType;
+  listingType: ListingType;
   capacity: number;
   squareMeters: number;
   pricePerMonth: number;
@@ -160,6 +164,7 @@ export interface UpdateSpaceInput {
   title?: string;
   description?: string;
   type?: SpaceType;
+  listingType?: ListingType;
   capacity?: number;
   squareMeters?: number;
   pricePerMonth?: number;

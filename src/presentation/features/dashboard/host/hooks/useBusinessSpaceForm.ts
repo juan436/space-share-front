@@ -122,6 +122,7 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
       title: formData.title,
       description: formData.description,
       type: "other" as const,
+      listingType: "storage" as const,
       squareMeters: formData.squareMeters,
       pricePerMonth: formData.pricePerMonth,
       capacity: formData.maxCapacity,

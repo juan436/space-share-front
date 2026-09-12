@@ -1,5 +1,5 @@
 import { Space } from "@/core/domain/entities/Space";
-import { SpaceViewModel, SpaceTypeValue, SpaceCategoryValue } from "@/presentation/types/spaces";
+import { SpaceViewModel, SpaceTypeValue, SpaceCategoryValue, ListingTypeValue } from "@/presentation/types/spaces";
 
 export function spaceToViewModel(space: Space): SpaceViewModel {
   return {
@@ -7,6 +7,7 @@ export function spaceToViewModel(space: Space): SpaceViewModel {
     title: space.title,
     description: space.description,
     type: space.type as SpaceTypeValue,
+    listingType: (space.listingType ?? "storage") as ListingTypeValue,
     squareMeters: space.squareMeters,
     pricePerMonth: space.pricePerMonth,
     capacity: space.capacity,

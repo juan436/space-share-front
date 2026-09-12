@@ -14,6 +14,7 @@ export class ApiSpaceRepository implements SpaceRepository {
 
     if (filters) {
       if (filters.type) params.append("type", filters.type);
+      if (filters.listingType) params.append("listingType", filters.listingType);
       if (filters.minPrice) params.append("minPrice", filters.minPrice.toString());
       if (filters.maxPrice) params.append("maxPrice", filters.maxPrice.toString());
       if (filters.climateControlled !== undefined) params.append("climateControlled", filters.climateControlled.toString());

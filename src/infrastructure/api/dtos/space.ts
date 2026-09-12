@@ -31,6 +31,7 @@ export interface SpaceDto {
   title: string;
   description: string;
   type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
+  listingType: "lodging" | "storage";
   squareMeters: number;
   pricePerMonth: number;
   capacity: number;
@@ -59,6 +60,7 @@ export interface CreateSpaceRequestDto {
   title: string;
   description: string;
   type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
+  listingType: "lodging" | "storage";
   squareMeters: number;
   pricePerMonth: number;
   capacity?: number;
@@ -78,6 +80,7 @@ export interface UpdateSpaceRequestDto {
   title?: string;
   description?: string;
   type?: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
+  listingType?: "lodging" | "storage";
   squareMeters?: number;
   pricePerMonth?: number;
   capacity?: number;

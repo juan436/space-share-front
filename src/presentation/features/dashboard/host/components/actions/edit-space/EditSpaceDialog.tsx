@@ -37,7 +37,7 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
 
   const isFormValid = Boolean(
     formData.title &&
-    formData.squareMeters > 0 &&
+    (formData.listingType === "lodging" || formData.squareMeters > 0) &&
     formData.pricePerMonth > 0 &&
     formData.address &&
     formData.city &&
@@ -77,7 +77,7 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
 function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
   if (!space) {
     return {
-      title: "", description: "", type: "garage", squareMeters: 0,
+      title: "", description: "", type: "garage", listingType: "storage", squareMeters: 0,
       pricePerMonth: 0, capacity: 1, climateControlled: false,
       securityCamera: false, privateEntrance: false, address: "",
       city: "", state: "", country: "",
@@ -87,6 +87,7 @@ function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
     title: space.title,
     description: space.description,
     type: space.type,
+    listingType: space.listingType,
     squareMeters: space.squareMeters,
     pricePerMonth: space.pricePerMonth,
     capacity: space.capacity || 1,

@@ -29,7 +29,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
     months, setMonths, mode, setMode, dateRange, setDateRange,
     quantity, setQuantity, startDate, setStartDate,
     showConfirmModal, setShowConfirmModal, bookingError,
-    isVehicleSpace, effectiveQuantity, displayCapacity, currentMonths,
+    allowsMultiUnit, effectiveQuantity, displayCapacity, currentMonths,
     totalPrice, serviceFee, grandTotal, isMonthAvailable, nextDate,
     handleConfirmBooking, isBookingDisabled, showFreeCancellation,
   } = useBookingLogic(space);
@@ -53,7 +53,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
           <span className="text-sm font-medium text-muted-foreground">/ mes</span>
         </div>
 
-        {isVehicleSpace && (
+        {allowsMultiUnit && (
           <BookingQuantitySelector
             quantity={quantity}
             displayCapacity={displayCapacity}
@@ -76,7 +76,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
               months={months}
               setMonths={setMonths}
               isMonthAvailable={isMonthAvailable}
-              isVehicleSpace={isVehicleSpace}
+              allowsMultiUnit={allowsMultiUnit}
               effectiveQuantity={effectiveQuantity}
               startDate={startDate}
               nextDate={nextDate}
@@ -136,7 +136,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
           dateRange={dateRange}
           space={space}
           currentMonths={currentMonths}
-          isVehicleSpace={isVehicleSpace}
+          allowsMultiUnit={allowsMultiUnit}
           effectiveQuantity={effectiveQuantity}
           totalPrice={totalPrice}
           serviceFee={serviceFee}

@@ -39,8 +39,8 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
             <Ruler className="w-16 h-16 text-muted-foreground/20" />
           </div>
         )}
-        <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold ring-1 ring-inset backdrop-blur-sm ${spaceTypeColors[space.type]}`}>
-          {spaceTypeLabels[space.type]}
+        <div className={`absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-semibold ring-1 ring-inset backdrop-blur-sm ${space.listingType === "lodging" ? "bg-violet-50 text-violet-700 ring-violet-200/60 dark:bg-violet-950/20 dark:text-violet-400 dark:ring-violet-800/40" : spaceTypeColors[space.type]}`}>
+          {space.listingType === "lodging" ? "Hospedaje" : spaceTypeLabels[space.type]}
         </div>
         <button
           onClick={(e) => { e.stopPropagation(); onToggleFavorite(space.id); }}

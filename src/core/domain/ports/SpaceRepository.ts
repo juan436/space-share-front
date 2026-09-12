@@ -1,7 +1,8 @@
-import { Space, CreateSpaceInput, UpdateSpaceInput, SpaceType } from "../entities/Space";
+import { Space, CreateSpaceInput, UpdateSpaceInput, SpaceType, ListingType } from "../entities/Space";
 
 export interface SpaceFilters {
   type?: SpaceType;
+  listingType?: ListingType;
   minPrice?: number;
   maxPrice?: number;
   climateControlled?: boolean;

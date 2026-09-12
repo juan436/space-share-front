@@ -8,6 +8,7 @@ const ITEMS_PER_PAGE = 40;
 export function useExplore() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "");
+  const [listingType, setListingType] = useState(() => searchParams.get("listingType") ?? "all");
   const [spaceType, setSpaceType] = useState(() => searchParams.get("type") ?? "all");
   const [priceRange, setPriceRange] = useState(() => searchParams.get("price") ?? "all");
   const [sizeRange, setSizeRange] = useState(() => searchParams.get("size") ?? "all");
@@ -16,10 +17,11 @@ export function useExplore() {
 
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, spaceType, priceRange, sizeRange, conditions]);
+  }, [searchQuery, listingType, spaceType, priceRange, sizeRange, conditions]);
 
   const serverFilters = useMemo((): SpaceFilters | undefined => {
     const f: SpaceFilters = {};
+    if (listingType !== "all") f.listingType = listingType as SpaceFilters["listingType"];
     if (spaceType !== "all") f.type = spaceType as SpaceFilters["type"];
     if (priceRange !== "all") {
       if (priceRange === "500+") {
@@ -34,7 +36,7 @@ export function useExplore() {
     if (conditions.includes("seguridad")) f.securityCamera = true;
     if (conditions.includes("privado")) f.privateEntrance = true;
     return Object.keys(f).length > 0 ? f : undefined;
-  }, [spaceType, priceRange, conditions]);
+  }, [listingType, spaceType, priceRange, conditions]);
 
   const { spaces: rawSpaces, isLoading, isError } = useExploreSpaces({
     filters: serverFilters,
@@ -83,6 +85,8 @@ export function useExplore() {
     isError,
     searchQuery,
     setSearchQuery,
+    listingType,
+    setListingType,
     spaceType,
     setSpaceType,
     priceRange,

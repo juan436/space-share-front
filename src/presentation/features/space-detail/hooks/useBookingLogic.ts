@@ -17,8 +17,11 @@ export function useBookingLogic(space: Space) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  const isVehicleSpace = space.type === "garage" || space.type === "parking";
-  const effectiveQuantity = isVehicleSpace ? quantity : 1;
+  // F2: cualquier espacio de Almacenamiento con capacity > 1 admite reservas
+  // parciales compartiendo el cupo (vehículos por slot, o m² para el resto de
+  // subtipos — el host de capacity ya viene resuelto por el backend en F1/F2).
+  const allowsMultiUnit = space.listingType === "storage" && (space.capacity ?? 1) > 1;
+  const effectiveQuantity = allowsMultiUnit ? quantity : 1;
   const displayCapacity =
     mode === "dates" && dateRange?.from
       ? getRemainingCapacity(space, dateRange.from, dateRange.to ?? dateRange.from)
@@ -102,7 +105,7 @@ export function useBookingLogic(space: Space) {
     startDate, setStartDate,
     showConfirmModal, setShowConfirmModal,
     bookingError,
-    isVehicleSpace,
+    allowsMultiUnit,
     effectiveQuantity,
     displayCapacity,
     currentMonths,

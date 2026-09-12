@@ -1,8 +1,14 @@
-import { SpaceType, SpaceStatus, SpaceCategory } from "@/core/domain/entities/Space";
+import { SpaceType, SpaceStatus, SpaceCategory, ListingType } from "@/core/domain/entities/Space";
 
 export type SpaceTypeValue = SpaceType;
 export type SpaceStatusValue = SpaceStatus;
 export type SpaceCategoryValue = SpaceCategory;
+export type ListingTypeValue = ListingType;
+
+export const listingTypeLabels: Record<ListingTypeValue, string> = {
+  lodging: "Hospedaje",
+  storage: "Almacenamiento",
+};
 
 export interface BusinessServicesViewModel {
   wifi?: boolean;
@@ -19,6 +25,7 @@ export interface SpaceViewModel {
   title: string;
   description: string;
   type: SpaceTypeValue;
+  listingType: ListingTypeValue;
   squareMeters: number;
   pricePerMonth: number;
   capacity: number;
@@ -44,6 +51,7 @@ export interface NewSpaceFormData {
   title: string;
   description: string;
   type: SpaceTypeValue;
+  listingType: ListingTypeValue;
   squareMeters: number;
   pricePerMonth: number;
   capacity: number;

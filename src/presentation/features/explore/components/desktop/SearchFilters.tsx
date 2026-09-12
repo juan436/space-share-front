@@ -1,8 +1,8 @@
 "use client";
 
-import { MapPin, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2 } from "lucide-react";
+import { MapPin, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2, Tags } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
-import { spaceTypeLabels } from "@/presentation/types/spaces";
+import { spaceTypeLabels, listingTypeLabels } from "@/presentation/types/spaces";
 import {
   Select,
   SelectContent,
@@ -14,6 +14,8 @@ import {
 interface SearchFiltersProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
+  listingType: string;
+  onListingTypeChange: (value: string) => void;
   spaceType: string;
   onSpaceTypeChange: (value: string) => void;
   priceRange: string;
@@ -41,6 +43,8 @@ const sizeLabels: Record<string, string> = {
 export function SearchFilters({
   searchQuery,
   onSearchChange,
+  listingType,
+  onListingTypeChange,
   spaceType,
   onSpaceTypeChange,
   priceRange,
@@ -59,6 +63,7 @@ export function SearchFilters({
   };
 
   const activeFilters = [
+    listingType !== "all" && { label: listingTypeLabels[listingType as keyof typeof listingTypeLabels] || listingType, type: "listingType", value: listingType },
     spaceType !== "all" && { label: spaceTypeLabels[spaceType as keyof typeof spaceTypeLabels] || spaceType, type: "type", value: spaceType },
     priceRange !== "all" && { label: priceLabels[priceRange] || priceRange, type: "price", value: priceRange },
     sizeRange !== "all" && { label: sizeLabels[sizeRange] || sizeRange, type: "size", value: sizeRange },
@@ -69,6 +74,7 @@ export function SearchFilters({
 
   const removeFilter = (filter: { type: string; value: string }) => {
     switch (filter.type) {
+      case "listingType": onListingTypeChange("all"); break;
       case "type": onSpaceTypeChange("all"); break;
       case "price": onPriceRangeChange("all"); break;
       case "size": onSizeRangeChange("all"); break;
@@ -77,6 +83,7 @@ export function SearchFilters({
   };
 
   const clearAll = () => {
+    onListingTypeChange("all");
     onSpaceTypeChange("all");
     onPriceRangeChange("all");
     onSizeRangeChange("all");
@@ -110,6 +117,22 @@ export function SearchFilters({
                 </button>
               )}
             </div>
+
+            {/* Divider */}
+            <div className="w-px h-6 bg-border flex-shrink-0" />
+
+            {/* Hospedaje / Almacenamiento */}
+            <Select value={listingType} onValueChange={onListingTypeChange}>
+              <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
+                <Tags className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+                <SelectValue placeholder="Categoría" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">Hospedaje y Almacenamiento</SelectItem>
+                <SelectItem value="lodging">Hospedaje</SelectItem>
+                <SelectItem value="storage">Almacenamiento</SelectItem>
+              </SelectContent>
+            </Select>
 
             {/* Divider */}
             <div className="w-px h-6 bg-border flex-shrink-0" />

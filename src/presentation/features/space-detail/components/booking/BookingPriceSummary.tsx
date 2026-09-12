@@ -9,7 +9,7 @@ interface BookingPriceSummaryProps {
   dateRange: { from?: Date; to?: Date } | undefined;
   space: Space;
   currentMonths: number;
-  isVehicleSpace: boolean;
+  allowsMultiUnit: boolean;
   effectiveQuantity: number;
   totalPrice: number;
   serviceFee: number;
@@ -21,7 +21,7 @@ export function BookingPriceSummary({
   dateRange,
   space,
   currentMonths,
-  isVehicleSpace,
+  allowsMultiUnit,
   effectiveQuantity,
   totalPrice,
   serviceFee,
@@ -42,7 +42,7 @@ export function BookingPriceSummary({
           {currentMonths < 1
             ? `$${space.pricePerMonth}/mes × ${Math.round(currentMonths * DAYS_PER_MONTH)} días`
             : `$${space.pricePerMonth} × ${Number.isInteger(currentMonths) ? currentMonths : currentMonths.toFixed(1)} ${currentMonths === 1 ? "mes" : "meses"}`}
-          {isVehicleSpace && ` × ${effectiveQuantity} unid.`}
+          {allowsMultiUnit && ` × ${effectiveQuantity} unid.`}
         </span>
         <span className="text-foreground font-semibold">${totalPrice}</span>
       </div>

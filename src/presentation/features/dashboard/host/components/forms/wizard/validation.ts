@@ -7,7 +7,7 @@ export function canProceed(step: number, formData: NewSpaceFormData): boolean {
         formData.title &&
         formData.description &&
         formData.type &&
-        formData.squareMeters > 0 &&
+        (formData.listingType === "lodging" || formData.squareMeters > 0) &&
         formData.pricePerMonth > 0
       );
     case 4:

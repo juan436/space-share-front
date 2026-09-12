@@ -11,6 +11,7 @@ interface DescriptionStepProps {
 }
 
 export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }: DescriptionStepProps) {
+  const isLodging = newSpace.listingType === "lodging";
   return (
     <div className="space-y-4">
       <div className="bg-white dark:bg-card rounded-2xl border border-border/50 p-4 space-y-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
@@ -37,27 +38,29 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
 
       <div className="bg-white dark:bg-card rounded-2xl border border-border/50 p-4 space-y-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Detalles del espacio</p>
-        <div className="space-y-1.5">
-          <Label className="text-sm font-medium">Tipo de espacio <span className="text-destructive">*</span></Label>
-          <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => {
-            const updates: Partial<NewSpaceFormData> = { type: v };
-            if (!isVehicleSpaceType(v)) updates.capacity = 1;
-            onUpdateNewSpace(updates);
-          }}>
-            <SelectTrigger className="h-11 rounded-xl border-border/50 bg-white dark:bg-card">
-              <SelectValue placeholder="Seleccionar" />
-            </SelectTrigger>
-            <SelectContent>
-              {spaceTypeOptions.map((o) => (
-                <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
+        {!isLodging && (
+          <div className="space-y-1.5">
+            <Label className="text-sm font-medium">Tipo de espacio <span className="text-destructive">*</span></Label>
+            <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => {
+              const updates: Partial<NewSpaceFormData> = { type: v };
+              if (!isVehicleSpaceType(v)) updates.capacity = 1;
+              onUpdateNewSpace(updates);
+            }}>
+              <SelectTrigger className="h-11 rounded-xl border-border/50 bg-white dark:bg-card">
+                <SelectValue placeholder="Seleccionar" />
+              </SelectTrigger>
+              <SelectContent>
+                {spaceTypeOptions.map((o) => (
+                  <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-3">
           <div className="space-y-1.5">
-            <Label className="text-sm font-medium">m² <span className="text-destructive">*</span></Label>
+            <Label className="text-sm font-medium">m² {!isLodging && <span className="text-destructive">*</span>}</Label>
             <Input
               type="number" min="1" placeholder="0"
               value={newSpace.squareMeters || ""}
@@ -80,7 +83,7 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
           <p className="text-xs text-muted-foreground">Precio sugerido: <span className="font-semibold text-foreground">${recommendedPrice}/mes</span></p>
         )}
 
-        {isVehicleSpaceType(newSpace.type) && (
+        {!isLodging && isVehicleSpaceType(newSpace.type) && (
           <div className="space-y-1.5">
             <Label className="text-sm font-medium">Capacidad (vehículos) <span className="text-destructive">*</span></Label>
             <Input

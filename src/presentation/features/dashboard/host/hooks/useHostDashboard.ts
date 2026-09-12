@@ -13,6 +13,7 @@ const initialFormState: NewSpaceFormData = {
   title: "",
   description: "",
   type: "garage",
+  listingType: "storage",
   squareMeters: 0,
   pricePerMonth: 0,
   capacity: 1,
@@ -63,6 +64,7 @@ export function useHostDashboard() {
         title: current.title,
         description: current.description,
         type: current.type,
+        listingType: current.listingType,
         squareMeters: current.squareMeters,
         pricePerMonth: current.pricePerMonth,
         capacity: current.capacity,
@@ -100,6 +102,7 @@ export function useHostDashboard() {
           title: data.title,
           description: data.description,
           type: data.type,
+          listingType: data.listingType,
           squareMeters: data.squareMeters,
           pricePerMonth: data.pricePerMonth,
           capacity: data.capacity,
@@ -142,7 +145,7 @@ export function useHostDashboard() {
 
   const isFormValid = Boolean(
     newSpace.title &&
-    newSpace.squareMeters > 0 &&
+    (newSpace.listingType === "lodging" || newSpace.squareMeters > 0) &&
     newSpace.pricePerMonth > 0 &&
     newSpace.address &&
     newSpace.city &&
