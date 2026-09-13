@@ -77,7 +77,7 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
 function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
   if (!space) {
     return {
-      title: "", description: "", type: "garage", listingType: "storage", squareMeters: 0,
+      title: "", description: "", type: "storage", listingType: "storage", squareMeters: 0,
       pricePerMonth: 0, capacity: 1, climateControlled: false,
       securityCamera: false, privateEntrance: false, address: "",
       city: "", state: "", country: "",

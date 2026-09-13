@@ -12,7 +12,9 @@ interface DescriptionStepProps {
 
 export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }: DescriptionStepProps) {
   const isLodging = newSpace.listingType === "lodging";
-  const showCapacity = !isLodging && isVehicleSpaceType(newSpace.type);
+  const isGarage = newSpace.listingType === "garage";
+  const hasStorageSubtype = !isLodging && !isGarage;
+  const showCapacity = isGarage || (hasStorageSubtype && isVehicleSpaceType(newSpace.type));
 
   const handleTypeChange = (value: SpaceTypeValue) => {
     const updates: Partial<NewSpaceFormData> = { type: value };
@@ -58,8 +60,8 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
       <div className="rounded-2xl border border-border/50 bg-muted/20 p-4 space-y-4">
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Detalles del espacio</p>
 
-        <div className={`grid grid-cols-1 ${isLodging ? "sm:grid-cols-2" : showCapacity ? "sm:grid-cols-2" : "sm:grid-cols-3"} gap-4`}>
-          {!isLodging && (
+        <div className={`grid grid-cols-1 ${!hasStorageSubtype ? "sm:grid-cols-2" : showCapacity ? "sm:grid-cols-2" : "sm:grid-cols-3"} gap-4`}>
+          {hasStorageSubtype && (
             <div className="space-y-1.5">
               <Label className="text-sm font-medium">Tipo de espacio <span className="text-destructive">*</span></Label>
               <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => handleTypeChange(v)}>

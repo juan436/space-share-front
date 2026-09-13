@@ -30,7 +30,7 @@ export interface AdminSpace {
   id: string;
   title: string;
   type: string;
-  listingType: "lodging" | "storage";
+  listingType: "lodging" | "storage" | "garage";
   squareMeters: number;
   pricePerMonth: number;
   status: string;

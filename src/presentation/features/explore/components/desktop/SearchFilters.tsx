@@ -128,16 +128,17 @@ export function SearchFilters({
                 <SelectValue placeholder="Categoría" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">Hospedaje y Almacenamiento</SelectItem>
+                <SelectItem value="all">Todas las categorías</SelectItem>
                 <SelectItem value="lodging">Hospedaje</SelectItem>
                 <SelectItem value="storage">Almacenamiento</SelectItem>
+                <SelectItem value="garage">Garaje</SelectItem>
               </SelectContent>
             </Select>
 
             {/* Divider */}
             <div className="w-px h-6 bg-border flex-shrink-0" />
 
-            {/* Tipo */}
+            {/* Tipo (subtipo de Almacenamiento) */}
             <Select value={spaceType} onValueChange={onSpaceTypeChange}>
               <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
                 <LayoutGrid className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
@@ -145,7 +146,6 @@ export function SearchFilters({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos los tipos</SelectItem>
-                <SelectItem value="garage">Garaje</SelectItem>
                 <SelectItem value="basement">Sótano</SelectItem>
                 <SelectItem value="attic">Ático</SelectItem>
                 <SelectItem value="storage">Bodega</SelectItem>

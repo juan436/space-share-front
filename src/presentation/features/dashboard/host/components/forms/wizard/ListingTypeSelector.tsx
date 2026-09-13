@@ -1,4 +1,4 @@
-import { BedDouble, Boxes, ArrowRight } from "lucide-react";
+import { BedDouble, Boxes, Car, ArrowRight } from "lucide-react";
 import type { ListingTypeValue } from "@/presentation/types/spaces";
 
 interface ListingTypeSelectorProps {
@@ -14,7 +14,7 @@ export function ListingTypeSelector({ onSelect }: ListingTypeSelectorProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 w-full max-w-xl">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
         <button
           onClick={() => onSelect("storage")}
           className="group flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-primary/40 transition-all duration-300 text-left"
@@ -25,7 +25,7 @@ export function ListingTypeSelector({ onSelect }: ListingTypeSelectorProps) {
           <div className="flex-1 min-w-0">
             <p className="text-sm font-semibold text-foreground">Almacenamiento</p>
             <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-              Garajes, bodegas, sótanos y espacios de negocio
+              Bodegas, sótanos, áticos y espacios de negocio
             </p>
           </div>
           <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -45,6 +45,22 @@ export function ListingTypeSelector({ onSelect }: ListingTypeSelectorProps) {
             </p>
           </div>
           <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-violet-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+        </button>
+
+        <button
+          onClick={() => onSelect("garage")}
+          className="group flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-sky-400/40 transition-all duration-300 text-left"
+        >
+          <div className="w-12 h-12 rounded-xl bg-muted/60 flex items-center justify-center shrink-0 group-hover:bg-sky-500/10 transition-colors">
+            <Car className="h-6 w-6 text-sky-600" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-foreground">Garaje</p>
+            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
+              Espacio para guardar un vehículo
+            </p>
+          </div>
+          <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all shrink-0" />
         </button>
       </div>
     </div>

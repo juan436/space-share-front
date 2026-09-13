@@ -57,7 +57,6 @@ export function CompactSearchFilters({
         </SelectTrigger>
         <SelectContent>
           <SelectItem value="all">Todos los tipos</SelectItem>
-          <SelectItem value="garage">Garaje</SelectItem>
           <SelectItem value="basement">Sótano</SelectItem>
           <SelectItem value="attic">Ático</SelectItem>
           <SelectItem value="storage">Bodega</SelectItem>

@@ -45,9 +45,9 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
 
           <div className="flex gap-1.5 flex-wrap">
             <span className="text-[10px] bg-violet-50 text-violet-700 dark:bg-violet-950/20 dark:text-violet-400 px-2 py-0.5 rounded-full font-medium">
-              {newSpace.listingType === "lodging" ? "Hospedaje" : "Almacenamiento"}
+              {newSpace.listingType === "lodging" ? "Hospedaje" : newSpace.listingType === "garage" ? "Garaje" : "Almacenamiento"}
             </span>
-            {newSpace.listingType !== "lodging" && newSpace.type && (
+            {newSpace.listingType === "storage" && newSpace.type && (
               <span className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded-full font-medium">
                 {spaceTypeOptions.find((o) => o.value === newSpace.type)?.label ?? newSpace.type}
               </span>
@@ -57,7 +57,7 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
                 <Ruler className="h-2.5 w-2.5" />{newSpace.squareMeters} m²
               </span>
             )}
-            {newSpace.listingType !== "lodging" && isVehicleSpaceType(newSpace.type) && newSpace.capacity > 1 && (
+            {(newSpace.listingType === "garage" || (newSpace.listingType === "storage" && isVehicleSpaceType(newSpace.type))) && newSpace.capacity > 1 && (
               <span className="text-[10px] bg-orange-50 text-orange-700 dark:bg-orange-950/20 dark:text-orange-400 px-2 py-0.5 rounded-full">
                 {newSpace.capacity} vehículos
               </span>

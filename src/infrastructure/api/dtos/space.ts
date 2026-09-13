@@ -30,8 +30,8 @@ export interface SpaceDto {
   hostId: string | { _id: string; name: string; email: string; avatar?: string; createdAt?: string };
   title: string;
   description: string;
-  type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
-  listingType: "lodging" | "storage";
+  type: "basement" | "attic" | "storage" | "parking" | "other";
+  listingType: "lodging" | "storage" | "garage";
   squareMeters: number;
   pricePerMonth: number;
   capacity: number;
@@ -59,8 +59,8 @@ export interface SpaceDto {
 export interface CreateSpaceRequestDto {
   title: string;
   description: string;
-  type: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
-  listingType: "lodging" | "storage";
+  type: "basement" | "attic" | "storage" | "parking" | "other";
+  listingType: "lodging" | "storage" | "garage";
   squareMeters: number;
   pricePerMonth: number;
   capacity?: number;
@@ -79,8 +79,8 @@ export interface CreateSpaceRequestDto {
 export interface UpdateSpaceRequestDto {
   title?: string;
   description?: string;
-  type?: "garage" | "basement" | "attic" | "storage" | "parking" | "other";
-  listingType?: "lodging" | "storage";
+  type?: "basement" | "attic" | "storage" | "parking" | "other";
+  listingType?: "lodging" | "storage" | "garage";
   squareMeters?: number;
   pricePerMonth?: number;
   capacity?: number;

@@ -12,6 +12,8 @@ interface DescriptionStepProps {
 
 export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }: DescriptionStepProps) {
   const isLodging = newSpace.listingType === "lodging";
+  const isGarage = newSpace.listingType === "garage";
+  const hasStorageSubtype = !isLodging && !isGarage;
   return (
     <div className="space-y-4">
       <div className="bg-white dark:bg-card rounded-2xl border border-border/50 p-4 space-y-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
@@ -38,7 +40,7 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
 
       <div className="bg-white dark:bg-card rounded-2xl border border-border/50 p-4 space-y-4 shadow-[0_1px_4px_rgba(0,0,0,0.05)]">
         <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Detalles del espacio</p>
-        {!isLodging && (
+        {hasStorageSubtype && (
           <div className="space-y-1.5">
             <Label className="text-sm font-medium">Tipo de espacio <span className="text-destructive">*</span></Label>
             <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => {
@@ -83,7 +85,7 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
           <p className="text-xs text-muted-foreground">Precio sugerido: <span className="font-semibold text-foreground">${recommendedPrice}/mes</span></p>
         )}
 
-        {!isLodging && isVehicleSpaceType(newSpace.type) && (
+        {(isGarage || (hasStorageSubtype && isVehicleSpaceType(newSpace.type))) && (
           <div className="space-y-1.5">
             <Label className="text-sm font-medium">Capacidad (vehículos) <span className="text-destructive">*</span></Label>
             <Input

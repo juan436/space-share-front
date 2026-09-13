@@ -8,6 +8,7 @@ export type ListingTypeValue = ListingType;
 export const listingTypeLabels: Record<ListingTypeValue, string> = {
   lodging: "Hospedaje",
   storage: "Almacenamiento",
+  garage: "Garaje",
 };
 
 export interface BusinessServicesViewModel {
@@ -71,7 +72,6 @@ export interface SpaceTypeOption {
 }
 
 export const spaceTypeOptions: SpaceTypeOption[] = [
-  { value: "garage", label: "Garaje" },
   { value: "parking", label: "Parking" },
   { value: "basement", label: "Sótano" },
   { value: "attic", label: "Ático" },
@@ -80,7 +80,6 @@ export const spaceTypeOptions: SpaceTypeOption[] = [
 ];
 
 export const spaceTypeLabels: Record<SpaceTypeValue, string> = {
-  garage: "Garaje",
   parking: "Parking",
   basement: "Sótano",
   attic: "Ático",
@@ -89,7 +88,7 @@ export const spaceTypeLabels: Record<SpaceTypeValue, string> = {
 };
 
 
-export const VEHICLE_SPACE_TYPES: SpaceTypeValue[] = ["garage", "parking"];
+export const VEHICLE_SPACE_TYPES: SpaceTypeValue[] = ["parking"];
 
 export function isVehicleSpaceType(type: SpaceTypeValue): boolean {
   return VEHICLE_SPACE_TYPES.includes(type);

@@ -59,7 +59,7 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
 
         {/* Type + verified badge */}
         <div className="absolute top-2.5 left-2.5 flex items-center gap-1 px-2.5 py-1 bg-white/90 dark:bg-card/90 backdrop-blur-sm text-foreground text-[11px] font-semibold rounded-lg shadow-sm">
-          {space.listingType === "lodging" ? "Hospedaje" : spaceTypeLabels[space.type] ?? space.type}
+          {space.listingType === "lodging" ? "Hospedaje" : space.listingType === "garage" ? "Garaje" : spaceTypeLabels[space.type] ?? space.type}
           {space.verified && <ShieldCheck className="w-3 h-3 text-emerald-500" />}
         </div>
 

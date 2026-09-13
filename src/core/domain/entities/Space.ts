@@ -1,8 +1,8 @@
-export type SpaceType = "garage" | "basement" | "attic" | "storage" | "parking" | "other";
+export type SpaceType = "basement" | "attic" | "storage" | "parking" | "other";
 
 export type SpaceCategory = "normal" | "business";
 
-export type ListingType = "lodging" | "storage";
+export type ListingType = "lodging" | "storage" | "garage";
 
 export interface BusinessServices {
   wifi?: boolean;

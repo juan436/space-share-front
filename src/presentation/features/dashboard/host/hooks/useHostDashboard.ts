@@ -12,7 +12,7 @@ import { spaceToViewModel } from "@/presentation/features/dashboard/host/mappers
 const initialFormState: NewSpaceFormData = {
   title: "",
   description: "",
-  type: "garage",
+  type: "storage",
   listingType: "storage",
   squareMeters: 0,
   pricePerMonth: 0,

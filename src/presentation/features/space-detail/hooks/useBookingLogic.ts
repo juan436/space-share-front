@@ -17,10 +17,11 @@ export function useBookingLogic(space: Space) {
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [bookingError, setBookingError] = useState<string | null>(null);
 
-  // F2: cualquier espacio de Almacenamiento con capacity > 1 admite reservas
-  // parciales compartiendo el cupo (vehículos por slot, o m² para el resto de
-  // subtipos — el host de capacity ya viene resuelto por el backend en F1/F2).
-  const allowsMultiUnit = space.listingType === "storage" && (space.capacity ?? 1) > 1;
+  // F2: cualquier espacio de Almacenamiento o Garaje con capacity > 1 admite
+  // reservas parciales compartiendo el cupo (vehículos por slot en Garaje, o
+  // m² para el resto de Almacenamiento — capacity ya viene resuelto por el
+  // backend en F1/F2).
+  const allowsMultiUnit = (space.listingType === "storage" || space.listingType === "garage") && (space.capacity ?? 1) > 1;
   const effectiveQuantity = allowsMultiUnit ? quantity : 1;
   const displayCapacity =
     mode === "dates" && dateRange?.from

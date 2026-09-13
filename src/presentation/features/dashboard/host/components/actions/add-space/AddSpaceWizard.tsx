@@ -41,6 +41,8 @@ export function AddSpaceWizard({
     setListingType(choice);
     if (choice === "lodging") {
       onUpdateNewSpace({ listingType: "lodging", type: "other", capacity: 1 });
+    } else if (choice === "garage") {
+      onUpdateNewSpace({ listingType: "garage", type: "other", capacity: 1 });
     } else {
       onUpdateNewSpace({ listingType: "storage" });
     }
@@ -95,7 +97,7 @@ export function AddSpaceWizard({
           <BusinessSpaceForm onClose={handleClose} />
         )}
 
-        {(listingType === "lodging" || (listingType === "storage" && spaceMode === "normal")) && (
+        {(listingType === "lodging" || listingType === "garage" || (listingType === "storage" && spaceMode === "normal")) && (
           <SpaceWizard
             newSpace={newSpace}
             onUpdateNewSpace={onUpdateNewSpace}
