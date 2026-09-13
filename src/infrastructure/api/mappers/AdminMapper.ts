@@ -29,6 +29,7 @@ export class AdminMapper {
       id: dto._id,
       title: dto.title,
       type: dto.type,
+      listingType: dto.listingType ?? "storage",
       squareMeters: dto.squareMeters,
       pricePerMonth: dto.pricePerMonth,
       status: dto.status,

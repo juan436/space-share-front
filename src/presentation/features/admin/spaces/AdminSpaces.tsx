@@ -92,7 +92,9 @@ export function AdminSpaces() {
                           </div>
                         </div>
                       </TableCell>
-                      <TableCell className="text-sm">{spaceTypeLabels[space.type as keyof typeof spaceTypeLabels] || space.type}</TableCell>
+                      <TableCell className="text-sm">
+                        {space.listingType === "lodging" ? "Hospedaje" : spaceTypeLabels[space.type as keyof typeof spaceTypeLabels] || space.type}
+                      </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-1 text-sm text-muted-foreground">
                           <MapPin className="w-3.5 h-3.5" />

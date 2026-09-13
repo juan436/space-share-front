@@ -23,6 +23,7 @@ export interface AdminSpaceDto {
   _id: string;
   title: string;
   type: string;
+  listingType?: "lodging" | "storage";
   squareMeters: number;
   pricePerMonth: number;
   status: string;
