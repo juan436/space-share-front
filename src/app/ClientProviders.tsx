@@ -36,6 +36,7 @@ import {
   listConversationsUseCase,
   getMessagesUseCase,
   sendMessageUseCase,
+  getUnreadCountUseCase,
 } from "@/bootstrap/application";
 
 // Singleton de módulo — referencia estable, nunca provoca re-renders en los providers
@@ -73,6 +74,7 @@ const useCases = {
   listConversationsUseCase,
   getMessagesUseCase,
   sendMessageUseCase,
+  getUnreadCountUseCase,
 };
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {

@@ -34,6 +34,7 @@ import { FindOrCreateConversationUseCase } from "@/core/application/use-cases/me
 import { ListConversationsUseCase } from "@/core/application/use-cases/messages/ListConversations";
 import { GetMessagesUseCase } from "@/core/application/use-cases/messages/GetMessages";
 import { SendMessageUseCase } from "@/core/application/use-cases/messages/SendMessage";
+import { GetUnreadCountUseCase } from "@/core/application/use-cases/messages/GetUnreadCount";
 
 export interface UseCases {
   // Auth
@@ -77,6 +78,7 @@ export interface UseCases {
   listConversationsUseCase: ListConversationsUseCase;
   getMessagesUseCase: GetMessagesUseCase;
   sendMessageUseCase: SendMessageUseCase;
+  getUnreadCountUseCase: GetUnreadCountUseCase;
 }
 
 const UseCasesContext = createContext<UseCases | null>(null);

@@ -26,4 +26,9 @@ export class ApiMessageRepository implements MessageRepository {
     const response = await this.httpClient.post<MessageDto>(`/conversations/${conversationId}/messages`, { text });
     return MessageMapper.messageToDomain(response.data);
   }
+
+  async getUnreadCount(): Promise<{ count: number; conversationIds: string[] }> {
+    const response = await this.httpClient.get<{ count: number; conversationIds: string[] }>("/conversations/unread-count");
+    return response.data;
+  }
 }

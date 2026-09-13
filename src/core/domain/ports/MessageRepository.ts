@@ -5,4 +5,5 @@ export interface MessageRepository {
   listConversations(): Promise<Conversation[]>;
   getMessages(conversationId: string, page?: number): Promise<MessagesPage>;
   sendMessage(conversationId: string, text: string): Promise<ChatMessage>;
+  getUnreadCount(): Promise<{ count: number; conversationIds: string[] }>;
 }

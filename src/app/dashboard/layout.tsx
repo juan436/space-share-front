@@ -10,6 +10,7 @@ import { UserHome, UserReservations } from "@/presentation/features/dashboard/us
 import { HostHome, HostDashboard, HostReservations } from "@/presentation/features/dashboard/host";
 import { Messages } from "@/presentation/features/messages";
 import { KycVerification } from "@/presentation/features/dashboard/verification/KycVerification";
+import { useUnreadMessages } from "@/presentation/features/messages/hooks/useUnreadMessages";
 import { AdminHome, AdminUsers, AdminSpaces, AdminAnalytics } from "@/presentation/features/admin";
 
 function ClientContent({ tab }: { tab: string }) {
@@ -45,6 +46,7 @@ function DashboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const { activeTab, setActiveTab, tabs } = useDashboardTabs(user!.role, searchParams.get("tab") ?? undefined);
+  const { unreadCount } = useUnreadMessages();
 
   const handleLogout = async () => {
     await logout();
@@ -64,6 +66,7 @@ function DashboardContent() {
       activeTab={activeTab}
       onTabChange={setActiveTab}
       onLogout={handleLogout}
+      tabBadges={unreadCount > 0 ? { messages: unreadCount } : undefined}
     >
       {renderContent()}
     </DashboardShell>

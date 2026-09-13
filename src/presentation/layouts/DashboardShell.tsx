@@ -22,7 +22,16 @@ interface DashboardShellProps {
   activeTab: string;
   onTabChange: (tabId: string) => void;
   onLogout: () => void;
+  tabBadges?: Record<string, number>;
   children: React.ReactNode;
+}
+
+function TabBadge({ count }: { count: number }) {
+  return (
+    <span className="ml-auto flex items-center justify-center min-w-[18px] h-[18px] px-1 rounded-full bg-primary text-primary-foreground text-[10px] font-bold">
+      {count > 9 ? "9+" : count}
+    </span>
+  );
 }
 
 const roleNames: Record<string, string> = {
@@ -31,7 +40,7 @@ const roleNames: Record<string, string> = {
   admin: "Administrador",
 };
 
-export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, children }: DashboardShellProps) {
+export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, tabBadges, children }: DashboardShellProps) {
   const initials = user.name
     ? user.name.split(" ").slice(0, 2).map((n) => n[0]).join("").toUpperCase()
     : "U";
@@ -110,6 +119,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
                 >
                   <tab.icon className={cn("h-[18px] w-[18px]", isActive && "text-primary")} />
                   {tab.label}
+                  {!!tabBadges?.[tab.id] && <TabBadge count={tabBadges[tab.id]} />}
                 </button>
               );
             })}
@@ -140,7 +150,14 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, c
                     isActive ? "text-primary" : "text-muted-foreground"
                   )}
                 >
-                  <tab.icon className="h-5 w-5" />
+                  <span className="relative">
+                    <tab.icon className="h-5 w-5" />
+                    {!!tabBadges?.[tab.id] && (
+                      <span className="absolute -top-1 -right-1.5 min-w-[14px] h-[14px] px-0.5 rounded-full bg-primary text-primary-foreground text-[9px] font-bold flex items-center justify-center">
+                        {tabBadges[tab.id] > 9 ? "9+" : tabBadges[tab.id]}
+                      </span>
+                    )}
+                  </span>
                   <span className="text-[10px] font-medium">{tab.label}</span>
                 </button>
               );
