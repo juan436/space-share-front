@@ -1,8 +1,10 @@
 "use client";
 
-import { MapPin, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2, Tags } from "lucide-react";
+import { MapPin, X, Clock, ShieldCheck, Snowflake, DoorOpen, LayoutGrid, DollarSign, Maximize2 } from "lucide-react";
 import { Input } from "@/presentation/components/ui/input";
 import { spaceTypeLabels, listingTypeLabels } from "@/presentation/types/spaces";
+
+const typeLabels: Record<string, string> = { ...listingTypeLabels, ...spaceTypeLabels };
 import {
   Select,
   SelectContent,
@@ -14,8 +16,6 @@ import {
 interface SearchFiltersProps {
   searchQuery: string;
   onSearchChange: (value: string) => void;
-  listingType: string;
-  onListingTypeChange: (value: string) => void;
   spaceType: string;
   onSpaceTypeChange: (value: string) => void;
   priceRange: string;
@@ -43,8 +43,6 @@ const sizeLabels: Record<string, string> = {
 export function SearchFilters({
   searchQuery,
   onSearchChange,
-  listingType,
-  onListingTypeChange,
   spaceType,
   onSpaceTypeChange,
   priceRange,
@@ -63,8 +61,7 @@ export function SearchFilters({
   };
 
   const activeFilters = [
-    listingType !== "all" && { label: listingTypeLabels[listingType as keyof typeof listingTypeLabels] || listingType, type: "listingType", value: listingType },
-    spaceType !== "all" && { label: spaceTypeLabels[spaceType as keyof typeof spaceTypeLabels] || spaceType, type: "type", value: spaceType },
+    spaceType !== "all" && { label: typeLabels[spaceType] || spaceType, type: "type", value: spaceType },
     priceRange !== "all" && { label: priceLabels[priceRange] || priceRange, type: "price", value: priceRange },
     sizeRange !== "all" && { label: sizeLabels[sizeRange] || sizeRange, type: "size", value: sizeRange },
     ...conditions.map(c => ({ label: conditionOptions.find(q => q.id === c)?.label || c, type: "condition", value: c }))
@@ -74,7 +71,6 @@ export function SearchFilters({
 
   const removeFilter = (filter: { type: string; value: string }) => {
     switch (filter.type) {
-      case "listingType": onListingTypeChange("all"); break;
       case "type": onSpaceTypeChange("all"); break;
       case "price": onPriceRangeChange("all"); break;
       case "size": onSizeRangeChange("all"); break;
@@ -83,7 +79,6 @@ export function SearchFilters({
   };
 
   const clearAll = () => {
-    onListingTypeChange("all");
     onSpaceTypeChange("all");
     onPriceRangeChange("all");
     onSizeRangeChange("all");
@@ -121,24 +116,7 @@ export function SearchFilters({
             {/* Divider */}
             <div className="w-px h-6 bg-border flex-shrink-0" />
 
-            {/* Hospedaje / Almacenamiento */}
-            <Select value={listingType} onValueChange={onListingTypeChange}>
-              <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
-                <Tags className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
-                <SelectValue placeholder="Categoría" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">Todas las categorías</SelectItem>
-                <SelectItem value="lodging">Hospedaje</SelectItem>
-                <SelectItem value="storage">Almacenamiento</SelectItem>
-                <SelectItem value="garage">Garaje</SelectItem>
-              </SelectContent>
-            </Select>
-
-            {/* Divider */}
-            <div className="w-px h-6 bg-border flex-shrink-0" />
-
-            {/* Tipo (subtipo de Almacenamiento) */}
+            {/* Tipo — categorías (Hospedaje/Garaje) + subtipos de Almacenamiento, todo junto */}
             <Select value={spaceType} onValueChange={onSpaceTypeChange}>
               <SelectTrigger className="h-10 bg-transparent border-none shadow-none text-sm font-medium hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto focus:ring-0 focus:ring-offset-0">
                 <LayoutGrid className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
@@ -146,6 +124,8 @@ export function SearchFilters({
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="all">Todos los tipos</SelectItem>
+                <SelectItem value="lodging">Hospedaje</SelectItem>
+                <SelectItem value="garage">Garaje</SelectItem>
                 <SelectItem value="basement">Sótano</SelectItem>
                 <SelectItem value="attic">Ático</SelectItem>
                 <SelectItem value="storage">Bodega</SelectItem>

@@ -8,7 +8,8 @@ const ITEMS_PER_PAGE = 40;
 export function useExplore() {
   const searchParams = useSearchParams();
   const [searchQuery, setSearchQuery] = useState(() => searchParams.get("q") ?? "");
-  const [listingType, setListingType] = useState(() => searchParams.get("listingType") ?? "all");
+  // Un solo selector de "Tipo": o es una categoría de primer nivel
+  // (lodging/garage) o un subtipo de Almacenamiento (basement/attic/...).
   const [spaceType, setSpaceType] = useState(() => searchParams.get("type") ?? "all");
   const [priceRange, setPriceRange] = useState(() => searchParams.get("price") ?? "all");
   const [sizeRange, setSizeRange] = useState(() => searchParams.get("size") ?? "all");
@@ -17,12 +18,15 @@ export function useExplore() {
 
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, listingType, spaceType, priceRange, sizeRange, conditions]);
+  }, [searchQuery, spaceType, priceRange, sizeRange, conditions]);
 
   const serverFilters = useMemo((): SpaceFilters | undefined => {
     const f: SpaceFilters = {};
-    if (listingType !== "all") f.listingType = listingType as SpaceFilters["listingType"];
-    if (spaceType !== "all") f.type = spaceType as SpaceFilters["type"];
+    if (spaceType === "lodging" || spaceType === "garage") {
+      f.listingType = spaceType as SpaceFilters["listingType"];
+    } else if (spaceType !== "all") {
+      f.type = spaceType as SpaceFilters["type"];
+    }
     if (priceRange !== "all") {
       if (priceRange === "500+") {
         f.minPrice = 500;
@@ -36,7 +40,7 @@ export function useExplore() {
     if (conditions.includes("seguridad")) f.securityCamera = true;
     if (conditions.includes("privado")) f.privateEntrance = true;
     return Object.keys(f).length > 0 ? f : undefined;
-  }, [listingType, spaceType, priceRange, conditions]);
+  }, [spaceType, priceRange, conditions]);
 
   const { spaces: rawSpaces, isLoading, isError } = useExploreSpaces({
     filters: serverFilters,
@@ -85,8 +89,6 @@ export function useExplore() {
     isError,
     searchQuery,
     setSearchQuery,
-    listingType,
-    setListingType,
     spaceType,
     setSpaceType,
     priceRange,
