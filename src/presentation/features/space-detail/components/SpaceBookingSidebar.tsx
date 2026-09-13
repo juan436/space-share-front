@@ -1,12 +1,14 @@
 "use client";
 
-import { Calendar as CalendarIconSVG, Shield, CalendarIcon } from "lucide-react";
+import { useState } from "react";
+import { Calendar as CalendarIconSVG, Shield, CalendarIcon, Loader2 } from "lucide-react";
 import { Space } from "@/core/domain/entities/Space";
 import { Button } from "@/presentation/components/ui/button";
 import { Calendar } from "@/presentation/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/presentation/components/ui/popover";
 import { format } from "date-fns";
 import { useAuth } from "@/presentation/providers/auth-context";
+import { useUseCases } from "@/presentation/providers/usecases-context";
 import { useRouter } from "next/navigation";
 import { BookingConfirmModal } from "./BookingConfirmModal";
 import { useBookingLogic } from "../hooks/useBookingLogic";
@@ -34,8 +36,10 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
     handleConfirmBooking, isBookingDisabled, showFreeCancellation,
   } = useBookingLogic(space);
 
-  const { isAuthenticated } = useAuth();
+  const { isAuthenticated, user } = useAuth();
+  const { findOrCreateConversationUseCase } = useUseCases();
   const router = useRouter();
+  const [isSchedulingVisit, setIsSchedulingVisit] = useState(false);
 
   const handleReserveClick = () => {
     if (!isAuthenticated) {
@@ -43,6 +47,21 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
       return;
     }
     setShowConfirmModal(true);
+  };
+
+  const handleScheduleVisit = async () => {
+    if (!isAuthenticated) {
+      router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
+      return;
+    }
+    setIsSchedulingVisit(true);
+    try {
+      const conversation = await findOrCreateConversationUseCase.execute(space.id);
+      const basePath = user?.role === "host" ? "/dashboard/host" : "/dashboard/user";
+      router.push(`${basePath}?tab=messages&conversationId=${conversation.id}`);
+    } finally {
+      setIsSchedulingVisit(false);
+    }
   };
 
   return (
@@ -155,8 +174,12 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
 
         <div className="h-px w-full bg-border/40 my-4" />
 
-        <button className="w-full flex items-center justify-center gap-2 py-2 rounded-xl font-semibold text-sm transition-colors hover:bg-muted/50 text-foreground">
-          <CalendarIconSVG className="w-4 h-4" />
+        <button
+          onClick={handleScheduleVisit}
+          disabled={isSchedulingVisit}
+          className="w-full flex items-center justify-center gap-2 py-2 rounded-xl font-semibold text-sm transition-colors hover:bg-muted/50 text-foreground disabled:opacity-50"
+        >
+          {isSchedulingVisit ? <Loader2 className="w-4 h-4 animate-spin" /> : <CalendarIconSVG className="w-4 h-4" />}
           Agendar visita
         </button>
 

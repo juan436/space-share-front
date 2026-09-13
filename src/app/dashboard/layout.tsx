@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { AuthGuard } from "@/presentation/guards/AuthGuard";
 import { DashboardShell } from "@/presentation/layouts/DashboardShell";
@@ -43,7 +43,8 @@ function AdminContent({ tab }: { tab: string }) {
 function DashboardContent() {
   const { user, logout } = useAuth();
   const router = useRouter();
-  const { activeTab, setActiveTab, tabs } = useDashboardTabs(user!.role);
+  const searchParams = useSearchParams();
+  const { activeTab, setActiveTab, tabs } = useDashboardTabs(user!.role, searchParams.get("tab") ?? undefined);
 
   const handleLogout = async () => {
     await logout();

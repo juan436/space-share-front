@@ -30,6 +30,10 @@ import { ReviewKycUseCase } from "@/core/application/use-cases/admin/ReviewKyc";
 import { InitiatePaymentUseCase } from "@/core/application/use-cases/payments/InitiatePayment";
 import { InitiateDirectPaymentUseCase } from "@/core/application/use-cases/payments/InitiateDirectPayment";
 import { VerifyCheckoutUseCase } from "@/core/application/use-cases/payments/VerifyCheckout";
+import { FindOrCreateConversationUseCase } from "@/core/application/use-cases/messages/FindOrCreateConversation";
+import { ListConversationsUseCase } from "@/core/application/use-cases/messages/ListConversations";
+import { GetMessagesUseCase } from "@/core/application/use-cases/messages/GetMessages";
+import { SendMessageUseCase } from "@/core/application/use-cases/messages/SendMessage";
 
 export interface UseCases {
   // Auth
@@ -68,6 +72,11 @@ export interface UseCases {
   initiatePaymentUseCase: InitiatePaymentUseCase;
   initiateDirectPaymentUseCase: InitiateDirectPaymentUseCase;
   verifyCheckoutUseCase: VerifyCheckoutUseCase;
+  // Messages
+  findOrCreateConversationUseCase: FindOrCreateConversationUseCase;
+  listConversationsUseCase: ListConversationsUseCase;
+  getMessagesUseCase: GetMessagesUseCase;
+  sendMessageUseCase: SendMessageUseCase;
 }
 
 const UseCasesContext = createContext<UseCases | null>(null);

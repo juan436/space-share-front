@@ -30,8 +30,10 @@ const tabsByRole: Record<string, TabDef[]> = {
   ],
 };
 
-export function useDashboardTabs(role: string) {
-  const [activeTab, setActiveTab] = useState("home");
+export function useDashboardTabs(role: string, initialTab?: string) {
   const tabs = useMemo(() => tabsByRole[role] ?? tabsByRole.client, [role]);
+  const [activeTab, setActiveTab] = useState(
+    initialTab && tabs.some((t) => t.id === initialTab) ? initialTab : "home"
+  );
   return { activeTab, setActiveTab, tabs };
 }

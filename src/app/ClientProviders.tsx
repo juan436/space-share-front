@@ -32,6 +32,10 @@ import {
   initiatePaymentUseCase,
   initiateDirectPaymentUseCase,
   verifyCheckoutUseCase,
+  findOrCreateConversationUseCase,
+  listConversationsUseCase,
+  getMessagesUseCase,
+  sendMessageUseCase,
 } from "@/bootstrap/application";
 
 // Singleton de módulo — referencia estable, nunca provoca re-renders en los providers
@@ -65,6 +69,10 @@ const useCases = {
   initiatePaymentUseCase,
   initiateDirectPaymentUseCase,
   verifyCheckoutUseCase,
+  findOrCreateConversationUseCase,
+  listConversationsUseCase,
+  getMessagesUseCase,
+  sendMessageUseCase,
 };
 
 export function ClientProviders({ children }: { children: React.ReactNode }) {

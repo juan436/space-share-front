@@ -5,7 +5,8 @@ import { GetSpaceReviewsUseCase, CreateReviewUseCase, DeleteReviewUseCase } from
 import { GetFavoritesUseCase, ToggleFavoriteUseCase } from "@/core/application/use-cases/favorites";
 import { GetAdminStatsUseCase, GetAdminSpacesUseCase, GetAdminUsersUseCase, GetAdminAnalyticsUseCase, ReviewKycUseCase } from "@/core/application/use-cases/admin";
 import { InitiatePaymentUseCase, InitiateDirectPaymentUseCase, VerifyCheckoutUseCase } from "@/core/application/use-cases/payments";
-import { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository } from "./repositories";
+import { FindOrCreateConversationUseCase, ListConversationsUseCase, GetMessagesUseCase, SendMessageUseCase } from "@/core/application/use-cases/messages";
+import { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository, messageRepository } from "./repositories";
 
 // Auth
 export const loginUseCase = new LoginUseCase(authRepository);
@@ -50,4 +51,10 @@ export const initiatePaymentUseCase = new InitiatePaymentUseCase(paymentReposito
 export const initiateDirectPaymentUseCase = new InitiateDirectPaymentUseCase(paymentRepository);
 export const verifyCheckoutUseCase = new VerifyCheckoutUseCase(paymentRepository);
 
-export { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository };
+// Messages
+export const findOrCreateConversationUseCase = new FindOrCreateConversationUseCase(messageRepository);
+export const listConversationsUseCase = new ListConversationsUseCase(messageRepository);
+export const getMessagesUseCase = new GetMessagesUseCase(messageRepository);
+export const sendMessageUseCase = new SendMessageUseCase(messageRepository);
+
+export { authRepository, spaceRepository, reservationRepository, reviewRepository, adminRepository, favoritesRepository, paymentRepository, messageRepository };
