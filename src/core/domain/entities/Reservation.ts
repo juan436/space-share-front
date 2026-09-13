@@ -1,5 +1,19 @@
 export type ReservationStatus = "pending" | "accepted" | "awaiting_payment" | "confirmed" | "expired" | "rejected" | "cancelled" | "completed";
 
+export type EvidenceStage = "checkIn" | "checkOut";
+
+export interface SiteEvidenceEntry {
+  photos: string[];
+  note: string;
+  submittedBy: string;
+  submittedAt: Date;
+}
+
+export interface SiteEvidence {
+  checkIn?: SiteEvidenceEntry;
+  checkOut?: SiteEvidenceEntry;
+}
+
 export interface Reservation {
   id: string;
   spaceId: string;
@@ -14,6 +28,7 @@ export interface Reservation {
   notes: string;
   quantity: number;
   eventCode?: string;
+  siteEvidence?: SiteEvidence;
   space?: {
     title: string;
     images: string[];

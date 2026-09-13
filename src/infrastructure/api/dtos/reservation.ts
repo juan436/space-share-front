@@ -1,3 +1,15 @@
+export interface SiteEvidenceEntryDto {
+  photos: string[];
+  note: string;
+  submittedBy: string;
+  submittedAt: string;
+}
+
+export interface SiteEvidenceDto {
+  checkIn?: SiteEvidenceEntryDto;
+  checkOut?: SiteEvidenceEntryDto;
+}
+
 export interface ReservationDto {
   _id: string;
   spaceId: string | {
@@ -29,6 +41,7 @@ export interface ReservationDto {
   notes: string;
   quantity?: number;
   eventCode?: string;
+  siteEvidence?: SiteEvidenceDto;
   createdAt: string;
   updatedAt: string;
 }

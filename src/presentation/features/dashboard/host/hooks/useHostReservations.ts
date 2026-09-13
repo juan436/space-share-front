@@ -1,12 +1,12 @@
 import { useQuery, useQueries, useMutation, useQueryClient } from "@tanstack/react-query";
-import { ReservationStatus } from "@/core/domain/entities/Reservation";
+import { ReservationStatus, EvidenceStage } from "@/core/domain/entities/Reservation";
 import { useUseCases } from "@/presentation/providers/usecases-context";
 import { toErrorMessage } from "@/presentation/utils/error";
 
 const QUERY_KEY = ["reservations", "host"] as const;
 
 export function useHostReservations() {
-  const { getHostReservationsUseCase, updateReservationStatusUseCase, findSpaceByIdUseCase } = useUseCases();
+  const { getHostReservationsUseCase, updateReservationStatusUseCase, findSpaceByIdUseCase, submitSiteEvidenceUseCase } = useUseCases();
   const queryClient = useQueryClient();
 
   const query = useQuery({
@@ -59,6 +59,12 @@ export function useHostReservations() {
     onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
   });
 
+  const evidenceMutation = useMutation({
+    mutationFn: ({ id, stage, photos, note }: { id: string; stage: EvidenceStage; photos: File[]; note: string }) =>
+      submitSiteEvidenceUseCase.execute(id, stage, photos, note),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: QUERY_KEY }),
+  });
+
   return {
     reservations,
     isLoading: query.isLoading,
@@ -66,5 +72,7 @@ export function useHostReservations() {
     errorMessage: query.error ? toErrorMessage(query.error) : null,
     updateStatus: updateMutation.mutateAsync,
     updatingId: updateMutation.isPending ? updateMutation.variables?.id ?? null : null,
+    submitEvidence: evidenceMutation.mutateAsync,
+    isSubmittingEvidence: evidenceMutation.isPending,
   };
 }

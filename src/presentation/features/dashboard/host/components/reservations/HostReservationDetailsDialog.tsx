@@ -1,10 +1,12 @@
 import { Calendar, MapPin, DollarSign, User, ArrowRight, MessageSquare, CheckCircle2, XCircle, Loader2 } from "lucide-react";
-import { Reservation, ReservationStatus } from "@/core/domain/entities/Reservation";
+import { Reservation, ReservationStatus, EvidenceStage } from "@/core/domain/entities/Reservation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { BaseDialog } from "@/presentation/components/shared/BaseDialog";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { Button } from "@/presentation/components/ui/button";
+import { SiteEvidenceSection } from "@/presentation/components/shared/SiteEvidenceSection";
+import { useAuth } from "@/presentation/providers/auth-context";
 
 interface HostReservationDetailsDialogProps {
   isOpen: boolean;
@@ -12,9 +14,12 @@ interface HostReservationDetailsDialogProps {
   reservation: Reservation | null;
   updatingId: string | null;
   onStatusUpdate: (id: string, status: ReservationStatus) => Promise<void>;
+  onSubmitEvidence: (id: string, stage: EvidenceStage, photos: File[], note: string) => Promise<unknown>;
+  isSubmittingEvidence: boolean;
 }
 
-export function HostReservationDetailsDialog({ isOpen, onClose, reservation, updatingId, onStatusUpdate }: HostReservationDetailsDialogProps) {
+export function HostReservationDetailsDialog({ isOpen, onClose, reservation, updatingId, onStatusUpdate, onSubmitEvidence, isSubmittingEvidence }: HostReservationDetailsDialogProps) {
+  const { user } = useAuth();
   if (!reservation) return null;
 
   const statusCfg = STATUS_CONFIG[reservation.status] || STATUS_CONFIG.pending;
@@ -95,6 +100,15 @@ export function HostReservationDetailsDialog({ isOpen, onClose, reservation, upd
               </p>
             </div>
           </div>
+
+          {(reservation.status === "confirmed" || reservation.status === "completed") && (
+            <SiteEvidenceSection
+              reservation={reservation}
+              currentUserId={user?.id}
+              isSubmitting={isSubmittingEvidence}
+              onSubmit={(stage, photos, note) => onSubmitEvidence(reservation.id, stage, photos, note)}
+            />
+          )}
 
           {isPending && (
             <div className="flex gap-3 pt-1">

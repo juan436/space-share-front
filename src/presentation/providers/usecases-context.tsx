@@ -17,6 +17,7 @@ import { GetClientReservationsUseCase } from "@/core/application/use-cases/reser
 import { GetHostReservationsUseCase } from "@/core/application/use-cases/reservations/GetHostReservations";
 import { CreateReservationUseCase } from "@/core/application/use-cases/reservations/CreateReservation";
 import { UpdateReservationStatusUseCase } from "@/core/application/use-cases/reservations/UpdateReservationStatus";
+import { SubmitSiteEvidenceUseCase } from "@/core/application/use-cases/reservations/SubmitSiteEvidence";
 import { GetSpaceReviewsUseCase } from "@/core/application/use-cases/reviews/GetSpaceReviews";
 import { CreateReviewUseCase } from "@/core/application/use-cases/reviews/CreateReview";
 import { DeleteReviewUseCase } from "@/core/application/use-cases/reviews/DeleteReview";
@@ -56,6 +57,7 @@ export interface UseCases {
   getHostReservationsUseCase: GetHostReservationsUseCase;
   createReservationUseCase: CreateReservationUseCase;
   updateReservationStatusUseCase: UpdateReservationStatusUseCase;
+  submitSiteEvidenceUseCase: SubmitSiteEvidenceUseCase;
   // Reviews
   getSpaceReviewsUseCase: GetSpaceReviewsUseCase;
   createReviewUseCase: CreateReviewUseCase;

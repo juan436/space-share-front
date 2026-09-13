@@ -24,7 +24,7 @@ interface PaymentResult {
 const PAGE_SIZE = 6;
 
 export function UserReservations() {
-  const { reservations, isLoading, isError, errorMessage, reviewedIds, checkoutReservation, openCheckout, closeCheckout, submitReview } = useUserReservations();
+  const { reservations, isLoading, isError, errorMessage, reviewedIds, checkoutReservation, openCheckout, closeCheckout, submitReview, submitEvidence, isSubmittingEvidence } = useUserReservations();
   const searchParams = useSearchParams();
   const router = useRouter();
   const queryClient = useQueryClient();
@@ -169,7 +169,13 @@ export function UserReservations() {
       )}
 
       <ReviewDialog isOpen={!!reviewingId} onClose={() => { setReviewingId(null); setReviewError(null); }} onSubmit={handleSubmitReview} isSubmitting={reviewSubmitting} error={reviewError} />
-      <ReservationDetailsDialog isOpen={!!detailsId} onClose={() => setDetailsId(null)} reservation={reservations.find((r) => r.id === detailsId) ?? null} />
+      <ReservationDetailsDialog
+        isOpen={!!detailsId}
+        onClose={() => setDetailsId(null)}
+        reservation={reservations.find((r) => r.id === detailsId) ?? null}
+        onSubmitEvidence={(id, stage, photos, note) => submitEvidence({ id, stage, photos, note })}
+        isSubmittingEvidence={isSubmittingEvidence}
+      />
       <WompiCheckoutModal open={!!checkoutReservation} onOpenChange={(v) => { if (!v) closeCheckout(); }} reservation={checkoutReservation} />
     </div>
   );

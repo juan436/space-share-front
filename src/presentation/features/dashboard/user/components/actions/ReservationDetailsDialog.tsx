@@ -1,20 +1,27 @@
 import { Calendar, MapPin, DollarSign, User, CheckCircle2, ArrowRight } from "lucide-react";
-import { Reservation } from "@/core/domain/entities/Reservation";
+import { Reservation, EvidenceStage } from "@/core/domain/entities/Reservation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { BaseDialog } from "@/presentation/components/shared/BaseDialog";
+import { SiteEvidenceSection } from "@/presentation/components/shared/SiteEvidenceSection";
+import { useAuth } from "@/presentation/providers/auth-context";
 
 interface ReservationDetailsDialogProps {
   isOpen: boolean;
   onClose: () => void;
   reservation: Reservation | null;
+  onSubmitEvidence: (id: string, stage: EvidenceStage, photos: File[], note: string) => Promise<unknown>;
+  isSubmittingEvidence: boolean;
 }
 
 export function ReservationDetailsDialog({
   isOpen,
   onClose,
   reservation,
+  onSubmitEvidence,
+  isSubmittingEvidence,
 }: ReservationDetailsDialogProps) {
+  const { user } = useAuth();
   if (!reservation) return null;
 
   return (
@@ -92,6 +99,13 @@ export function ReservationDetailsDialog({
           <p className="text-xs text-muted-foreground text-center bg-emerald-50 dark:bg-emerald-950/20 text-emerald-700 dark:text-emerald-400 p-2.5 rounded-lg font-medium">
             ✓ Pago recibido · Tu espacio está asegurado para estas fechas
           </p>
+
+          <SiteEvidenceSection
+            reservation={reservation}
+            currentUserId={user?.id}
+            isSubmitting={isSubmittingEvidence}
+            onSubmit={(stage, photos, note) => onSubmitEvidence(reservation.id, stage, photos, note)}
+          />
         </div>
       </div>
     </BaseDialog>

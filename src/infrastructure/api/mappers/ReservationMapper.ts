@@ -1,6 +1,24 @@
-import { Reservation, CreateReservationInput } from "@/core/domain/entities/Reservation";
-import { ReservationDto, CreateReservationRequestDto } from "../dtos/reservation";
+import { Reservation, CreateReservationInput, SiteEvidence } from "@/core/domain/entities/Reservation";
+import { ReservationDto, CreateReservationRequestDto, SiteEvidenceDto, SiteEvidenceEntryDto } from "../dtos/reservation";
 import { resolveImageUrl } from "@/infrastructure/utils/imageUrl";
+
+function evidenceEntryToDomain(dto?: SiteEvidenceEntryDto) {
+  if (!dto) return undefined;
+  return {
+    photos: (dto.photos || []).map(resolveImageUrl),
+    note: dto.note,
+    submittedBy: dto.submittedBy,
+    submittedAt: new Date(dto.submittedAt),
+  };
+}
+
+function siteEvidenceToDomain(dto?: SiteEvidenceDto): SiteEvidence | undefined {
+  if (!dto) return undefined;
+  return {
+    checkIn: evidenceEntryToDomain(dto.checkIn),
+    checkOut: evidenceEntryToDomain(dto.checkOut),
+  };
+}
 
 export class ReservationMapper {
   static toDomain(dto: ReservationDto): Reservation {
@@ -38,6 +56,7 @@ export class ReservationMapper {
       notes: dto.notes,
       quantity: dto.quantity ?? 1,
       eventCode: dto.eventCode,
+      siteEvidence: siteEvidenceToDomain(dto.siteEvidence),
       space,
       client,
       host,

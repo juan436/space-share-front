@@ -14,7 +14,7 @@ import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReser
 const PAGE_SIZE = 6;
 
 export function HostReservations() {
-  const { reservations, isLoading, isError, errorMessage, updateStatus, updatingId } = useHostReservations();
+  const { reservations, isLoading, isError, errorMessage, updateStatus, updatingId, submitEvidence, isSubmittingEvidence } = useHostReservations();
   const [searchQuery, setSearchQuery] = useState("");
 
   const searchedReservations = searchQuery.trim()
@@ -110,6 +110,8 @@ export function HostReservations() {
         reservation={reservations.find((r) => r.id === detailsId) ?? null}
         updatingId={updatingId}
         onStatusUpdate={handleStatusUpdate}
+        onSubmitEvidence={(id, stage, photos, note) => submitEvidence({ id, stage, photos, note })}
+        isSubmittingEvidence={isSubmittingEvidence}
       />
     </div>
   );

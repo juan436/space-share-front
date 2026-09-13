@@ -1,6 +1,6 @@
 import { LoginUseCase, RegisterUseCase, LogoutUseCase, GetCurrentUserUseCase, SubmitKycUseCase } from "@/core/application/use-cases/auth";
 import { CreateSpaceUseCase, ListSpacesUseCase, UpdateSpaceUseCase, DeleteSpaceUseCase, FindSpaceByIdUseCase, FindHostSpacesUseCase, UploadSpaceImagesUseCase } from "@/core/application/use-cases/spaces";
-import { GetClientReservationsUseCase, GetHostReservationsUseCase, CreateReservationUseCase, UpdateReservationStatusUseCase } from "@/core/application/use-cases/reservations";
+import { GetClientReservationsUseCase, GetHostReservationsUseCase, CreateReservationUseCase, UpdateReservationStatusUseCase, SubmitSiteEvidenceUseCase } from "@/core/application/use-cases/reservations";
 import { GetSpaceReviewsUseCase, CreateReviewUseCase, DeleteReviewUseCase } from "@/core/application/use-cases/reviews";
 import { GetFavoritesUseCase, ToggleFavoriteUseCase } from "@/core/application/use-cases/favorites";
 import { GetAdminStatsUseCase, GetAdminSpacesUseCase, GetAdminUsersUseCase, GetAdminAnalyticsUseCase, ReviewKycUseCase } from "@/core/application/use-cases/admin";
@@ -29,6 +29,7 @@ export const getClientReservationsUseCase = new GetClientReservationsUseCase(res
 export const getHostReservationsUseCase = new GetHostReservationsUseCase(reservationRepository);
 export const createReservationUseCase = new CreateReservationUseCase(reservationRepository);
 export const updateReservationStatusUseCase = new UpdateReservationStatusUseCase(reservationRepository);
+export const submitSiteEvidenceUseCase = new SubmitSiteEvidenceUseCase(reservationRepository);
 
 // Reviews
 export const getSpaceReviewsUseCase = new GetSpaceReviewsUseCase(reviewRepository);
