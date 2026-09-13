@@ -42,7 +42,9 @@ function EvidenceBlock({
         {entry.photos.length > 0 && (
           <div className="grid grid-cols-4 gap-1.5">
             {entry.photos.map((url) => (
-              <img key={url} src={url} alt="Evidencia" className="w-full aspect-square object-cover rounded-lg" />
+              <a key={url} href={url} target="_blank" rel="noreferrer" className="block">
+                <img src={url} alt="Evidencia" className="w-full aspect-square object-cover rounded-lg hover:opacity-80 transition-opacity cursor-zoom-in" />
+              </a>
             ))}
           </div>
         )}
