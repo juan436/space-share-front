@@ -1,2 +1,2 @@
-export { ReservationDetailsDialog } from "./ReservationDetailsDialog";
+export { ReservationDetailPage } from "./ReservationDetailPage";
 export { ReviewDialog } from "./ReviewDialog";

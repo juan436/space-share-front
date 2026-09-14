@@ -5,6 +5,7 @@ import { Camera, Upload, Loader2, Lock } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Button } from "@/presentation/components/ui/button";
+import { EvidencePhotoCarousel } from "@/presentation/components/shared/EvidencePhotoCarousel";
 import { Reservation, EvidenceStage } from "@/core/domain/entities/Reservation";
 
 interface SiteEvidenceSectionProps {
@@ -19,45 +20,70 @@ const STAGE_LABEL: Record<EvidenceStage, string> = {
   checkOut: "Al final",
 };
 
-function EvidenceBlock({
-  stage, reservation, currentUserId, onSubmit, isSubmitting,
+const STAGES: EvidenceStage[] = ["checkIn", "checkOut"];
+
+function EvidenceGallery({ reservation, currentUserId }: { reservation: Reservation; currentUserId?: string }) {
+  const stagesWithEvidence = STAGES.filter((stage) => reservation.siteEvidence?.[stage]);
+  const [activeStage, setActiveStage] = useState<EvidenceStage>(stagesWithEvidence[0] ?? "checkIn");
+  const [photoIndex, setPhotoIndex] = useState(0);
+
+  if (stagesWithEvidence.length === 0) return null;
+
+  const entry = reservation.siteEvidence![activeStage] ?? reservation.siteEvidence![stagesWithEvidence[0]]!;
+  const isMine = entry.submittedBy === currentUserId;
+
+  const handleTabChange = (stage: EvidenceStage) => {
+    setActiveStage(stage);
+    setPhotoIndex(0);
+  };
+
+  return (
+    <div className="rounded-2xl border border-border/40 p-4 space-y-3">
+      {stagesWithEvidence.length > 1 && (
+        <div className="flex gap-2">
+          {stagesWithEvidence.map((stage) => (
+            <button
+              key={stage}
+              type="button"
+              onClick={() => handleTabChange(stage)}
+              className={`px-3 py-1.5 rounded-full text-xs font-semibold transition-all ${
+                activeStage === stage
+                  ? "bg-primary text-primary-foreground shadow-sm"
+                  : "bg-muted/50 text-muted-foreground hover:bg-muted/70"
+              }`}
+            >
+              Evidencia {STAGE_LABEL[stage].toLowerCase()}
+            </button>
+          ))}
+        </div>
+      )}
+
+      <div className="flex items-center justify-between flex-wrap gap-1.5">
+        {stagesWithEvidence.length === 1 && <p className="text-sm font-bold text-foreground">{STAGE_LABEL[activeStage]}</p>}
+        <span className="flex items-center gap-1 text-xs text-muted-foreground ml-auto">
+          <Lock className="w-3.5 h-3.5" />
+          {isMine ? "Enviado por ti" : "Enviado por la otra parte"} · {format(entry.submittedAt, "d MMM, HH:mm", { locale: es })}
+        </span>
+      </div>
+      <EvidencePhotoCarousel photos={entry.photos} index={photoIndex} onIndexChange={setPhotoIndex} />
+      {entry.note && <p className="text-sm text-muted-foreground">{entry.note}</p>}
+    </div>
+  );
+}
+
+function EvidenceUploadBox({
+  stage, reservation, onSubmit, isSubmitting,
 }: SiteEvidenceSectionProps & { stage: EvidenceStage }) {
-  const entry = reservation.siteEvidence?.[stage];
   const canSubmit = reservation.status === "confirmed" || reservation.status === "completed";
   const [files, setFiles] = useState<File[]>([]);
   const [note, setNote] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  if (entry) {
-    const isMine = entry.submittedBy === currentUserId;
-    return (
-      <div className="rounded-xl border border-border/40 p-3 space-y-2">
-        <div className="flex items-center justify-between">
-          <p className="text-xs font-semibold text-foreground">{STAGE_LABEL[stage]}</p>
-          <span className="flex items-center gap-1 text-[10px] text-muted-foreground">
-            <Lock className="w-3 h-3" />
-            {isMine ? "Enviado por ti" : "Enviado por la otra parte"} · {format(entry.submittedAt, "d MMM, HH:mm", { locale: es })}
-          </span>
-        </div>
-        {entry.photos.length > 0 && (
-          <div className="grid grid-cols-4 gap-1.5">
-            {entry.photos.map((url) => (
-              <a key={url} href={url} target="_blank" rel="noreferrer" className="block">
-                <img src={url} alt="Evidencia" className="w-full aspect-square object-cover rounded-lg hover:opacity-80 transition-opacity cursor-zoom-in" />
-              </a>
-            ))}
-          </div>
-        )}
-        {entry.note && <p className="text-xs text-muted-foreground">{entry.note}</p>}
-      </div>
-    );
-  }
-
   if (!canSubmit) {
     return (
-      <div className="rounded-xl border border-dashed border-border/40 p-3">
-        <p className="text-xs font-semibold text-muted-foreground">{STAGE_LABEL[stage]}</p>
-        <p className="text-[11px] text-muted-foreground/70 mt-0.5">Disponible cuando la reserva esté confirmada</p>
+      <div className="rounded-2xl border border-dashed border-border/40 p-4">
+        <p className="text-sm font-bold text-muted-foreground">{STAGE_LABEL[stage]}</p>
+        <p className="text-xs text-muted-foreground/70 mt-0.5">Disponible cuando la reserva esté confirmada</p>
       </div>
     );
   }
@@ -70,15 +96,15 @@ function EvidenceBlock({
   };
 
   return (
-    <div className="rounded-xl border border-border/40 p-3 space-y-2">
-      <p className="text-xs font-semibold text-foreground">{STAGE_LABEL[stage]}</p>
+    <div className="rounded-2xl border border-border/40 p-4 space-y-3">
+      <p className="text-sm font-bold text-foreground">{STAGE_LABEL[stage]}</p>
       <button
         type="button"
         onClick={() => inputRef.current?.click()}
-        className="w-full flex flex-col items-center gap-1 py-4 rounded-lg border border-dashed border-border/50 hover:border-primary/40 transition-colors"
+        className="w-full flex flex-col items-center gap-2 py-8 rounded-xl border border-dashed border-border/50 hover:border-primary/40 hover:bg-primary/[0.03] transition-colors"
       >
-        <Upload className="w-4 h-4 text-muted-foreground" />
-        <span className="text-[11px] text-muted-foreground">{files.length > 0 ? `${files.length} foto(s) seleccionada(s)` : "Subir fotos"}</span>
+        <Upload className="w-6 h-6 text-muted-foreground" />
+        <span className="text-sm text-muted-foreground">{files.length > 0 ? `${files.length} foto(s) seleccionada(s)` : "Subir fotos"}</span>
       </button>
       <input
         ref={inputRef}
@@ -92,25 +118,34 @@ function EvidenceBlock({
         value={note}
         onChange={(e) => setNote(e.target.value)}
         placeholder="Nota corta (opcional)"
-        className="w-full h-16 p-2 rounded-lg border border-border/50 bg-background text-xs resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
+        className="w-full h-20 p-3 rounded-xl border border-border/50 bg-background text-sm resize-none focus:outline-none focus:ring-2 focus:ring-primary/20"
       />
-      <Button size="sm" className="w-full rounded-lg" disabled={files.length === 0 || isSubmitting} onClick={handleSubmit}>
-        {isSubmitting ? <Loader2 className="w-3.5 h-3.5 animate-spin" /> : "Enviar evidencia"}
+      <Button className="w-full rounded-xl" disabled={files.length === 0 || isSubmitting} onClick={handleSubmit}>
+        {isSubmitting ? <Loader2 className="w-4 h-4 animate-spin" /> : "Enviar evidencia"}
       </Button>
     </div>
   );
 }
 
 export function SiteEvidenceSection(props: SiteEvidenceSectionProps) {
+  const { reservation, currentUserId } = props;
+  const pendingStages = STAGES.filter((stage) => !reservation.siteEvidence?.[stage]);
+
   return (
-    <div className="space-y-2">
-      <p className="text-xs font-semibold text-muted-foreground flex items-center gap-1.5">
-        <Camera className="w-3.5 h-3.5" /> Estado del espacio
+    <div className="space-y-3">
+      <p className="text-base font-bold text-foreground flex items-center gap-2">
+        <Camera className="w-5 h-5 text-primary" /> Estado del espacio
       </p>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-        <EvidenceBlock {...props} stage="checkIn" />
-        <EvidenceBlock {...props} stage="checkOut" />
-      </div>
+
+      <EvidenceGallery reservation={reservation} currentUserId={currentUserId} />
+
+      {pendingStages.length > 0 && (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {pendingStages.map((stage) => (
+            <EvidenceUploadBox key={stage} stage={stage} {...props} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

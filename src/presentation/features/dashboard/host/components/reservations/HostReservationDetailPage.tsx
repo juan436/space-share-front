@@ -1,24 +1,30 @@
-import { Calendar, MapPin, DollarSign, User, ArrowRight, MessageSquare, CheckCircle2, XCircle, Loader2 } from "lucide-react";
+import { Calendar, MapPin, DollarSign, ArrowRight, MessageSquare, CheckCircle2, XCircle, Loader2, KeyRound } from "lucide-react";
 import { Reservation, ReservationStatus, EvidenceStage } from "@/core/domain/entities/Reservation";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
-import { BaseDialog } from "@/presentation/components/shared/BaseDialog";
+import { Breadcrumb } from "@/presentation/components/shared/Breadcrumb";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
 import { Button } from "@/presentation/components/ui/button";
 import { SiteEvidenceSection } from "@/presentation/components/shared/SiteEvidenceSection";
 import { useAuth } from "@/presentation/providers/auth-context";
 
-interface HostReservationDetailsDialogProps {
-  isOpen: boolean;
-  onClose: () => void;
+interface HostReservationDetailPageProps {
   reservation: Reservation | null;
+  onBack: () => void;
   updatingId: string | null;
   onStatusUpdate: (id: string, status: ReservationStatus) => Promise<void>;
   onSubmitEvidence: (id: string, stage: EvidenceStage, photos: File[], note: string) => Promise<unknown>;
   isSubmittingEvidence: boolean;
 }
 
-export function HostReservationDetailsDialog({ isOpen, onClose, reservation, updatingId, onStatusUpdate, onSubmitEvidence, isSubmittingEvidence }: HostReservationDetailsDialogProps) {
+export function HostReservationDetailPage({
+  reservation,
+  onBack,
+  updatingId,
+  onStatusUpdate,
+  onSubmitEvidence,
+  isSubmittingEvidence,
+}: HostReservationDetailPageProps) {
   const { user } = useAuth();
   if (!reservation) return null;
 
@@ -29,14 +35,23 @@ export function HostReservationDetailsDialog({ isOpen, onClose, reservation, upd
 
   const handleAction = async (status: ReservationStatus) => {
     await onStatusUpdate(reservation.id, status);
-    onClose();
+    onBack();
   };
 
   return (
-    <BaseDialog isOpen={isOpen} onClose={onClose} title="Detalle de Reservación">
-      <div className="space-y-4 py-2">
+    <div className="space-y-4">
+      <Breadcrumb
+        items={[
+          { label: "Reservaciones", onClick: onBack },
+          { label: reservation.space?.title ?? "Reservación" },
+        ]}
+      />
+
+      <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-5 space-y-4">
+        <h2 className="text-xl font-bold text-foreground">Detalle de Reservación</h2>
+
         {reservation.space?.images?.[0] && (
-          <div className="h-36 w-full rounded-xl overflow-hidden">
+          <div className="h-48 w-full rounded-xl overflow-hidden">
             <img src={reservation.space.images[0]} alt={reservation.space.title} className="w-full h-full object-cover" />
           </div>
         )}
@@ -64,18 +79,36 @@ export function HostReservationDetailsDialog({ isOpen, onClose, reservation, upd
             <span className="font-medium">{format(reservation.endDate, "d MMM yyyy", { locale: es })}</span>
           </div>
 
-          {reservation.client && (
-            <div className="flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/40">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-white text-sm font-bold shrink-0">
-                {reservation.client.name?.charAt(0).toUpperCase()}
+          <div className="flex flex-wrap gap-3">
+            {reservation.client && (
+              <div className="flex-1 min-w-[180px] flex items-center gap-3 p-3 bg-muted/30 rounded-xl border border-border/40">
+                <div className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary/70 flex items-center justify-center text-white text-sm font-bold shrink-0">
+                  {reservation.client.name?.charAt(0).toUpperCase()}
+                </div>
+                <div className="min-w-0">
+                  <p className="text-xs text-muted-foreground">Cliente</p>
+                  <p className="font-semibold text-sm truncate">{reservation.client.name}</p>
+                </div>
               </div>
-              <div>
-                <p className="text-xs text-muted-foreground">Cliente</p>
-                <p className="font-semibold text-sm">{reservation.client.name}</p>
-              </div>
-              <User className="w-4 h-4 text-muted-foreground ml-auto" />
+            )}
+
+            <div className="flex-1 min-w-[140px] p-3 bg-muted/30 rounded-xl border border-border/40">
+              <p className="text-xs text-muted-foreground">Precio</p>
+              <p className="font-bold text-lg flex items-center gap-0.5 text-emerald-600">
+                <DollarSign className="w-4 h-4" />{reservation.totalPrice}
+              </p>
+              <p className="text-[11px] text-muted-foreground mt-0.5">Base ${reservation.basePrice}</p>
             </div>
-          )}
+
+            {reservation.eventCode && (
+              <div className="flex-1 min-w-[160px] p-3 rounded-xl bg-violet-50 dark:bg-violet-950/20 border border-violet-200/60 dark:border-violet-800/40">
+                <p className="text-xs font-semibold text-violet-700 dark:text-violet-400 flex items-center gap-1">
+                  <KeyRound className="w-3.5 h-3.5" />Código de entrega/retiro
+                </p>
+                <p className="text-lg font-bold tracking-wider text-violet-700 dark:text-violet-400">{reservation.eventCode}</p>
+              </div>
+            )}
+          </div>
 
           {reservation.notes && (
             <div className="p-3 bg-muted/30 rounded-xl border border-border/40">
@@ -85,21 +118,6 @@ export function HostReservationDetailsDialog({ isOpen, onClose, reservation, upd
               <p className="text-sm text-foreground">{reservation.notes}</p>
             </div>
           )}
-
-          <div className="flex items-center justify-between p-3 bg-muted/30 rounded-xl border border-border/40">
-            <div>
-              <p className="text-xs text-muted-foreground">Base</p>
-              <p className="font-semibold text-sm flex items-center gap-0.5">
-                <DollarSign className="w-3.5 h-3.5 text-muted-foreground" />{reservation.basePrice}
-              </p>
-            </div>
-            <div className="text-right">
-              <p className="text-xs text-muted-foreground">Total</p>
-              <p className="font-bold text-lg flex items-center gap-0.5 text-emerald-600">
-                <DollarSign className="w-4 h-4" />{reservation.totalPrice}
-              </p>
-            </div>
-          </div>
 
           {(reservation.status === "confirmed" || reservation.status === "completed") && (
             <SiteEvidenceSection
@@ -133,6 +151,6 @@ export function HostReservationDetailsDialog({ isOpen, onClose, reservation, upd
           )}
         </div>
       </div>
-    </BaseDialog>
+    </div>
   );
 }

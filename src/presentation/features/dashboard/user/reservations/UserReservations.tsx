@@ -8,7 +8,7 @@ import { ReservationsSkeleton } from "@/presentation/components/shared/skeletons
 import { Button } from "@/presentation/components/ui/button";
 import { Input } from "@/presentation/components/ui/input";
 import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
-import { ReviewDialog, ReservationDetailsDialog, UserReservationCard, PaymentResultBanner } from "../components";
+import { ReviewDialog, ReservationDetailPage, UserReservationCard, PaymentResultBanner } from "../components";
 import { WompiCheckoutModal } from "../components/WompiCheckoutModal";
 import { useUserReservations } from "../hooks/useUserReservations";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
@@ -85,6 +85,19 @@ export function UserReservations() {
       setReviewSubmitting(false);
     }
   };
+
+  if (detailsId) {
+    return (
+      <div className="space-y-6">
+        <ReservationDetailPage
+          reservation={reservations.find((r) => r.id === detailsId) ?? null}
+          onBack={() => setDetailsId(null)}
+          onSubmitEvidence={(id, stage, photos, note) => submitEvidence({ id, stage, photos, note })}
+          isSubmittingEvidence={isSubmittingEvidence}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -169,13 +182,6 @@ export function UserReservations() {
       )}
 
       <ReviewDialog isOpen={!!reviewingId} onClose={() => { setReviewingId(null); setReviewError(null); }} onSubmit={handleSubmitReview} isSubmitting={reviewSubmitting} error={reviewError} />
-      <ReservationDetailsDialog
-        isOpen={!!detailsId}
-        onClose={() => setDetailsId(null)}
-        reservation={reservations.find((r) => r.id === detailsId) ?? null}
-        onSubmitEvidence={(id, stage, photos, note) => submitEvidence({ id, stage, photos, note })}
-        isSubmittingEvidence={isSubmittingEvidence}
-      />
       <WompiCheckoutModal open={!!checkoutReservation} onOpenChange={(v) => { if (!v) closeCheckout(); }} reservation={checkoutReservation} />
     </div>
   );

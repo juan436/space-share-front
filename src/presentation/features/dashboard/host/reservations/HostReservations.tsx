@@ -7,7 +7,7 @@ import { ReservationsSkeleton } from "@/presentation/components/shared/skeletons
 import { PaginationBar } from "@/presentation/components/shared/PaginationBar";
 import { ReservationStatus } from "@/core/domain/entities/Reservation";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
-import { HostReservationCard, HostReservationDetailsDialog } from "../components";
+import { HostReservationCard, HostReservationDetailPage } from "../components";
 import { useHostReservations } from "../hooks";
 import { usePaginatedReservations } from "@/presentation/hooks/usePaginatedReservations";
 
@@ -29,6 +29,21 @@ export function HostReservations() {
   const handleStatusUpdate = async (id: string, status: ReservationStatus): Promise<void> => {
     await updateStatus({ id, status });
   };
+
+  if (detailsId) {
+    return (
+      <div className="space-y-6">
+        <HostReservationDetailPage
+          reservation={reservations.find((r) => r.id === detailsId) ?? null}
+          onBack={() => setDetailsId(null)}
+          updatingId={updatingId}
+          onStatusUpdate={handleStatusUpdate}
+          onSubmitEvidence={(id, stage, photos, note) => submitEvidence({ id, stage, photos, note })}
+          isSubmittingEvidence={isSubmittingEvidence}
+        />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -103,16 +118,6 @@ export function HostReservations() {
           <PaginationBar page={currentPage} totalPages={totalPages} onPageChange={setCurrentPage} className="pt-4" />
         </>
       )}
-
-      <HostReservationDetailsDialog
-        isOpen={!!detailsId}
-        onClose={() => setDetailsId(null)}
-        reservation={reservations.find((r) => r.id === detailsId) ?? null}
-        updatingId={updatingId}
-        onStatusUpdate={handleStatusUpdate}
-        onSubmitEvidence={(id, stage, photos, note) => submitEvidence({ id, stage, photos, note })}
-        isSubmittingEvidence={isSubmittingEvidence}
-      />
     </div>
   );
 }
