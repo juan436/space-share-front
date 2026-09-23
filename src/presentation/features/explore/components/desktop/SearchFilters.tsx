@@ -129,7 +129,6 @@ export function SearchFilters({
                 <SelectItem value="basement">Sótano</SelectItem>
                 <SelectItem value="attic">Ático</SelectItem>
                 <SelectItem value="storage">Bodega</SelectItem>
-                <SelectItem value="parking">Parqueo</SelectItem>
                 <SelectItem value="other">Otro</SelectItem>
               </SelectContent>
             </Select>

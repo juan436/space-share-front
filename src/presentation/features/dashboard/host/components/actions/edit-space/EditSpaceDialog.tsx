@@ -54,6 +54,7 @@ export function EditSpaceDialog({ space, isOpen, onOpenChange, onSave, isSaving 
         {isBusiness ? (
           <BusinessSpaceForm
             onClose={() => onOpenChange(false)}
+            listingType={space?.listingType === "lodging" ? "lodging" : "storage"}
             initialData={space ?? undefined}
             spaceId={space?.id}
           />

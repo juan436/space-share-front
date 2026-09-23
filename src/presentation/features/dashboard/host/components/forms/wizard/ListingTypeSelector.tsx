@@ -1,68 +1,45 @@
-import { BedDouble, Boxes, Car, ArrowRight } from "lucide-react";
+import { BedDouble, Boxes, Car } from "lucide-react";
 import type { ListingTypeValue } from "@/presentation/types/spaces";
+import { WizardOptionGrid, WizardOption } from "./WizardOptionGrid";
 
 interface ListingTypeSelectorProps {
   onSelect: (listingType: ListingTypeValue) => void;
 }
 
+const OPTIONS: WizardOption<ListingTypeValue>[] = [
+  {
+    value: "storage",
+    label: "Almacenamiento",
+    description: "Bodegas, sótanos, áticos y espacios de negocio",
+    icon: Boxes,
+    accent: "primary",
+  },
+  {
+    value: "lodging",
+    label: "Hospedaje",
+    description: "Una habitación, apartamento o casa para que alguien se quede",
+    icon: BedDouble,
+    accent: "violet",
+  },
+  {
+    value: "garage",
+    label: "Parqueo",
+    description: "Espacio para guardar un vehículo",
+    icon: Car,
+    accent: "sky",
+  },
+];
+
 export function ListingTypeSelector({ onSelect }: ListingTypeSelectorProps) {
   return (
-    <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 gap-6">
+    <div className="flex-1 flex flex-col items-center justify-center px-6 py-8 gap-7">
       <div className="text-center max-w-sm">
         <p className="text-sm text-muted-foreground">
           ¿Qué quieres ofrecer en SpaceShare?
         </p>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 w-full max-w-2xl">
-        <button
-          onClick={() => onSelect("storage")}
-          className="group flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-primary/40 transition-all duration-300 text-left"
-        >
-          <div className="w-12 h-12 rounded-xl bg-muted/60 flex items-center justify-center shrink-0 group-hover:bg-primary/10 transition-colors">
-            <Boxes className="h-6 w-6 text-primary" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground">Almacenamiento</p>
-            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-              Bodegas, sótanos, áticos y espacios de negocio
-            </p>
-          </div>
-          <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-primary group-hover:translate-x-0.5 transition-all shrink-0" />
-        </button>
-
-        <button
-          onClick={() => onSelect("lodging")}
-          className="group flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-violet-400/40 transition-all duration-300 text-left"
-        >
-          <div className="w-12 h-12 rounded-xl bg-muted/60 flex items-center justify-center shrink-0 group-hover:bg-violet-500/10 transition-colors">
-            <BedDouble className="h-6 w-6 text-violet-600" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground">Hospedaje</p>
-            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-              Una habitación, apartamento o casa para que alguien se quede
-            </p>
-          </div>
-          <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-violet-600 group-hover:translate-x-0.5 transition-all shrink-0" />
-        </button>
-
-        <button
-          onClick={() => onSelect("garage")}
-          className="group flex items-center gap-4 p-5 rounded-2xl bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.11)] hover:border-sky-400/40 transition-all duration-300 text-left"
-        >
-          <div className="w-12 h-12 rounded-xl bg-muted/60 flex items-center justify-center shrink-0 group-hover:bg-sky-500/10 transition-colors">
-            <Car className="h-6 w-6 text-sky-600" />
-          </div>
-          <div className="flex-1 min-w-0">
-            <p className="text-sm font-semibold text-foreground">Garaje</p>
-            <p className="text-xs text-muted-foreground mt-0.5 leading-relaxed">
-              Espacio para guardar un vehículo
-            </p>
-          </div>
-          <ArrowRight className="h-4 w-4 text-muted-foreground/40 group-hover:text-sky-600 group-hover:translate-x-0.5 transition-all shrink-0" />
-        </button>
-      </div>
+      <WizardOptionGrid options={OPTIONS} onSelect={onSelect} columns={3} />
     </div>
   );
 }

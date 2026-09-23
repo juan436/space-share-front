@@ -13,7 +13,7 @@ import { BusinessPreviewStep } from "./BusinessPreviewStep";
 import { ImagesStep } from "../wizard/steps/ImagesStep";
 import { WizardFooter } from "../wizard/WizardFooter";
 import { WizardStepper } from "../wizard/WizardStepper";
-import type { SpaceViewModel } from "@/presentation/types/spaces";
+import type { SpaceViewModel, ListingTypeValue } from "@/presentation/types/spaces";
 
 const STEPS = [
   { id: 1, title: "Descripción", icon: Building2 },
@@ -25,11 +25,12 @@ const STEPS = [
 
 interface BusinessSpaceFormProps {
   onClose: () => void;
+  listingType: Extract<ListingTypeValue, "storage" | "lodging">;
   initialData?: SpaceViewModel;
   spaceId?: string;
 }
 
-export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpaceFormProps) {
+export function BusinessSpaceForm({ onClose, listingType, initialData, spaceId }: BusinessSpaceFormProps) {
   const [currentStep, setCurrentStep] = useState(1);
 
   const {
@@ -37,7 +38,7 @@ export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpa
     images, handleFilesSelected, removeImage,
     handleSubmit, isFormValid, canProceedStep,
     isSubmitting, submitError,
-  } = useBusinessSpaceForm({ onClose, initialData, spaceId });
+  } = useBusinessSpaceForm({ onClose, listingType, initialData, spaceId });
 
   const handleBack = () => {
     if (currentStep === 1) onClose();
@@ -52,7 +53,7 @@ export function BusinessSpaceForm({ onClose, initialData, spaceId }: BusinessSpa
       <div className="border-b border-border/40 bg-white dark:bg-card">
         <DialogHeader className="px-5 pt-5 pb-0">
           <DialogTitle className="text-base font-semibold text-foreground">
-            {spaceId ? "Editar Espacio Empresarial" : "Publicar Espacio Empresarial"}
+            {spaceId ? "Editar" : "Publicar"} {listingType === "lodging" ? "Hospedaje Empresarial" : "Espacio Empresarial"}
           </DialogTitle>
           <p className="text-xs text-muted-foreground mt-0.5">Paso {currentStep} de {STEPS.length}</p>
         </DialogHeader>

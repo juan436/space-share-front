@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { Button } from "@/presentation/components/ui/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/presentation/components/ui/dialog";
-import { Plus } from "lucide-react";
+import { Plus, ArrowLeft } from "lucide-react";
 import { NewSpaceFormData, ListingTypeValue } from "@/presentation/types/spaces";
 import { BusinessSpaceForm } from "../../forms/business/BusinessSpaceForm";
 import { SpaceTypeSelector, SpaceMode, SpaceWizard, ListingTypeSelector } from "../../forms/wizard";
@@ -48,9 +48,15 @@ export function AddSpaceWizard({
     }
   };
 
-  const handleClose = () => {
-    handleReset();
-    onOpenChange(false);
+  const hasSubtypeStep = listingType === "storage" || listingType === "lodging";
+  const isSelectorStep = listingType === null || (hasSubtypeStep && spaceMode === null);
+
+  const handleSpaceWizardBack = () => {
+    if (hasSubtypeStep) {
+      setSpaceMode(null);
+    } else {
+      handleReset();
+    }
   };
 
   return (
@@ -66,7 +72,13 @@ export function AddSpaceWizard({
           Agregar Espacio
         </Button>
       </DialogTrigger>
-      <DialogContent className="w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0 rounded-2xl">
+      <DialogContent
+        className={
+          isSelectorStep
+            ? "w-[92vw] max-w-[760px] h-auto max-h-[85vh] flex flex-col overflow-hidden p-0 rounded-2xl"
+            : "w-[95vw] max-w-[800px] h-[95vh] sm:h-[85vh] flex flex-col overflow-hidden p-0 rounded-2xl"
+        }
+      >
         {listingType === null && (
           <>
             <div className="border-b border-border/40 bg-white dark:bg-card">
@@ -80,29 +92,39 @@ export function AddSpaceWizard({
           </>
         )}
 
-        {listingType === "storage" && spaceMode === null && (
+        {hasSubtypeStep && spaceMode === null && (
           <>
             <div className="border-b border-border/40 bg-white dark:bg-card">
               <DialogHeader className="px-4 py-4 sm:px-6">
-                <DialogTitle className="text-xl font-semibold">
-                  ¿Qué tipo de espacio deseas publicar?
-                </DialogTitle>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setListingType(null)}
+                    className="px-2 -ml-2 text-muted-foreground hover:text-foreground shrink-0"
+                  >
+                    <ArrowLeft className="h-4 w-4" />
+                  </Button>
+                  <DialogTitle className="text-xl font-semibold">
+                    ¿Qué tipo de espacio deseas publicar?
+                  </DialogTitle>
+                </div>
               </DialogHeader>
             </div>
-            <SpaceTypeSelector onSelectMode={setSpaceMode} />
+            <SpaceTypeSelector listingType={listingType as "storage" | "lodging"} onSelectMode={setSpaceMode} />
           </>
         )}
 
-        {listingType === "storage" && spaceMode === "business" && (
-          <BusinessSpaceForm onClose={handleClose} />
+        {hasSubtypeStep && spaceMode === "business" && (
+          <BusinessSpaceForm listingType={listingType as "storage" | "lodging"} onClose={() => setSpaceMode(null)} />
         )}
 
-        {(listingType === "lodging" || listingType === "garage" || (listingType === "storage" && spaceMode === "normal")) && (
+        {(listingType === "garage" || (hasSubtypeStep && spaceMode === "normal")) && (
           <SpaceWizard
             newSpace={newSpace}
             onUpdateNewSpace={onUpdateNewSpace}
             onAddSpace={onAddSpace}
-            onBack={handleReset}
+            onBack={handleSpaceWizardBack}
             isCreating={isCreating}
             isFormValid={isFormValid}
             recommendedPrice={recommendedPrice}

@@ -21,7 +21,7 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
         <div className="space-y-1.5">
           <Label className="text-sm font-medium">Título <span className="text-destructive">*</span></Label>
           <Input
-            placeholder="Ej: Garaje amplio en zona céntrica"
+            placeholder="Ej: Parqueo amplio en zona céntrica"
             value={newSpace.title}
             onChange={(e) => onUpdateNewSpace({ title: e.target.value })}
             className="h-11 rounded-xl border-border/50 bg-white dark:bg-card"

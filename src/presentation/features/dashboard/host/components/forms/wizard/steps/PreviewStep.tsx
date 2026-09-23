@@ -57,7 +57,7 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
           {/* Badges tipo + dimensiones */}
           <div className="flex gap-1.5 flex-wrap">
             <span className="text-[10px] bg-violet-50 text-violet-700 dark:bg-violet-950/20 dark:text-violet-400 px-2 py-0.5 rounded-full font-medium">
-              {newSpace.listingType === "lodging" ? "Hospedaje" : newSpace.listingType === "garage" ? "Garaje" : "Almacenamiento"}
+              {newSpace.listingType === "lodging" ? "Hospedaje" : newSpace.listingType === "garage" ? "Parqueo" : "Almacenamiento"}
             </span>
             {newSpace.listingType === "storage" && newSpace.type && (
               <span className="text-[10px] bg-muted text-muted-foreground px-2 py-0.5 rounded-full font-medium">

@@ -1,7 +1,7 @@
 import { useState, useCallback } from "react";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
 import { useUseCases } from "@/presentation/providers/usecases-context";
-import type { SpaceViewModel } from "@/presentation/types/spaces";
+import type { SpaceViewModel, ListingTypeValue } from "@/presentation/types/spaces";
 
 export type BusinessSpaceType = "office" | "commercial" | "warehouse" | "meeting_room" | "";
 
@@ -82,11 +82,12 @@ function viewModelToFormData(vm: SpaceViewModel): BusinessSpaceData {
 
 interface UseBusinessSpaceFormOptions {
   onClose: () => void;
+  listingType: Extract<ListingTypeValue, "storage" | "lodging">;
   initialData?: SpaceViewModel;
   spaceId?: string;
 }
 
-export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusinessSpaceFormOptions) {
+export function useBusinessSpaceForm({ onClose, listingType, initialData, spaceId }: UseBusinessSpaceFormOptions) {
   const { uploadSpaceImagesUseCase } = useUseCases();
   const { create, isCreating, update, isUpdating } = useSpaces();
 
@@ -122,7 +123,7 @@ export function useBusinessSpaceForm({ onClose, initialData, spaceId }: UseBusin
       title: formData.title,
       description: formData.description,
       type: "other" as const,
-      listingType: "storage" as const,
+      listingType,
       squareMeters: formData.squareMeters,
       pricePerMonth: formData.pricePerMonth,
       capacity: formData.maxCapacity,
