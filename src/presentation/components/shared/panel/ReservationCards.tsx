@@ -1,4 +1,4 @@
-import { CalendarX2 } from "lucide-react";
+import { CalendarX2, Warehouse } from "lucide-react";
 import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Reservation } from "@/core/domain/entities/Reservation";
@@ -41,8 +41,13 @@ export function ReservationCards({ reservations, emptyText, counterpart, onOpen 
         return (
           <button key={r.id} onClick={onOpen} className="group text-left">
             <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-muted">
-              {image && (
+              {image ? (
                 <img src={resolveImageUrl(image)} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+              ) : (
+                <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-primary/10 to-accent/10 text-primary/60">
+                  <Warehouse className="w-10 h-10" strokeWidth={1.5} />
+                  <span className="text-xs font-medium">Sin foto</span>
+                </div>
               )}
               <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 text-foreground text-xs font-semibold shadow-sm">
                 <span className={`w-2 h-2 rounded-full ${DOT[r.status] ?? "bg-gray-400"}`} />
