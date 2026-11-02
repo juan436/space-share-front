@@ -1,2 +1,3 @@
-export { SpacesTable } from "./SpacesTable";
-export { MobileSpacesList } from "./MobileSpacesList";
+export { SpaceCards } from "./SpaceCards";
+export { SpacesToolbar } from "./SpacesToolbar";
+export type { SpaceFilter } from "./SpacesToolbar";
