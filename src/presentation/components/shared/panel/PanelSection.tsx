@@ -8,13 +8,14 @@ interface PanelSectionProps {
   children: React.ReactNode;
 }
 
+/** Sección al estilo editorial: título grande sobre el fondo, sin caja alrededor. */
 export function PanelSection({ title, actionLabel, onAction, className = "", children }: PanelSectionProps) {
   return (
-    <section className={`rounded-2xl bg-white dark:bg-card border border-border ${className}`}>
-      <div className="flex items-center justify-between px-5 py-4 border-b border-border">
-        <h2 className="text-base font-bold text-foreground">{title}</h2>
+    <section className={className}>
+      <div className="flex items-baseline justify-between mb-4">
+        <h2 className="text-2xl font-semibold text-foreground tracking-tight">{title}</h2>
         {actionLabel && onAction && (
-          <button onClick={onAction} className="text-sm font-semibold text-primary hover:underline">
+          <button onClick={onAction} className="text-sm font-semibold text-foreground underline underline-offset-4 hover:text-primary">
             {actionLabel}
           </button>
         )}
