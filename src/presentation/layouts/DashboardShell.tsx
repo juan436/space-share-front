@@ -28,7 +28,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
         <DashboardHeader user={user} title={title} onLogout={onLogout} />
 
         <main className="flex-1 overflow-y-auto thin-scrollbar pb-20 md:pb-0 bg-background">
-          <div className="mx-auto w-full max-w-6xl px-6 py-6">{children}</div>
+          <div className="mx-auto w-full max-w-[1440px] px-6 lg:px-8 py-6">{children}</div>
         </main>
       </div>
 
