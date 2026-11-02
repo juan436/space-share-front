@@ -30,7 +30,7 @@ export function UserHome({ onNavigate }: UserHomeProps) {
   return (
     <div className="space-y-10">
       <PageHeader name={user?.name} subtitle="Encuentra el espacio que necesitas y gestiona tus reservaciones.">
-        <Link href="/explore" className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-foreground text-background text-sm font-semibold hover:opacity-85 transition-opacity">
+        <Link href="/explore" className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors">
           <Compass className="w-4 h-4" /> Explorar espacios
         </Link>
       </PageHeader>

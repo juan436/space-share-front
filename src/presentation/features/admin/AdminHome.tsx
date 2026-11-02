@@ -51,7 +51,7 @@ export function AdminHome({ onNavigate }: AdminHomeProps) {
           <div className="rounded-xl border border-border bg-white dark:bg-card divide-y divide-border">
             {pendingKyc.slice(0, 6).map((u) => (
               <button key={u.id} onClick={go("users")} className="w-full flex items-center gap-4 px-6 py-4 text-left hover:bg-muted/60 transition-colors">
-                <div className="w-11 h-11 rounded-full bg-foreground text-background font-semibold flex items-center justify-center shrink-0">
+                <div className="w-11 h-11 rounded-full bg-primary/10 text-primary font-semibold flex items-center justify-center shrink-0">
                   {u.name.slice(0, 1).toUpperCase()}
                 </div>
                 <div className="min-w-0 flex-1">

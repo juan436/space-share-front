@@ -29,7 +29,7 @@ export function HostHome({ onNavigate }: HostHomeProps) {
   return (
     <div className="space-y-10">
       <PageHeader name={user?.name} subtitle="Gestiona tus espacios, responde solicitudes y sigue tus ingresos.">
-        <button onClick={go("spaces")} className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-foreground text-background text-sm font-semibold hover:opacity-85 transition-opacity">
+        <button onClick={go("spaces")} className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors">
           <Plus className="w-4 h-4" /> Agregar espacio
         </button>
       </PageHeader>

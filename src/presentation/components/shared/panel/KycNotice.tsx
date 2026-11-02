@@ -21,7 +21,7 @@ export function KycNotice({ status, onAction }: KycNoticeProps) {
           {pending ? "Te avisaremos cuando termine la revisión." : "La necesitas para reservar y publicar espacios."}
         </p>
       </div>
-      <button onClick={onAction} className="h-11 px-6 rounded-lg bg-foreground text-background text-sm font-semibold hover:opacity-85 transition-opacity">
+      <button onClick={onAction} className="h-11 px-6 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors">
         {pending ? "Ver estado" : status === "rejected" ? "Volver a enviar" : "Empezar"}
       </button>
     </div>
