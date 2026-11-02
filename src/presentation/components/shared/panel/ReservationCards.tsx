@@ -1,20 +1,6 @@
-import { CalendarX2, Warehouse } from "lucide-react";
-import { format } from "date-fns";
-import { es } from "date-fns/locale";
+import { CalendarX2 } from "lucide-react";
 import { Reservation } from "@/core/domain/entities/Reservation";
-import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
-import { resolveImageUrl } from "@/presentation/utils/image";
-
-const DOT: Record<string, string> = {
-  pending: "bg-amber-500",
-  accepted: "bg-emerald-500",
-  awaiting_payment: "bg-violet-500",
-  confirmed: "bg-emerald-500",
-  completed: "bg-blue-500",
-  rejected: "bg-red-500",
-  cancelled: "bg-gray-400",
-  expired: "bg-gray-400",
-};
+import { ReservationCard } from "./ReservationCard";
 
 interface ReservationCardsProps {
   reservations: Reservation[];
@@ -23,6 +9,7 @@ interface ReservationCardsProps {
   onOpen: () => void;
 }
 
+/** Rejilla de reservaciones para los inicios del panel (solo lectura, abre la sección). */
 export function ReservationCards({ reservations, emptyText, counterpart, onOpen }: ReservationCardsProps) {
   if (reservations.length === 0) {
     return (
@@ -34,37 +21,20 @@ export function ReservationCards({ reservations, emptyText, counterpart, onOpen 
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-x-5 gap-y-8">
-      {reservations.map((r) => {
-        const image = r.space?.images?.[0];
-        const person = counterpart === "client" ? r.client?.name : r.host?.name;
-        return (
-          <button key={r.id} onClick={onOpen} className="group text-left">
-            <div className="relative aspect-[4/3] rounded-xl overflow-hidden bg-muted">
-              {image ? (
-                <img src={resolveImageUrl(image)} alt="" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-              ) : (
-                <div className="w-full h-full flex flex-col items-center justify-center gap-2 bg-gradient-to-br from-primary/10 to-accent/10 text-primary/60">
-                  <Warehouse className="w-10 h-10" strokeWidth={1.5} />
-                  <span className="text-xs font-medium">Sin foto</span>
-                </div>
-              )}
-              <span className="absolute top-3 left-3 inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-white/95 text-foreground text-xs font-semibold shadow-sm">
-                <span className={`w-2 h-2 rounded-full ${DOT[r.status] ?? "bg-gray-400"}`} />
-                {STATUS_CONFIG[r.status]?.label ?? r.status}
-              </span>
-            </div>
-            <p className="text-[15px] font-semibold text-foreground mt-3 truncate">{r.space?.title ?? "Espacio"}</p>
-            <p className="text-sm text-muted-foreground truncate">
-              {format(r.startDate, "d MMM", { locale: es })} – {format(r.endDate, "d MMM yyyy", { locale: es })}
-            </p>
-            <p className="text-sm text-foreground mt-0.5">
-              <span className="font-semibold">${r.totalPrice}</span>
-              {person && <span className="text-muted-foreground"> · {person}</span>}
-            </p>
-          </button>
-        );
-      })}
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-5">
+      {reservations.map((r) => (
+        <ReservationCard
+          key={r.id}
+          reservation={r}
+          counterpart={
+            counterpart === "client"
+              ? { label: "Cliente", name: r.client?.name }
+              : { label: "Anfitrión", name: r.host?.name }
+          }
+          priceLine={<><span className="font-bold">${r.totalPrice}</span> <span className="text-xs text-muted-foreground">total</span></>}
+          onOpen={onOpen}
+        />
+      ))}
     </div>
   );
 }
