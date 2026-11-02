@@ -12,6 +12,8 @@ import { useUseCases } from "@/presentation/providers/usecases-context";
 import { useRouter } from "next/navigation";
 import { BookingConfirmModal } from "./BookingConfirmModal";
 import { useBookingLogic } from "../hooks/useBookingLogic";
+import { useKycGate } from "../hooks/useKycGate";
+import { KycRequiredDialog } from "./booking/KycRequiredDialog";
 import { MIN_RENTAL_DAYS } from "@/core/domain/entities/Reservation";
 import {
   BookingQuantitySelector,
@@ -39,6 +41,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
   const { isAuthenticated, user } = useAuth();
   const { findOrCreateConversationUseCase } = useUseCases();
   const router = useRouter();
+  const { isKycDialogOpen, kycStatus, requireKyc, goVerify, closeKycDialog } = useKycGate();
   const [isSchedulingVisit, setIsSchedulingVisit] = useState(false);
 
   const handleReserveClick = () => {
@@ -46,6 +49,7 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
       router.push(`/login?redirect=${encodeURIComponent(window.location.pathname)}`);
       return;
     }
+    if (requireKyc()) return;
     setShowConfirmModal(true);
   };
 
@@ -76,8 +80,11 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
           <BookingQuantitySelector
             quantity={quantity}
             displayCapacity={displayCapacity}
+            isVehicle={space.listingType === "garage"}
+            pricePerUnit={space.pricePerMonth}
             onDecrement={() => setQuantity(Math.max(1, quantity - 1))}
             onIncrement={() => setQuantity(Math.min(displayCapacity, quantity + 1))}
+            onQuantityChange={setQuantity}
             className="mb-4"
           />
         )}
@@ -188,6 +195,13 @@ export function SpaceBookingSidebar({ space }: SpaceBookingSidebarProps) {
           <span>Pago seguro 100% garantizado</span>
         </div>
       </div>
+
+      <KycRequiredDialog
+        open={isKycDialogOpen}
+        status={kycStatus}
+        onClose={closeKycDialog}
+        onGoVerify={goVerify}
+      />
 
       <BookingConfirmModal
         open={showConfirmModal}

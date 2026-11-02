@@ -10,6 +10,8 @@ import { format } from "date-fns";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
 import { BookingConfirmModal } from "./BookingConfirmModal";
+import { useKycGate } from "../hooks/useKycGate";
+import { KycRequiredDialog } from "./booking/KycRequiredDialog";
 import { useBookingLogic } from "../hooks/useBookingLogic";
 import { MIN_RENTAL_DAYS } from "@/core/domain/entities/Reservation";
 import {
@@ -39,6 +41,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
 
   const { isAuthenticated } = useAuth();
   const router = useRouter();
+  const { isKycDialogOpen, kycStatus, requireKyc, goVerify, closeKycDialog } = useKycGate();
 
   const handleReserveClick = () => {
     if (!isAuthenticated) {
@@ -46,6 +49,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
       return;
     }
     setIsOpen(false);
+    if (requireKyc()) return;
     setShowConfirmModal(true);
   };
 
@@ -89,8 +93,11 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                   <BookingQuantitySelector
                     quantity={quantity}
                     displayCapacity={displayCapacity}
+                    isVehicle={space.listingType === "garage"}
+                    pricePerUnit={space.pricePerMonth}
                     onDecrement={() => setQuantity(Math.max(1, quantity - 1))}
                     onIncrement={() => setQuantity(Math.min(displayCapacity, quantity + 1))}
+                    onQuantityChange={setQuantity}
                     className="mb-6"
                   />
                 )}
@@ -171,6 +178,13 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
           </Dialog>
         </div>
       </div>
+
+      <KycRequiredDialog
+        open={isKycDialogOpen}
+        status={kycStatus}
+        onClose={closeKycDialog}
+        onGoVerify={goVerify}
+      />
 
       <BookingConfirmModal
         open={showConfirmModal}
