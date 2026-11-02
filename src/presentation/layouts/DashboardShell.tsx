@@ -52,7 +52,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
       <header className="sticky top-0 z-50 w-full bg-white dark:bg-card border-b border-border shadow-[0_2px_10px_0_rgb(15_23_42/0.08)]">
         <div className="flex h-[72px] items-center justify-between px-6">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo cropped className="h-12 w-auto" />
+            <Logo cropped className="h-9 w-auto" />
           </Link>
 
           <div className="flex items-center gap-3">
