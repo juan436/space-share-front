@@ -1,5 +1,5 @@
 import { MapPin, ImageIcon, Ruler, Thermometer, Shield, DoorOpen } from "lucide-react";
-import { NewSpaceFormData, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
+import { NewSpaceFormData, spaceTypeOptions } from "@/presentation/types/spaces";
 import { resolveImageUrl } from "@/presentation/utils/image";
 
 interface PreviewStepProps {
@@ -57,7 +57,7 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
                 <Ruler className="h-2.5 w-2.5" />{newSpace.squareMeters} m²
               </span>
             )}
-            {(newSpace.listingType === "garage" || (newSpace.listingType === "storage" && isVehicleSpaceType(newSpace.type))) && newSpace.capacity > 1 && (
+            {newSpace.listingType === "garage" && newSpace.capacity > 1 && (
               <span className="text-[10px] bg-orange-50 text-orange-700 dark:bg-orange-950/20 dark:text-orange-400 px-2 py-0.5 rounded-full">
                 {newSpace.capacity} vehículos
               </span>

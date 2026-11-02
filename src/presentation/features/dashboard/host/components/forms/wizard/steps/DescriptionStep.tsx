@@ -2,7 +2,7 @@ import { Input } from "@/presentation/components/ui/input";
 import { Label } from "@/presentation/components/ui/label";
 import { Textarea } from "@/presentation/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
-import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
+import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions } from "@/presentation/types/spaces";
 
 interface DescriptionStepProps {
   newSpace: NewSpaceFormData;
@@ -14,11 +14,11 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
   const isLodging = newSpace.listingType === "lodging";
   const isGarage = newSpace.listingType === "garage";
   const hasStorageSubtype = !isLodging && !isGarage;
-  const showCapacity = isGarage || (hasStorageSubtype && isVehicleSpaceType(newSpace.type));
+  const showCapacity = isGarage;
 
   const handleTypeChange = (value: SpaceTypeValue) => {
     const updates: Partial<NewSpaceFormData> = { type: value };
-    if (!isVehicleSpaceType(value)) updates.capacity = 1;
+    updates.capacity = 1;
     onUpdateNewSpace(updates);
   };
 

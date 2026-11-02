@@ -5,7 +5,7 @@ import { Input } from "@/presentation/components/ui/input";
 import { Button } from "@/presentation/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
-export type FilterType = "all" | "garage" | "basement" | "attic" | "storage" | "parking";
+export type FilterType = "all" | "garage" | "basement" | "attic" | "storage";
 
 export interface FilterState {
   type: FilterType;
@@ -16,9 +16,8 @@ export interface FilterState {
 
 const filterOptions: { type: FilterType; label: string; icon: typeof Home }[] = [
   { type: "all", label: "Todos", icon: Home },
-  { type: "garage", label: "Garaje", icon: Warehouse },
+  { type: "garage", label: "Parqueo", icon: Car },
   { type: "storage", label: "Bodega", icon: Box },
-  { type: "parking", label: "Parqueo", icon: Car },
   { type: "basement", label: "Sótano", icon: ArrowDown },
   { type: "attic", label: "Ático", icon: Home },
 ];

@@ -1,4 +1,4 @@
-export type SpaceType = "basement" | "attic" | "storage" | "parking" | "other";
+export type SpaceType = "basement" | "attic" | "storage" | "other";
 
 export type SpaceCategory = "normal" | "business";
 

@@ -58,7 +58,7 @@ export function CompactSearchFilters({
         <SelectContent>
           <SelectItem value="all">Todos los tipos</SelectItem>
           <SelectItem value="lodging">Hospedaje</SelectItem>
-          <SelectItem value="garage">Garaje</SelectItem>
+          <SelectItem value="garage">Parqueo</SelectItem>
           <SelectItem value="basement">Sótano</SelectItem>
           <SelectItem value="attic">Ático</SelectItem>
           <SelectItem value="storage">Bodega</SelectItem>

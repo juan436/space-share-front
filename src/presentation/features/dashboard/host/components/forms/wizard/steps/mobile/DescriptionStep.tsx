@@ -2,7 +2,7 @@ import { Label } from "@/presentation/components/ui/label";
 import { Input } from "@/presentation/components/ui/input";
 import { Textarea } from "@/presentation/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/presentation/components/ui/select";
-import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions, isVehicleSpaceType } from "@/presentation/types/spaces";
+import { NewSpaceFormData, SpaceTypeValue, spaceTypeOptions } from "@/presentation/types/spaces";
 
 interface DescriptionStepProps {
   newSpace: NewSpaceFormData;
@@ -45,7 +45,7 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
             <Label className="text-sm font-medium">Tipo de espacio <span className="text-destructive">*</span></Label>
             <Select value={newSpace.type} onValueChange={(v: SpaceTypeValue) => {
               const updates: Partial<NewSpaceFormData> = { type: v };
-              if (!isVehicleSpaceType(v)) updates.capacity = 1;
+              updates.capacity = 1;
               onUpdateNewSpace(updates);
             }}>
               <SelectTrigger className="h-11 rounded-xl border-border/50 bg-white dark:bg-card">
@@ -85,7 +85,7 @@ export function DescriptionStep({ newSpace, onUpdateNewSpace, recommendedPrice }
           <p className="text-xs text-muted-foreground">Precio sugerido: <span className="font-semibold text-foreground">${recommendedPrice}/mes</span></p>
         )}
 
-        {(isGarage || (hasStorageSubtype && isVehicleSpaceType(newSpace.type))) && (
+        {isGarage && (
           <div className="space-y-1.5">
             <Label className="text-sm font-medium">Capacidad (vehículos) <span className="text-destructive">*</span></Label>
             <Input

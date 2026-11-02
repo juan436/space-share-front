@@ -71,10 +71,6 @@ export interface SpaceTypeOption {
   label: string;
 }
 
-// "parking" no está en esta lista a propósito: quedó como listingType propio (Garaje/Parqueo)
-// desde 2026-09-13, así que ya no se ofrece como subtipo de Almacenamiento (evita el duplicado).
-// El value/label sigue existiendo en SpaceType y spaceTypeLabels para los espacios ya publicados
-// con ese subtipo — no se tocan, solo dejan de ser elegibles para publicaciones nuevas.
 export const spaceTypeOptions: SpaceTypeOption[] = [
   { value: "basement", label: "Sótano" },
   { value: "attic", label: "Ático" },
@@ -83,19 +79,12 @@ export const spaceTypeOptions: SpaceTypeOption[] = [
 ];
 
 export const spaceTypeLabels: Record<SpaceTypeValue, string> = {
-  parking: "Parking",
   basement: "Sótano",
   attic: "Ático",
   storage: "Almacén",
   other: "Otro",
 };
 
-
-export const VEHICLE_SPACE_TYPES: SpaceTypeValue[] = ["parking"];
-
-export function isVehicleSpaceType(type: SpaceTypeValue): boolean {
-  return VEHICLE_SPACE_TYPES.includes(type);
-}
 
 export function calculateRecommendedPriceForUI(squareMeters: number): number {
   const basePrice = 5;
