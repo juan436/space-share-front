@@ -3,8 +3,8 @@
 import { useAdminUsers } from "@/presentation/features/admin/hooks/useAdminUsers";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/presentation/components/ui/card";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/presentation/components/ui/table";
-import { Button } from "@/presentation/components/ui/button";
-import { Users, Loader2, AlertCircle, Search, ShieldCheck, Clock, XCircle, Check, X } from "lucide-react";
+import { KycCell } from "./KycCell";
+import { Users, Loader2, AlertCircle, Search } from "lucide-react";
 import type { AdminUser } from "@/core/domain/entities/AdminStats";
 
 const roleBadge: Record<string, string> = {
@@ -19,48 +19,10 @@ const roleLabel: Record<string, string> = {
   client: "Cliente",
 };
 
-const kycBadge: Record<string, { label: string; className: string; icon: typeof ShieldCheck }> = {
-  none: { label: "Sin verificar", className: "bg-gray-100 text-gray-600 dark:bg-gray-800 dark:text-gray-400", icon: AlertCircle },
-  pending: { label: "En revisión", className: "bg-amber-100 text-amber-700 dark:bg-amber-950 dark:text-amber-400", icon: Clock },
-  approved: { label: "Verificado", className: "bg-emerald-100 text-emerald-700 dark:bg-emerald-950 dark:text-emerald-400", icon: ShieldCheck },
-  rejected: { label: "Rechazado", className: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-400", icon: XCircle },
-};
-
-function KycCell({ user, onReview, isReviewing }: { user: AdminUser; onReview: (approve: boolean) => void; isReviewing: boolean }) {
-  const cfg = kycBadge[user.kycStatus] ?? kycBadge.none;
-  const Icon = cfg.icon;
-
-  return (
-    <div className="flex items-center gap-2">
-      <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium ${cfg.className}`}>
-        <Icon className="w-3 h-3" />{cfg.label}
-      </span>
-      {user.kycStatus === "pending" && (
-        <>
-          {(user.duiImageUrl || user.selfieImageUrl) && (
-            <a href={user.duiImageUrl ?? user.selfieImageUrl} target="_blank" rel="noreferrer" className="text-xs text-primary underline">
-              Ver fotos
-            </a>
-          )}
-          <Button size="sm" variant="outline" disabled={isReviewing} onClick={() => onReview(true)} className="h-7 px-2 gap-1 text-emerald-700 border-emerald-200">
-            <Check className="w-3.5 h-3.5" />
-          </Button>
-          <Button size="sm" variant="outline" disabled={isReviewing} onClick={() => onReview(false)} className="h-7 px-2 gap-1 text-red-700 border-red-200">
-            <X className="w-3.5 h-3.5" />
-          </Button>
-        </>
-      )}
-    </div>
-  );
-}
-
 export function AdminUsers() {
   const { users, filtered, isLoading, error, search, setSearch, reviewKyc, reviewingId } = useAdminUsers();
 
-  const handleReview = (userId: string, approve: boolean) => {
-    const reason = approve ? undefined : window.prompt("Motivo del rechazo (opcional):") ?? undefined;
-    reviewKyc(userId, approve, reason);
-  };
+  const handleReview = (userId: string, approve: boolean, reason?: string) => reviewKyc(userId, approve, reason);
 
   return (
     <div className="space-y-6">
@@ -140,7 +102,7 @@ export function AdminUsers() {
                       </span>
                     </TableCell>
                     <TableCell>
-                      <KycCell user={user} isReviewing={reviewingId === user.id} onReview={(approve) => handleReview(user.id, approve)} />
+                      <KycCell user={user} isReviewing={reviewingId === user.id} onReview={(approve, reason) => handleReview(user.id, approve, reason)} />
                     </TableCell>
                     <TableCell className="text-muted-foreground text-sm">
                       {user.createdAt.toLocaleDateString("es-ES", {
