@@ -47,16 +47,16 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
   const roleName = roleNames[user.role] ?? user.role;
 
   return (
-    <div className="h-screen bg-white dark:bg-background flex flex-col overflow-hidden">
+    <div className="panel-theme h-screen bg-background flex flex-col overflow-hidden">
       {/* ── Header ── */}
-      <header className="sticky top-0 z-50 w-full glass-strong border-b border-border/40 shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]">
-        <div className="flex h-16 items-center justify-between px-6">
+      <header className="sticky top-0 z-50 w-full bg-white dark:bg-card border-b border-border shadow-[0_2px_10px_0_rgb(15_23_42/0.08)]">
+        <div className="flex h-[72px] items-center justify-between px-6">
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo className="h-14 w-14" />
+            <Logo cropped className="h-12 w-auto" />
           </Link>
 
           <div className="flex items-center gap-3">
-            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md bg-muted/70 text-muted-foreground text-xs font-semibold">
+            <span className="hidden sm:inline-flex items-center px-2.5 py-1 rounded-md bg-primary/10 text-primary text-xs font-semibold">
               <LayoutDashboard className="w-3 h-3 mr-1.5" />
               {roleName}
             </span>
@@ -102,7 +102,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
       {/* ── Body ── */}
       <div className="flex flex-1 min-h-0 overflow-hidden">
         {/* ── Sidebar ── */}
-        <aside className="hidden md:flex w-60 flex-col bg-white dark:bg-card/50 border-r border-border/40">
+        <aside className="hidden md:flex w-64 flex-col bg-white dark:bg-card/50 border-r border-border shadow-[2px_0_10px_0_rgb(15_23_42/0.05)]">
           <nav className="flex-1 px-3 py-4 space-y-1">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -113,8 +113,8 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
                   className={cn(
                     "w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition-all duration-200 text-left",
                     isActive
-                      ? "bg-muted/70 text-foreground font-semibold border-l-2 border-primary"
-                      : "text-muted-foreground hover:text-foreground hover:bg-muted/50 border-l-2 border-transparent"
+                      ? "bg-primary/10 text-primary font-semibold border-l-4 border-primary"
+                      : "text-muted-foreground hover:text-foreground hover:bg-muted border-l-4 border-transparent"
                   )}
                 >
                   <tab.icon className={cn("h-[18px] w-[18px]", isActive && "text-primary")} />
@@ -137,7 +137,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
         </aside>
 
         {/* ── Mobile Navigation ── */}
-        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border/40 bg-card/95 backdrop-blur-lg safe-area-bottom">
+        <nav className="md:hidden fixed bottom-0 left-0 right-0 z-50 border-t border-border bg-white dark:bg-card shadow-[0_-2px_10px_0_rgb(15_23_42/0.06)] safe-area-bottom">
           <div className="flex justify-around py-1.5">
             {tabs.slice(0, 4).map((tab) => {
               const isActive = activeTab === tab.id;
@@ -166,7 +166,7 @@ export function DashboardShell({ user, tabs, activeTab, onTabChange, onLogout, t
         </nav>
 
         {/* ── Main Content ── */}
-        <main className="flex-1 overflow-y-auto thin-scrollbar pb-20 md:pb-0 bg-slate-50/60 dark:bg-background">
+        <main className="flex-1 overflow-y-auto thin-scrollbar pb-20 md:pb-0 bg-background">
           <div className="mx-auto w-full max-w-6xl px-6 py-6">
             {children}
           </div>

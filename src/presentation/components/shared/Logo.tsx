@@ -1,12 +1,14 @@
 interface LogoProps {
   className?: string;
+  /** Recorta el espacio vacío del lienzo: el dibujo ocupa todo el alto (para headers de poca altura). */
+  cropped?: boolean;
 }
 
-export function Logo({ className = "h-10 w-10" }: LogoProps) {
+export function Logo({ className = "h-10 w-10", cropped = false }: LogoProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 852.07 852.07"
+      viewBox={cropped ? "96 273 651 417" : "0 0 852.07 852.07"}
       className={className}
       role="img"
       aria-label="SpaceShare"

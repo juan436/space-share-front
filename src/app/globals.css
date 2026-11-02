@@ -69,6 +69,23 @@
   }
 }
 
+/* Tema del panel (dashboard admin/host/cliente): más contraste entre fondo, tarjetas y bordes.
+   Solo vive bajo .panel-theme; Explorar y el resto del sitio usan los tokens globales. */
+@layer base {
+  html:not(.dark) .panel-theme {
+    --background: 214 32% 93%;
+    --border: 214 24% 80%;
+    --input: 214 24% 78%;
+    --muted: 214 32% 91%;
+  }
+}
+
+@layer components {
+  .panel-theme :where(.rounded-2xl.border, .rounded-xl.border.bg-white) {
+    box-shadow: 0 1px 3px rgb(15 23 42 / 0.08), 0 1px 2px rgb(15 23 42 / 0.05);
+  }
+}
+
 @layer utilities {
   /* Hide scrollbar but allow scrolling */
   .no-scrollbar {
