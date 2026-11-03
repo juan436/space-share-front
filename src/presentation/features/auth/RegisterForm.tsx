@@ -50,7 +50,7 @@ export function RegisterForm() {
         <div className="absolute -bottom-32 -right-32 w-[500px] h-[500px] rounded-full bg-accent/15 blur-3xl pointer-events-none" />
 
         <Link href="/" className="relative inline-flex">
-          <Logo className="h-14 w-auto" />
+          <Logo tagline taglineClassName="text-background/70" className="h-14 w-auto" />
         </Link>
 
         <div className="relative space-y-8">

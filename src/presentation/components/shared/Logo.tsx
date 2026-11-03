@@ -1,5 +1,9 @@
 interface LogoProps {
   className?: string;
+  /** Muestra «Plataforma de intercambio» bajo el logo. */
+  tagline?: boolean;
+  /** Clases del texto del lema (p. ej. color sobre fondos oscuros). */
+  taglineClassName?: string;
 }
 
 /**
@@ -7,8 +11,8 @@ interface LogoProps {
  * y un marcador de ubicación como punto de la «i». Dibujado en SVG, sin depender de
  * ninguna tipografía. Color: naranja de marca (#fd9630).
  */
-export function Logo({ className = "h-8 w-auto" }: LogoProps) {
-  return (
+export function Logo({ className = "h-8 w-auto", tagline = false, taglineClassName = "text-muted-foreground" }: LogoProps) {
+  const mark = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       viewBox="335 262 950 366"
@@ -39,5 +43,16 @@ export function Logo({ className = "h-8 w-auto" }: LogoProps) {
         d="M978 392 L943 358 A50 50 0 1 1 1013 358 Z M955 322 a23 23 0 1 0 46 0 a23 23 0 1 0 -46 0 Z"
       />
     </svg>
+  );
+
+  if (!tagline) return mark;
+
+  return (
+    <span className="inline-flex flex-col items-start gap-1 leading-none">
+      {mark}
+      <span className={`text-[10px] font-semibold tracking-wide whitespace-nowrap ${taglineClassName}`}>
+        Plataforma de intercambio
+      </span>
+    </span>
   );
 }
