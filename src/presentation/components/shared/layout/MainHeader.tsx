@@ -70,10 +70,10 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)]">
-        <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-24" : "h-20"}`}>
+        <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-[72px]" : "h-16"}`}>
 
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo className="h-20 w-20" />
+            <Logo cropped className="h-10 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
