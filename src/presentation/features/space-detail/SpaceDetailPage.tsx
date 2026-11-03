@@ -111,6 +111,7 @@ export function SpaceDetailPage({ space, spaceTypeLabel, spaceTypeColor }: Space
               description={space.description}
               squareMeters={space.squareMeters}
               capacity={space.capacity}
+              listingType={space.listingType}
               bookingsCount={space.bookingsCount}
               createdAt={space.createdAt}
             />

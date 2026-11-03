@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Ruler, Calendar, CheckCircle2, Users, TrendingUp, Clock } from "lucide-react";
+import { Ruler, Calendar, CheckCircle2, Users, Car, Layers, TrendingUp, Clock } from "lucide-react";
 
 const DESCRIPTION_TRUNCATE_LENGTH = 220;
 
@@ -9,6 +9,7 @@ interface SpaceDescriptionProps {
   description: string;
   squareMeters: number;
   capacity: number;
+  listingType: "lodging" | "storage" | "garage";
   bookingsCount?: number;
   createdAt: Date;
 }
@@ -21,7 +22,23 @@ function getTimeAgo(date: Date): string {
   return `Hace ${years} ${years === 1 ? "año" : "años"}`;
 }
 
-export function SpaceDescription({ description, squareMeters, capacity, bookingsCount, createdAt }: SpaceDescriptionProps) {
+/** Qué significa «capacidad» para cada tipo de espacio, dicho en palabras del cliente. */
+function describeCapacity(listingType: SpaceDescriptionProps["listingType"], capacity: number) {
+  if (listingType === "garage") {
+    return {
+      Icon: Car,
+      title: `${capacity === 1 ? "Cabe" : "Caben"} ${capacity} ${capacity === 1 ? "vehículo" : "vehículos"}`,
+      text: "Capacidad del parqueo",
+    };
+  }
+  if (listingType === "storage" && capacity > 1) {
+    return { Icon: Layers, title: "Se alquila por metros", text: "Reserva solo los m² que necesites" };
+  }
+  return { Icon: Users, title: "Se alquila completo", text: "Un solo cliente a la vez" };
+}
+
+export function SpaceDescription({ description, squareMeters, capacity, listingType, bookingsCount, createdAt }: SpaceDescriptionProps) {
+  const cap = describeCapacity(listingType, capacity);
   const [expanded, setExpanded] = useState(false);
   const needsTruncation = description.length > DESCRIPTION_TRUNCATE_LENGTH;
 
@@ -54,10 +71,10 @@ export function SpaceDescription({ description, squareMeters, capacity, bookings
         </div>
 
         <div className="flex items-start gap-4">
-          <Users className="w-7 h-7 text-foreground shrink-0 mt-0.5" />
+          <cap.Icon className="w-7 h-7 text-foreground shrink-0 mt-0.5" />
           <div>
-            <p className="text-[17px] font-semibold text-foreground">{capacity} {capacity === 1 ? "espacio" : "espacios"}</p>
-            <p className="text-sm text-muted-foreground">Capacidad disponible</p>
+            <p className="text-[17px] font-semibold text-foreground">{cap.title}</p>
+            <p className="text-sm text-muted-foreground">{cap.text}</p>
           </div>
         </div>
 
