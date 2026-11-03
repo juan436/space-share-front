@@ -10,7 +10,7 @@ export interface SummaryRow {
 export function SummaryCard({ title, rows }: { title: string; rows: SummaryRow[] }) {
   return (
     <aside className="rounded-2xl border border-border bg-white dark:bg-card shadow-[0_2px_8px_rgba(0,0,0,0.05)]">
-      <h2 className="px-5 py-4 text-base font-bold text-foreground border-b border-border">{title}</h2>
+      <h2 className="px-5 py-4 text-xl font-semibold tracking-tight text-foreground border-b border-border">{title}</h2>
       <dl className="divide-y divide-border">
         {rows.map((row) => {
           const Wrapper = row.onClick ? "button" : "div";

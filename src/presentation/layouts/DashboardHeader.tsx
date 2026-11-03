@@ -37,7 +37,7 @@ export function DashboardHeader({ user, title, onLogout }: DashboardHeaderProps)
           <Link href="/" className="md:hidden flex items-center shrink-0">
             <Logo cropped className="h-8 w-auto" />
           </Link>
-          <h2 className="hidden md:block text-lg font-bold text-foreground truncate">{title}</h2>
+          <h2 className="hidden md:block text-2xl font-semibold tracking-tight text-foreground truncate">{title}</h2>
         </div>
 
         <div className="flex items-center gap-3">

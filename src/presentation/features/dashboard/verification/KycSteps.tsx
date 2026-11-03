@@ -20,7 +20,7 @@ export function KycSteps({ status }: { status: KycStatus }) {
 
   return (
     <aside className="rounded-2xl bg-white dark:bg-card border border-border shadow-[0_2px_8px_rgba(0,0,0,0.07)] p-6">
-      <h2 className="text-base font-bold text-foreground">Cómo funciona</h2>
+      <h2 className="text-xl font-semibold tracking-tight text-foreground">Cómo funciona</h2>
       <ol className="mt-5 space-y-5">
         {STEPS.map((step, i) => {
           const isDone = i < done;
