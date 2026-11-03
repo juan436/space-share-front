@@ -32,7 +32,7 @@ export function DashboardHeader({ user, title, onLogout }: DashboardHeaderProps)
 
   return (
     <header className="shrink-0 z-40 w-full bg-white dark:bg-card border-b border-border shadow-[0_2px_10px_0_rgb(15_23_42/0.08)]">
-      <div className="flex h-[72px] items-center justify-between px-6">
+      <div className="flex h-[60px] items-center justify-between px-6">
         <div className="flex items-center gap-3 min-w-0">
           <Link href="/" className="md:hidden flex items-center shrink-0">
             <Logo cropped className="h-8 w-auto" />
