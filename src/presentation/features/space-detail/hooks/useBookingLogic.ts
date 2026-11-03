@@ -49,6 +49,9 @@ export function useBookingLogic(space: Space) {
   const isMonthAvailable = (m: number) =>
     checkSpaceAvailability(space, m, startDate, effectiveQuantity);
 
+  // Una fecha de inicio es elegible si hay cupo continuo durante toda la duración elegida.
+  const isStartDateAvailable = (date: Date) => checkSpaceAvailability(space, months, date, effectiveQuantity);
+
   const nextDate = getNextAvailableDate(space, months, effectiveQuantity);
 
   const getBookingDates = (): { start: string; end: string } => {
@@ -114,6 +117,7 @@ export function useBookingLogic(space: Space) {
     serviceFee,
     grandTotal,
     isMonthAvailable,
+    isStartDateAvailable,
     nextDate,
     getBookingDates,
     handleConfirmBooking,
