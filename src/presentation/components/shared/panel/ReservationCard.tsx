@@ -4,18 +4,8 @@ import { format } from "date-fns";
 import { es } from "date-fns/locale";
 import { Reservation } from "@/core/domain/entities/Reservation";
 import { STATUS_CONFIG } from "@/presentation/shared/constants/reservation-status";
+import { RESERVATION_TONE, TONE_DOT } from "@/presentation/shared/constants/status-tones";
 import { PanelCard } from "./PanelCard";
-
-const DOT: Record<string, string> = {
-  pending: "bg-amber-500",
-  accepted: "bg-emerald-500",
-  awaiting_payment: "bg-violet-500",
-  confirmed: "bg-emerald-500",
-  completed: "bg-blue-500",
-  rejected: "bg-red-500",
-  cancelled: "bg-gray-400",
-  expired: "bg-gray-400",
-};
 
 interface ReservationCardProps {
   reservation: Reservation;
@@ -40,7 +30,7 @@ export const ReservationCard = memo(function ReservationCard({ reservation: r, c
       onImageClick={onOpen}
       badge={
         <>
-          <span className={`w-2 h-2 rounded-full ${DOT[r.status] ?? "bg-gray-400"}`} />
+          <span className={`w-2 h-2 rounded-full ${TONE_DOT[RESERVATION_TONE[r.status] ?? "neutral"]}`} />
           {STATUS_CONFIG[r.status]?.label ?? r.status}
         </>
       }

@@ -8,9 +8,9 @@ import { Users, Loader2, AlertCircle, Search } from "lucide-react";
 import type { AdminUser } from "@/core/domain/entities/AdminStats";
 
 const roleBadge: Record<string, string> = {
-  admin: "bg-red-100 text-red-700 dark:bg-red-950 dark:text-red-300",
-  host: "bg-violet-100 text-violet-700 dark:bg-violet-950 dark:text-violet-300",
-  client: "bg-blue-100 text-blue-700 dark:bg-blue-950 dark:text-blue-300",
+  admin: "bg-muted text-foreground",
+  host: "bg-muted text-foreground",
+  client: "bg-muted text-foreground",
 };
 
 const roleLabel: Record<string, string> = {

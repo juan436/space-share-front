@@ -6,13 +6,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSepara
 import { PanelCard } from "@/presentation/components/shared/panel/PanelCard";
 import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, listingTypeLabels } from "@/presentation/types/spaces";
 import { SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
-
-const DOT: Record<string, string> = {
-  active: "bg-emerald-500",
-  paused: "bg-amber-500",
-  pending: "bg-blue-500",
-  deactivated: "bg-gray-400",
-};
+import { SPACE_TONE, TONE_DOT } from "@/presentation/shared/constants/status-tones";
 
 export interface SpaceCardActions {
   isDeleting: boolean;
@@ -35,7 +29,7 @@ export function SpaceCard({ space, actions }: { space: SpaceViewModel; actions: 
       onImageClick={() => onEditSpace(space)}
       badge={
         <>
-          <span className={`w-2 h-2 rounded-full ${DOT[space.status] ?? "bg-gray-400"}`} />
+          <span className={`w-2 h-2 rounded-full ${TONE_DOT[SPACE_TONE[space.status] ?? "neutral"]}`} />
           {SPACE_STATUS_LABEL[space.status]}
         </>
       }
