@@ -5,6 +5,7 @@ import { GoogleMap, useJsApiLoader, OverlayView } from "@react-google-maps/api";
 import { MapPin } from "lucide-react";
 import { MapSkeleton } from "@/presentation/components/shared/skeletons/MapSkeleton";
 import { Space } from "@/core/domain/entities/Space";
+import { spacePath } from "@/presentation/utils/spacePath";
 
 interface SpacesMapProps {
   spaces: Space[];
@@ -191,7 +192,7 @@ export function SpacesMap({ spaces, selectedSpaceId, onSpaceSelect }: SpacesMapP
                 space={space}
                 isSelected={space.id === selectedSpaceId}
                 isHovered={space.id === hoveredSpaceId}
-                onClick={() => window.open(`/space/${space.id}`, "_blank")}
+                onClick={() => window.open(spacePath(space), "_blank")}
                 onMouseEnter={() => setHoveredSpaceId(space.id)}
                 onMouseLeave={() => setHoveredSpaceId(null)}
               />

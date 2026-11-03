@@ -9,6 +9,7 @@ import { useAuth } from "@/presentation/providers/auth-context";
 import { useRouter } from "next/navigation";
 import { spaceTypeLabels } from "@/presentation/types/spaces";
 import { resolveHostId } from "@/presentation/utils/resolveHostId";
+import { spacePath } from "@/presentation/utils/spacePath";
 
 interface SpaceCardProps {
   space: Space;
@@ -33,7 +34,7 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
   const handleClick = () => {
     if (onClick) onClick();
     const query = returnPath ? `?from=${encodeURIComponent(returnPath)}` : "";
-    router.push(`/space/${space.id}${query}`);
+    router.push(spacePath(space, query));
   };
 
   return (

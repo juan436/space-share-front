@@ -9,6 +9,7 @@ import { spaceTypeLabels } from "@/presentation/types/spaces";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { resolveHostId } from "@/presentation/utils/resolveHostId";
+import { spacePath } from "@/presentation/utils/spacePath";
 
 interface MobileSpaceCardProps {
   space: Space;
@@ -26,7 +27,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
   const handleClick = () => {
     if (onClick) onClick();
     const query = returnPath ? `?from=${encodeURIComponent(returnPath)}` : "";
-    router.push(`/space/${space.id}${query}`);
+    router.push(spacePath(space, query));
   };
 
   return (

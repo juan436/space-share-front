@@ -7,6 +7,7 @@ import { MapSkeleton } from "@/presentation/components/shared/skeletons/MapSkele
 import { Space } from "@/core/domain/entities/Space";
 import { spaceTypeColors, mapConfig } from "../../data";
 import { spaceTypeLabels } from "@/presentation/types/spaces";
+import { spacePath } from "@/presentation/utils/spacePath";
 
 interface MobileMapViewProps {
   spaces: Space[];
@@ -101,7 +102,7 @@ export function MobileMapView({ spaces, selectedSpace, onSpaceSelect, onSpaceDet
         <div className="absolute bottom-4 left-4 right-4 animate-in slide-in-from-bottom duration-200">
           <div 
             className="bg-card rounded-2xl shadow-xl border overflow-hidden"
-            onClick={() => window.open(`/space/${selectedSpace.id}`, "_blank")}
+            onClick={() => window.open(spacePath(selectedSpace), "_blank")}
           >
             <div className="flex gap-3 p-3">
               <div className="w-24 h-24 rounded-xl bg-gradient-to-br from-primary/10 to-accent/10 flex items-center justify-center shrink-0">

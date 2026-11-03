@@ -6,6 +6,7 @@ export class SpaceMapper {
   static toDomain(dto: SpaceDto): Space {
     return {
       id: dto._id,
+      slug: dto.slug,
       hostId: typeof dto.hostId === "object" ? dto.hostId._id : dto.hostId,
       host: typeof dto.hostId === "object"
         ? {

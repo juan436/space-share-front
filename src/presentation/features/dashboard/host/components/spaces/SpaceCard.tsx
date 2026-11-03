@@ -7,6 +7,7 @@ import { PanelCard } from "@/presentation/components/shared/panel/PanelCard";
 import { SpaceViewModel, SpaceStatusValue, spaceTypeLabels, listingTypeLabels } from "@/presentation/types/spaces";
 import { SPACE_STATUS_LABEL } from "@/presentation/shared/constants/space-labels";
 import { SPACE_TONE, TONE_DOT } from "@/presentation/shared/constants/status-tones";
+import { spacePath } from "@/presentation/utils/spacePath";
 
 export interface SpaceCardActions {
   isDeleting: boolean;
@@ -43,7 +44,7 @@ export function SpaceCard({ space, actions }: { space: SpaceViewModel; actions: 
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
             <DropdownMenuItem onSelect={() => onEditSpace(space)}>Editar</DropdownMenuItem>
-            <DropdownMenuItem onSelect={() => router.push(`/space/${space.id}?from=/dashboard/host/spaces`)}>Ver detalles</DropdownMenuItem>
+            <DropdownMenuItem onSelect={() => router.push(spacePath(space, "?from=/dashboard/host/spaces"))}>Ver detalles</DropdownMenuItem>
             <DropdownMenuSeparator />
             {space.status !== "active" && (
               <DropdownMenuItem disabled={isUpdating} onSelect={() => onUpdateStatus(space.id, "active")}>Activar</DropdownMenuItem>

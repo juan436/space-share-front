@@ -1,46 +1,35 @@
-"use client";
+import { permanentRedirect } from "next/navigation";
+import LegacySpaceRoute from "./LegacySpaceRoute";
 
-import { useParams } from "next/navigation";
-import { SpaceDetailPage } from "@/presentation/features/space-detail";
-import { useSpaceById } from "@/presentation/hooks/useSpaces";
-import { spaceTypeLabels } from "@/presentation/types/spaces";
-import { spaceTypeColors } from "@/presentation/features/explore/data";
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "";
 
-export default function SpaceDetailRoute() {
-  const params = useParams();
-  const spaceId = params.id as string;
-  const { space, isLoading } = useSpaceById(spaceId);
-
-  if (isLoading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
-      </div>
-    );
+/**
+ * Enlace antiguo /space/:id. Si el espacio tiene slug, redirige de forma permanente (308)
+ * a /espacio/:slug conservando la query (p. ej. ?from=). Si no, muestra la página como antes.
+ */
+export default async function LegacySpacePage({
+  params,
+  searchParams,
+}: {
+  params: { id: string };
+  searchParams: Record<string, string | string[] | undefined>;
+}) {
+  let slug: string | null = null;
+  try {
+    const res = await fetch(`${API_URL}/spaces/${encodeURIComponent(params.id)}`, { cache: "no-store" });
+    if (res.ok) slug = ((await res.json()) as { slug?: string }).slug ?? null;
+  } catch {
+    // sin conexión con la API desde el servidor: se usa el respaldo del cliente
   }
 
-  if (!space) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-foreground mb-4">404</h1>
-          <p className="text-muted-foreground mb-6">Espacio no encontrado</p>
-          <a
-            href="/explore"
-            className="text-primary hover:underline"
-          >
-            Volver a explorar
-          </a>
-        </div>
-      </div>
-    );
+  if (slug) {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(searchParams)) {
+      if (typeof value === "string") query.set(key, value);
+    }
+    const qs = query.toString();
+    permanentRedirect(`/espacio/${slug}${qs ? `?${qs}` : ""}`);
   }
 
-  return (
-    <SpaceDetailPage
-      space={space}
-      spaceTypeLabel={spaceTypeLabels[space.type as keyof typeof spaceTypeLabels] || space.type}
-      spaceTypeColor={spaceTypeColors[space.type] || "bg-gray-500"}
-    />
-  );
+  return <LegacySpaceRoute />;
 }

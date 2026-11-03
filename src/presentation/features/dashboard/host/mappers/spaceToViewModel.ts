@@ -4,6 +4,7 @@ import { SpaceViewModel, SpaceTypeValue, SpaceCategoryValue, ListingTypeValue } 
 export function spaceToViewModel(space: Space): SpaceViewModel {
   return {
     id: space.id,
+    slug: space.slug,
     title: space.title,
     description: space.description,
     type: space.type as SpaceTypeValue,

@@ -23,6 +23,7 @@ export interface PaginatedResult<T> {
 export interface SpaceRepository {
   findAll(filters?: SpaceFilters, page?: number, limit?: number): Promise<PaginatedResult<Space>>;
   findById(id: string): Promise<Space | null>;
+  findBySlug(slug: string): Promise<Space | null>;
   findByHostId(hostId: string): Promise<Space[]>;
   create(input: CreateSpaceInput): Promise<Space>;
   update(id: string, input: UpdateSpaceInput): Promise<Space>;

@@ -11,6 +11,7 @@ import { ListSpacesUseCase } from "@/core/application/use-cases/spaces/ListSpace
 import { UpdateSpaceUseCase } from "@/core/application/use-cases/spaces/UpdateSpace";
 import { DeleteSpaceUseCase } from "@/core/application/use-cases/spaces/DeleteSpace";
 import { FindSpaceByIdUseCase } from "@/core/application/use-cases/spaces/FindSpaceById";
+import { FindSpaceBySlugUseCase } from "@/core/application/use-cases/spaces/FindSpaceBySlug";
 import { FindHostSpacesUseCase } from "@/core/application/use-cases/spaces/FindHostSpaces";
 import { UploadSpaceImagesUseCase } from "@/core/application/use-cases/spaces/UploadSpaceImages";
 import { GetClientReservationsUseCase } from "@/core/application/use-cases/reservations/GetClientReservations";
@@ -50,6 +51,7 @@ export interface UseCases {
   updateSpaceUseCase: UpdateSpaceUseCase;
   deleteSpaceUseCase: DeleteSpaceUseCase;
   findSpaceByIdUseCase: FindSpaceByIdUseCase;
+  findSpaceBySlugUseCase: FindSpaceBySlugUseCase;
   findHostSpacesUseCase: FindHostSpacesUseCase;
   uploadSpaceImagesUseCase: UploadSpaceImagesUseCase;
   // Reservations

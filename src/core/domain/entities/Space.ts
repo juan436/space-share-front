@@ -42,6 +42,8 @@ export interface SpaceHostSummary {
 
 export interface Space {
   id: string;
+  /** Identificador público para la URL (/espacio/:slug). Puede faltar en datos antiguos. */
+  slug?: string;
   hostId: string;
   host?: SpaceHostSummary;
   title: string;

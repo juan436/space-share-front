@@ -1,2 +1,2 @@
-export { useSpaces, useSpaceById } from "./useSpaces";
+export { useSpaces, useSpaceById, useSpaceBySlug } from "./useSpaces";
 export { useToast, toast } from "./use-toast";

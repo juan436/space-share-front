@@ -23,6 +23,7 @@ export interface BusinessServicesViewModel {
 
 export interface SpaceViewModel {
   id: string;
+  slug?: string;
   title: string;
   description: string;
   type: SpaceTypeValue;

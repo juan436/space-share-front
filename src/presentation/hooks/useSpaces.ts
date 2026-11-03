@@ -67,6 +67,21 @@ export function useSpaces(options?: UseSpacesOptions) {
   };
 }
 
+export function useSpaceBySlug(slug: string | null) {
+  const { findSpaceBySlugUseCase } = useUseCases();
+  const query = useQuery({
+    enabled: Boolean(slug),
+    queryKey: ["space", { slug }],
+    queryFn: async () => (slug ? findSpaceBySlugUseCase.execute(slug) : null),
+    staleTime: 15_000,
+  });
+
+  return {
+    space: query.data ?? null,
+    isLoading: query.isLoading,
+  };
+}
+
 export function useSpaceById(id: string | null) {
   const { findSpaceByIdUseCase } = useUseCases();
   const query = useQuery({

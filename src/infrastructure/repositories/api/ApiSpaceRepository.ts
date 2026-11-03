@@ -44,6 +44,15 @@ export class ApiSpaceRepository implements SpaceRepository {
     }
   }
 
+  async findBySlug(slug: string): Promise<Space | null> {
+    try {
+      const response = await this.httpClient.get<SpaceDto>(`/spaces/slug/${encodeURIComponent(slug)}`);
+      return SpaceMapper.toDomain(response.data);
+    } catch {
+      return null;
+    }
+  }
+
   async findByHostId(hostId: string): Promise<Space[]> {
     const response = await this.httpClient.get<SpaceDto[]>(`/spaces/host/${hostId}`);
     return response.data.map(SpaceMapper.toDomain);

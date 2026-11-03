@@ -27,6 +27,7 @@ export interface SpaceLocationDto {
 
 export interface SpaceDto {
   _id: string;
+  slug?: string;
   hostId: string | { _id: string; name: string; email: string; avatar?: string; createdAt?: string };
   title: string;
   description: string;

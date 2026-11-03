@@ -1,5 +1,5 @@
 import { LoginUseCase, RegisterUseCase, LogoutUseCase, GetCurrentUserUseCase, SubmitKycUseCase } from "@/core/application/use-cases/auth";
-import { CreateSpaceUseCase, ListSpacesUseCase, UpdateSpaceUseCase, DeleteSpaceUseCase, FindSpaceByIdUseCase, FindHostSpacesUseCase, UploadSpaceImagesUseCase } from "@/core/application/use-cases/spaces";
+import { CreateSpaceUseCase, ListSpacesUseCase, UpdateSpaceUseCase, DeleteSpaceUseCase, FindSpaceByIdUseCase, FindSpaceBySlugUseCase, FindHostSpacesUseCase, UploadSpaceImagesUseCase } from "@/core/application/use-cases/spaces";
 import { GetClientReservationsUseCase, GetHostReservationsUseCase, CreateReservationUseCase, UpdateReservationStatusUseCase, SubmitSiteEvidenceUseCase } from "@/core/application/use-cases/reservations";
 import { GetSpaceReviewsUseCase, CreateReviewUseCase, DeleteReviewUseCase } from "@/core/application/use-cases/reviews";
 import { GetFavoritesUseCase, ToggleFavoriteUseCase } from "@/core/application/use-cases/favorites";
@@ -21,6 +21,7 @@ export const listSpacesUseCase = new ListSpacesUseCase(spaceRepository);
 export const updateSpaceUseCase = new UpdateSpaceUseCase(spaceRepository);
 export const deleteSpaceUseCase = new DeleteSpaceUseCase(spaceRepository);
 export const findSpaceByIdUseCase = new FindSpaceByIdUseCase(spaceRepository);
+export const findSpaceBySlugUseCase = new FindSpaceBySlugUseCase(spaceRepository);
 export const findHostSpacesUseCase = new FindHostSpacesUseCase(spaceRepository);
 export const uploadSpaceImagesUseCase = new UploadSpaceImagesUseCase(spaceRepository);
 
