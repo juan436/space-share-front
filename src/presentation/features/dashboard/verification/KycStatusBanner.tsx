@@ -7,8 +7,8 @@ const CONFIG: Record<KycStatus, { icon: typeof ShieldCheck; title: string; text:
     icon: ShieldAlert,
     title: "Aún no estás verificado",
     text: "Verifica tu identidad para reservar y publicar espacios.",
-    box: "bg-muted/40 border-border/60",
-    icon_: "bg-muted text-muted-foreground",
+    box: "bg-primary/5 border-primary/30",
+    icon_: "bg-primary/10 text-primary",
   },
   pending: {
     icon: Clock,
