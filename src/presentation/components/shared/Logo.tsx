@@ -11,7 +11,7 @@ interface LogoProps {
  * y un marcador de ubicación como punto de la «i». Dibujado en SVG, sin depender de
  * ninguna tipografía. Color: naranja de marca (#fd9630).
  */
-export function Logo({ className = "h-8 w-auto", tagline = false, taglineClassName = "text-muted-foreground" }: LogoProps) {
+export function Logo({ className = "h-8 w-auto", tagline = false, taglineClassName = "text-primary" }: LogoProps) {
   const mark = (
     <svg
       xmlns="http://www.w3.org/2000/svg"
