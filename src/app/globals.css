@@ -12,11 +12,12 @@
     --popover: 0 0% 100%;
     --popover-foreground: 224 71.4% 4.1%;
     --primary: 207 99% 59%;
+    --primary-ink: 207 99% 38%;
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 222.2 47.4% 11.2%;
     --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted-foreground: 215 14% 38%;
     --accent: 30 99% 59%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --select-hover: 214 40% 94%;
@@ -37,6 +38,7 @@
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     --primary: 207 99% 59%;
+    --primary-ink: 207 99% 65%;
     --primary-foreground: 222.2 47.4% 11.2%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -182,3 +184,13 @@
 .animate-fade-in-up {
   animation: fade-in-up 0.4s ease-out forwards;
 }
+
+/* Legibilidad: el azul de marca (--primary) es claro y como TEXTO sobre blanco da solo 2.7:1.
+   Para texto se usa --primary-ink (mismo tono, más profundo, 5.4:1). Los fondos y botones
+   siguen usando --primary sin cambios. */
+.text-primary,
+.hover\:text-primary:hover,
+.group:hover .group-hover\:text-primary {
+  color: hsl(var(--primary-ink));
+}
+

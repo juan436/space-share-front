@@ -118,7 +118,7 @@ export const SpaceCard = memo(function SpaceCard({ space, isSelected, onClick, r
         )}
         <div className="flex items-center justify-between mt-1">
           <div>
-            <span className="text-base font-bold bg-gradient-to-r from-primary to-primary/80 bg-clip-text text-transparent">
+            <span className="text-base font-bold bg-gradient-to-r from-[hsl(var(--primary-ink))] to-[hsl(var(--primary-ink)/0.85)] bg-clip-text text-transparent">
               ${space.pricePerMonth.toLocaleString()}
             </span>
             <span className="text-xs text-muted-foreground ml-0.5">/mes</span>
