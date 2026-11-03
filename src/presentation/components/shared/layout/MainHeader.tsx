@@ -65,8 +65,8 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
 
   return (
     <header
-      className={`sticky top-0 z-50 w-full bg-[hsl(214_32%_93%)] dark:bg-card border-b border-border transition-[transform,box-shadow] duration-300 ease-in-out ${
-        showCompact ? "shadow-[0_2px_10px_0_rgb(15_23_42/0.08)]" : ""
+      className={`sticky top-0 z-50 w-full bg-[#F7F7F7] dark:bg-card transition-[transform,box-shadow] duration-300 ease-in-out ${
+        showCompact ? "border-b border-border shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]" : ""
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)]">
