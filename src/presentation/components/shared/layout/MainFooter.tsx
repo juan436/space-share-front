@@ -8,7 +8,7 @@ const HOST_LINKS = ["Publica tu espacio", "Recursos", "Materiales para Anfitrion
 
 export function MainFooter() {
   return (
-    <footer className="bg-[#F7F7F7] dark:bg-card border-t border-border shadow-[0_-1px_12px_0_rgb(0,0,0,0.05)]">
+    <footer className="bg-[#F7F7F7] dark:bg-card border-t border-[hsl(214_24%_78%)] shadow-[0_-1px_12px_0_rgb(0,0,0,0.05)]">
       <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)] py-12">
         <div className="grid grid-cols-4 gap-10">
 
@@ -25,7 +25,7 @@ export function MainFooter() {
                 <a
                   key={i}
                   href="#"
-                  className="p-2 rounded-lg border border-border bg-white shadow-sm text-muted-foreground hover:text-foreground hover:bg-select-hover transition-colors"
+                  className="p-2 rounded-lg border border-[hsl(214_24%_78%)] bg-white shadow-sm text-muted-foreground hover:text-foreground hover:bg-select-hover transition-colors"
                 >
                   <Icon className="w-4 h-4" />
                 </a>
@@ -76,7 +76,7 @@ export function MainFooter() {
           </div>
         </div>
 
-        <div className="mt-10 pt-6 border-t border-border/30 text-center">
+        <div className="mt-10 pt-6 border-t border-[hsl(214_24%_78%)] text-center">
           <p className="text-xs text-muted-foreground">
             © 2025 SpaceShare. Todos los derechos reservados.
           </p>
