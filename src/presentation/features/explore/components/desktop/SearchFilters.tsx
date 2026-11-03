@@ -94,14 +94,14 @@ export function SearchFilters({
           <div className="flex items-center gap-0 bg-white border border-border rounded-2xl shadow-sm overflow-hidden w-full max-w-4xl">
             {/* Search input */}
             <div className="relative flex-1 min-w-0">
-              <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50" />
+              <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="text"
                 aria-label="Buscar espacios"
                 placeholder="Buscar ciudad o zona..."
                 value={searchQuery}
                 onChange={(e) => onSearchChange(e.target.value)}
-                className="pl-10 h-10 bg-transparent border-none shadow-none rounded-none text-sm placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:ring-offset-0"
+                className="pl-10 h-10 bg-transparent border-none shadow-none rounded-none text-sm placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
               />
               {searchQuery && (
                 <button

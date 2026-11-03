@@ -36,7 +36,7 @@ export function CompactSearchFilters({
   return (
     <div className="flex items-center gap-0 bg-white border border-border rounded-full shadow-sm overflow-hidden h-12 w-full max-w-2xl">
       <div className="relative flex-1 min-w-[90px] max-w-[280px]">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/50" />
+        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground" />
         <Input
           type="text"
           aria-label="Buscar espacios"
@@ -44,7 +44,7 @@ export function CompactSearchFilters({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") onSearchSubmit?.(); }}
-          className="pl-8 h-12 bg-transparent border-none shadow-none rounded-none text-xs placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="pl-8 h-12 bg-transparent border-none shadow-none rounded-none text-xs placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
         />
       </div>
 
