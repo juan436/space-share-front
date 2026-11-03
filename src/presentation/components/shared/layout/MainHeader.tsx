@@ -73,7 +73,7 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
         <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-[72px]" : "h-16"}`}>
 
           <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo cropped className="h-10 w-auto" />
+            <Logo className="h-9 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">

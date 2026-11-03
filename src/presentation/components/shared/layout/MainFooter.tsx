@@ -15,7 +15,7 @@ export function MainFooter() {
           {/* Brand */}
           <div className="flex flex-col gap-4">
             <Link href="/" className="flex items-center">
-              <Logo className="h-20 w-20" />
+              <Logo className="h-12 w-auto" />
             </Link>
             <p className="text-sm text-muted-foreground leading-relaxed">
               La plataforma líder en el intercambio de espacios de confianza.

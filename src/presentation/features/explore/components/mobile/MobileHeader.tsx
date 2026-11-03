@@ -42,7 +42,7 @@ export function MobileHeader() {
   return (
     <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem] border-b border-border/50">
       <Link href="/" className="flex items-center">
-        <Logo className="h-12 w-12" />
+        <Logo className="h-8 w-auto" />
       </Link>
 
       {/* User Icon & Dropdown */}

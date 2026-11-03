@@ -26,7 +26,7 @@ export function DashboardSidebar({ tabs, activeTab, onTabChange, tabBadges }: Da
     <aside className="hidden md:flex w-64 shrink-0 flex-col bg-white dark:bg-card/50 border-r border-border shadow-[2px_0_10px_0_rgb(15_23_42/0.05)]">
       <div className="h-[72px] shrink-0 flex items-center px-6 border-b border-border">
         <Link href="/" className="flex items-center">
-          <Logo cropped className="h-9 w-auto" />
+          <Logo className="h-8 w-auto" />
         </Link>
       </div>
 

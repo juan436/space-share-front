@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="-6 -10 350 120" role="img" aria-label="Ubika" fill="none" stroke="#fd9630" stroke-width="14" stroke-linecap="round" stroke-linejoin="round">
+  <path d="M7 0 V60 A33 33 0 0 0 73 60 V0"/>
+  <path d="M107 0 V93"/>
+  <path d="M107 70 A23 23 0 1 1 153 70 A23 23 0 1 1 107 70"/>
+  <path d="M186 47 V93"/>
+  <path d="M186 12 V12.01" stroke-width="17"/>
+  <path d="M214 0 V93"/>
+  <path d="M254 47 L216 77"/>
+  <path d="M230 66 L256 93"/>
+  <path d="M330 70 A23 23 0 1 0 284 70 A23 23 0 1 0 330 70"/>
+  <path d="M330 47 V93"/>
+</svg>
