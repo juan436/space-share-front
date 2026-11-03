@@ -75,7 +75,7 @@ export function ReservationDetailPage({
         <div className="lg:col-span-5">
           <div className="lg:sticky lg:top-24 flex flex-col gap-4">
             <div className="bg-white dark:bg-card border border-border/60 shadow-[0_2px_8px_rgba(0,0,0,0.07)] rounded-2xl p-5 space-y-4">
-              <h2 className="text-sm font-bold text-foreground">Resumen de tu estadía</h2>
+              <h2 className="text-lg font-semibold tracking-tight text-foreground">Resumen de tu estadía</h2>
 
               <div className="flex items-center gap-2 text-sm">
                 <Calendar className="w-4 h-4 text-primary shrink-0" />

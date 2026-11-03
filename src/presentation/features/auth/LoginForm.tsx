@@ -22,7 +22,7 @@ export function LoginForm() {
 
         {/* Logo */}
         <Link href="/" className="relative inline-flex">
-          <Logo className="h-28 w-28" />
+          <Logo tagline taglineClassName="text-[hsl(var(--primary))]" className="h-14 w-auto" />
         </Link>
 
         {/* Hero text */}

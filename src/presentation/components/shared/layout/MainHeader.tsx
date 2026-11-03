@@ -66,14 +66,14 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
   return (
     <header
       className={`sticky top-0 z-50 w-full bg-[#F7F7F7] dark:bg-card transition-[transform,box-shadow] duration-300 ease-in-out ${
-        showCompact ? "border-b border-border shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]" : ""
+        showCompact ? "border-b border-[hsl(214_24%_78%)] shadow-[0_1px_12px_0_rgb(0_0_0/0.05)]" : ""
       } ${hidden ? "-translate-y-full" : "translate-y-0"}`}
     >
       <div className="max-w-[2520px] mx-auto px-[clamp(1.5rem,4vw,4rem)]">
-        <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-24" : "h-20"}`}>
+        <div className={`flex items-center justify-between gap-8 ${showCompact ? "h-20" : "h-[72px]"}`}>
 
-          <Link href="/" className="flex items-center flex-shrink-0">
-            <Logo className="h-20 w-20" />
+          <Link href="/" className="flex items-center flex-shrink-0 translate-y-0.5">
+            <Logo tagline className="h-9 w-auto" />
           </Link>
 
           <nav className="hidden md:flex items-center gap-0.5 flex-1 justify-center">
@@ -86,7 +86,7 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
                       key={link.href}
                       href={link.href}
                       className={`relative px-5 py-2.5 text-base font-medium rounded-lg transition-all duration-200 ${
-                        isActive ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        isActive ? "text-primary" : "text-foreground hover:bg-muted/50"
                       }`}
                     >
                       {link.label}
@@ -102,7 +102,7 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full border border-border/50 hover:border-border hover:bg-muted/30 transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
+                  <button className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full border border-[hsl(214_24%_78%)] bg-white shadow-sm hover:bg-select-hover transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-sm">
                       {initials}
                     </div>
@@ -141,13 +141,13 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="gap-2 rounded-full h-11 px-5 text-base text-muted-foreground hover:bg-select-hover hover:text-select-hover-foreground focus-visible:ring-select-hover">
+                  <Button variant="ghost" size="sm" className="gap-2 rounded-full h-11 px-5 text-base text-foreground bg-white border border-[hsl(214_24%_78%)] shadow-sm hover:bg-select-hover hover:text-select-hover-foreground focus-visible:ring-select-hover">
                     <LogIn className="w-[18px] h-[18px]" />
                     Iniciar Sesión
                   </Button>
                 </Link>
                 <Link href="/register">
-                  <Button size="sm" className="rounded-full h-11 px-6 text-base bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-sm shadow-primary/20 font-medium">
+                  <Button size="sm" className="rounded-full h-11 px-6 text-base bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary shadow-sm shadow-primary/20 font-semibold">
                     Registrarse
                     <ChevronRight className="w-[18px] h-[18px] ml-1" />
                   </Button>

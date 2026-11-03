@@ -35,7 +35,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
     quantity, setQuantity, startDate, setStartDate,
     showConfirmModal, setShowConfirmModal, bookingError,
     allowsMultiUnit, effectiveQuantity, displayCapacity, currentMonths,
-    totalPrice, serviceFee, grandTotal, isMonthAvailable, nextDate,
+    totalPrice, serviceFee, grandTotal, isMonthAvailable, isStartDateAvailable, nextDate,
     handleConfirmBooking, isBookingDisabled, showFreeCancellation,
   } = useBookingLogic(space);
 
@@ -115,6 +115,7 @@ export function SpaceMobileBookingBar({ space }: SpaceMobileBookingBarProps) {
                       months={months}
                       setMonths={setMonths}
                       isMonthAvailable={isMonthAvailable}
+                      isStartDateAvailable={isStartDateAvailable}
                       allowsMultiUnit={allowsMultiUnit}
                       effectiveQuantity={effectiveQuantity}
                       startDate={startDate}

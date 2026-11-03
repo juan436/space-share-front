@@ -1,7 +1,9 @@
 "use client";
 
-import { Info } from "lucide-react";
-import { format } from "date-fns";
+import { Info, CalendarIcon } from "lucide-react";
+import { format, addMonths, isSameDay } from "date-fns";
+import { Calendar } from "@/presentation/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/presentation/components/ui/popover";
 import { es } from "date-fns/locale";
 import { AVAILABLE_MONTHS, DAYS_PER_MONTH } from "@/core/domain/entities/Reservation";
 
@@ -9,6 +11,7 @@ interface BookingMonthGridProps {
   months: number;
   setMonths: (m: number) => void;
   isMonthAvailable: (m: number) => boolean;
+  isStartDateAvailable: (date: Date) => boolean;
   allowsMultiUnit: boolean;
   effectiveQuantity: number;
   startDate: Date;
@@ -20,12 +23,14 @@ export function BookingMonthGrid({
   months,
   setMonths,
   isMonthAvailable,
+  isStartDateAvailable,
   allowsMultiUnit,
   effectiveQuantity,
   startDate,
   nextDate,
   setStartDate,
 }: BookingMonthGridProps) {
+  const today = new Date(new Date().setHours(0, 0, 0, 0));
   return (
     <div className="space-y-3">
       <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
@@ -81,12 +86,39 @@ export function BookingMonthGrid({
         </div>
       )}
 
-      {isMonthAvailable(months) &&
-        startDate.getTime() !== new Date(new Date().setHours(0, 0, 0, 0)).getTime() && (
-          <p className="text-[11px] text-emerald-600 font-bold mt-2 w-full text-left">
-            Iniciando el {format(startDate, "d 'de' MMMM", { locale: es })}
+      <div className="space-y-2 pt-1">
+        <label className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
+          ¿Cuándo quieres empezar?
+        </label>
+        <Popover>
+          <PopoverTrigger asChild>
+            <button
+              type="button"
+              className="w-full flex items-center gap-2 h-12 px-4 rounded-xl border border-border bg-white dark:bg-zinc-900 text-left text-sm font-semibold hover:bg-select-hover transition-colors"
+            >
+              <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+              <span className="flex-1">{format(startDate, "d 'de' MMMM yyyy", { locale: es })}</span>
+              {isSameDay(startDate, today) && <span className="text-xs font-medium text-muted-foreground">Hoy</span>}
+            </button>
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0 rounded-2xl" align="start">
+            <Calendar
+              initialFocus
+              mode="single"
+              locale={es}
+              defaultMonth={startDate}
+              selected={startDate}
+              onSelect={(d) => d && setStartDate(new Date(d.setHours(0, 0, 0, 0)))}
+              disabled={(d) => d < today || !isStartDateAvailable(d)}
+            />
+          </PopoverContent>
+        </Popover>
+        {isMonthAvailable(months) && (
+          <p className="text-[11px] text-muted-foreground font-medium">
+            Termina el {format(addMonths(startDate, months), "d 'de' MMMM yyyy", { locale: es })}
           </p>
         )}
+      </div>
     </div>
   );
 }

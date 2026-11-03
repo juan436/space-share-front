@@ -34,9 +34,9 @@ export function CompactSearchFilters({
   onSizeRangeChange,
 }: CompactSearchFiltersProps) {
   return (
-    <div className="flex items-center gap-0 bg-white border border-border rounded-full shadow-sm overflow-hidden h-12 w-full max-w-2xl">
-      <div className="relative flex-1 min-w-[90px] max-w-[280px]">
-        <MapPin className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-muted-foreground/50" />
+    <div className="flex items-center gap-0 bg-white border border-[hsl(214_24%_78%)] rounded-full shadow-sm overflow-hidden h-12 w-full max-w-4xl">
+      <div className="relative flex-1 min-w-[200px]">
+        <MapPin className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
         <Input
           type="text"
           aria-label="Buscar espacios"
@@ -44,15 +44,15 @@ export function CompactSearchFilters({
           value={searchQuery}
           onChange={(e) => onSearchChange(e.target.value)}
           onKeyDown={(e) => { if (e.key === "Enter") onSearchSubmit?.(); }}
-          className="pl-8 h-12 bg-transparent border-none shadow-none rounded-none text-xs placeholder:text-muted-foreground/70 focus-visible:ring-0 focus-visible:ring-offset-0"
+          className="pl-10 h-12 bg-transparent border-none shadow-none rounded-none text-sm text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
         />
       </div>
 
-      <div className="w-px h-5 bg-border flex-shrink-0" />
+      <div className="w-px h-6 bg-[hsl(214_24%_78%)] flex-shrink-0" />
 
       <Select value={spaceType} onValueChange={onSpaceTypeChange}>
-        <SelectTrigger className="h-12 bg-transparent border-none shadow-none text-xs font-medium text-foreground hover:bg-muted/40 rounded-none transition-colors gap-1 px-2 w-auto max-w-[136px] focus:ring-0 focus:ring-offset-0 [&>svg:last-child]:hidden">
-          <LayoutGrid className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+        <SelectTrigger className="h-12 bg-transparent border-none shadow-none text-sm font-medium text-foreground hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto shrink-0 whitespace-nowrap focus:ring-0 focus:ring-offset-0 [&>svg:last-child]:hidden">
+          <LayoutGrid className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
           <SelectValue placeholder="Tipo" />
         </SelectTrigger>
         <SelectContent>
@@ -66,11 +66,11 @@ export function CompactSearchFilters({
         </SelectContent>
       </Select>
 
-      <div className="w-px h-5 bg-border flex-shrink-0" />
+      <div className="w-px h-6 bg-[hsl(214_24%_78%)] flex-shrink-0" />
 
       <Select value={priceRange} onValueChange={onPriceRangeChange}>
-        <SelectTrigger className="h-12 bg-transparent border-none shadow-none text-xs font-medium text-foreground hover:bg-muted/40 rounded-none transition-colors gap-1 px-2 w-auto max-w-[136px] focus:ring-0 focus:ring-offset-0 [&>svg:last-child]:hidden">
-          <DollarSign className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+        <SelectTrigger className="h-12 bg-transparent border-none shadow-none text-sm font-medium text-foreground hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto shrink-0 whitespace-nowrap focus:ring-0 focus:ring-offset-0 [&>svg:last-child]:hidden">
+          <DollarSign className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
           <SelectValue placeholder="Precio" />
         </SelectTrigger>
         <SelectContent>
@@ -82,11 +82,11 @@ export function CompactSearchFilters({
         </SelectContent>
       </Select>
 
-      <div className="w-px h-5 bg-border flex-shrink-0" />
+      <div className="w-px h-6 bg-[hsl(214_24%_78%)] flex-shrink-0" />
 
       <Select value={sizeRange} onValueChange={onSizeRangeChange}>
-        <SelectTrigger className="h-12 bg-transparent border-none shadow-none text-xs font-medium text-foreground hover:bg-muted/40 rounded-none transition-colors gap-1 px-2 w-auto max-w-[136px] focus:ring-0 focus:ring-offset-0 [&>svg:last-child]:hidden">
-          <Maximize2 className="w-3 h-3 text-muted-foreground flex-shrink-0" />
+        <SelectTrigger className="h-12 bg-transparent border-none shadow-none text-sm font-medium text-foreground hover:bg-muted/40 rounded-none transition-colors gap-1.5 px-3 w-auto shrink-0 whitespace-nowrap focus:ring-0 focus:ring-offset-0 [&>svg:last-child]:hidden">
+          <Maximize2 className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
           <SelectValue placeholder="Tamaño" />
         </SelectTrigger>
         <SelectContent>

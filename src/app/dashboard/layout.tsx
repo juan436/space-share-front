@@ -13,12 +13,12 @@ import { KycVerification } from "@/presentation/features/dashboard/verification/
 import { useUnreadMessages } from "@/presentation/features/messages/hooks/useUnreadMessages";
 import { AdminHome, AdminUsers, AdminSpaces, AdminAnalytics } from "@/presentation/features/admin";
 
-function ClientContent({ tab }: { tab: string }) {
+function ClientContent({ tab, onNavigate }: { tab: string; onNavigate: (tab: string) => void }) {
   switch (tab) {
     case "reservations": return <UserReservations />;
     case "messages": return <Messages />;
     case "verification": return <KycVerification />;
-    default: return <UserHome />;
+    default: return <UserHome onNavigate={onNavigate} />;
   }
 }
 
@@ -32,12 +32,12 @@ function HostContent({ tab, onNavigate }: { tab: string; onNavigate: (tab: strin
   }
 }
 
-function AdminContent({ tab }: { tab: string }) {
+function AdminContent({ tab, onNavigate }: { tab: string; onNavigate: (tab: string) => void }) {
   switch (tab) {
     case "users": return <AdminUsers />;
     case "spaces": return <AdminSpaces />;
     case "analytics": return <AdminAnalytics />;
-    default: return <AdminHome />;
+    default: return <AdminHome onNavigate={onNavigate} />;
   }
 }
 
@@ -54,9 +54,9 @@ function DashboardContent() {
   };
 
   const renderContent = () => {
-    if (user!.role === "client") return <ClientContent tab={activeTab} />;
+    if (user!.role === "client") return <ClientContent tab={activeTab} onNavigate={setActiveTab} />;
     if (user!.role === "host") return <HostContent tab={activeTab} onNavigate={setActiveTab} />;
-    return <AdminContent tab={activeTab} />;
+    return <AdminContent tab={activeTab} onNavigate={setActiveTab} />;
   };
 
   return (

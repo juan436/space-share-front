@@ -17,7 +17,7 @@ export function MessageComposer({ isSending, onSend }: MessageComposerProps) {
   };
 
   return (
-    <div className="shrink-0 flex items-end gap-3 px-4 sm:px-6 py-4 border-t border-border/40 bg-white dark:bg-card">
+    <div className="shrink-0 flex items-end gap-3 px-4 sm:px-6 py-4 border-t border-border bg-white dark:bg-card">
       <textarea
         value={draft}
         rows={1}

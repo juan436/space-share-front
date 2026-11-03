@@ -19,7 +19,7 @@ export function KycDocumentUpload({ step, title, hint, file, onChange }: KycDocu
   useEffect(() => () => { if (preview) URL.revokeObjectURL(preview); }, [preview]);
 
   return (
-    <div className="rounded-2xl bg-white dark:bg-card border border-border/60 p-5 space-y-4">
+    <div className="rounded-2xl bg-white dark:bg-card border border-border shadow-[0_2px_8px_rgba(0,0,0,0.07)] p-5 space-y-4">
       <div className="flex items-center gap-3">
         <span className="w-7 h-7 rounded-full bg-primary text-primary-foreground text-xs font-bold flex items-center justify-center shrink-0">
           {step}
