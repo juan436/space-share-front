@@ -25,7 +25,7 @@ export function MainFooter() {
                 <a
                   key={i}
                   href="#"
-                  className="p-2 rounded-lg text-muted-foreground hover:text-foreground hover:bg-muted/50 transition-colors"
+                  className="p-2 rounded-lg border border-border bg-white shadow-sm text-muted-foreground hover:text-foreground hover:bg-select-hover transition-colors"
                 >
                   <Icon className="w-4 h-4" />
                 </a>

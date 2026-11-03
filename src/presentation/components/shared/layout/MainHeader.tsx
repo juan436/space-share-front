@@ -86,7 +86,7 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
                       key={link.href}
                       href={link.href}
                       className={`relative px-5 py-2.5 text-base font-medium rounded-lg transition-all duration-200 ${
-                        isActive ? "text-primary" : "text-muted-foreground hover:text-foreground hover:bg-muted/50"
+                        isActive ? "text-primary bg-white border border-border shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-white/70 border border-transparent"
                       }`}
                     >
                       {link.label}
@@ -102,7 +102,7 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
             {isAuthenticated && user ? (
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <button className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full border border-border/50 hover:border-border hover:bg-muted/30 transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
+                  <button className="flex items-center gap-2.5 pl-1 pr-3 py-1 rounded-full border border-border bg-white shadow-sm hover:bg-select-hover transition-all duration-200 group focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/30">
                     <div className="w-8 h-8 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white text-xs font-bold flex-shrink-0 shadow-sm">
                       {initials}
                     </div>
@@ -141,7 +141,7 @@ export function MainHeader({ activeLink, scrollCompactSlot, showCompactSlot, hid
             ) : (
               <>
                 <Link href="/login">
-                  <Button variant="ghost" size="sm" className="gap-2 rounded-full h-11 px-5 text-base text-muted-foreground hover:bg-select-hover hover:text-select-hover-foreground focus-visible:ring-select-hover">
+                  <Button variant="ghost" size="sm" className="gap-2 rounded-full h-11 px-5 text-base text-foreground bg-white border border-border shadow-sm hover:bg-select-hover hover:text-select-hover-foreground focus-visible:ring-select-hover">
                     <LogIn className="w-[18px] h-[18px]" />
                     Iniciar Sesión
                   </Button>
