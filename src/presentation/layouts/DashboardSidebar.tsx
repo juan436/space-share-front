@@ -1,8 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Compass, ArrowRight } from "lucide-react";
-import { Button } from "@/presentation/components/ui/button";
+import { Compass } from "lucide-react";
 import { Logo } from "@/presentation/components/shared/Logo";
 import { cn } from "@/presentation/utils/cn";
 import { TabDef } from "@/presentation/hooks/useDashboardTabs";
@@ -53,13 +52,13 @@ export function DashboardSidebar({ tabs, activeTab, onTabChange, tabBadges }: Da
         })}
       </nav>
 
-      <div className="px-3 pb-4">
-        <Link href="/explore">
-          <Button className="w-full rounded-xl h-10 bg-gradient-to-r from-primary to-primary/90 shadow-sm shadow-primary/20 font-medium text-sm gap-2 justify-center">
-            <Compass className="w-4 h-4" />
-            Explorar Espacios
-            <ArrowRight className="w-3.5 h-3.5 ml-auto" />
-          </Button>
+      <div className="px-3 py-3 border-t border-border">
+        <Link
+          href="/explore"
+          className="w-full flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-muted border-l-4 border-transparent transition-colors"
+        >
+          <Compass className="h-[18px] w-[18px]" />
+          Explorar espacios
         </Link>
       </div>
     </aside>

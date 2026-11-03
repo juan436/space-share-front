@@ -62,13 +62,13 @@ export function DashboardHeader({ user, title, onLogout }: DashboardHeaderProps)
                 <p className="text-xs text-muted-foreground truncate mt-0.5">{user.email}</p>
               </div>
               <DropdownMenuSeparator className="my-1" />
-              <DropdownMenuItem asChild className="rounded-lg cursor-pointer gap-2.5 px-3 py-2 text-sm">
+              <DropdownMenuItem asChild className="md:hidden rounded-lg cursor-pointer gap-2.5 px-3 py-2 text-sm">
                 <Link href="/explore">
                   <Compass className="w-4 h-4 text-muted-foreground" />
-                  Explorar Espacios
+                  Explorar espacios
                 </Link>
               </DropdownMenuItem>
-              <DropdownMenuSeparator className="my-1" />
+              <DropdownMenuSeparator className="my-1 md:hidden" />
               <DropdownMenuItem
                 onClick={onLogout}
                 className="rounded-lg cursor-pointer gap-2.5 px-3 py-2 text-sm text-destructive focus:text-destructive focus:bg-destructive/8"
