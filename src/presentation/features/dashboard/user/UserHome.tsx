@@ -1,11 +1,11 @@
-import { Calendar, MessageSquare, ShieldCheck, Heart } from "lucide-react";
+import { CreditCard, ShieldCheck, MessageSquare } from "lucide-react";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { PageHeader } from "@/presentation/components/shared/panel/PageHeader";
-import { StatStrip } from "@/presentation/components/shared/panel/StatStrip";
 import { PanelSection } from "@/presentation/components/shared/panel/PanelSection";
-import { ActionList } from "@/presentation/components/shared/panel/ActionList";
-import { ReservationCards } from "@/presentation/components/shared/panel/ReservationCards";
-import { KycNotice } from "@/presentation/components/shared/panel/KycNotice";
+import { AttentionList, AttentionItem } from "@/presentation/components/shared/panel/AttentionList";
+import { AgendaList } from "@/presentation/components/shared/panel/AgendaList";
+import { SummaryCard } from "@/presentation/components/shared/panel/SummaryCard";
+import { useUnreadMessages } from "@/presentation/features/messages/hooks/useUnreadMessages";
 import { useUserReservations } from "./hooks/useUserReservations";
 
 const ACTIVE = ["pending", "accepted", "awaiting_payment", "confirmed"];
@@ -18,43 +18,71 @@ interface UserHomeProps {
 export function UserHome({ onNavigate }: UserHomeProps) {
   const { user } = useAuth();
   const { reservations } = useUserReservations();
-
-  const active = reservations.filter((r) => ACTIVE.includes(r.status)).length;
-  const toPay = reservations.filter((r) => r.status === "awaiting_payment").length;
-  const completed = reservations.filter((r) => r.status === "completed").length;
-  const invested = reservations.filter((r) => PAID.includes(r.status)).reduce((sum, r) => sum + r.totalPrice, 0);
-  const recent = [...reservations].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 4);
+  const { unreadCount } = useUnreadMessages();
   const go = (tab: string) => () => onNavigate(tab);
 
+  const toPay = reservations.filter((r) => r.status === "awaiting_payment" || r.status === "accepted");
+  const upcoming = reservations
+    .filter((r) => ACTIVE.includes(r.status) && r.endDate.getTime() >= Date.now())
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    .slice(0, 5);
+  const invested = reservations.filter((r) => PAID.includes(r.status)).reduce((sum, r) => sum + r.totalPrice, 0);
+
+  const attention: AttentionItem[] = [
+    ...(user && user.kycStatus !== "approved"
+      ? [{
+          id: "kyc",
+          icon: ShieldCheck,
+          title: user.kycStatus === "pending" ? "Tu verificación está en revisión" : "Verifica tu identidad",
+          description: user.kycStatus === "pending" ? "Te avisaremos cuando termine." : "La necesitas para reservar espacios.",
+          actionLabel: user.kycStatus === "pending" ? "Ver estado" : "Verificar",
+          onAction: go("verification"),
+        }]
+      : []),
+    ...toPay.map((r) => ({
+      id: r.id,
+      icon: CreditCard,
+      title: `Paga tu reservación: ${r.space?.title ?? "Espacio"}`,
+      description: `Total $${r.totalPrice}`,
+      actionLabel: "Pagar",
+      onAction: go("reservations"),
+    })),
+    ...(unreadCount > 0
+      ? [{
+          id: "messages",
+          icon: MessageSquare,
+          title: `Tienes ${unreadCount} mensaje${unreadCount > 1 ? "s" : ""} sin leer`,
+          actionLabel: "Abrir",
+          onAction: go("messages"),
+        }]
+      : []),
+  ];
+
   return (
-    <div className="space-y-10">
-      <PageHeader name={user?.name} subtitle="Gestiona tus reservaciones y habla con tus anfitriones." />
+    <div className="space-y-8">
+      <PageHeader name={user?.name} subtitle="Esto es lo que necesita tu atención hoy." />
 
-      {user && <KycNotice status={user.kycStatus} onAction={go("verification")} />}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="lg:col-span-2 space-y-8">
+          <PanelSection title="Requiere tu atención">
+            <AttentionList items={attention} emptyText="No tienes nada pendiente. Todo al día." />
+          </PanelSection>
 
-      <StatStrip
-        items={[
-          { label: "Reservaciones activas", value: active, hint: "En curso o por confirmar", onClick: go("reservations") },
-          { label: "Pendientes de pago", value: toPay, hint: toPay ? "Completa el pago para confirmar" : "Todo al día", onClick: go("reservations") },
-          { label: "Estancias completadas", value: completed, hint: "Finalizadas" },
-          { label: "Total invertido", value: `$${invested.toLocaleString()}`, hint: "En reservas confirmadas" },
-        ]}
-      />
+          <PanelSection title="Próximas reservaciones" actionLabel="Ver todas" onAction={go("reservations")}>
+            <AgendaList reservations={upcoming} counterpart="host" emptyText="Aún no tienes reservaciones próximas" onOpen={go("reservations")} />
+          </PanelSection>
+        </div>
 
-      <PanelSection title="Tus reservaciones" actionLabel="Ver todas" onAction={go("reservations")}>
-        <ReservationCards reservations={recent} counterpart="host" emptyText="Aún no tienes reservaciones" onOpen={go("reservations")} />
-      </PanelSection>
-
-      <PanelSection title="Atajos">
-        <ActionList
-          actions={[
-            { icon: Calendar, label: "Mis reservaciones", description: "Revisa y gestiona tus reservas", onClick: go("reservations") },
-            { icon: MessageSquare, label: "Mensajes", description: "Habla con tus anfitriones", onClick: go("messages") },
-            { icon: ShieldCheck, label: "Verificación", description: "Estado de tu identidad", onClick: go("verification") },
-            { icon: Heart, label: "Favoritos", description: "Espacios que guardaste", href: "/favorites" },
+        <SummaryCard
+          title="Resumen"
+          rows={[
+            { label: "Reservaciones activas", value: reservations.filter((r) => ACTIVE.includes(r.status)).length, onClick: go("reservations") },
+            { label: "Pendientes de pago", value: toPay.length, onClick: go("reservations") },
+            { label: "Estancias completadas", value: reservations.filter((r) => r.status === "completed").length },
+            { label: "Total invertido", value: `$${invested.toLocaleString()}` },
           ]}
         />
-      </PanelSection>
+      </div>
     </div>
   );
 }

@@ -1,12 +1,12 @@
-import { Calendar, Plus, MessageSquare, ShieldCheck, Building2 } from "lucide-react";
+import { Clock, ShieldCheck, MessageSquare, Plus } from "lucide-react";
 import { useAuth } from "@/presentation/providers/auth-context";
 import { useSpaces } from "@/presentation/hooks/useSpaces";
 import { PageHeader } from "@/presentation/components/shared/panel/PageHeader";
-import { StatStrip } from "@/presentation/components/shared/panel/StatStrip";
 import { PanelSection } from "@/presentation/components/shared/panel/PanelSection";
-import { ActionList } from "@/presentation/components/shared/panel/ActionList";
-import { ReservationCards } from "@/presentation/components/shared/panel/ReservationCards";
-import { KycNotice } from "@/presentation/components/shared/panel/KycNotice";
+import { AttentionList, AttentionItem } from "@/presentation/components/shared/panel/AttentionList";
+import { AgendaList } from "@/presentation/components/shared/panel/AgendaList";
+import { SummaryCard } from "@/presentation/components/shared/panel/SummaryCard";
+import { useUnreadMessages } from "@/presentation/features/messages/hooks/useUnreadMessages";
 import { useHostReservations } from "./hooks/useHostReservations";
 
 const PAID = ["confirmed", "completed"];
@@ -19,46 +19,81 @@ export function HostHome({ onNavigate }: HostHomeProps) {
   const { user } = useAuth();
   const { spaces } = useSpaces();
   const { reservations } = useHostReservations();
-
-  const pending = reservations.filter((r) => r.status === "pending").length;
-  const confirmed = reservations.filter((r) => r.status === "confirmed").length;
-  const earnings = reservations.filter((r) => PAID.includes(r.status)).reduce((sum, r) => sum + r.basePrice, 0);
-  const recent = [...reservations].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime()).slice(0, 4);
+  const { unreadCount } = useUnreadMessages();
   const go = (tab: string) => () => onNavigate(tab);
 
+  const pending = reservations.filter((r) => r.status === "pending");
+  const upcoming = reservations
+    .filter((r) => ["confirmed", "accepted", "awaiting_payment"].includes(r.status) && r.endDate.getTime() >= Date.now())
+    .sort((a, b) => a.startDate.getTime() - b.startDate.getTime())
+    .slice(0, 5);
+  const earnings = reservations.filter((r) => PAID.includes(r.status)).reduce((sum, r) => sum + r.basePrice, 0);
+
+  const attention: AttentionItem[] = [
+    ...(user && user.kycStatus !== "approved"
+      ? [{
+          id: "kyc",
+          icon: ShieldCheck,
+          title: user.kycStatus === "pending" ? "Tu verificación está en revisión" : "Verifica tu identidad",
+          description: user.kycStatus === "pending" ? "Mientras tanto tus espacios quedan pendientes." : "Tus espacios se publican cuando te verifiquemos.",
+          actionLabel: user.kycStatus === "pending" ? "Ver estado" : "Verificar",
+          onAction: go("verification"),
+        }]
+      : []),
+    ...pending.map((r) => ({
+      id: r.id,
+      icon: Clock,
+      title: `Solicitud de ${r.client?.name ?? "un cliente"}`,
+      description: r.space?.title,
+      actionLabel: "Responder",
+      onAction: go("reservations"),
+    })),
+    ...(unreadCount > 0
+      ? [{
+          id: "messages",
+          icon: MessageSquare,
+          title: `Tienes ${unreadCount} mensaje${unreadCount > 1 ? "s" : ""} sin leer`,
+          actionLabel: "Abrir",
+          onAction: go("messages"),
+        }]
+      : []),
+    ...(spaces.length === 0
+      ? [{
+          id: "first-space",
+          icon: Plus,
+          title: "Publica tu primer espacio",
+          description: "Empieza a recibir reservaciones.",
+          actionLabel: "Agregar",
+          onAction: go("spaces"),
+        }]
+      : []),
+  ];
+
   return (
-    <div className="space-y-10">
-      <PageHeader name={user?.name} subtitle="Gestiona tus espacios, responde solicitudes y sigue tus ingresos.">
-        <button onClick={go("spaces")} className="inline-flex items-center gap-2 h-11 px-6 rounded-lg bg-primary text-primary-foreground text-sm font-semibold hover:bg-primary/90 transition-colors">
-          <Plus className="w-4 h-4" /> Agregar espacio
-        </button>
-      </PageHeader>
+    <div className="space-y-8">
+      <PageHeader name={user?.name} subtitle="Esto es lo que necesita tu atención hoy." />
 
-      {user && <KycNotice status={user.kycStatus} onAction={go("verification")} />}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+        <div className="lg:col-span-2 space-y-8">
+          <PanelSection title="Requiere tu atención">
+            <AttentionList items={attention} emptyText="No tienes nada pendiente. Todo al día." />
+          </PanelSection>
 
-      <StatStrip
-        items={[
-          { label: "Mis espacios", value: spaces.length, hint: "Publicados", onClick: go("spaces") },
-          { label: "Solicitudes pendientes", value: pending, hint: pending ? "Esperan tu respuesta" : "Sin solicitudes nuevas", onClick: go("reservations") },
-          { label: "Reservaciones confirmadas", value: confirmed, hint: "Pagadas y en curso", onClick: go("reservations") },
-          { label: "Ingresos", value: `$${earnings.toLocaleString()}`, hint: "De reservas confirmadas" },
-        ]}
-      />
+          <PanelSection title="Próximas llegadas" actionLabel="Ver todas" onAction={go("reservations")}>
+            <AgendaList reservations={upcoming} counterpart="client" emptyText="Aún no tienes reservaciones próximas" onOpen={go("reservations")} />
+          </PanelSection>
+        </div>
 
-      <PanelSection title="Reservaciones recientes" actionLabel="Ver todas" onAction={go("reservations")}>
-        <ReservationCards reservations={recent} counterpart="client" emptyText="Aún no tienes reservaciones" onOpen={go("reservations")} />
-      </PanelSection>
-
-      <PanelSection title="Atajos">
-        <ActionList
-          actions={[
-            { icon: Building2, label: "Mis espacios", description: "Edita y publica tus espacios", onClick: go("spaces") },
-            { icon: Calendar, label: "Reservaciones", description: "Gestiona las solicitudes", onClick: go("reservations"), badge: pending },
-            { icon: MessageSquare, label: "Mensajes", description: "Habla con tus clientes", onClick: go("messages") },
-            { icon: ShieldCheck, label: "Verificación", description: "Estado de tu identidad", onClick: go("verification") },
+        <SummaryCard
+          title="Resumen"
+          rows={[
+            { label: "Mis espacios", value: spaces.length, onClick: go("spaces") },
+            { label: "Solicitudes pendientes", value: pending.length, onClick: go("reservations") },
+            { label: "Reservaciones confirmadas", value: reservations.filter((r) => r.status === "confirmed").length, onClick: go("reservations") },
+            { label: "Ingresos", value: `$${earnings.toLocaleString()}` },
           ]}
         />
-      </PanelSection>
+      </div>
     </div>
   );
 }
