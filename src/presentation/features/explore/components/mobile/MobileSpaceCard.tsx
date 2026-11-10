@@ -31,7 +31,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
   };
 
   return (
-    <div onClick={handleClick} className="bg-card rounded-2xl overflow-hidden shadow-sm border active:scale-[0.98] transition-transform">
+    <div onClick={handleClick} className="bg-card rounded-2xl overflow-hidden border border-border shadow-[0_2px_8px_rgba(0,0,0,0.07)] active:scale-[0.98] transition-transform">
       <div className="relative aspect-[16/10] bg-gradient-to-br from-muted/80 to-muted/40">
         {space.images && space.images.length > 0 ? (
           <Image src={space.images[0]} alt={space.title} fill className="object-cover" sizes="(max-width: 768px) 100vw, 50vw" />
@@ -70,7 +70,7 @@ export const MobileSpaceCard = memo(function MobileSpaceCard({ space, isFavorite
               <span className="text-sm font-medium">{space.rating}</span>
             </div>
           ) : (
-            <span className="text-[10px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ring-1 ring-emerald-200 shrink-0">Nuevo</span>
+            <span className="text-xs font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full ring-1 ring-emerald-200 shrink-0">Nuevo</span>
           )}
         </div>
         <div className="flex items-center gap-1.5 mt-1.5 text-sm text-muted-foreground">

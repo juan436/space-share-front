@@ -1,5 +1,6 @@
 "use client";
 
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { Logo } from "@/presentation/components/shared/Logo";
 import { useRouter } from "next/navigation";
@@ -13,7 +14,8 @@ import {
   DropdownMenuTrigger,
 } from "@/presentation/components/ui/dropdown-menu";
 
-export function MobileHeader() {
+// `children` ocupa el centro (buscador en Explorar). Sin hijos, queda logo a la izquierda y menú a la derecha.
+export function MobileHeader({ children }: { children?: ReactNode }) {
   const { user, isAuthenticated, logout } = useAuth();
   const router = useRouter();
 
@@ -40,16 +42,18 @@ export function MobileHeader() {
     : "U";
 
   return (
-    <div className="flex items-center justify-between px-4 pt-0 pb-[0.1rem] border-b border-border/50">
-      <Link href="/" className="flex items-center">
+    <div className={`flex items-center px-4 pt-3 pb-2.5 ${children ? "gap-2.5" : "justify-between"}`}>
+      <Link href="/" className="flex items-center flex-shrink-0">
         <Logo className="h-8 w-auto" />
       </Link>
+
+      {children}
 
       {/* User Icon & Dropdown */}
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button
-            className={`relative flex items-center justify-center w-10 h-10 rounded-full border border-border/50 transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
+            className={`relative flex-shrink-0 flex items-center justify-center w-10 h-10 rounded-full border border-[hsl(214_24%_78%)] transition-all active:scale-95 outline-none focus-visible:ring-2 focus-visible:ring-primary/30 ${
               isAuthenticated ? "bg-gradient-to-br from-primary to-accent shadow-sm" : "bg-gradient-to-br from-primary/10 to-accent/10"
             }`}
             aria-label="Menú de usuario"
@@ -66,7 +70,7 @@ export function MobileHeader() {
           <DropdownMenuContent
             align="end"
             sideOffset={8}
-            className="w-56 rounded-xl border border-border/50 shadow-lg shadow-black/5 p-1.5"
+            className="w-56 rounded-xl border border-[hsl(214_24%_78%)] shadow-lg shadow-black/5 p-1.5"
           >
             {/* User info header */}
             <div className="px-3 py-2.5 mb-1">
@@ -104,9 +108,9 @@ export function MobileHeader() {
           <DropdownMenuContent
             align="end"
             sideOffset={8}
-            className="w-56 rounded-xl border border-border/50 shadow-lg shadow-black/5 p-1.5"
+            className="w-56 rounded-xl border border-[hsl(214_24%_78%)] shadow-lg shadow-black/5 p-1.5"
           >
-            <div className="px-3 py-2.5 mb-1 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg border border-border/40">
+            <div className="px-3 py-2.5 mb-1 bg-gradient-to-r from-primary/5 to-accent/5 rounded-lg border border-[hsl(214_24%_78%)]">
               <p className="text-xs font-medium text-muted-foreground">¡Bienvenido!</p>
               <p className="text-sm font-semibold text-foreground mt-0.5">Accede a tu cuenta</p>
             </div>

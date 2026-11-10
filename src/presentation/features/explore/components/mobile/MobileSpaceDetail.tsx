@@ -17,7 +17,7 @@ export function MobileSpaceDetail({ space, isFavorite, onToggleFavorite, onClose
   return (
     <div className="fixed inset-0 bg-slate-50 dark:bg-background z-50 flex flex-col">
       {/* Header */}
-      <div className="flex items-center gap-3 p-4 border-b border-border/60 bg-white dark:bg-card">
+      <div className="flex items-center gap-3 p-4 border-b border-[hsl(214_24%_78%)] bg-white dark:bg-card">
         <button
           onClick={onClose}
           className="p-2 -ml-2 rounded-xl hover:bg-muted/60 transition-colors"
@@ -66,14 +66,14 @@ export function MobileSpaceDetail({ space, isFavorite, onToggleFavorite, onClose
 
           {/* Stats */}
           <div className="grid grid-cols-2 gap-3">
-            <div className="bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] rounded-xl p-4 text-center">
+            <div className="bg-white dark:bg-card border border-[hsl(214_24%_78%)] shadow-[0_4px_12px_rgba(0,0,0,0.09)] rounded-xl p-4 text-center">
               <div className="w-8 h-8 rounded-lg bg-muted/60 flex items-center justify-center mx-auto mb-2">
                 <Ruler className="w-4 h-4 text-muted-foreground" />
               </div>
               <p className="text-xl font-bold text-foreground">{space.squareMeters}</p>
               <p className="text-xs text-muted-foreground">metros²</p>
             </div>
-            <div className="bg-white dark:bg-card border border-border/60 shadow-[0_4px_12px_rgba(0,0,0,0.09)] rounded-xl p-4 text-center">
+            <div className="bg-white dark:bg-card border border-[hsl(214_24%_78%)] shadow-[0_4px_12px_rgba(0,0,0,0.09)] rounded-xl p-4 text-center">
               <p className="text-xl font-bold text-foreground">${space.pricePerMonth}</p>
               <p className="text-xs text-muted-foreground">por mes</p>
             </div>
@@ -106,7 +106,7 @@ export function MobileSpaceDetail({ space, isFavorite, onToggleFavorite, onClose
       </div>
 
       {/* Bottom CTA */}
-      <div className="p-4 border-t border-border/60 bg-white dark:bg-card safe-area-bottom">
+      <div className="p-4 border-t border-[hsl(214_24%_78%)] bg-white dark:bg-card safe-area-bottom">
         <Button className="w-full h-11 text-sm font-semibold rounded-xl">
           Contactar al anfitrión
         </Button>

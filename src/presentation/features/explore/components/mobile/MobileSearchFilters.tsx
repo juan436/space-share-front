@@ -1,7 +1,6 @@
 "use client";
 
-import { Search, X, Thermometer, Video, DoorOpen, Warehouse, Home, ArrowDown, Box, Car, Clock } from "lucide-react";
-import { Input } from "@/presentation/components/ui/input";
+import { X, Thermometer, Video, DoorOpen, Warehouse, Home, ArrowDown, Box, Car, Clock } from "lucide-react";
 import { Button } from "@/presentation/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 
@@ -13,6 +12,9 @@ export interface FilterState {
   size: string | null;
   amenities: string[];
 }
+
+// Filtros del panel (precio, tamaño, características); el tipo va en los chips.
+export const countActiveFilters = (f: FilterState) => (f.priceRange ? 1 : 0) + (f.size ? 1 : 0) + f.amenities.length;
 
 const filterOptions: { type: FilterType; label: string; icon: typeof Home }[] = [
   { type: "all", label: "Todos", icon: Home },
@@ -37,21 +39,20 @@ const amenitiesList = [
 ];
 
 interface MobileSearchFiltersProps {
-  searchQuery: string;
-  onSearchChange: (value: string) => void;
   filters: FilterState;
   onFilterChange: (filters: FilterState) => void;
   showFilters: boolean;
   onShowFiltersChange: (show: boolean) => void;
+  // Oculta la fila de chips (se usa al bajar por la lista).
+  collapsed?: boolean;
 }
 
 export function MobileSearchFilters({
-  searchQuery,
-  onSearchChange,
   filters,
   onFilterChange,
   showFilters,
   onShowFiltersChange,
+  collapsed = false,
 }: MobileSearchFiltersProps) {
   const [localFilters, setLocalFilters] = useState<FilterState>(filters);
 
@@ -85,42 +86,20 @@ export function MobileSearchFilters({
     }));
   };
 
-  const activeFilterCount = (filters.priceRange ? 1 : 0) + (filters.size ? 1 : 0) + filters.amenities.length;
-
   return (
     <>
-      {/* Search Bar */}
-      <div className="px-4 pb-3">
-        <div className="relative">
-          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4.5 h-4.5 text-muted-foreground/70" />
-          <Input
-            type="text"
-            placeholder="¿Dónde necesitas espacio?"
-            value={searchQuery}
-            onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-11 pr-10 h-11 bg-white dark:bg-card border border-border/50 rounded-2xl text-sm shadow-[0_1px_4px_rgba(0,0,0,0.05)] focus:shadow-[0_2px_8px_rgba(0,0,0,0.08)] transition-all"
-          />
-          {searchQuery && (
-            <button
-              onClick={() => onSearchChange("")}
-              className="absolute right-3 top-1/2 -translate-y-1/2 p-1.5 rounded-full bg-muted-foreground/15 hover:bg-muted-foreground/25 transition-colors"
-            >
-              <X className="w-3 h-3" />
-            </button>
-          )}
-        </div>
-      </div>
-
       {/* Filter Pills with Icons */}
-      <div className="px-4 pb-3 overflow-x-auto no-scrollbar flex items-center justify-between">
-        <div className="flex gap-2 mr-2">
+      <div className={`grid transition-[grid-template-rows] duration-300 ease-out ${collapsed ? "grid-rows-[0fr]" : "grid-rows-[1fr]"}`}>
+       <div className="min-h-0 overflow-hidden">
+        <div className="px-4 pb-3 overflow-x-auto no-scrollbar flex items-center">
+        <div className="flex gap-2">
           {filterOptions.map(({ type, label, icon: Icon }) => (
             <button
               key={type}
               onClick={() => onFilterChange({ ...filters, type })}
               className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${filters.type === type
                   ? "bg-primary text-primary-foreground shadow-md shadow-primary/25"
-                  : "bg-card text-muted-foreground border border-border/60 hover:border-primary/30 hover:text-foreground"
+                  : "bg-card text-muted-foreground border border-[hsl(214_24%_78%)] hover:border-foreground/40 hover:text-foreground"
                 }`}
             >
               <Icon className="w-3.5 h-3.5" />
@@ -128,13 +107,8 @@ export function MobileSearchFilters({
             </button>
           ))}
         </div>
-        
-        {/* Visual indicator for active sheet filters */}
-        {activeFilterCount > 0 && (
-          <div className="flex-shrink-0 flex items-center justify-center w-6 h-6 rounded-full bg-primary text-[10px] font-bold text-primary-foreground shadow-sm animate-in fade-in zoom-in duration-200">
-            {activeFilterCount}
-          </div>
-        )}
+        </div>
+       </div>
       </div>
 
       {/* Filter Sheet */}
@@ -176,7 +150,7 @@ export function MobileSearchFilters({
                         className={`py-3 px-4 rounded-xl border text-sm font-medium transition-all ${
                           isActive
                             ? "border-foreground/30 bg-foreground/8 text-foreground font-semibold"
-                            : "border-border/60 hover:border-border text-muted-foreground"
+                            : "border-[hsl(214_24%_78%)] hover:border-foreground/40 text-muted-foreground"
                         }`}
                       >
                         {range}/mes
@@ -199,7 +173,7 @@ export function MobileSearchFilters({
                         className={`py-3 px-4 rounded-xl border text-left transition-all ${
                           isActive
                             ? "border-foreground/30 bg-foreground/8"
-                            : "border-border/60 hover:border-border"
+                            : "border-[hsl(214_24%_78%)] hover:border-foreground/40"
                         }`}
                       >
                         <span className={`block text-sm font-medium ${isActive ? "text-foreground" : "text-foreground"}`}>{label}</span>
@@ -223,7 +197,7 @@ export function MobileSearchFilters({
                         className={`flex items-center gap-2 py-2.5 px-4 rounded-full border text-sm font-medium transition-all ${
                           isActive 
                             ? "border-primary bg-primary text-primary-foreground shadow-md shadow-primary/25" 
-                            : "border-border/60 hover:border-primary/50 text-muted-foreground bg-card"
+                            : "border-[hsl(214_24%_78%)] hover:border-foreground/40 text-muted-foreground bg-card"
                         }`}
                       >
                         <Icon className="w-4 h-4" />
@@ -235,7 +209,7 @@ export function MobileSearchFilters({
               </div>
             </div>
 
-            <div className="flex-none p-6 pt-4 border-t border-border/40 bg-card">
+            <div className="flex-none p-6 pt-4 border-t border-[hsl(214_24%_78%)] bg-card">
               <div className="flex gap-3">
                 <Button variant="outline" className="flex-1 h-12 rounded-xl" onClick={handleClear}>
                   Limpiar todo

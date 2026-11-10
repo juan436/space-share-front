@@ -1,6 +1,8 @@
 export { MobileExplorePage } from "./MobileExplorePage";
 export { MobileHeader } from "./MobileHeader";
 export { MobileSearchFilters } from "./MobileSearchFilters";
+export { MobileSearchInput } from "./MobileSearchInput";
+export { MobileFilterButton } from "./MobileFilterButton";
 export { MobileSpaceCard } from "./MobileSpaceCard";
 export { MobileSpacesList } from "./MobileSpacesList";
 export { MobileSpaceDetail } from "./MobileSpaceDetail";

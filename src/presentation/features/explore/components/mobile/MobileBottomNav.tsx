@@ -17,7 +17,7 @@ interface MobileBottomNavProps {
 
 export function MobileBottomNav({ items }: MobileBottomNavProps) {
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-border/40 safe-area-bottom z-40">
+    <nav className="fixed bottom-0 left-0 right-0 bg-card border-t border-[hsl(214_24%_78%)] safe-area-bottom z-40">
       <div className="flex items-center justify-around pb-1.5 pt-2">
         {items.map((item) => {
           const Icon = item.icon;
@@ -31,7 +31,7 @@ export function MobileBottomNav({ items }: MobileBottomNavProps) {
               )}
             >
               <Icon className="w-5 h-5" />
-              <span className="text-[11px] font-medium leading-none mt-0.5">{item.label}</span>
+              <span className="text-xs font-medium leading-none mt-0.5">{item.label}</span>
             </button>
           );
         })}
