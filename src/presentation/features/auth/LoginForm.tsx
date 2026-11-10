@@ -13,7 +13,19 @@ export function LoginForm() {
   const { email, setEmail, password, setPassword, isLoading, error, handleLogin } = useLoginForm();
 
   return (
-    <div className="min-h-screen flex">
+    <div className="min-h-screen flex flex-col lg:flex-row">
+
+      {/* ── Banner de marca (solo móvil) ── */}
+      <div className="lg:hidden relative overflow-hidden bg-foreground dark:bg-zinc-900 px-6 pt-10 pb-14">
+        <div className="absolute -top-24 -left-24 w-[300px] h-[300px] rounded-full bg-primary/15 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-24 -right-24 w-[300px] h-[300px] rounded-full bg-accent/15 blur-3xl pointer-events-none" />
+        <Link href="/" className="relative inline-flex">
+          <Logo tagline taglineClassName="text-[hsl(var(--primary))]" className="h-11 w-auto" />
+        </Link>
+        <h1 className="relative mt-6 text-[1.7rem] font-extrabold text-background leading-[1.15] tracking-tight">
+          El espacio que necesitas, cuando lo necesitas
+        </h1>
+      </div>
 
       {/* ── Left panel — branding ── */}
       <div className="hidden lg:flex lg:w-1/2 xl:w-3/5 bg-foreground dark:bg-zinc-900 relative overflow-hidden flex-col justify-between p-14">
@@ -51,15 +63,8 @@ export function LoginForm() {
       </div>
 
       {/* ── Right panel — form ── */}
-      <div className="w-full lg:w-1/2 xl:w-2/5 flex items-center justify-center px-6 sm:px-12 py-12 bg-white dark:bg-card">
+      <div className="w-full flex-1 lg:flex-none lg:w-1/2 xl:w-2/5 flex items-start lg:items-center justify-center px-6 sm:px-12 pt-8 pb-10 lg:py-12 -mt-6 lg:mt-0 rounded-t-3xl lg:rounded-none relative bg-white dark:bg-card">
         <div className="w-full max-w-[380px] space-y-7">
-
-          {/* Mobile logo */}
-          <div className="lg:hidden flex justify-center">
-            <Link href="/">
-              <img src="/images/logo.svg" alt="SpaceShare" className="h-20 w-20 rounded-2xl" />
-            </Link>
-          </div>
 
           <div>
             <h2 className="text-2xl font-extrabold text-foreground tracking-tight">Bienvenido de vuelta</h2>
@@ -70,7 +75,7 @@ export function LoginForm() {
             <div className="space-y-1.5">
               <Label htmlFor="email" className="text-sm font-semibold">Correo electrónico</Label>
               <div className="relative">
-                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50 pointer-events-none" />
+                <Mail className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground lg:text-muted-foreground/50 pointer-events-none" />
                 <Input
                   id="email"
                   type="email"
@@ -79,7 +84,7 @@ export function LoginForm() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
-                  className="h-11 pl-10 rounded-xl border-border/50 bg-white dark:bg-card"
+                  className="h-11 pl-10 rounded-xl border-[hsl(214_24%_78%)] lg:border-border/50 bg-white dark:bg-card"
                 />
               </div>
             </div>
@@ -87,7 +92,7 @@ export function LoginForm() {
             <div className="space-y-1.5">
               <Label htmlFor="password" className="text-sm font-semibold">Contraseña</Label>
               <div className="relative">
-                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground/50 pointer-events-none" />
+                <Lock className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground lg:text-muted-foreground/50 pointer-events-none" />
                 <Input
                   id="password"
                   type="password"
@@ -96,7 +101,7 @@ export function LoginForm() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   required
-                  className="h-11 pl-10 rounded-xl border-border/50 bg-white dark:bg-card"
+                  className="h-11 pl-10 rounded-xl border-[hsl(214_24%_78%)] lg:border-border/50 bg-white dark:bg-card"
                 />
               </div>
             </div>
@@ -121,14 +126,14 @@ export function LoginForm() {
           </form>
 
           <div className="relative flex items-center gap-3">
-            <div className="flex-1 border-t border-border/40" />
-            <span className="text-xs text-muted-foreground/60 shrink-0">¿No tienes cuenta?</span>
-            <div className="flex-1 border-t border-border/40" />
+            <div className="flex-1 border-t border-[hsl(214_24%_78%)] lg:border-border/40" />
+            <span className="text-xs text-muted-foreground lg:text-muted-foreground/60 shrink-0">¿No tienes cuenta?</span>
+            <div className="flex-1 border-t border-[hsl(214_24%_78%)] lg:border-border/40" />
           </div>
 
           <Link
             href="/register"
-            className="flex items-center justify-center gap-2 w-full h-11 rounded-xl border border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.05)] text-sm font-semibold text-foreground hover:bg-muted/40 hover:border-border/80 transition-all"
+            className="flex items-center justify-center gap-2 w-full h-11 rounded-xl border border-[hsl(214_24%_78%)] lg:border-border/60 shadow-[0_1px_4px_rgba(0,0,0,0.05)] text-sm font-semibold text-foreground hover:bg-muted/40 hover:border-border/80 transition-all"
           >
             Crear cuenta gratis
           </Link>
