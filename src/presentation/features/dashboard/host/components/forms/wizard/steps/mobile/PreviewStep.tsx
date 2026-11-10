@@ -1,4 +1,4 @@
-import { MapPin, ImageIcon, Ruler, Thermometer, Shield, DoorOpen } from "lucide-react";
+import { MapPin, ImageIcon, Ruler, Thermometer, Shield, DoorOpen, Clock } from "lucide-react";
 import { NewSpaceFormData, spaceTypeOptions } from "@/presentation/types/spaces";
 import { resolveImageUrl } from "@/presentation/utils/image";
 
@@ -64,7 +64,7 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
             )}
           </div>
 
-          {(newSpace.climateControlled || newSpace.securityCamera || newSpace.privateEntrance) && (
+          {(newSpace.climateControlled || newSpace.securityCamera || newSpace.privateEntrance || newSpace.access247) && (
             <div className="pt-2 border-t border-border/40">
               <div className="flex gap-1.5 flex-wrap">
                 {newSpace.climateControlled && (
@@ -80,6 +80,11 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
                 {newSpace.privateEntrance && (
                   <span className="flex items-center gap-1 text-[10px] bg-violet-50 text-violet-700 dark:bg-violet-950/20 dark:text-violet-400 px-2 py-0.5 rounded-full">
                     <DoorOpen className="h-2.5 w-2.5" />Entrada
+                  </span>
+                )}
+                {newSpace.access247 && (
+                  <span className="flex items-center gap-1 text-[10px] bg-amber-50 text-amber-700 dark:bg-amber-950/20 dark:text-amber-400 px-2 py-0.5 rounded-full">
+                    <Clock className="h-2.5 w-2.5" />24/7
                   </span>
                 )}
               </div>

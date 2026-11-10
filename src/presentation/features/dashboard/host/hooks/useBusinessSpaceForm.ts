@@ -127,7 +127,7 @@ export function useBusinessSpaceForm({ onClose, listingType, initialData, spaceI
       squareMeters: formData.squareMeters,
       pricePerMonth: formData.pricePerMonth,
       capacity: formData.maxCapacity,
-      amenities: { climateControlled: false, securityCamera: false, privateEntrance: false },
+      amenities: { climateControlled: false, securityCamera: false, privateEntrance: false, access247: false },
       location: {
         address: formData.address,
         city: formData.city,

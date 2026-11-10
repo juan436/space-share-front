@@ -80,7 +80,7 @@ function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
     return {
       title: "", description: "", type: "storage", listingType: "storage", squareMeters: 0,
       pricePerMonth: 0, capacity: 1, climateControlled: false,
-      securityCamera: false, privateEntrance: false, address: "",
+      securityCamera: false, privateEntrance: false, access247: false, address: "",
       city: "", state: "", country: "",
     };
   }
@@ -95,6 +95,7 @@ function toFormData(space: SpaceViewModel | null): NewSpaceFormData {
     climateControlled: space.climateControlled,
     securityCamera: space.securityCamera,
     privateEntrance: space.privateEntrance,
+    access247: space.access247,
     address: space.address,
     city: space.city,
     state: space.state,

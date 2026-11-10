@@ -8,8 +8,13 @@ export interface SpaceFilters {
   climateControlled?: boolean;
   securityCamera?: boolean;
   privateEntrance?: boolean;
+  access247?: boolean;
+  verified?: boolean;
   city?: string;
   hostId?: string;
+  q?: string;
+  minSize?: number;
+  maxSize?: number;
 }
 
 export interface PaginatedResult<T> {

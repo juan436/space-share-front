@@ -1,4 +1,4 @@
-import { ImageIcon, MapPin, Thermometer, Shield, DoorOpen, Ruler } from "lucide-react";
+import { ImageIcon, MapPin, Thermometer, Shield, DoorOpen, Ruler, Clock } from "lucide-react";
 import { NewSpaceFormData, spaceTypeOptions } from "@/presentation/types/spaces";
 import { resolveImageUrl } from "@/presentation/utils/image";
 
@@ -12,6 +12,7 @@ export function PreviewStep({ newSpace, images }: PreviewStepProps) {
     newSpace.climateControlled && { key: "climate",  label: "Control de Clima", icon: Thermometer },
     newSpace.securityCamera    && { key: "security",  label: "Seguridad 24/7",   icon: Shield      },
     newSpace.privateEntrance   && { key: "entrance",  label: "Entrada Privada",  icon: DoorOpen    },
+    newSpace.access247         && { key: "access247", label: "Acceso 24/7",      icon: Clock       },
   ].filter(Boolean) as { key: string; label: string; icon: React.ElementType }[];
 
   return (

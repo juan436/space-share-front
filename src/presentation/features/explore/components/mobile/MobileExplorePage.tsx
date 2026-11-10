@@ -15,7 +15,7 @@ import { MobileBottomNav } from "./MobileBottomNav";
 type ViewMode = "list" | "map";
 
 export function MobileExplorePage() {
-  const { searchQuery, setSearchQuery, filters, setFilters, filteredSpaces } = useMobileExplore();
+  const { searchQuery, setSearchQuery, filters, setFilters, filteredSpaces, total, hasMore, isFetching, loadMore } = useMobileExplore();
   const [viewMode, setViewMode] = useState<ViewMode>("list");
   const [showFilters, setShowFilters] = useState(false);
   const [selectedSpace, setSelectedSpace] = useState<Space | null>(null);
@@ -58,6 +58,10 @@ export function MobileExplorePage() {
           onToggleFavorite={toggleFavorite}
           onSpaceSelect={setSelectedSpace}
           onShowFilters={() => setShowFilters(true)}
+          total={total}
+          hasMore={hasMore}
+          isLoadingMore={isFetching}
+          onLoadMore={loadMore}
         />
       ) : (
         <div className="flex-1 relative">

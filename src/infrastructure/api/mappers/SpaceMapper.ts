@@ -17,6 +17,7 @@ export class SpaceMapper {
             hostSince: dto.hostId.createdAt ? new Date(dto.hostId.createdAt) : undefined,
           }
         : undefined,
+      verified: typeof dto.hostId === "object" ? dto.hostId.kycStatus === "approved" : undefined,
       title: dto.title,
       description: dto.description,
       type: dto.type,

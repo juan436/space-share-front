@@ -1,5 +1,5 @@
 import { Checkbox } from "@/presentation/components/ui/checkbox";
-import { Thermometer, Shield, DoorOpen, Check } from "lucide-react";
+import { Thermometer, Shield, DoorOpen, Clock, Check } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 import { cn } from "@/presentation/utils/cn";
 
@@ -91,6 +91,30 @@ export function AmenitiesStep({ newSpace, onUpdateNewSpace }: AmenitiesStepProps
             <p className="text-xs text-muted-foreground">Acceso independiente exclusivo</p>
           </div>
           {newSpace.privateEntrance && <Check className="h-4 w-4 text-violet-600 shrink-0" />}
+        </label>
+        {/* Acceso 24/7 */}
+        <label className={cn(
+          "flex items-center gap-4 p-4 rounded-2xl border cursor-pointer transition-all duration-200",
+          "shadow-[0_1px_4px_rgba(0,0,0,0.06)] hover:shadow-[0_4px_16px_rgba(0,0,0,0.09)]",
+          newSpace.access247
+            ? "border-amber-400/50 bg-amber-50 dark:bg-amber-950/20"
+            : "border-border/60 bg-white dark:bg-card hover:border-border/80"
+        )}>
+          <Checkbox
+            checked={newSpace.access247}
+            onCheckedChange={(checked) => onUpdateNewSpace({ access247: checked as boolean })}
+            className="sr-only"
+          />
+          <div className={cn("w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-colors",
+            newSpace.access247 ? "bg-amber-100 dark:bg-amber-950/40" : "bg-muted/60"
+          )}>
+            <Clock className={cn("h-5 w-5", newSpace.access247 ? "text-amber-600" : "text-muted-foreground")} />
+          </div>
+          <div className="flex-1 min-w-0">
+            <p className="text-sm font-semibold text-foreground">Acceso 24/7</p>
+            <p className="text-xs text-muted-foreground">El cliente puede entrar a cualquier hora</p>
+          </div>
+          {newSpace.access247 && <Check className="h-4 w-4 text-amber-600 shrink-0" />}
         </label>
       </div>
     </div>

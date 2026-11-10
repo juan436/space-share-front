@@ -29,7 +29,12 @@ export function useSpaces(options?: UseSpacesOptions) {
     staleTime: 30_000,
   });
 
-  const invalidate = () => queryClient.invalidateQueries({ queryKey: ["spaces"] });
+  const invalidate = () => {
+    queryClient.invalidateQueries({ queryKey: ["spaces"] });
+    // La lista pública del Explorar tiene su propio caché: sin esto un espacio
+    // recién creado/editado no aparece hasta que vence el staleTime.
+    queryClient.invalidateQueries({ queryKey: ["explore-spaces"] });
+  };
 
   const createMutation = useMutation({
     mutationFn: async (input: Omit<CreateSpaceInput, "hostId">) => {

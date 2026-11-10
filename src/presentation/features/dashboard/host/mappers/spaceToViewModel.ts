@@ -16,6 +16,7 @@ export function spaceToViewModel(space: Space): SpaceViewModel {
     climateControlled: space.amenities.climateControlled,
     securityCamera: space.amenities.securityCamera,
     privateEntrance: space.amenities.privateEntrance,
+    access247: space.amenities.access247 ?? false,
     address: space.location.address,
     city: space.location.city,
     state: space.location.state,

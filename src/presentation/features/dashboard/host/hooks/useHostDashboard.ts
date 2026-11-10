@@ -20,6 +20,7 @@ const initialFormState: NewSpaceFormData = {
   climateControlled: false,
   securityCamera: false,
   privateEntrance: false,
+  access247: false,
   address: "",
   city: "",
   state: "",
@@ -73,6 +74,7 @@ export function useHostDashboard() {
           climateControlled: current.climateControlled,
           securityCamera: current.securityCamera,
           privateEntrance: current.privateEntrance,
+          access247: current.access247,
         },
         location: {
           address: current.address,
@@ -114,6 +116,7 @@ export function useHostDashboard() {
             climateControlled: data.climateControlled,
             securityCamera: data.securityCamera,
             privateEntrance: data.privateEntrance,
+            access247: data.access247,
           },
           location: {
             address: data.address,

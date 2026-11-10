@@ -1,5 +1,5 @@
 import { Checkbox } from "@/presentation/components/ui/checkbox";
-import { Thermometer, Shield, DoorOpen, Check } from "lucide-react";
+import { Thermometer, Shield, DoorOpen, Check, Clock } from "lucide-react";
 import { NewSpaceFormData } from "@/presentation/types/spaces";
 import { cn } from "@/presentation/utils/cn";
 
@@ -94,6 +94,33 @@ export function AmenitiesStep({ newSpace, onUpdateNewSpace }: AmenitiesStepProps
             <Checkbox
               checked={newSpace.privateEntrance}
               onCheckedChange={(checked) => onUpdateNewSpace({ privateEntrance: checked as boolean })}
+            />
+          </div>
+        </label>
+        {/* Acceso 24/7 */}
+        <label className={cn(
+          "flex items-center justify-between p-3.5 rounded-xl border cursor-pointer transition-all duration-200",
+          "shadow-[0_1px_3px_rgba(0,0,0,0.05)]",
+          newSpace.access247
+            ? "border-border bg-muted/40 dark:bg-muted/20"
+            : "border-border/60 bg-white dark:bg-card hover:border-border/80"
+        )}>
+          <div className="flex items-center gap-3">
+            <div className={cn("h-9 w-9 rounded-lg flex items-center justify-center shrink-0 transition-colors",
+              newSpace.access247 ? "bg-amber-100 dark:bg-amber-950/40" : "bg-muted/60"
+            )}>
+              <Clock className={cn("h-4 w-4", newSpace.access247 ? "text-amber-600" : "text-muted-foreground")} />
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-foreground">Acceso 24/7</p>
+              <p className="text-xs text-muted-foreground">Entrada a cualquier hora</p>
+            </div>
+          </div>
+          <div className="flex items-center gap-2">
+            {newSpace.access247 && <Check className="h-3.5 w-3.5 text-amber-600" />}
+            <Checkbox
+              checked={newSpace.access247}
+              onCheckedChange={(checked) => onUpdateNewSpace({ access247: checked as boolean })}
             />
           </div>
         </label>

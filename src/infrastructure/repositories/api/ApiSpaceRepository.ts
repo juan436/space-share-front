@@ -20,8 +20,13 @@ export class ApiSpaceRepository implements SpaceRepository {
       if (filters.climateControlled !== undefined) params.append("climateControlled", filters.climateControlled.toString());
       if (filters.securityCamera !== undefined) params.append("securityCamera", filters.securityCamera.toString());
       if (filters.privateEntrance !== undefined) params.append("privateEntrance", filters.privateEntrance.toString());
+      if (filters.access247 !== undefined) params.append("access247", filters.access247.toString());
+      if (filters.verified !== undefined) params.append("verified", filters.verified.toString());
       if (filters.city) params.append("city", filters.city);
       if (filters.hostId) params.append("hostId", filters.hostId);
+      if (filters.q) params.append("q", filters.q);
+      if (filters.minSize !== undefined) params.append("minSize", filters.minSize.toString());
+      if (filters.maxSize !== undefined) params.append("maxSize", filters.maxSize.toString());
     }
 
     const response = await this.httpClient.get<PaginatedSpacesResponseDto>(`/spaces?${params.toString()}`);

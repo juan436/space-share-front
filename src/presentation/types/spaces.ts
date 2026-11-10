@@ -35,6 +35,7 @@ export interface SpaceViewModel {
   climateControlled: boolean;
   securityCamera: boolean;
   privateEntrance: boolean;
+  access247: boolean;
   address: string;
   city: string;
   state: string;
@@ -60,6 +61,7 @@ export interface NewSpaceFormData {
   climateControlled: boolean;
   securityCamera: boolean;
   privateEntrance: boolean;
+  access247: boolean;
   address: string;
   city: string;
   state: string;

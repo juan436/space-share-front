@@ -15,10 +15,16 @@ export function useExplore() {
   const [sizeRange, setSizeRange] = useState(() => searchParams.get("size") ?? "all");
   const [conditions, setConditions] = useState<string[]>([]);
   const [page, setPage] = useState(1);
+  // La búsqueda ahora va al servidor: se espera a que el usuario deje de teclear.
+  const [debouncedQuery, setDebouncedQuery] = useState(searchQuery);
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(searchQuery), 350);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
 
   useEffect(() => {
     setPage(1);
-  }, [searchQuery, spaceType, priceRange, sizeRange, conditions]);
+  }, [debouncedQuery, spaceType, priceRange, sizeRange, conditions]);
 
   const serverFilters = useMemo((): SpaceFilters | undefined => {
     const f: SpaceFilters = {};
@@ -39,49 +45,33 @@ export function useExplore() {
     if (conditions.includes("climatizado")) f.climateControlled = true;
     if (conditions.includes("seguridad")) f.securityCamera = true;
     if (conditions.includes("privado")) f.privateEntrance = true;
+    if (conditions.includes("24/7")) f.access247 = true;
+    if (conditions.includes("verificado")) f.verified = true;
+    const q = debouncedQuery.trim();
+    if (q) f.q = q;
+    if (sizeRange !== "all") {
+      if (sizeRange === "50+") {
+        f.minSize = 50;
+      } else {
+        const [min, max] = sizeRange.split("-").map(Number);
+        f.minSize = min;
+        f.maxSize = max;
+      }
+    }
     return Object.keys(f).length > 0 ? f : undefined;
-  }, [spaceType, priceRange, conditions]);
+  }, [spaceType, priceRange, conditions, debouncedQuery, sizeRange]);
 
-  const { spaces: rawSpaces, isLoading, isError } = useExploreSpaces({
+  // Paginación en el servidor: el API ordena (más nuevos primero) y devuelve
+  // total y totalPages sobre TODOS los espacios, no solo los primeros N.
+  const { spaces: rawSpaces, isLoading, isError, total, totalPages } = useExploreSpaces({
     filters: serverFilters,
+    page,
+    limit: ITEMS_PER_PAGE,
   });
 
-  const filteredSpaces = useMemo(() => {
-    return rawSpaces.filter((space) => {
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        if (
-          !space.title.toLowerCase().includes(q) &&
-          !space.location.city.toLowerCase().includes(q) &&
-          !space.location.state.toLowerCase().includes(q)
-        )
-          return false;
-      }
-      if (sizeRange !== "all") {
-        if (sizeRange === "50+") {
-          if (space.squareMeters < 50) return false;
-        } else {
-          const [min, max] = sizeRange.split("-").map(Number);
-          if (space.squareMeters < min || space.squareMeters > max) return false;
-        }
-      }
-      if (conditions.includes("24/7") && !space.amenities.access247) return false;
-      if (conditions.includes("verificado") && !space.verified) return false;
-      return true;
-    });
-  }, [rawSpaces, searchQuery, sizeRange, conditions]);
-
-  const totalSpaces = filteredSpaces.length;
-  const totalPages = Math.max(1, Math.ceil(totalSpaces / ITEMS_PER_PAGE));
-
-  const pagedSpaces = useMemo(
-    () => filteredSpaces.slice((page - 1) * ITEMS_PER_PAGE, page * ITEMS_PER_PAGE),
-    [filteredSpaces, page]
-  );
-
   return {
-    filteredSpaces: pagedSpaces,
-    totalSpaces,
+    filteredSpaces: rawSpaces,
+    totalSpaces: total,
     page,
     setPage,
     totalPages,

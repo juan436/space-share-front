@@ -1,4 +1,4 @@
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { SpaceFilters } from "@/core/domain/ports/SpaceRepository";
 import { FilterState } from "../components/mobile/MobileSearchFilters";
 import { useExploreSpaces } from "./useExploreSpaces";
@@ -10,11 +10,21 @@ const DEFAULT_FILTERS: FilterState = {
   amenities: [],
 };
 
-const SERVER_AMENITIES = new Set(["climateControlled", "securityCamera", "privateEntrance"]);
+const PAGE_SIZE = 40;
 
 export function useMobileExplore() {
   const [searchQuery, setSearchQuery] = useState("");
   const [filters, setFilters] = useState<FilterState>(DEFAULT_FILTERS);
+  // Sin páginas numeradas en móvil: "Ver más" agranda el límite pedido al servidor.
+  const [limit, setLimit] = useState(PAGE_SIZE);
+  const [debouncedQuery, setDebouncedQuery] = useState("");
+  useEffect(() => {
+    const t = setTimeout(() => setDebouncedQuery(searchQuery), 350);
+    return () => clearTimeout(t);
+  }, [searchQuery]);
+  useEffect(() => {
+    setLimit(PAGE_SIZE);
+  }, [debouncedQuery, filters]);
 
   const serverFilters = useMemo((): SpaceFilters | undefined => {
     const f: SpaceFilters = {};
@@ -28,35 +38,19 @@ export function useMobileExplore() {
     if (filters.amenities.includes("climateControlled")) f.climateControlled = true;
     if (filters.amenities.includes("securityCamera")) f.securityCamera = true;
     if (filters.amenities.includes("privateEntrance")) f.privateEntrance = true;
+    if (filters.amenities.includes("access247")) f.access247 = true;
+    const q = debouncedQuery.trim();
+    if (q) f.q = q;
+    if (filters.size === "small") f.maxSize = 15;
+    else if (filters.size === "medium") { f.minSize = 15; f.maxSize = 30; }
+    else if (filters.size === "large") { f.minSize = 30; f.maxSize = 50; }
+    else if (filters.size === "xlarge") f.minSize = 50;
     return Object.keys(f).length > 0 ? f : undefined;
-  }, [filters]);
+  }, [filters, debouncedQuery]);
 
-  const { spaces: rawSpaces } = useExploreSpaces({ filters: serverFilters });
-
-  const filteredSpaces = useMemo(() => {
-    const clientAmenities = filters.amenities.filter((a) => !SERVER_AMENITIES.has(a));
-    return rawSpaces.filter((space) => {
-      if (searchQuery) {
-        const q = searchQuery.toLowerCase();
-        if (
-          !space.title.toLowerCase().includes(q) &&
-          !space.location.city.toLowerCase().includes(q)
-        )
-          return false;
-      }
-      if (filters.size) {
-        const sqm = space.squareMeters;
-        if (filters.size === "small" && sqm > 15) return false;
-        if (filters.size === "medium" && (sqm < 15 || sqm > 30)) return false;
-        if (filters.size === "large" && (sqm < 30 || sqm > 50)) return false;
-        if (filters.size === "xlarge" && sqm < 50) return false;
-      }
-      for (const amenity of clientAmenities) {
-        if (!space.amenities[amenity as keyof typeof space.amenities]) return false;
-      }
-      return true;
-    });
-  }, [rawSpaces, searchQuery, filters]);
+  const { spaces: filteredSpaces, total, isFetching } = useExploreSpaces({ filters: serverFilters, limit });
+  const hasMore = filteredSpaces.length < total;
+  const loadMore = () => setLimit((l) => l + PAGE_SIZE);
 
   return {
     searchQuery,
@@ -64,5 +58,9 @@ export function useMobileExplore() {
     filters,
     setFilters,
     filteredSpaces,
+    total,
+    hasMore,
+    isFetching,
+    loadMore,
   };
 }

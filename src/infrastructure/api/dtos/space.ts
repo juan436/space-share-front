@@ -14,6 +14,7 @@ export interface SpaceAmenitiesDto {
   climateControlled: boolean;
   securityCamera: boolean;
   privateEntrance: boolean;
+  access247?: boolean;
 }
 
 export interface SpaceLocationDto {
@@ -28,7 +29,7 @@ export interface SpaceLocationDto {
 export interface SpaceDto {
   _id: string;
   slug?: string;
-  hostId: string | { _id: string; name: string; email: string; avatar?: string; createdAt?: string };
+  hostId: string | { _id: string; name: string; email: string; avatar?: string; createdAt?: string; kycStatus?: string };
   title: string;
   description: string;
   type: "basement" | "attic" | "storage" | "other";
